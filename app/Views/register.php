@@ -6,18 +6,13 @@
         <hr>
         <form class="" action="/register" method="post">
           <div class="row">
-            <div class="col-12 col-sm-6">
+            <div class="col-12">
               <div class="form-group">
-               <label for="firstname">First Name</label>
-               <input type="text" class="form-control" name="firstname" id="firstname" value="<?= set_value('firstname') ?>">
+               <label for="name">Name</label>
+               <input type="text" class="form-control" name="name" id="name" value="<?= set_value('name') ?>">
               </div>
             </div>
-            <div class="col-12 col-sm-6">
-              <div class="form-group">
-               <label for="lastname">Last Name</label>
-               <input type="text" class="form-control" name="lastname" id="lastname" value="<?= set_value('lastname') ?>">
-              </div>
-            </div>
+         
             <div class="col-12">
               <div class="form-group">
                <label for="email">Email address</label>

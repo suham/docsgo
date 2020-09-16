@@ -47,8 +47,7 @@ class Users extends BaseController
 	private function setUserSession($user){
 		$data = [
 			'id' => $user['id'],
-			'firstname' => $user['firstname'],
-			'lastname' => $user['lastname'],
+			'name' => $user['name'],
 			'email' => $user['email'],
 			'isLoggedIn' => true,
 		];
@@ -64,8 +63,7 @@ class Users extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			//let's do the validation here
 			$rules = [
-				'firstname' => 'required|min_length[3]|max_length[20]',
-				'lastname' => 'required|min_length[3]|max_length[20]',
+				'name' => 'required|min_length[3]|max_length[50]',
 				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
 				'password' => 'required|min_length[8]|max_length[255]',
 				'password_confirm' => 'matches[password]',
@@ -77,8 +75,7 @@ class Users extends BaseController
 				$model = new UserModel();
 
 				$newData = [
-					'firstname' => $this->request->getVar('firstname'),
-					'lastname' => $this->request->getVar('lastname'),
+					'name' => $this->request->getVar('name'),
 					'email' => $this->request->getVar('email'),
 					'password' => $this->request->getVar('password'),
 				];
@@ -105,8 +102,7 @@ class Users extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			//let's do the validation here
 			$rules = [
-				'firstname' => 'required|min_length[3]|max_length[20]',
-				'lastname' => 'required|min_length[3]|max_length[20]',
+				'name' => 'required|min_length[3]|max_length[50]',
 				];
 
 			if($this->request->getPost('password') != ''){
@@ -121,8 +117,7 @@ class Users extends BaseController
 
 				$newData = [
 					'id' => session()->get('id'),
-					'firstname' => $this->request->getPost('firstname'),
-					'lastname' => $this->request->getPost('lastname'),
+					'name' => $this->request->getPost('name'),
 					];
 					if($this->request->getPost('password') != ''){
 						$newData['password'] = $this->request->getPost('password');

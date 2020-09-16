@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-5 pt-3 pb-3 bg-white from-wrapper">
       <div class="container">
-        <h3><?= $user['firstname'].' '.$user['lastname'] ?></h3>
+        <h3><?= $user['name'] ?></h3>
         <hr>
         <?php if (session()->get('success')): ?>
           <div class="alert alert-success" role="alert">
@@ -11,19 +11,13 @@
         <?php endif; ?>
         <form class="" action="/profile" method="post">
           <div class="row">
-            <div class="col-12 col-sm-6">
-              <div class="form-group">
-               <label for="firstname">First Name</label>
-               <input type="text" class="form-control" name="firstname" id="firstname" value="<?= set_value('firstname', $user['firstname']) ?>">
-              </div>
-            </div>
-            <div class="col-12 col-sm-6">
-              <div class="form-group">
-               <label for="lastname">Last Name</label>
-               <input type="text" class="form-control" name="lastname" id="lastname" value="<?= set_value('lastname', $user['lastname']) ?>">
-              </div>
-            </div>
             <div class="col-12">
+              <div class="form-group">
+               <label for="name">Name</label>
+               <input type="text" class="form-control" name="name" id="name" value="<?= set_value('name', $user['name']) ?>">
+              </div>
+            </div>
+          <div class="col-12">
               <div class="form-group">
                <label for="email">Email address</label>
                <input type="text" class="form-control" readonly id="email" value="<?= $user['email'] ?>">
