@@ -83,7 +83,7 @@
             <li class="header-menu">
               <span>Manage</span>
             </li>
-            <li class="sidebar-dropdown">
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'projects' ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
                 <span>Project</span>
@@ -92,12 +92,12 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="#">Add Project</a>
+                    <a href="/projects">Add Project</a>
                   </li>
                 </ul>
               </div>
             </li>
-            <li class="sidebar-dropdown">
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents' ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-folder-open"></i>
                 <span>Documents</span>
@@ -106,13 +106,13 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="#">Add Documents</a>
+                    <a href="/documents">Add Documents</a>
                   </li>
                 </ul>
               </div>
             </li>
             
-            <li class="sidebar-dropdown">
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'team' ? 'active' : null) ?>">
               <a href="#">
                 <i class="far fa-user"></i>
                 <span>Team</span>
@@ -121,7 +121,7 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="#">Add Member</a>
+                    <a href="/team">Add Member</a>
                   </li>
                 </ul>
               </div>
