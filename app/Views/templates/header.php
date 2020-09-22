@@ -95,8 +95,11 @@
               </a>
               <div class="sidebar-submenu">
                 <ul>
+                <li>
+                    <a href="/projects">View</a>
+                  </li>
                   <li>
-                    <a href="/projects">Add Project</a>
+                    <a href="/projects/add">Add New</a>
                   </li>
                 </ul>
               </div>
