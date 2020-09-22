@@ -3,7 +3,7 @@
 use CodeIgniter\Model;
 
 class UserModel extends Model{
-  protected $table = 'users';
+  protected $table = 'docsgo-users';
   protected $allowedFields = ['name', 'email', 'password', 'updated_at'];
   protected $beforeInsert = ['beforeInsert'];
   protected $beforeUpdate = ['beforeUpdate'];

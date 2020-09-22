@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/header.css">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <script src="/assets/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootbox.min.js"></script>
     <title></title>
 
   </head>
@@ -106,7 +110,10 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="/documents">Add Documents</a>
+                    <a href="/documents">View</a>
+                  </li>
+                  <li>
+                    <a href="/documents/add">Add New</a>
                   </li>
                 </ul>
               </div>
@@ -121,7 +128,10 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="/team">Add Member</a>
+                    <a href="/team">View</a>
+                  </li>
+                  <li>
+                    <a href="/team/add">Add New</a>
                   </li>
                 </ul>
               </div>

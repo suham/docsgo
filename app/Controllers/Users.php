@@ -33,7 +33,6 @@ class Users extends BaseController
 											->first();
 
 				$this->setUserSession($user);
-				//$session->setFlashdata('success', 'Successful Registration');
 				return redirect()->to('dashboard');
 
 			}
@@ -64,7 +63,7 @@ class Users extends BaseController
 			//let's do the validation here
 			$rules = [
 				'name' => 'required|min_length[3]|max_length[50]',
-				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
+				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-users.email]',
 				'password' => 'required|min_length[8]|max_length[255]',
 				'password_confirm' => 'matches[password]',
 			];
@@ -96,6 +95,9 @@ class Users extends BaseController
 	public function profile(){
 		
 		$data = [];
+		$data['pageTitle'] = 'My Profile';
+		$data['addBtn'] = False;
+		$data['backUrl'] = "/";
 		helper(['form']);
 		$model = new UserModel();
 
@@ -132,6 +134,7 @@ class Users extends BaseController
 
 		$data['user'] = $model->where('id', session()->get('id'))->first();
 		echo view('templates/header', $data);
+		echo view('templates/pageTitle', $data);
 		echo view('profile');
 		echo view('templates/footer');
 	}
