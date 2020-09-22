@@ -38,18 +38,18 @@ $routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
 
 $routes->get('projects', 'Projects::index',['filter' => 'auth']);
 $routes->match(['get','post'],'projects/add', 'Projects::add',['filter' => 'auth']);
-$routes->match(['get','post'],'projects/add/(:num)', 'Projects::add',['filter' => 'auth']);
-$routes->match(['get','post'],'projects/delete/(:num)', 'Projects::delete',['filter' => 'auth']);
+// $routes->match(['get','post'],'projects/add/(:num)', 'Projects::add',['filter' => 'auth']);
+// $routes->match(['get','post'],'projects/delete/(:num)', 'Projects::delete',['filter' => 'auth']);
 
 $routes->get('documents', 'Documents::index',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/add', 'Documents::add',['filter' => 'auth']);
-$routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
-$routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);
+// $routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
+// $routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);
 
 $routes->get('team', 'Team::index',['filter' => 'auth']);
 $routes->match(['get','post'],'team/add', 'Team::add',['filter' => 'auth']);
-$routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth']);
-$routes->match(['get','post'],'team/delete/(:num)', 'Team::delete',['filter' => 'auth']);
+// $routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth']);
+// $routes->match(['get','post'],'team/delete/(:num)', 'Team::delete',['filter' => 'auth']);
 
 /**
  * --------------------------------------------------------------------
