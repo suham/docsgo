@@ -33,7 +33,7 @@ class Users extends BaseController
 											->first();
 
 				$this->setUserSession($user);
-				return redirect()->to('dashboard');
+				return redirect()->to('projects');
 
 			}
 		}
