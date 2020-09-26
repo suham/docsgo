@@ -87,7 +87,7 @@
             <li class="header-menu">
               <span>Manage</span>
             </li>
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'projects' ? 'active' : null) ?>">
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects') || $uri->getSegment(1) == 'documents') ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
                 <span>Project</span>
@@ -101,10 +101,13 @@
                   <li>
                     <a href="/projects/add">Add New</a>
                   </li>
+                  <li>
+                    <a href="/documents">Project Documents</a>
+                  </li>
                 </ul>
               </div>
             </li>
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents' ? 'active' : null) ?>">
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-master' ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-folder-open"></i>
                 <span>Documents</span>
@@ -113,10 +116,10 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="/documents">View</a>
+                    <a href="/documents-master">View</a>
                   </li>
                   <li>
-                    <a href="/documents/add">Add New</a>
+                    <a href="/documents-master/add">Add New</a>
                   </li>
                 </ul>
               </div>

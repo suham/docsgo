@@ -3,7 +3,7 @@
 use CodeIgniter\Model;
 
 class DocumentModel extends Model{
-    protected $table = 'docsgo-document-master';
-    protected $allowedFields = ['name', 'category', 'version', 'description', 'ref', 'location', 'status'];
+    protected $table = 'docsgo-documents';
+    protected $allowedFields = ["project-id","type","update-date","json-object","file-name","status"];
     
 }

@@ -12,10 +12,10 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Category</th>
-          <th scope="col">Version</th>
+          <th scope="col">Project</th>
+          <th scope="col">Type</th>
           <th scope="col">Status</th>
+          <th scope="col">Update Date</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -23,15 +23,15 @@
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
-                <td><?php echo $row['name'];?></td>
-                <td><?php echo $row['category'];?></td>
-                <td><?php echo $row['version'];?></td>
+                <td><?php echo $projects[$row['project-id']];?></td>
+                <td><?php echo $row['type'];?></td>
                 <td><?php echo $row['status'];?></td>
+                <td><?php echo $row['update-date'];?></td>
                 <td>
-                    <a href="/documents-master/add/<?php echo $row['id'];?>" class="btn btn-warning">
+                    <a href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <a onclick="deleteDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                    <a onclick="deletePlanDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                         <i class="fa fa-trash text-light"></i>
                     </a>
                 </td>
@@ -45,12 +45,12 @@
 </div>
 
 <script>
- function deleteDocument(id){
+ function deletePlanDocument(id){
 
-    bootbox.confirm("Do you really want to delete the document?", function(result) {
+    bootbox.confirm("Do you really want to delete the plan document?", function(result) {
       if(result){
         $.ajax({
-           url: '/documents-master/delete/'+id,
+           url: '/documents/delete/'+id,
            type: 'GET',
            success: function(response){
               console.log(response);

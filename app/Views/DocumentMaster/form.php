@@ -9,7 +9,7 @@
             <?= session()->get('success') ?>
           </div>
         <?php endif; ?>
-        <form class="" action="/documents/<?= $action ?>" method="post">
+        <form class="" action="/documents-master/<?= $action ?>" method="post">
           <div class="row">
             <div class="col-12 col-sm-6">
               <div class="form-group">

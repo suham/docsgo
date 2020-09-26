@@ -20,7 +20,18 @@ class Team extends BaseController
 		echo view('templates/footer');
 	}
 
-	public function add ($id = 0){
+	private function returnParams(){
+		$uri = $this->request->uri;
+		$id = $uri->getSegment(3);
+		if($id != ""){
+			$id = intval($id);
+		}
+		return $id;
+	}
+
+	public function add(){
+
+		$id = $this->returnParams();
 
 		helper(['form']);
 		$model = new TeamModel();
@@ -29,7 +40,7 @@ class Team extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/team";
 
-		if($id == 0){
+		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Member";
 
@@ -84,7 +95,8 @@ class Team extends BaseController
 		echo view('templates/footer');
 	}
 
-	public function delete($id){
+	public function delete(){
+		$id = $this->returnParams();
 		$model = new TeamModel();
 		$model->delete($id);
 		$response = array('success' => "True");
