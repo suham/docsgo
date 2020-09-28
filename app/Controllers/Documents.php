@@ -10,7 +10,7 @@ class Documents extends BaseController
     public function index()
     {
         $data = [];
-		$data['pageTitle'] = 'Project Documents';
+		$data['pageTitle'] = 'Documents';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/documents/add";
 
@@ -49,7 +49,8 @@ class Documents extends BaseController
         $data = $templateModel->findAll();	
 		$templates = [];
 		foreach($data as $project){
-			$templates[$project['type']] = $project['template-json-object'];
+			// $templates[$project['type']] = $project['template-json-object'];
+			$templates[$project['type']] = $project;
 		}
 		return $templates;
 	}
@@ -73,8 +74,42 @@ class Documents extends BaseController
 		return [$type, $id];
 	}
 	
-	public function addProject() {
+	public function updateTemplate() {
+		if ($this->request->getMethod() == 'post') {
+			
+			
+			$type = $this->request->getVar('type');
+			$templates = $this->getTemplates();
+			if (array_key_exists($type,$templates)){
+				$entireTemplate = $templates[$type];
+				$template = json_decode($templates[$type]['template-json-object'], true);
+				$template[$type]['cp-line3'] = $this->request->getVar('cp-line3');
+				$template[$type]['cp-line4'] = $this->request->getVar('cp-line4');
+				$template[$type]['cp-line5'] = $this->request->getVar('cp-line5');
+				$template[$type]['cp-approval-matrix'] = $this->request->getVar('cp-approval-matrix');
+				$template[$type]['cp-change-history'] = $this->request->getVar('cp-change-history');
 
+				$sections = array();
+
+				foreach ($template[$type]['sections'] as $section){
+					$temp["id"] = $section["id"];
+					$temp["title"] = $section["title"];
+					$temp["content"] = $this->request->getVar($section["id"]);
+
+					array_push($sections, $temp);
+				}
+				$template[$type]['sections'] = $sections;
+				$entireTemplate['template-json-object'] = json_encode($template);
+				$templateModel = new DocumentTemplate();
+				$templateModel->save($entireTemplate);
+				$response = array('success' => "True");
+
+			}else{
+				$response = array('success' => "False");
+			}
+			echo json_encode( $response );
+		}
+		
 	}
 
 	public function add(){
@@ -86,11 +121,11 @@ class Documents extends BaseController
 		helper(['form']);
 		
 		$data = [];
-		$data['pageTitle'] = 'Project Documents';
+		$data['pageTitle'] = 'Documents';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents";
 		$data['planStatus'] = ['Draft', 'Approved', 'Rejected'];
-		$data['documentType'] = array("project-plan"=>"Project Plan", "review"=>"Review" );
+		$data['documentType'] = array("project-plan"=>"Project Plan", "reviews"=>"Reviews", "test-plan"=> "Test Plan", "impact-analysis"=>"Impact Analysis" );
 		$data['projects'] = $this->getProjects();
 		$data['template'] = "";
 		$data['type'] = $type;
@@ -98,8 +133,8 @@ class Documents extends BaseController
 		if($type != ""){
 			$templates = $this->getTemplates();
 			if (array_key_exists($type,$templates)){
-				$template = json_decode($templates[$type], true);
-				$data['template'] = $template;
+				$template = json_decode($templates[$type]['template-json-object'], true);
+				$data['template'] = $template[$type];
 				$data['sections'] = $template[$type]['sections'];
 				$data['projectDocument']["type"] = $type;
 			}
@@ -114,14 +149,14 @@ class Documents extends BaseController
 			}else{
 				$data['action'] = "add/".$type;
 			}
-			$data['formTitle'] = "Add Project Document";
+			$data['formTitle'] = "Add Document";
 		}else{
 			$data['action'] = "add/".$type."/".$id;
 			$data['formTitle'] = "Update";
 
 			$data['projectDocument'] = $model->where('id',$id)->first();	
 			$template = json_decode($data['projectDocument']["json-object"], true);		
-			$data['template'] = $template;
+			$data['template'] = $template[$type];
 			$data['sections'] = $template[$type]['sections'];
 		}
 
@@ -143,6 +178,12 @@ class Documents extends BaseController
                 'status' => $this->request->getVar('status'),
 			];
 
+			$template[$type]['cp-line3'] = $this->request->getVar('cp-line3');
+			$template[$type]['cp-line4'] = $this->request->getVar('cp-line4');
+			$template[$type]['cp-line5'] = $this->request->getVar('cp-line5');
+			$template[$type]['cp-approval-matrix'] = $this->request->getVar('cp-approval-matrix');
+			$template[$type]['cp-change-history'] = $this->request->getVar('cp-change-history');
+
 			$sections = array();
 
 			foreach ($data['sections'] as $section){
@@ -152,6 +193,9 @@ class Documents extends BaseController
 
 				array_push($sections, $temp);
 			}
+
+			$template[$type]['sections'] = $sections;
+			$data['template'] = $template[$type];
 			$data['sections'] = $sections;
 			$data['projectDocument'] = $newData;
 
@@ -159,7 +203,7 @@ class Documents extends BaseController
 				$session = session();
 				$data['validation'] = $this->validator;
 			}else{
-				$template[$type]['sections'] = $sections;
+				
 				$newData['json-object'] = json_encode($template);
 
 				if($id > 0){

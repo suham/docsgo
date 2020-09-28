@@ -8,7 +8,7 @@ class DocumentsMaster extends BaseController
 	public function index()
     {
         $data = [];
-		$data['pageTitle'] = 'Documents';
+		$data['pageTitle'] = 'References';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/documents-master/add";
 
@@ -42,7 +42,7 @@ class DocumentsMaster extends BaseController
 		helper(['form']);
 		$model = new DocumentsMasterModel();
 		$data = [];
-		$data['pageTitle'] = 'Documents';
+		$data['pageTitle'] = 'References';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents-master";
 		$data['statusList'] = ['Draft', 'Approved', 'Obsolete'];
@@ -50,7 +50,7 @@ class DocumentsMaster extends BaseController
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Document";
+			$data['formTitle'] = "Add Reference";
 		}else{
 			$data['action'] = "add/".$id;
 			$data['formTitle'] = "Update";

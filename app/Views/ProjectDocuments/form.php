@@ -9,7 +9,7 @@
             <?= session()->get('success') ?>
           </div>
         <?php endif; ?>
-        <form class="" action="/documents/<?= $action ?>" method="post">
+        <form id="documentForm" action="/documents/<?= $action ?>" method="post">
         <?php if (isset($validation)): ?>
             <div class="col-12">
               <div class="alert alert-danger" role="alert">
@@ -80,6 +80,52 @@
                 </div>
               </div>
             </div>
+
+            <hr/>
+            <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="cp-line3">Title</label>
+                <input type="text" class="form-control" name="cp-line3" id="cp-line3"
+                  value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>" >
+              </div>
+            </div>
+            
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label for="cp-line4">Document ID</label>
+                <input type="text" class="form-control" name="cp-line4" id="cp-line4"
+                  value="<?= isset($template["cp-line4"]) ? $template["cp-line4"] : '' ?>" >
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label for="cp-line5">Revision</label>
+                <input type="text" class="form-control" name="cp-line5" id="cp-line5"
+                  value="<?= isset($template["cp-line5"]) ? $template["cp-line5"] : '' ?>" >
+              </div>
+            </div>
+            
+              
+            <div class="col-12">
+              <div class="form-group">
+                <label for="cp-approval-matrix">Approval Matrix</label>
+                <input type="text" class="form-control" name="cp-approval-matrix" id="cp-approval-matrix"
+                  value="<?= isset($template["cp-approval-matrix"]) ? $template["cp-approval-matrix"] : '' ?>" >
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="cp-change-history">Change History</label>
+                <input type="text" class="form-control" name="cp-change-history" id="cp-change-history"
+                  value="<?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?>" >
+              </div>
+            </div>
+          </div>
+            <hr/>
+            
+
             <?php foreach ($sections as $section): ?>
               <div class="col-12">
               <div class="form-group">
@@ -94,9 +140,9 @@
 
             <div class="row">
               <div class="col-12 text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" id="updateTemplate" class="btn btn-secondary" title="Save content to template">Update Template</button>
+                <button type="submit" class="btn btn-primary ml-3">Submit</button>
               </div>
-
             </div>
 
           <?php endif; ?>
@@ -115,6 +161,35 @@
 </div>
 
 <script>
+
+$("#updateTemplate").click(function(){
+  console.log('Update template clicked');
+  var form =  $("#documentForm");
+  $.ajax({
+    type:'POST',
+    url: '/documents/updateTemplate',
+    data: form.serialize(),
+    success: function(response){
+      response = JSON.parse(response);
+      if(response.success == "True"){
+        bootbox.alert({
+            message: "Template updated successfully!.",
+            backdrop: true
+        });
+      }else{
+        bootbox.alert({
+            message: "Template update failed!.",
+            backdrop: true
+        });
+      }
+    },
+    error: function(err){
+      console.log(err);
+    }
+  })
+
+});
+
 $("#type").change(function(){
   var type = $(this).val();
   var baseUrl = "<?=  $_SERVER['SERVER_NAME'] ?>"

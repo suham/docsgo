@@ -60,7 +60,7 @@
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
         <div class="sidebar-brand">
-          <a href="#" title="Project Data Reporting Tool">Project Reporting Tool</a>
+          <a href="#" title="Project Data Reporting Tool">DocsGo</a>
           <div id="close-sidebar">
             <i class="fas fa-times"></i>
           </div>
@@ -96,13 +96,13 @@
               <div class="sidebar-submenu">
                 <ul>
                 <li>
-                    <a href="/projects">View</a>
+                    <a href="/projects">View/Add/Update</a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <a href="/projects/add">Add New</a>
-                  </li>
+                  </li> -->
                   <li>
-                    <a href="/documents">Project Documents</a>
+                    <a href="/documents">Documents</a>
                   </li>
                 </ul>
               </div>
@@ -110,17 +110,17 @@
             <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-master' ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-folder-open"></i>
-                <span>Documents</span>
+                <span>References</span>
                 <span class="badge badge-pill badge-warning">New</span>
               </a>
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="/documents-master">View</a>
+                    <a href="/documents-master">View/Add/Update</a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <a href="/documents-master/add">Add New</a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </li>
@@ -134,15 +134,15 @@
               <div class="sidebar-submenu">
                 <ul>
                   <li>
-                    <a href="/team">View</a>
+                    <a href="/team">View/Add/Update</a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <a href="/team/add">Add New</a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
-            </li>
-            <li class="sidebar-dropdown">
+             </li>
+            <!--<li class="sidebar-dropdown">
               <a href="#">
                 <i class="far fa-edit"></i>
                 <span>Update from Testlink</span>
@@ -182,7 +182,7 @@
                 <i class="fa fa-folder"></i>
                 <span>Cybersecurity Compliance</span>
               </a>
-            </li>
+            </li> -->
           </ul>
         </div>
         <!-- sidebar-menu  -->
