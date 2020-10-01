@@ -114,8 +114,9 @@
             <div class="col-12">
               <div class="form-group">
                 <label for="cp-change-history">Change History</label>
-                <input type="text" class="form-control" name="cp-change-history" id="cp-change-history"
-                  value="<?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?>" >
+                <textarea data-adaptheight class="form-control"
+                      name="cp-change-history" id="cp-change-history"
+                ><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
               </div>
             </div>
           </div>
