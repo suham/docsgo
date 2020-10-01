@@ -17,7 +17,8 @@ class Reviews extends BaseController
 		$data['data'] = $model->findAll();	
 		
 		$data['projects'] = $this->getProjects();
-		$data['teamMembers'] = $this->getTeamMembers();
+		$teamModel = new TeamModel();
+		$data['teamMembers'] = $teamModel->getMembers();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -39,7 +40,8 @@ class Reviews extends BaseController
 		
 		$data['projects'] = $this->getProjects();
 		$data['pageTitle'] = $data['projects'][$id].' Reviews';
-		$data['teamMembers'] = $this->getTeamMembers();
+		$teamModel = new TeamModel();
+		$data['teamMembers'] = $teamModel->getMembers();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -56,16 +58,6 @@ class Reviews extends BaseController
 			$projects[$project['project-id']] = $project['name'];
 		}
 		return $projects;
-	}
-
-	private function getTeamMembers(){
-		$teamModel = new TeamModel();
-		$data = $teamModel->findAll();	
-		$team = [];
-		foreach($data as $member){
-			$team[$member['id']] = $member['name'];
-		}
-		return $team;
 	}
 
 	private function returnParams(){
@@ -87,7 +79,8 @@ class Reviews extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/reviews";
 		$data['projects'] = $this->getProjects();
-		$data['teamMembers'] = $this->getTeamMembers();
+		$teamModel = new TeamModel();
+		$data['teamMembers'] = $teamModel->getMembers();
 		$data['reviewStatus'] = ['Change', 'Accepted', 'Rejected'];
 		
 		if($id == ""){
