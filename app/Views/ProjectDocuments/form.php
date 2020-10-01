@@ -10,6 +10,7 @@
           </div>
         <?php endif; ?>
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
+        
         <?php if (isset($validation)): ?>
             <div class="col-12">
               <div class="alert alert-danger" role="alert">
@@ -20,7 +21,7 @@
           <div class="col-12 col-sm-6" style="margin:0 auto">
                 <div class="form-group">
                 <label for="type">Type</label>
-                  <select class="form-control" name="type" id="type" >
+                  <select class="form-control fstdropdown-select" name="type" id="type" >
                   <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
                       Select
                   </option>
@@ -41,7 +42,7 @@
               <div class="col-12 col-sm-4">
                   <div class="form-group">
                   <label for="project-id">Project</label>
-                  <select class="form-control" name="project-id" id="project-id" >
+                  <select class="form-control fstdropdown-select" name="project-id" id="project-id" >
                     <option value="" disabled <?= isset($projectDocument['project-id']) ? '' : 'selected' ?>>
                         Select
                     </option>
@@ -54,31 +55,26 @@
                   </select>
                   </div>
               </div>
-
-              <div class="col-12 col-sm-4">
-                <div class="form-group">
-                <label for="file-name">File Name</label>
-                <input type="text" class="form-control" name="file-name" id="file-name"
-                  value="<?= isset($projectDocument['file-name']) ? $projectDocument['file-name'] : '' ?>" >
+              <?php if (count($existingDocs)): ?>
+                <div class="col-12 col-sm-3"></div>
+                <div class="col-12 col-sm-5">
+                  <div class="form-group">
+                  <label for="existingDocs">Fill From Existing</label>
+                  <select class="form-control fstdropdown-select" name="existingDocs" id="existingDocs" >
+                      <option value="" selected>
+                          Select
+                      </option>
+                      <?php foreach ($existingDocs as $key=>$value): ?>
+                        <option 
+                        value='<?=  json_encode($value['json-object'][$type]) ?>' ><?=  $value['json-object'][$type]['cp-line3'] ?></option>
+                      <?php endforeach; ?>
+                      
+                    </select>
+                  </div>
                 </div>
-              </div>
+              <?php endif; ?>
+              
 
-              <div class="col-12 col-sm-4">
-                <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" name="status" id="status" >
-                  <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
-                      Select
-                  </option>
-                  <?php foreach ($planStatus as $key=>$value): ?>
-                    <option 
-                      <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $key) ? 'selected': '') : '' ?>
-                      value="<?=  $value ?>" ><?=  $value ?></option>
-                  <?php endforeach; ?>
-                  
-                </select>
-                </div>
-              </div>
             </div>
 
             <hr/>
@@ -131,7 +127,7 @@
               <div class="form-group">
                 <label for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
           
-                <textarea class="form-control" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
+                <textarea data-adaptheight class="form-control" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
                 </div>
               </div>
                 
@@ -139,9 +135,25 @@
               <?php endforeach; ?>
 
             <div class="row">
-              <div class="col-12 text-center">
-                <button type="button" id="updateTemplate" class="btn btn-secondary" title="Save content to template">Update Template</button>
-                <button type="submit" class="btn btn-primary ml-3">Submit</button>
+              <div class="col-12 col-sm-3"></div>
+              <div class="col-12 col-sm-4">
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" name="status" id="status" >
+                      <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
+                          Select
+                      </option>
+                      <?php foreach ($planStatus as $key=>$value): ?>
+                        <option 
+                          <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $key) ? 'selected': '') : '' ?>
+                          value="<?=  $value ?>" ><?=  $value ?></option>
+                      <?php endforeach; ?>
+                      
+                    </select>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-4 " style="margin-top:1.8rem">
+                <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
 
@@ -161,6 +173,10 @@
 </div>
 
 <script>
+
+
+
+
 
 $("#updateTemplate").click(function(){
   console.log('Update template clicked');
@@ -198,6 +214,29 @@ $("#type").change(function(){
   console.log(type);
   console.log(url)
   window.location.href = url;
+});
+
+$("#existingDocs").change(function(){
+  var value = $(this).val();
+  if(value != ""){
+    var jsonValue = JSON.parse(value);
+
+    console.log(jsonValue);
+    $("#cp-line3").val(jsonValue['cp-line3']);
+    $("#cp-line4").val(jsonValue['cp-line4']);
+    $("#cp-line5").val(jsonValue['cp-line5']);
+    $("#cp-approval-matrix").val(jsonValue['cp-approval-matrix']);
+    $("#cp-change-history").val(jsonValue['cp-change-history']);
+
+    var sections = jsonValue.sections;
+    for(var i = 0; i<sections.length ; i++){
+      var section = sections[i];
+      $("#"+section.id).val(section.content);
+    }
+    
+  }
+
+
 });
 
 

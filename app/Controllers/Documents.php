@@ -14,15 +14,66 @@ class Documents extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/documents/add";
 
-		$model = new DocumentModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $this->getExistingDocs();
 		$data['projects'] = $this->getProjects();
+		$data['templates'] = $this->getTemplates();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('ProjectDocuments/list',$data);
 		echo view('templates/footer');
-    }
+	}
+
+	public function projectDocument()
+    {
+		$uri = $this->request->uri;
+		$id = $uri->getSegment(3);
+
+        $data = [];
+	
+		$data['addBtn'] = True;
+		$data['addUrl'] = "/documents/add";
+
+		$model = new DocumentModel();
+		$documents = $model->where('project-id',$id)->findAll();	
+		for($i=0; $i<count($documents);$i++){
+			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
+		}
+
+		$data['data'] = $documents;
+		$data['projects'] = $this->getProjects();
+		$data['templates'] = $this->getTemplates();
+		
+		$data['pageTitle'] = $data['projects'][$id].' Documents';
+		echo view('templates/header');
+		echo view('templates/pageTitle', $data);
+		echo view('ProjectDocuments/list',$data);
+		echo view('templates/footer');
+	}
+
+	private function getExistingDocs($type = ""){
+		$model = new DocumentModel();
+		if($type == ""){
+			$documents= $model->findAll();	
+		}else{
+			$documents= $model->where('type',$type)->findAll();	
+		}
+		
+		for($i=0; $i<count($documents);$i++){
+			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
+		}
+		return $documents;
+	}
+	
+	public function getJson(){
+		$model = new DocumentModel();
+		$data = $model->findAll();	
+		$documents = [];
+		foreach($data as $document){
+			$documents[$document['id']] = $document['json-object'];
+		}
+		return json_encode($documents);
+	}
 
     public function getTeamMembers(){
 		$teamModel = new TeamModel();
@@ -137,6 +188,7 @@ class Documents extends BaseController
 				$data['template'] = $template[$type];
 				$data['sections'] = $template[$type]['sections'];
 				$data['projectDocument']["type"] = $type;
+				$data['existingDocs'] = $this->getExistingDocs($type);
 			}
 		}else{
 			$data['projectDocument']["type"] = null;
@@ -164,7 +216,6 @@ class Documents extends BaseController
 			
 			$rules = [
 				'type' => 'required',
-				'file-name' => 'required',
 				'project-id' => 'required',
                 'status' => 'required',
 			];	
@@ -231,13 +282,19 @@ class Documents extends BaseController
     
 	
 	public function delete(){
-		$uri = $this->request->uri;
-		$id = $uri->getSegment(3);
+		if (session()->get('is-admin')){
+			$uri = $this->request->uri;
+			$id = $uri->getSegment(3);
 
-		$model = new DocumentModel();
-		$model->delete($id);
-		$response = array('success' => "True");
-		echo json_encode( $response );
+			$model = new DocumentModel();
+			$model->delete($id);
+			$response = array('success' => "True");
+			echo json_encode( $response );
+		}
+		else{
+			$response = array('success' => "False");
+			echo json_encode( $response );
+		}
 	}
 
 

@@ -12,7 +12,7 @@ class Team extends BaseController
 
 		// helper(['form']);
 		$model = new TeamModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $model->orderBy('is-manager', 'desc')->orderBy('name', 'asc')->findAll();	
 		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -62,12 +62,17 @@ class Team extends BaseController
 		
 
 		if ($this->request->getMethod() == 'post') {
-
+			$is_manager_text = $this->request->getVar('is-manager');
+			$is_manager = 0;
+			if($is_manager_text == 'on'){
+				$is_manager = 1;
+			}
 			$newData = [
 				'name' => $this->request->getVar('name'),
 				'email' => $this->request->getVar('email'),
 				'role' => $this->request->getVar('role'),
 				'responsibility' => $this->request->getVar('responsibility'),
+				'is-manager' => $is_manager,
 			];
 
 			$data['member'] = $newData;
@@ -96,11 +101,17 @@ class Team extends BaseController
 	}
 
 	public function delete(){
-		$id = $this->returnParams();
-		$model = new TeamModel();
-		$model->delete($id);
-		$response = array('success' => "True");
-		echo json_encode( $response );
+		if (session()->get('is-admin')){
+			$id = $this->returnParams();
+			$model = new TeamModel();
+			$model->delete($id);
+			$response = array('success' => "True");
+			echo json_encode( $response );
+		}
+		else{
+			$response = array('success' => "False");
+			echo json_encode( $response );
+		}
 	}
 
 }

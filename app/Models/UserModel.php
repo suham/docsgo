@@ -4,12 +4,9 @@ use CodeIgniter\Model;
 
 class UserModel extends Model{
   protected $table = 'docsgo-users';
-  protected $allowedFields = ['name', 'email', 'password', 'updated_at'];
+  protected $allowedFields = ['name', 'email', 'password', 'updated_at', 'is-admin'];
   protected $beforeInsert = ['beforeInsert'];
   protected $beforeUpdate = ['beforeUpdate'];
-
-
-
 
   protected function beforeInsert(array $data){
     $data = $this->passwordHash($data);
@@ -29,6 +26,23 @@ class UserModel extends Model{
       $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
 
     return $data;
+  }
+
+  public function getUsers(){
+    $db      = \Config\Database::connect();
+    $builder = $db->table('docsgo-users');
+    $builder->select('id, name, email, is-admin');
+    $builder->orderBy('name', 'ASC');
+    $query = $builder->get();
+    return $query->getResult('array');
+  }
+
+  public function updateAdminStatus($id, $status){
+    $db      = \Config\Database::connect();
+    $builder = $db->table('docsgo-users');
+    $builder->set('is-admin', $status);
+    $builder->where('id', $id);
+    $builder->update();    
   }
 
 

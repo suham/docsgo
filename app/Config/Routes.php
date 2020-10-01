@@ -34,6 +34,9 @@ $routes->get('/', 'Users::index', ['filter' => 'noauth']);
 $routes->get('logout', 'Users::logout');
 $routes->match(['get','post'],'register', 'Users::register', ['filter' => 'noauth']);
 $routes->match(['get','post'],'profile', 'Users::profile',['filter' => 'auth']);
+$routes->match(['get','post'],'admin/users', 'Users::viewUsers',['filter' => 'auth']);
+$routes->post('admin/users/updateStatus', 'Users::updateAdminStatus',['filter' => 'auth']);
+
 $routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
 
 $routes->get('projects', 'Projects::index',['filter' => 'auth']);
@@ -52,9 +55,13 @@ $routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth'
 $routes->match(['get','post'],'team/delete/(:num)', 'Team::delete',['filter' => 'auth']);
 
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
+$routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/add', 'Reviews::add',['filter' => 'auth']);
+$routes->match(['get','post'],'reviews/add/(:num)', 'Reviews::add',['filter' => 'auth']);
+$routes->match(['get','post'],'reviews/delete/(:num)', 'Reviews::delete',['filter' => 'auth']);
 
 $routes->get('documents', 'Documents::index',['filter' => 'auth']);
+$routes->get('documents/project/(:num)', 'Documents::projectDocument',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/add', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);

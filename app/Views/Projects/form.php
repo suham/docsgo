@@ -14,7 +14,7 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
                <label for="name">Name</label>
-               <input type="text" class="form-control" name="name" id="name"
+               <input required type="text" class="form-control" name="name" id="name"
                 value="<?= isset($project['name']) ? $project['name'] :'' ?>">
               </div>
             </div>
@@ -23,7 +23,7 @@
               <div class="form-group">
                <label for="manager-id">Manager</label>
                
-               <select class="form-control" name="manager-id" id="manager-id" >
+               <select class="form-control fstdropdown-select" name="manager-id" id="manager-id" required>
                 <option value="" disabled <?= isset($project['manager-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -50,7 +50,7 @@
             <div class="col-12  col-sm-4">
               <div class="form-group">
                <label for="start-date">Start Date</label>
-               <input type="date" class="form-control" name="start-date" id="start-date"
+               <input required type="date" class="form-control" name="start-date" id="start-date"
                 value="<?= isset($project['start-date']) ? $project['start-date'] : '' ?>" >
               </div>
             </div>
@@ -67,7 +67,7 @@
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label for="is-active">Status</label>
-               <select class="form-control" name="is-active" id="is-active" >
+               <select required class="form-control" name="is-active" id="is-active" >
                 <option value="" disabled <?= isset($project['is-active']) ? '' : 'selected' ?>>
                     Select
                 </option>

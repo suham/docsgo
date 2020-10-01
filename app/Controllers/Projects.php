@@ -14,7 +14,8 @@ class Projects extends BaseController
 
 		$model = new ProjectModel();
 		$data['data'] = $model->findAll();	
-		$data['teamMembers'] = $this->getTeamMembers();	
+		$teamModel = new TeamModel();
+		$data['teamMembers'] = $teamModel->getManagers();	
 		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -22,16 +23,7 @@ class Projects extends BaseController
 		echo view('templates/footer');
 	}
 
-	public function getTeamMembers(){
-		$teamModel = new TeamModel();
-		$data = $teamModel->findAll();	
-		$team = [];
-		foreach($data as $member){
-			$team[$member['id']] = $member['name'];
-		}
-		return $team;
-	}
-	
+
 	public function add($id = 0){
 
 		helper(['form']);
@@ -43,7 +35,7 @@ class Projects extends BaseController
 		$data['backUrl'] = "/projects";
 		$data['isActiveList'] = ['Active', 'Completed'];
 		
-		$data['teamMembers'] = $this->getTeamMembers();	
+		$data['teamMembers'] = $teamModel->getManagers();	
 
 		if($id == 0){
 			$data['action'] = "add";
@@ -101,10 +93,15 @@ class Projects extends BaseController
 
 	
 	public function delete($id){
-		$model = new ProjectModel();
-		$model->delete($id);
-		$response = array('success' => "True");
-		echo json_encode( $response );
+		if (session()->get('is-admin')){
+			$model = new ProjectModel();
+			$model->delete($id);
+			$response = array('success' => "True");
+			echo json_encode( $response );
+		}else{
+			$response = array('success' => "False");
+			echo json_encode( $response );
+		}
 	}
 
 

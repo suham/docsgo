@@ -13,10 +13,9 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Project</th>
-          <th scope="col">Subtitle</th>
-          <th scope="col">Reviewed Date</th>
-          <th scope="col">Opened Date</th>
-          <th scope="col">status</th>
+          <th scope="col">Name</th>
+          <th scope="col">Reviewed By</th>
+          <th scope="col">Status</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -24,18 +23,27 @@
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
-                <td><?php echo $row['project-id'];?></td>
-                <td><?php echo $row['subtitle'];?></td>
-                <td><?php echo $row['reviewed-date'];?></td>
-                <td><?php echo $row['opened-date'];?></td>
-                <td><?php echo $teamMembers[$row['status']];?></td>
+                <td><?php echo $projects[$row['project-id']];?></td>
+                <td><?php echo $row['review-name'];?></td>
+                <td><?php echo $teamMembers[$row['review-by']];?></td>
+                <td>
+                  <button type="button" 
+                          style="cursor: unset;"
+                          class="btn btn-sm btn-outline-<?php
+                           echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Rejected' ? 'danger' : 'info');
+                           ?>">
+                          <?php echo $row['status'];?>
+                  </button>
+                </td>
                 <td>
                     <a href="/reviews/add/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
+                    <?php if (session()->get('is-admin')): ?>
                     <a onclick="deleteReview(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                         <i class="fa fa-trash text-light"></i>
                     </a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>

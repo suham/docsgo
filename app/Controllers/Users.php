@@ -48,6 +48,7 @@ class Users extends BaseController
 			'id' => $user['id'],
 			'name' => $user['name'],
 			'email' => $user['email'],
+			'is-admin' => $user['is-admin'],
 			'isLoggedIn' => true,
 		];
 
@@ -137,6 +138,49 @@ class Users extends BaseController
 		echo view('templates/pageTitle', $data);
 		echo view('profile');
 		echo view('templates/footer');
+	}
+
+	public function viewUsers(){
+		$data = [];
+		$data['addBtn'] = False;
+		$data['backUrl'] = "/";
+		if (session()->get('is-admin')){
+			
+			$data['pageTitle'] = 'Users';
+	
+			$model = new UserModel();
+			$users = $model->getUsers();
+			
+			$data['data'] = $users;
+			echo view('templates/header', $data);
+			echo view('templates/pageTitle', $data);
+			echo view('Admin/Users/list', $data);
+			echo view('templates/footer');
+		}else{
+			
+			$data['pageTitle'] = 'You are not authorized to view this page.';
+			echo view('templates/header', $data);
+			echo view('templates/pageTitle', $data);
+			echo view('templates/footer');
+		}
+		
+	}
+
+	public function updateAdminStatus(){
+		$response = array();
+		if ($this->request->getMethod() == 'post') {
+			$id = $this->request->getPost('id');
+			$model = new UserModel();
+			$user = $model->find($id);
+			// $user['is-admin'] = !$user['is-admin'];
+			$model->updateAdminStatus($id, !$user['is-admin']);
+			$response['success'] = 'true';
+			echo json_encode($response);
+	
+		}else{
+			$response['success'] = 'false';
+		}
+		
 	}
 
 	public function logout(){

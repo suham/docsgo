@@ -6,13 +6,19 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/header.css">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/fstdropdown.css">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <script src="/assets/js/jquery-3.2.1.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/bootbox.min.js"></script>
+    <script src="/assets/js/fstdropdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <title></title>
-
+    <script>
+      
+    </script>
   </head>
   <body>
     <?php
@@ -87,7 +93,8 @@
             <li class="header-menu">
               <span>Manage</span>
             </li>
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects') || $uri->getSegment(1) == 'documents') ? 'active' : null) ?>">
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects') 
+            || $uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'reviews')  ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
                 <span>Project</span>
@@ -103,6 +110,9 @@
                   </li> -->
                   <li>
                     <a href="/documents">Documents</a>
+                  </li>
+                  <li>
+                    <a href="/reviews">Reviews</a>
                   </li>
                 </ul>
               </div>
@@ -189,10 +199,13 @@
       </div>
       <!-- sidebar-content  -->
       <div class="sidebar-footer">
-        <!-- <a href="#">
-          <i class="fa fa-bell"></i>
-          <span class="badge badge-pill badge-warning notification">3</span>
+      <?php if (session()->get('is-admin')): ?>
+        <a href="/admin/users">
+          <i class="fa fa-users"></i>
+          <span class="badge badge-pill badge-warning notification">!</span>
         </a>
+      <?php endif; ?>
+        <!-- 
         <a href="#">
           <i class="fa fa-envelope"></i>
           <span class="badge badge-pill badge-success notification">7</span>

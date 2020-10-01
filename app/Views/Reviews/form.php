@@ -12,10 +12,19 @@
         <form class="" action="/reviews/<?= $action ?>" method="post">
 
           <div class="row">
+
+            <?php if (isset($validation)): ?>
+              <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                  <?= $validation->listErrors() ?>
+                </div>
+              </div>
+            <?php endif; ?>
+
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label for="project-id">Project</label>
-               <select class="form-control" name="project-id" id="project-id" >
+               <select class="form-control fstdropdown-select" name="project-id" id="project-id" required>
                 <option value="" disabled <?= isset($review['project-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -29,132 +38,109 @@
               </div>
             </div>
 
-            <div class="col-12 col-sm-4">
+            <div class="col-12  col-sm-4">
               <div class="form-group">
-               <label for="authors">Authors</label>
-               <input type="text" class="form-control" name="authors" id="authors"
-                value="<?= isset($review['authors']) ? $review['authors'] : '' ?>" >
+               <label for="review-name">Name</label>
+               <input type="text" class="form-control" required name="review-name" id="review-name"
+                value="<?= isset($review['review-name']) ? $review['review-name'] : '' ?>" >
               </div>
             </div>
 
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="status">Status</label>
-               <select class="form-control" name="status" id="status" >
-                <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
+               <label for="assigned-to">Assigned To</label>
+               
+               <select class="form-control fstdropdown-select" name="assigned-to" id="assigned-to" required>
+                <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
                     Select
                 </option>
-                <?php foreach ($reviewStatus as $key=>$value): ?>
+                <?php foreach ($teamMembers as $key=>$value): ?>
                   <option 
-                    <?= isset($review['status']) ? (($review['status'] == $key) ? 'selected': '') : '' ?>
+                    <?= isset($review['assigned-to']) ? (($review['assigned-to'] == $key) ? 'selected': '') : '' ?>
                     value="<?=  $key ?>" ><?=  $value ?></option>
                 <?php endforeach; ?>
                 
               </select>
+
               </div>
             </div>
 
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="opened-date">Open Date</label>
-               <input type="date" class="form-control" name="opened-date" id="opened-date"
-                value="<?= isset($review['opened-date']) ? $review['opened-date'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="closed-date">Closed Date</label>
-               <input type="date" class="form-control" name="closed-date" id="closed-date"
-                value="<?= isset($review['closed-date']) ? $review['closed-date'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-8">
-              <div class="form-group">
-               <label for="subtitle">Subtitle</label>
-               <input type="text" class="form-control" name="subtitle" id="subtitle"
-                value="<?= isset($review['subtitle']) ? $review['subtitle'] : '' ?>" >
-              </div>
-            </div>
-
-          
-          
             <div class="col-12">
               <div class="form-group">
-               <label for="description1">Purpose</label>
-               <textarea class="form-control" name="description1" id="description1" maxlength=100><?=
-                isset($review['description1']) ? trim($review['description1']) : ''
+               <label for="context">Context</label>
+               <textarea data-adaptheight class="form-control" name="context" id="context" maxlength=200><?=
+                isset($review['context']) ? trim($review['context']) : ''
                 ?></textarea>
               </div>
             </div>
 
             <div class="col-12">
               <div class="form-group">
-               <label for="description2">Review Comments</label>
-               <textarea class="form-control" name="description2" id="description2" maxlength=200><?=
-                isset($review['description2']) ? trim($review['description2']) : ''
+               <label for="description">Description</label>
+               <textarea data-adaptheight class="form-control" name="description" id="description" maxlength=400><?=
+                isset($review['description']) ? trim($review['description']) : ''
+                ?></textarea>
+            </div>
+            </div>
+
+            <div class="col-12 ">
+              <div class="form-group">
+               <label for="review-ref">Reference</label>
+               <textarea data-adaptheight class="form-control" name="review-ref" id="review-ref" maxlength=250><?=
+                isset($review['review-ref']) ? trim($review['review-ref']) : ''
                 ?></textarea>
               </div>
             </div>
 
-            <div class="col-12">
-              <div class="form-group">
-               <label for="description3">Update Comments</label>
-               <textarea class="form-control" name="description3" id="description3" maxlength=100><?=
-                isset($review['description3']) ? trim($review['description3']) : ''
-                ?></textarea>
-              </div>
-            </div>
-
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="ref">Review Items</label>
-               <input type="text" class="form-control" name="review-items" id="review-items"
-                value="<?= isset($review['review-items']) ? $review['review-items'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="ref">Reviewed by</label>
-               <input type="text" class="form-control" name="reviewed-by" id="reviewed-by"
-                value="<?= isset($review['reviewed-by']) ? $review['reviewed-by'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="reviewed-date">Reviewed Date</label>
-               <input type="date" class="form-control" name="reviewed-date" id="reviewed-date"
-                value="<?= isset($review['reviewed-date']) ? $review['reviewed-date'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12  col-sm-4">
-              <div class="form-group">
-               <label for="reviewers">Reviewers</label>
-               <input type="text" class="form-control" name="reviewers" id="reviewers"
-                value="<?= isset($review['reviewers']) ? $review['reviewers'] : '' ?>" >
-              </div>
-            </div>
-
-          
-          <?php if (isset($validation)): ?>
-            <div class="col-12">
-              <div class="alert alert-danger" role="alert">
-                <?= $validation->listErrors() ?>
-              </div>
-            </div>
-          <?php endif; ?>
           </div>
 
+            <div class="row justify-content-md-center" >
+              <div class="col-12 col-sm-4" >
+                <div class="form-group">
+                <label for="review-by">Reviewd By</label>
+                
+                <select class="form-control fstdropdown-select" name="review-by" id="review-by" required>
+                  <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>
+                      Select
+                  </option>
+                  <?php foreach ($teamMembers as $key=>$value): ?>
+                    <option 
+                      <?= isset($review['review-by']) ? (($review['review-by'] == $key) ? 'selected': '') : '' ?>
+                      value="<?=  $key ?>" ><?=  $value ?></option>
+                  <?php endforeach; ?>
+                  
+                </select>
+
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4">
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control fstdropdown-select" name="status" id="status" required>
+                      <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
+                          Select
+                      </option>
+                      <?php foreach ($reviewStatus as $value): ?>
+                        <option 
+                          <?= isset($review['status']) ? (($review['status'] == $value) ? 'selected': '') : '' ?>
+                          value="<?=  $value ?>" ><?=  $value ?></option>
+                      <?php endforeach; ?>
+                      
+                    </select>
+                  </div>
+              </div>
+            
+            </div>
+           
           <div class="row">
-            <div class="col-12 text-center">
-              <button type="submit" class="btn btn-primary">Submit</button>
+         
+            <div class="col-12 text-center mt-3" >
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-
+          
           </div>
+
         </form>
       </div>
     </div>
