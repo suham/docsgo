@@ -23,7 +23,7 @@
 
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="project-id">Project</label>
+               <label class = "font-weight-bold text-muted" for="project-id">Project</label>
                <select class="form-control fstdropdown-select" name="project-id" id="project-id" required>
                 <option value="" disabled <?= isset($review['project-id']) ? '' : 'selected' ?>>
                     Select
@@ -40,7 +40,7 @@
 
             <div class="col-12  col-sm-4">
               <div class="form-group">
-               <label for="review-name">Name</label>
+               <label class = "font-weight-bold text-muted" for="review-name">Name</label>
                <input type="text" class="form-control" required name="review-name" id="review-name"
                 value="<?= isset($review['review-name']) ? $review['review-name'] : '' ?>" >
               </div>
@@ -48,7 +48,7 @@
 
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="assigned-to">Assigned To</label>
+               <label class = "font-weight-bold text-muted" for="assigned-to">Assigned To</label>
                
                <select class="form-control fstdropdown-select" name="assigned-to" id="assigned-to" required>
                 <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
@@ -67,7 +67,7 @@
 
             <div class="col-12">
               <div class="form-group">
-               <label for="context">Context</label>
+               <label class = "font-weight-bold text-muted" for="context">Context</label>
                <textarea data-adaptheight class="form-control" name="context" id="context" maxlength=200><?=
                 isset($review['context']) ? trim($review['context']) : ''
                 ?></textarea>
@@ -76,7 +76,7 @@
 
             <div class="col-12">
               <div class="form-group">
-               <label for="description">Description</label>
+               <label class = "font-weight-bold text-muted" for="description">Description</label>
                <textarea data-adaptheight class="form-control" name="description" id="description" maxlength=400><?=
                 isset($review['description']) ? trim($review['description']) : ''
                 ?></textarea>
@@ -85,7 +85,7 @@
 
             <div class="col-12 ">
               <div class="form-group">
-               <label for="review-ref">Reference</label>
+               <label class = "font-weight-bold text-muted" for="review-ref">Reference</label>
                <textarea data-adaptheight class="form-control" name="review-ref" id="review-ref" maxlength=250><?=
                 isset($review['review-ref']) ? trim($review['review-ref']) : ''
                 ?></textarea>
@@ -97,7 +97,7 @@
             <div class="row justify-content-md-center" >
               <div class="col-12 col-sm-4" >
                 <div class="form-group">
-                <label for="review-by">Reviewd By</label>
+                <label class = "font-weight-bold text-muted" for="review-by">Reviewd By</label>
                 
                 <select class="form-control fstdropdown-select" name="review-by" id="review-by" required>
                   <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>
@@ -116,7 +116,7 @@
 
               <div class="col-12 col-sm-4">
                   <div class="form-group">
-                    <label for="status">Status</label>
+                    <label class = "font-weight-bold text-muted" for="status">Status</label>
                     <select class="form-control fstdropdown-select" name="status" id="status" required>
                       <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
                           Select

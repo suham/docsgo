@@ -9,16 +9,21 @@
     <link href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/fstdropdown.css">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
     <script src="/assets/js/jquery-3.2.1.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/bootbox.min.js"></script>
     <script src="/assets/js/fstdropdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-    <title></title>
-    <script>
-      
-    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <title>DocsGo</title>
+    <style>
+      .CodeMirror, .CodeMirror-scroll {
+    height: auto;
+    min-height: 70px;
+}
+    </style>
   </head>
   <body>
     <?php

@@ -20,7 +20,7 @@
           <?php endif; ?>
           <div class="col-12 col-sm-6" style="margin:0 auto">
                 <div class="form-group">
-                <label for="type">Type</label>
+                <label class = "font-weight-bold text-muted" for="type">Type</label>
                   <select class="form-control fstdropdown-select" name="type" id="type" >
                   <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
                       Select
@@ -41,7 +41,7 @@
             <div class="row">
               <div class="col-12 col-sm-4">
                   <div class="form-group">
-                  <label for="project-id">Project</label>
+                  <label class = "font-weight-bold text-muted" for="project-id">Project</label>
                   <select class="form-control fstdropdown-select" name="project-id" id="project-id" >
                     <option value="" disabled <?= isset($projectDocument['project-id']) ? '' : 'selected' ?>>
                         Select
@@ -59,7 +59,7 @@
                 <div class="col-12 col-sm-3"></div>
                 <div class="col-12 col-sm-5">
                   <div class="form-group">
-                  <label for="existingDocs">Fill From Existing</label>
+                  <label class = "font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
                   <select class="form-control fstdropdown-select" name="existingDocs" id="existingDocs" >
                       <option value="" selected>
                           Select
@@ -81,7 +81,7 @@
             <div class="row">
             <div class="col-12">
               <div class="form-group">
-                <label for="cp-line3">Title</label>
+                <label class = "font-weight-bold text-muted" for="cp-line3">Title</label>
                 <input type="text" class="form-control" name="cp-line3" id="cp-line3"
                   value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>" >
               </div>
@@ -89,14 +89,14 @@
             
             <div class="col-12 col-sm-6">
               <div class="form-group">
-                <label for="cp-line4">Document ID</label>
+                <label class = "font-weight-bold text-muted" for="cp-line4">Document ID</label>
                 <input type="text" class="form-control" name="cp-line4" id="cp-line4"
                   value="<?= isset($template["cp-line4"]) ? $template["cp-line4"] : '' ?>" >
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="form-group">
-                <label for="cp-line5">Revision</label>
+                <label class = "font-weight-bold text-muted" for="cp-line5">Revision</label>
                 <input type="text" class="form-control" name="cp-line5" id="cp-line5"
                   value="<?= isset($template["cp-line5"]) ? $template["cp-line5"] : '' ?>" >
               </div>
@@ -105,7 +105,7 @@
               
             <div class="col-12">
               <div class="form-group">
-                <label for="cp-approval-matrix">Approval Matrix</label>
+                <label class = "font-weight-bold text-muted" for="cp-approval-matrix">Approval Matrix</label>
                 <input type="text" class="form-control" name="cp-approval-matrix" id="cp-approval-matrix"
                   value="<?= isset($template["cp-approval-matrix"]) ? $template["cp-approval-matrix"] : '' ?>" >
               </div>
@@ -113,7 +113,7 @@
 
             <div class="col-12">
               <div class="form-group">
-                <label for="cp-change-history">Change History</label>
+                <label class = "font-weight-bold text-muted" for="cp-change-history">Change History</label>
                 <textarea data-adaptheight class="form-control"
                       name="cp-change-history" id="cp-change-history"
                 ><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
@@ -126,7 +126,7 @@
             <?php foreach ($sections as $section): ?>
               <div class="col-12">
               <div class="form-group">
-                <label for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
+                <label class = "font-weight-bold text-muted" for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
           
                 <textarea data-adaptheight class="form-control" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
                 </div>
@@ -139,7 +139,7 @@
               <div class="col-12 col-sm-3"></div>
               <div class="col-12 col-sm-4">
                   <div class="form-group">
-                    <label for="status">Status</label>
+                    <label class = "font-weight-bold text-muted" for="status">Status</label>
                     <select class="form-control" name="status" id="status" >
                       <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
                           Select

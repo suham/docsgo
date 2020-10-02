@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-12 col-sm-6">
               <div class="form-group">
-               <label for="name">Name</label>
+               <label class = "font-weight-bold text-muted" for="name">Name</label>
                <input required type="text" class="form-control" name="name" id="name"
                 value="<?= isset($project['name']) ? $project['name'] :'' ?>">
               </div>
@@ -21,7 +21,7 @@
 
             <div class="col-12 col-sm-6">
               <div class="form-group">
-               <label for="manager-id">Manager</label>
+               <label class = "font-weight-bold text-muted" for="manager-id">Manager</label>
                
                <select class="form-control fstdropdown-select" name="manager-id" id="manager-id" required>
                 <option value="" disabled <?= isset($project['manager-id']) ? '' : 'selected' ?>>
@@ -40,7 +40,7 @@
           
             <div class="col-12">
               <div class="form-group">
-               <label for="description">Description</label>
+               <label class = "font-weight-bold text-muted" for="description">Description</label>
                <textarea class="form-control" name="description" id="description" maxlength=100><?=
                 isset($project['description']) ? trim($project['description']) : ''
                 ?></textarea>
@@ -49,7 +49,7 @@
 
             <div class="col-12  col-sm-4">
               <div class="form-group">
-               <label for="start-date">Start Date</label>
+               <label class = "font-weight-bold text-muted" for="start-date">Start Date</label>
                <input required type="date" class="form-control" name="start-date" id="start-date"
                 value="<?= isset($project['start-date']) ? $project['start-date'] : '' ?>" >
               </div>
@@ -57,7 +57,7 @@
 
             <div class="col-12  col-sm-4">
               <div class="form-group">
-               <label for="end-date">End Date</label>
+               <label class = "font-weight-bold text-muted" for="end-date">End Date</label>
                <input type="date" class="form-control" name="end-date" id="end-date"
                 value="<?= isset($project['end-date']) ? $project['end-date'] : '' ?>" >
               </div>
@@ -66,7 +66,7 @@
           
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="is-active">Status</label>
+               <label class = "font-weight-bold text-muted" for="is-active">Status</label>
                <select required class="form-control" name="is-active" id="is-active" >
                 <option value="" disabled <?= isset($project['is-active']) ? '' : 'selected' ?>>
                     Select

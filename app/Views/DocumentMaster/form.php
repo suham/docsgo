@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-12 col-sm-6">
               <div class="form-group">
-               <label for="name">Name</label>
+               <label class = "font-weight-bold text-muted" for="name">Name</label>
                <input type="text" class="form-control" name="name" id="name"
                 value="<?= isset($document['name']) ? $document['name'] :'' ?>">
               </div>
@@ -21,14 +21,14 @@
           
             <div class="col-12  col-sm-6">
               <div class="form-group">
-               <label for="version">Version</label>
+               <label class = "font-weight-bold text-muted" for="version">Version</label>
                <input type="text" class="form-control" name="version" id="version"
                 value="<?= isset($document['version']) ? $document['version'] : '' ?>" >
               </div>
             </div>
             <div class="col-12">
               <div class="form-group">
-               <label for="description">Description</label>
+               <label class = "font-weight-bold text-muted" for="description">Description</label>
                <textarea class="form-control" name="description" id="description" maxlength=100><?=
                 isset($document['description']) ? trim($document['description']) : ''
                 ?></textarea>
@@ -36,7 +36,7 @@
             </div>
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="category">Category</label>
+               <label class = "font-weight-bold text-muted" for="category">Category</label>
                <select class="form-control" name="category" id="category" >
                 <option value="" disabled <?= isset($document['category']) ? '' : 'selected' ?>>
                     Select
@@ -55,7 +55,7 @@
            </div>
            <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="status">Status</label>
+               <label class = "font-weight-bold text-muted" for="status">Status</label>
                <select class="form-control" name="status" id="status" >
                 <option value="" disabled <?= isset($document['status']) ? '' : 'selected' ?>>
                     Select
@@ -73,14 +73,14 @@
 
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label for="location">Location</label>
+               <label class = "font-weight-bold text-muted" for="location">Location</label>
                <input type="text" class="form-control" name="location" id="location" 
                value="<?= isset($document['location']) ? $document['location'] : '' ?>" >
               </div>
             </div>
             <div class="col-12">
               <div class="form-group">
-               <label for="ref">Reference</label>
+               <label class = "font-weight-bold text-muted" for="ref">Reference</label>
                <input type="text" class="form-control" name="ref" id="ref" 
                value="<?= isset($document['ref']) ? $document['ref'] : '' ?>" >
               </div>
