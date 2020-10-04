@@ -29,10 +29,6 @@ Project plan, test plan, impact analysis, and reviews.
 are used in assigning projects, reviews, and reviewed by fields in
 various pages.
 
-## Installation
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
