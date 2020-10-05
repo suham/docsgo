@@ -15,4 +15,14 @@ class UserRules
 
     return password_verify($data['password'], $user['password']);
   }
+
+  public function validatePassCode(string $str){
+    $pass_code = getenv('PASS_CODE');
+    if($str == $pass_code){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 }

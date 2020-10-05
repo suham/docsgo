@@ -14,6 +14,7 @@
           <th scope="col">#</th>
           <th scope="col">Project</th>
           <th scope="col">Name</th>
+          <th scope="col">Context</th>
           <th scope="col">Reviewed By</th>
           <th scope="col">Status</th>
           <th scope="col">Actions</th>
@@ -25,6 +26,7 @@
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $projects[$row['project-id']];?></td>
                 <td><?php echo $row['review-name'];?></td>
+                <td><?php echo $row['context'];?></td>
                 <td><?php echo $teamMembers[$row['review-by']];?></td>
                 <td>
                   <button type="button" 

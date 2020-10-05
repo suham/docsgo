@@ -67,9 +67,16 @@ class Users extends BaseController
 				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-users.email]',
 				'password' => 'required|min_length[8]|max_length[255]',
 				'password_confirm' => 'matches[password]',
+				'pass_code' => 'required|max_length[255]|validatePassCode[pass_code]',
 			];
 
-			if (! $this->validate($rules)) {
+			$errors = [
+				'pass_code' => [
+					'validatePassCode' => 'Pass Code incorrect. Contact admin for a pass code.'
+				]
+			];
+
+			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
 			}else{
 				$model = new UserModel();
