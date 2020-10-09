@@ -5,242 +5,249 @@
         <h3><?= $formTitle ?></h3>
         <hr>
         <?php if (session()->get('success') && (!isset($validation))): ?>
-          <div class="alert alert-success" role="alert">
-            <?= session()->get('success') ?>
-          </div>
+        <div class="alert alert-success" role="alert">
+          <?= session()->get('success') ?>
+        </div>
         <?php endif; ?>
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
-        
-        <?php if (isset($validation)): ?>
-            <div class="col-12">
-              <div class="alert alert-danger" role="alert">
-                <?= $validation->listErrors() ?>
-              </div>
+
+          <?php if (isset($validation)): ?>
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              <?= $validation->listErrors() ?>
             </div>
+          </div>
           <?php endif; ?>
           <div class="col-12 col-sm-6" style="margin:0 auto">
-                <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="type">Type</label>
-                  <select class="form-control fstdropdown-select" name="type" id="type" >
-                  <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
-                      Select
-                  </option>
-                  <?php foreach ($documentType as $key=>$value): ?>
-                    <option 
-                      <?= isset($projectDocument["type"]) ? (($projectDocument["type"] == $key) ? 'selected readonly': '') : '' ?>
-                      value="<?=  $key ?>" ><?=  $value ?></option>
-                  <?php endforeach; ?>
-                  
-                </select>
-                </div>
+            <div class="form-group">
+              <label class="font-weight-bold text-muted" for="type">Type</label>
+              <select class="form-control" name="type" id="type">
+                <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
+                  Select
+                </option>
+                <?php foreach ($documentType as $key=>$value): ?>
+                <option
+                  <?= isset($projectDocument["type"]) ? (($projectDocument["type"] == $key) ? 'selected readonly': '') : '' ?>
+                  value="<?=  $key ?>"><?=  $value ?></option>
+                <?php endforeach; ?>
+
+              </select>
+            </div>
 
           </div>
 
 
           <?php if (isset($sections)): ?>
-            <div class="row">
-              <div class="col-12 col-sm-4">
-                  <div class="form-group">
-                  <label class = "font-weight-bold text-muted" for="project-id">Project</label>
-                  <select class="form-control fstdropdown-select" name="project-id" id="project-id" >
-                    <option value="" disabled <?= isset($projectDocument['project-id']) ? '' : 'selected' ?>>
-                        Select
-                    </option>
-                    <?php foreach ($projects as $key=>$value): ?>
-                      <option 
-                        <?= isset($projectDocument['project-id']) ? (($projectDocument['project-id'] == $key) ? 'selected': '') : '' ?>
-                        value="<?=  $key ?>" ><?=  $value ?></option>
-                    <?php endforeach; ?>
-                    
-                  </select>
-                  </div>
+          <div class="row">
+            <div class="col-12 col-sm-4">
+              <div class="form-group">
+                <label class="font-weight-bold text-muted" for="project-id">Project</label>
+                <select class="form-control fstdropdown-select" name="project-id" id="project-id">
+                  <option value="" disabled <?= isset($projectDocument['project-id']) ? '' : 'selected' ?>>
+                    Select
+                  </option>
+                  <?php foreach ($projects as $key=>$value): ?>
+                  <option
+                    <?= isset($projectDocument['project-id']) ? (($projectDocument['project-id'] == $key) ? 'selected': '') : '' ?>
+                    value="<?=  $key ?>"><?=  $value ?></option>
+                  <?php endforeach; ?>
+
+                </select>
               </div>
-              <?php if (count($existingDocs)): ?>
-                <div class="col-12 col-sm-3"></div>
-                <div class="col-12 col-sm-5">
-                  <div class="form-group">
-                  <label class = "font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
-                  <select class="form-control fstdropdown-select" name="existingDocs" id="existingDocs" >
-                      <option value="" selected>
-                          Select
-                      </option>
-                      <?php foreach ($existingDocs as $key=>$value): ?>
-                        <option 
-                        value='<?=  json_encode($value['json-object'][$type]) ?>' ><?=  $value['json-object'][$type]['cp-line3'] ?></option>
-                      <?php endforeach; ?>
-                      
-                    </select>
-                  </div>
-                </div>
-              <?php endif; ?>
-              
-
             </div>
+            <?php if (count($existingDocs)): ?>
+            <div class="col-12 col-sm-2"></div>
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
+                <select class="form-control fstdropdown-select" name="existingDocs" id="existingDocs">
+                  <option value="" selected>
+                    Select
+                  </option>
+                  <?php foreach ($existingDocs as $key=>$value): ?>
+                  <option value='<?=  $key ?>'>
+                    <?=  $value['json-object'][$type]['cp-line3'] ?></option>
+                  <?php endforeach; ?>
 
-            <hr/>
-            <div class="row">
+                </select>
+              </div>
+            </div>
+            <?php endif; ?>
+
+
+          </div>
+
+          <hr />
+
+          <div class="row">
             <div class="col-12">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="cp-line3">Title</label>
+                <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                 <input type="text" class="form-control" name="cp-line3" id="cp-line3"
-                  value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>" >
+                  value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>">
               </div>
             </div>
-            
+
             <div class="col-12 col-sm-6">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="cp-line4">Document ID</label>
+                <label class="font-weight-bold text-muted" for="cp-line4">Document ID</label>
                 <input type="text" class="form-control" name="cp-line4" id="cp-line4"
-                  value="<?= isset($template["cp-line4"]) ? $template["cp-line4"] : '' ?>" >
+                  value="<?= isset($template["cp-line4"]) ? $template["cp-line4"] : '' ?>">
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="cp-line5">Revision</label>
+                <label class="font-weight-bold text-muted" for="cp-line5">Revision</label>
                 <input type="text" class="form-control" name="cp-line5" id="cp-line5"
-                  value="<?= isset($template["cp-line5"]) ? $template["cp-line5"] : '' ?>" >
+                  value="<?= isset($template["cp-line5"]) ? $template["cp-line5"] : '' ?>">
               </div>
             </div>
-            
-              
+
+
             <div class="col-12">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="cp-approval-matrix">Approval Matrix</label>
+                <label class="font-weight-bold text-muted" for="cp-approval-matrix">Approval Matrix</label>
                 <input type="text" class="form-control" name="cp-approval-matrix" id="cp-approval-matrix"
-                  value="<?= isset($template["cp-approval-matrix"]) ? $template["cp-approval-matrix"] : '' ?>" >
+                  value="<?= isset($template["cp-approval-matrix"]) ? $template["cp-approval-matrix"] : '' ?>">
               </div>
             </div>
 
             <div class="col-12">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="cp-change-history">Change History</label>
-                <textarea data-adaptheight class="form-control"
-                      name="cp-change-history" id="cp-change-history"
-                ><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
+                <label class="font-weight-bold text-muted" for="cp-change-history">Change History</label>
+                <textarea data-adaptheight class="form-control" name="cp-change-history"
+                  id="cp-change-history"><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
               </div>
             </div>
           </div>
-            <hr/>
-            
+          <hr />
 
-            <?php foreach ($sections as $section): ?>
-              <div class="col-12">
+
+          <?php foreach ($sections as $section): ?>
+          <div class="col-12">
+            <div class="form-group">
+              <label class="font-weight-bold text-muted" for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
+
+              <textarea class="form-control" name="<?=  $section["id"] ?>"
+                id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
+            </div>
+          </div>
+
+
+          <?php endforeach; ?>
+
+          <div class="row">
+            <div class="col-12 col-sm-3"></div>
+            <div class="col-12 col-sm-4">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
-          
-                <textarea data-adaptheight class="form-control" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
-                </div>
-              </div>
-                
+                <label class="font-weight-bold text-muted" for="status">Status</label>
+                <select class="form-control" name="status" id="status">
+                  <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
+                    Select
+                  </option>
+                  <?php foreach ($planStatus as $key=>$value): ?>
+                  <option
+                    <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $key) ? 'selected': '') : '' ?>
+                    value="<?=  $value ?>"><?=  $value ?></option>
+                  <?php endforeach; ?>
 
-              <?php endforeach; ?>
-
-            <div class="row">
-              <div class="col-12 col-sm-3"></div>
-              <div class="col-12 col-sm-4">
-                  <div class="form-group">
-                    <label class = "font-weight-bold text-muted" for="status">Status</label>
-                    <select class="form-control" name="status" id="status" >
-                      <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
-                          Select
-                      </option>
-                      <?php foreach ($planStatus as $key=>$value): ?>
-                        <option 
-                          <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $key) ? 'selected': '') : '' ?>
-                          value="<?=  $value ?>" ><?=  $value ?></option>
-                      <?php endforeach; ?>
-                      
-                    </select>
-                  </div>
-              </div>
-              <div class="col-12 col-sm-4 " style="margin-top:1.8rem">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                </select>
               </div>
             </div>
+            <div class="col-12 col-sm-4 " style="margin-top:1.8rem">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
 
           <?php endif; ?>
-       
 
-           
 
-         
-        </div>
 
-          
-        </form>
+
+
       </div>
+
+
+      </form>
     </div>
   </div>
 </div>
+</div>
 
 <script>
+var existingDocs= [];
+  $(document).ready(function(){
+    <?php if (isset($existingDocs)): ?>
+    <?php foreach ($existingDocs as $key=>$value): ?>
+      var json = <?=  json_encode($value['json-object'][$type]) ?>;
+      existingDocs.push(json);
+     
+    <?php endforeach; ?>
+    <?php endif; ?>
 
+  });
 
-
-
-
-$("#updateTemplate").click(function(){
-  console.log('Update template clicked');
-  var form =  $("#documentForm");
-  $.ajax({
-    type:'POST',
-    url: '/documents/updateTemplate',
-    data: form.serialize(),
-    success: function(response){
-      response = JSON.parse(response);
-      if(response.success == "True"){
-        bootbox.alert({
+  $("#updateTemplate").click(function () {
+   
+    var form = $("#documentForm");
+    $.ajax({
+      type: 'POST',
+      url: '/documents/updateTemplate',
+      data: form.serialize(),
+      success: function (response) {
+        response = JSON.parse(response);
+        if (response.success == "True") {
+          bootbox.alert({
             message: "Template updated successfully!.",
             backdrop: true
-        });
-      }else{
-        bootbox.alert({
+          });
+        } else {
+          bootbox.alert({
             message: "Template update failed!.",
             backdrop: true
-        });
+          });
+        }
+      },
+      error: function (err) {
+        console.log(err);
       }
-    },
-    error: function(err){
-      console.log(err);
-    }
-  })
+    })
 
-});
+  });
 
-$("#type").change(function(){
-  var type = $(this).val();
-  var baseUrl = "<?=  $_SERVER['SERVER_NAME'] ?>"
-  console.log(baseUrl);
-  var url = "/documents/add/"+type;
-  console.log(type);
-  console.log(url)
-  window.location.href = url;
-});
-
-$("#existingDocs").change(function(){
-  var value = $(this).val();
-  if(value != ""){
-    var jsonValue = JSON.parse(value);
-
-    console.log(jsonValue);
-    $("#cp-line3").val(jsonValue['cp-line3']);
-    $("#cp-line4").val(jsonValue['cp-line4']);
-    $("#cp-line5").val(jsonValue['cp-line5']);
-    $("#cp-approval-matrix").val(jsonValue['cp-approval-matrix']);
-    $("#cp-change-history").val(jsonValue['cp-change-history']);
-
-    var sections = jsonValue.sections;
-    for(var i = 0; i<sections.length ; i++){
-      var section = sections[i];
-      $("#"+section.id).val(section.content);
-    }
+  $("#type").change(function () {
+    var type = $(this).val();
+    var url = "/documents/add/" + type;
     
-  }
+    window.location.href = url;
+  });
+
+  $("#existingDocs").change(function () {
+    var value = $(this).val();
+    if (value != "") {
+      var jsonValue = existingDocs[value];
+
+      $("#cp-line3").val(jsonValue['cp-line3']);
+      $("#cp-line4").val(jsonValue['cp-line4']);
+      $("#cp-line5").val(jsonValue['cp-line5']);
+      $("#cp-approval-matrix").val(jsonValue['cp-approval-matrix']);
+      $("#cp-change-history").val(jsonValue['cp-change-history']);
+
+      var sections = jsonValue.sections;
+      for (var i = 0; i < sections.length; i++) {
+        var section = sections[i];
+        $("#" + section.id).text(section.content);
+        
+        const $codemirror = $('textarea[name="'+section.id+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+        $codemirror.getDoc().setValue(section.content);
+      }
+
+      
+
+    }
 
 
-});
-
+  });
 
 
 </script>
-

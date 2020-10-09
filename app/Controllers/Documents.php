@@ -3,7 +3,7 @@
 use App\Models\DocumentModel;
 use App\Models\ProjectModel;
 use App\Models\TeamModel;
-use App\Models\DocumentTemplate;
+use App\Models\DocumentTemplateModel;
 
 class Documents extends BaseController
 {
@@ -35,7 +35,7 @@ class Documents extends BaseController
 		$data['addUrl'] = "/documents/add";
 
 		$model = new DocumentModel();
-		$documents = $model->where('project-id',$id)->findAll();	
+		$documents = $model->where('project-id',$id)->orderBy('update-date', 'desc')->findAll();	
 		for($i=0; $i<count($documents);$i++){
 			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
 		}
@@ -54,9 +54,9 @@ class Documents extends BaseController
 	private function getExistingDocs($type = ""){
 		$model = new DocumentModel();
 		if($type == ""){
-			$documents= $model->findAll();	
+			$documents= $model->orderBy('update-date', 'desc')->findAll();	
 		}else{
-			$documents= $model->where('type',$type)->findAll();	
+			$documents= $model->where('type',$type)->orderBy('update-date', 'desc')->findAll();	
 		}
 		
 		for($i=0; $i<count($documents);$i++){
@@ -96,11 +96,10 @@ class Documents extends BaseController
 	}
 
 	public function getTemplates(){
-        $templateModel = new DocumentTemplate();
+        $templateModel = new DocumentTemplateModel();
         $data = $templateModel->findAll();	
 		$templates = [];
 		foreach($data as $project){
-			// $templates[$project['type']] = $project['template-json-object'];
 			$templates[$project['type']] = $project;
 		}
 		return $templates;
@@ -151,7 +150,7 @@ class Documents extends BaseController
 				}
 				$template[$type]['sections'] = $sections;
 				$entireTemplate['template-json-object'] = json_encode($template);
-				$templateModel = new DocumentTemplate();
+				$templateModel = new DocumentTemplateModel();
 				$templateModel->save($entireTemplate);
 				$response = array('success' => "True");
 

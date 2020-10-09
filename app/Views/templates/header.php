@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/assets/css/fstdropdown.css">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <script src="/assets/js/jquery-3.2.1.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
@@ -17,6 +18,7 @@
     <script src="/assets/js/fstdropdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <title>DocsGo</title>
     <style>
       .CodeMirror, .CodeMirror-scroll {
@@ -114,11 +116,15 @@
                     <a href="/projects/add">Add New</a>
                   </li> -->
                   <li>
+                    <a href="/reviews">Reviews</a>
+                  </li>
+                  <li>
                     <a href="/documents">Documents</a>
                   </li>
                   <li>
-                    <a href="/reviews">Reviews</a>
+                    <a href="/documents-templates">Templates</a>
                   </li>
+                  
                 </ul>
               </div>
             </li>

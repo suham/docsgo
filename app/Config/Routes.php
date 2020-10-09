@@ -65,6 +65,12 @@ $routes->get('documents/project/(:num)', 'Documents::projectDocument',['filter' 
 $routes->match(['get','post'],'documents/add', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);
+
+$routes->get('documents-templates', 'DocumentTemplate::index',['filter' => 'auth']);
+$routes->post('documents-templates/addTemplate', 'DocumentTemplate::addTemplate',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/add', 'DocumentTemplate::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/add/(:num)', 'DocumentTemplate::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/delete/(:num)', 'DocumentTemplate::delete',['filter' => 'auth']);
 /**
  * --------------------------------------------------------------------
  * Additional Routing

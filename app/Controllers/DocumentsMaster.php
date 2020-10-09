@@ -31,12 +31,6 @@ class DocumentsMaster extends BaseController
 	}
 	
 	public function add(){
-		
-		// $uri = $this->request->uri;
-		// $id = $uri->getSegment(3);
-		// if($id != ""){
-		// 	$id = intval($id);
-		// }
 		$id = $this->returnParams();
 
 		helper(['form']);

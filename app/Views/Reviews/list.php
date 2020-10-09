@@ -15,9 +15,9 @@
           <th scope="col">Project</th>
           <th scope="col">Name</th>
           <th scope="col">Context</th>
-          <th scope="col">Reviewed By</th>
+          <th scope="col" style="min-width:125px;">>Reviewed By</th>
           <th scope="col">Status</th>
-          <th scope="col">Actions</th>
+          <th scope="col" style="min-width: 125px;">Actions</th>
         </tr>
       </thead>
       <tbody>

@@ -1,0 +1,1 @@
+ALTER TABLE `docsgo-document-template` CHANGE `type` `type` VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
