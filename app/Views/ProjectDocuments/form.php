@@ -159,7 +159,7 @@
 
                           <?php if (isset($section["type"])): ?>
                             <?php if ($section["type"] == "database"): ?>
-                              <div class="col-6">
+                              <div class="col-5">
                                 <select class="form-control selectpicker" data-actions-box="true" data-live-search="true" data-size="8"
                                   id="select_<?=  $section["id"] ?>" multiple>
                                   <?php foreach (${$section["tableName"]} as $key=>$value): ?>
@@ -168,7 +168,7 @@
                                   <?php endforeach; ?>
                                 </select>
                               </div>
-                              <div class="col ">
+                              <div class="col-1 ">
                                 <button type="button" class="btn btn-sm btn-success text-white float-right mt-1"
                                   onclick='insertTable("<?=  $section["id"] ?>","<?=$section["tableName"] ?>", "<?=  $section["contentColumns"] ?>" )'>
                                   Insert</button>
