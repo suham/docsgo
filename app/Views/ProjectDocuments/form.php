@@ -148,31 +148,43 @@
             </div>
             <div class="tab-pane fade mt-3" id="section" role="tabpanel" aria-labelledby="section-tab">
               <?php foreach ($sections as $section): ?>
-              <div class="col-12">
-                <div class="form-group">
-                  <div class="form-row mb-2" style="justify-content: space-between;">
-                    <label class="font-weight-bold text-muted mt-2"
-                      for="<?=  $section["id"] ?>"><?=  $section["title"] ?></label>
-                    <?php if (isset($section["type"])): ?>
-                    <?php if ($section["type"] == "database"): ?>
+                <div class="col-12 mb-3">
+                  <div class="card">
+                    <div class="card-header text-white bg-dark">
+                      <div class="row" style="margin-bottom:-10px">
+                        <div class="col">
+                          <p class="lead"><?=  $section["title"] ?></p>
+                        </div>
 
-                    <select class="form-control selectpicker col-6 " data-live-search="true" data-size="8"
-                      data-width="100%" id="select_<?=  $section["id"] ?>" multiple>
-                      <?php foreach (${$section["tableName"]} as $key=>$value): ?>
-                      <option value='<?=  $value['id'] ?>'>
-                        <?=  $value[$section["headerColumns"] ] ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-sm btn-success text-white"
-                      onclick='insertTable("<?=  $section["id"] ?>","<?=$section["tableName"] ?>", "<?=  $section["contentColumns"] ?>" )'>Insert</button>
-                    <?php endif; ?>
-
-                    <?php endif; ?>
+                        <?php if (isset($section["type"])): ?>
+                          <?php if ($section["type"] == "database"): ?>
+                            <div class="col-6">
+                              <select class="form-control selectpicker" data-actions-box="true" data-live-search="true" data-size="8"
+                                id="select_<?=  $section["id"] ?>" multiple>
+                                <?php foreach (${$section["tableName"]} as $key=>$value): ?>
+                                <option value='<?=  $value['id'] ?>'>
+                                  <?=  $value[$section["headerColumns"] ] ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col ">
+                              <button type="button" class="btn btn-sm btn-success text-white float-right mt-1"
+                                onclick='insertTable("<?=  $section["id"] ?>","<?=$section["tableName"] ?>", "<?=  $section["contentColumns"] ?>" )'>
+                                Insert</button>
+                            </div>
+                          <?php endif; ?>
+                        <?php endif; ?>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <textarea class="form-control sections" name="<?=  $section["id"] ?>"
+                        id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
+                    </div>
                   </div>
-                  <textarea class="form-control sections" name="<?=  $section["id"] ?>"
-                    id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
                 </div>
-              </div>
+
+
+        
               <?php endforeach; ?>
             </div>
           </div>

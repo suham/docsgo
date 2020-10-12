@@ -376,7 +376,7 @@ function createSectionBody(){
                 </div>
                 <div class="form-row mt-3">
                   <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Value</label>
-                  <select class="form-control col-xl-9 section_column_value selectpicker" multiple name="table_columns_value">
+                  <select class="form-control col-xl-9 section_column_value selectpicker" data-actions-box="true" multiple name="table_columns_value">
                    
                     </select>
                 </div>

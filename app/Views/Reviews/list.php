@@ -15,8 +15,9 @@
           <th scope="col">Project</th>
           <th scope="col">Name</th>
           <th scope="col">Context</th>
-          <th scope="col" style="min-width:125px;">>Reviewed By</th>
+          <th scope="col" style="min-width:125px;">Assigned To</th>
           <th scope="col">Status</th>
+          <th scope="col" style="min-width:125px;">Reviewed By</th>
           <th scope="col" style="min-width: 125px;">Actions</th>
         </tr>
       </thead>
@@ -27,7 +28,7 @@
                 <td><?php echo $projects[$row['project-id']];?></td>
                 <td><?php echo $row['review-name'];?></td>
                 <td><?php echo $row['context'];?></td>
-                <td><?php echo $teamMembers[$row['review-by']];?></td>
+                <td><?php echo $teamMembers[$row['assigned-to']];?></td>
                 <td>
                   <button type="button" 
                           style="cursor: unset;"
@@ -37,6 +38,7 @@
                           <?php echo $row['status'];?>
                   </button>
                 </td>
+                <td><?php echo $teamMembers[$row['review-by']];?></td>
                 <td>
                     <a href="/reviews/add/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
