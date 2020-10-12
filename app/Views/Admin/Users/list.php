@@ -9,30 +9,32 @@
 
     <?php else: ?>
 
-        <table class="table rounded table-striped table-hover table-responsive">
-            <thead class="thead-dark">
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email id</th>
-                <th scope="col">Admin</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $key=>$row): ?>
-                    <tr scope="row" >
-                        <td><?php echo $key+1; ?></td>
-                        <td><?php echo $row ['name'];?></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td><input id="<?php echo $row ['id'];?>" 
-                                    data-on="Yes" data-off="No"
-                                    type="checkbox" <?php echo $row['is-admin'] ? 'checked' : '';?>
-                                    data-toggle="toggle" onchange="changeStatus(<?php echo $row ['id'];?>)">
-                        </td>
+        <div class="table-responsive">
+            <table class="table rounded table-striped table-hover table-responsive">
+                <thead class="thead-dark">
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email id</th>
+                    <th scope="col">Admin</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="bg-white">
+                    <?php foreach ($data as $key=>$row): ?>
+                        <tr scope="row" >
+                            <td><?php echo $key+1; ?></td>
+                            <td><?php echo $row ['name'];?></td>
+                            <td><?php echo $row['email'];?></td>
+                            <td><input id="<?php echo $row ['id'];?>" 
+                                        data-on="Yes" data-off="No"
+                                        type="checkbox" <?php echo $row['is-admin'] ? 'checked' : '';?>
+                                        data-toggle="toggle" onchange="changeStatus(<?php echo $row ['id'];?>)">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
     <?php endif; ?>
 </div>

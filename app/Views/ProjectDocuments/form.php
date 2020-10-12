@@ -106,20 +106,27 @@
                 </div>
                 <?php $decodedJson = json_decode($jsonTemplate, true);$temp = $decodedJson[$type]; ?>
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-6">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
                         value="<?= isset($temp["cp-line3"]) ? $temp["cp-line3"] : '' ?>">
                     </div>
                   </div>
-                  <div class="col-12">
-              <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="author">Author</label>
-                <input type="text" class="form-control" name="author"
-                  value="<?= isset($projectDocument["author"]) ? $projectDocument["author"] : '' ?>" >
-              </div>
-            </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label class = "font-weight-bold text-muted" for="author">Author</label>
+                      <select class="form-control selectpicker" data-live-search="true" data-size="8"
+                          id="author" name="author">
+                          <option disabled selected value> -- select an author -- </option>
+                          <?php foreach ($teams as $key=>$value): ?>
+                          <option <?= isset($projectDocument['author']) ? (($projectDocument['author'] == $value['name']) ? 'selected': '') : '' ?>
+                          value='<?=  $value['name'] ?>' >
+                            <?=  $value['name'] ?></option>
+                          <?php endforeach; ?>
+                      </select>
+                    </div>
+                  </div>
 
                   <div class="col-12 col-sm-6">
                     <div class="form-group">

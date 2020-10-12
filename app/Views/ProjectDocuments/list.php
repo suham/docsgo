@@ -1,5 +1,5 @@
 
-<div class="container1">
+<div class="container">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -28,7 +28,7 @@
                 <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
                 <td><?php echo $row['author'];?></td>
                 <td><?php echo $row['status'];?></td>
-                <td><?php echo $row['update-date'];?></td>
+                <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
                     <a href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>

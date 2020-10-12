@@ -1,5 +1,5 @@
 
-<div class="container1">
+<div class="container">
   <?php if (count($data) == 0): ?>
 
     <div class="alert alert-warning" role="alert">
@@ -21,7 +21,7 @@
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white">
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['project-id'];?>">
                 <td><?php echo $key+1; ?></td>

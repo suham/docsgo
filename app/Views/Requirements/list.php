@@ -19,7 +19,7 @@
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody  class="bg-white">
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>

@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-12 col-md-6">
+  <div class="col-12 col-md-7 col-lg-6">
     <div class="container">
       <?php if (count($data) == 0): ?>
 
@@ -8,33 +8,33 @@
       </div>
 
       <?php else: ?>
-
-      <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col" style="min-width:125px;">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($data as $key=>$row): ?>
-          <tr scope="row" id="<?php echo $row['id'];?>">
-            <td><?php echo $key+1; ?></td>
-            <td><?php echo $row['name'];?></td>
-            <td>
-              <a href="/documents-templates/add/<?php echo $row['id'];?>" class="btn btn-warning">
-                <i class="fa fa-edit"></i>
-              </a>
-              <a onclick="deleteTemplate(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                <i class="fa fa-trash text-light"></i>
-              </a>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col" style="min-width:125px;">Action</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white ">
+              <?php foreach ($data as $key=>$row): ?>
+              <tr scope="row" id="<?php echo $row['id'];?>">
+                <td><?php echo $key+1; ?></td>
+                <td><?php echo $row['name'];?></td>
+                <td>
+                  <a href="/documents-templates/add/<?php echo $row['id'];?>" class="btn btn-warning">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a onclick="deleteTemplate(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                    <i class="fa fa-trash text-light"></i>
+                  </a>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
       <?php endif; ?>
 
     </div>

@@ -18,7 +18,6 @@ class Documents extends BaseController
 
 		$data['data'] = $this->getExistingDocs();
 		$data['projects'] = $this->getProjects();
-		// $data['templates'] = $this->getTemplates();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -44,7 +43,6 @@ class Documents extends BaseController
 
 		$data['data'] = $documents;
 		$data['projects'] = $this->getProjects();
-		// $data['templates'] = $this->getTemplates();
 		
 		$data['pageTitle'] = $data['projects'][$id].' Documents';
 		echo view('templates/header');
@@ -176,6 +174,11 @@ class Documents extends BaseController
 			$data['type'] = null;
 		}
 
+		//Filling for authors
+		if(!isset($data['teams'])){
+			$data['teams'] = $this->getTablesData('teams');
+		}
+
 		if($id == ""){
 			if($type == ""){
 				$data['action'] = "add";
@@ -205,14 +208,15 @@ class Documents extends BaseController
 			];	
 
 			$data['type'] = $this->request->getVar('type');
-
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
 				'author' => $this->request->getVar('author'),
                 'file-name' => $this->request->getVar('file-name'),
 				'status' => $this->request->getVar('status'),
-				'json-object' => $this->request->getVar('json-object')
+				'update-date' => $currentTime,
+				'json-object' => $this->request->getVar('json-object'),
 			];
 			$data['jsonTemplate'] = $this->request->getVar('json-object');
 			$decodedJson = json_decode($data['jsonTemplate'], true);
@@ -228,9 +232,9 @@ class Documents extends BaseController
 				
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update-date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update-date'] = $timestamp;
 					$message = 'Plan successfully updated.';
 				}else{
 					$message = 'Plan successfully added.';

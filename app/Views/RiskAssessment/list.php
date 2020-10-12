@@ -41,7 +41,7 @@
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody  class="bg-white">
         <?php foreach ($issues as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td> open-issue</td>
