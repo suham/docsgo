@@ -4,6 +4,8 @@ use App\Models\DocumentModel;
 use App\Models\ProjectModel;
 use App\Models\TeamModel;
 use App\Models\DocumentTemplateModel;
+use App\Models\ReviewModel;
+use App\Models\DocumentsMasterModel;
 
 class Documents extends BaseController
 {
@@ -16,7 +18,7 @@ class Documents extends BaseController
 
 		$data['data'] = $this->getExistingDocs();
 		$data['projects'] = $this->getProjects();
-		$data['templates'] = $this->getTemplates();
+		// $data['templates'] = $this->getTemplates();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -42,7 +44,7 @@ class Documents extends BaseController
 
 		$data['data'] = $documents;
 		$data['projects'] = $this->getProjects();
-		$data['templates'] = $this->getTemplates();
+		// $data['templates'] = $this->getTemplates();
 		
 		$data['pageTitle'] = $data['projects'][$id].' Documents';
 		echo view('templates/header');
@@ -67,7 +69,7 @@ class Documents extends BaseController
 	
 	public function getJson(){
 		$model = new DocumentModel();
-		$data = $model->findAll();	
+		$data = $model->where('status',"Approved")->findAll();	
 		$documents = [];
 		foreach($data as $document){
 			$documents[$document['id']] = $document['json-object'];
@@ -75,15 +77,24 @@ class Documents extends BaseController
 		return json_encode($documents);
 	}
 
-    public function getTeamMembers(){
-		$teamModel = new TeamModel();
-		$data = $teamModel->findAll();	
-		$team = [];
-		foreach($data as $member){
-			$team[$member['id']] = $member['name'];
+	
+	private function getTablesData($tableName){
+		if($tableName == 'teams'){
+			$teamModel = new TeamModel();
+			$data = $teamModel->orderBy('name', 'asc')->findAll();	
+			return $data;
+		}else if($tableName == 'reviews'){
+			$reviewModel = new ReviewModel();
+			$data = $reviewModel->getMappedRecords();
+			return $data;
+		}else if($tableName == 'documentMaster'){
+			$references = new DocumentsMasterModel();
+			$data = $references->findAll();	
+			return $data;
+		}else{
+			return [];
 		}
-		return $team;
-    }
+	}
     
     public function getProjects(){
         $projectModel = new ProjectModel();
@@ -95,14 +106,10 @@ class Documents extends BaseController
 		return $projects;
 	}
 
-	public function getTemplates(){
+	public function getTemplates($type){
         $templateModel = new DocumentTemplateModel();
-        $data = $templateModel->findAll();	
-		$templates = [];
-		foreach($data as $project){
-			$templates[$project['type']] = $project;
-		}
-		return $templates;
+		$data = $templateModel->where('type', $type)->first();	
+		return $data;
 	}
 	
 	private function returnParams(){
@@ -124,43 +131,6 @@ class Documents extends BaseController
 		return [$type, $id];
 	}
 	
-	public function updateTemplate() {
-		if ($this->request->getMethod() == 'post') {
-			
-			
-			$type = $this->request->getVar('type');
-			$templates = $this->getTemplates();
-			if (array_key_exists($type,$templates)){
-				$entireTemplate = $templates[$type];
-				$template = json_decode($templates[$type]['template-json-object'], true);
-				$template[$type]['cp-line3'] = $this->request->getVar('cp-line3');
-				$template[$type]['cp-line4'] = $this->request->getVar('cp-line4');
-				$template[$type]['cp-line5'] = $this->request->getVar('cp-line5');
-				$template[$type]['cp-approval-matrix'] = $this->request->getVar('cp-approval-matrix');
-				$template[$type]['cp-change-history'] = $this->request->getVar('cp-change-history');
-
-				$sections = array();
-
-				foreach ($template[$type]['sections'] as $section){
-					$temp["id"] = $section["id"];
-					$temp["title"] = $section["title"];
-					$temp["content"] = $this->request->getVar($section["id"]);
-
-					array_push($sections, $temp);
-				}
-				$template[$type]['sections'] = $sections;
-				$entireTemplate['template-json-object'] = json_encode($template);
-				$templateModel = new DocumentTemplateModel();
-				$templateModel->save($entireTemplate);
-				$response = array('success' => "True");
-
-			}else{
-				$response = array('success' => "False");
-			}
-			echo json_encode( $response );
-		}
-		
-	}
 
 	public function add(){
 		$model = new DocumentModel();
@@ -175,19 +145,31 @@ class Documents extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents";
 		$data['planStatus'] = ['Draft', 'Approved', 'Rejected'];
-		$data['documentType'] = array("project-plan"=>"Project Plan", "reviews"=>"Reviews", "test-plan"=> "Test Plan", "impact-analysis"=>"Impact Analysis" );
 		$data['projects'] = $this->getProjects();
 		$data['template'] = "";
 		$data['type'] = $type;
 
+		$templateModel = new DocumentTemplateModel();
+		$existingTypes = $templateModel->getTypes();
+		$data['documentType'] = $existingTypes;
+
 		if($type != ""){
-			$templates = $this->getTemplates();
-			if (array_key_exists($type,$templates)){
-				$template = json_decode($templates[$type]['template-json-object'], true);
-				$data['template'] = $template[$type];
-				$data['sections'] = $template[$type]['sections'];
-				$data['projectDocument']["type"] = $type;
-				$data['existingDocs'] = $this->getExistingDocs($type);
+			$templates = $this->getTemplates($type);
+			$data['jsonTemplate'] = $templates['template-json-object'];
+			$decodedJson = json_decode($templates['template-json-object'], true);
+			
+			$sections = $decodedJson[$type]["sections"];
+			$data["sections"] = $sections;
+			$data['projectDocument']["type"] = $type;
+			$data['existingDocs'] = $this->getExistingDocs($type);
+			foreach ($sections as $section){
+				if(array_key_exists('type', $section)){
+					if($section['type'] == 'database'){
+						if(!array_key_exists($section['tableName'] , $data)){
+							$data[$section['tableName']] = $this->getTablesData($section['tableName']);
+						}
+					}
+				}
 			}
 		}else{
 			$data['projectDocument']["type"] = null;
@@ -206,9 +188,11 @@ class Documents extends BaseController
 			$data['formTitle'] = "Update";
 
 			$data['projectDocument'] = $model->where('id',$id)->first();	
-			$template = json_decode($data['projectDocument']["json-object"], true);		
-			$data['template'] = $template[$type];
-			$data['sections'] = $template[$type]['sections'];
+			$data['jsonTemplate'] = $data['projectDocument']['json-object'];	
+			$decodedJson = json_decode($data['jsonTemplate'], true);
+			
+			$sections = $decodedJson[$type]["sections"];
+			$data["sections"] = $sections;
 		}
 
 		if ($this->request->getMethod() == 'post') {
@@ -225,28 +209,14 @@ class Documents extends BaseController
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
                 'file-name' => $this->request->getVar('file-name'),
-                'status' => $this->request->getVar('status'),
+				'status' => $this->request->getVar('status'),
+				'json-object' => $this->request->getVar('json-object')
 			];
-
-			$template[$type]['cp-line3'] = $this->request->getVar('cp-line3');
-			$template[$type]['cp-line4'] = $this->request->getVar('cp-line4');
-			$template[$type]['cp-line5'] = $this->request->getVar('cp-line5');
-			$template[$type]['cp-approval-matrix'] = $this->request->getVar('cp-approval-matrix');
-			$template[$type]['cp-change-history'] = $this->request->getVar('cp-change-history');
-
-			$sections = array();
-
-			foreach ($data['sections'] as $section){
-				$temp["id"] = $section["id"];
-				$temp["title"] = $section["title"];
-				$temp["content"] = $this->request->getVar($section["id"]);
-
-				array_push($sections, $temp);
-			}
-
-			$template[$type]['sections'] = $sections;
-			$data['template'] = $template[$type];
-			$data['sections'] = $sections;
+			$data['jsonTemplate'] = $this->request->getVar('json-object');
+			$decodedJson = json_decode($data['jsonTemplate'], true);
+			
+			$sections = $decodedJson[$type]["sections"];
+			$data["sections"] = $sections;
 			$data['projectDocument'] = $newData;
 
 			if (! $this->validate($rules)) {
@@ -254,8 +224,6 @@ class Documents extends BaseController
 				$data['validation'] = $this->validator;
 			}else{
 				
-				$newData['json-object'] = json_encode($template);
-
 				if($id > 0){
 					$newData['id'] = $id;
 					$message = 'Plan successfully updated.';

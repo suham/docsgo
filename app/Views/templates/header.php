@@ -22,9 +22,9 @@
     <title>DocsGo</title>
     <style>
       .CodeMirror, .CodeMirror-scroll {
-    height: auto;
-    min-height: 70px;
-}
+          height: auto;
+          min-height: 70px;
+      }
     </style>
   </head>
   <body>

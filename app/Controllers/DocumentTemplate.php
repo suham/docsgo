@@ -66,7 +66,9 @@ class DocumentTemplate extends BaseController
 		$data['pageTitle'] = 'Templates';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents-templates";
-		$data['existingTypes'] =  join(",",$model->getTypes());
+		// $data['existingTypes'] =  join(",",$model->getTypes());
+		$existingTypes = $model->getTypes();
+		$data['existingTypes'] = implode(",", array_keys($existingTypes));
 
 		if($id == ""){
 			$data['action'] = "add";
@@ -90,12 +92,12 @@ class DocumentTemplate extends BaseController
 
 	private function returnTablesLayout(){
 		$tables = array();
-		$tables['References']['name'] = "docsgo-document-master";
+		$tables['References']['name'] = "documentMaster";
 		$tables['References']['columns'] = "name,category,description,location,ref,status,version";
-		$tables['Teams']['name'] = "docsgo-team-master";
+		$tables['Teams']['name'] = "teams";
 		$tables['Teams']['columns'] = "name,email,responsibility,role";
-		$tables['Reviews']['name'] = "docsgo-reviews";
-		$tables['Reviews']['columns'] = "review-name,context,assigned-to,description,project-id,review-by,review-ref,status";
+		$tables['Reviews']['name'] = "reviews";
+		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
 		return $tables;
 	}
 

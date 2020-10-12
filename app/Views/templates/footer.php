@@ -53,6 +53,7 @@ $( document ).ready(function(){
          status: false,
          showIcons: ["code", "table"],
       });
+      simplemde.codemirror.refresh();
    });
 
 });

@@ -9,12 +9,12 @@ class DocumentTemplateModel extends Model{
     public function getTypes(){
         $db      = \Config\Database::connect();
         $builder = $db->table('docsgo-document-template');
-        $builder->select('type');
+        $builder->select('name, type');
         $query = $builder->get();
         $data = $query->getResult('array');
         $types = [];
 		foreach($data as $type){
-			$types[] = $type['type'];
+			$types[$type['type']] = $type['name'];
 		}
 		return $types;
     }

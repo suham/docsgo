@@ -5,8 +5,8 @@
   }
 </style>
 <div class="">
-  <div class="row">
-    <div class="col-12 col-sm8- offset-sm-2 col-md-9 offset-md-1 mt-1 pt-3 pb-3 bg-white from-wrapper">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9 mt-1 pt-3 pb-3 bg-white from-wrapper">
       <div class="container">
         
         <div class="row">
@@ -299,7 +299,7 @@ function submitForm(){
 
     const $codemirror = $('textarea[name="cp-change-history"]').nextAll('.CodeMirror')[0].CodeMirror;
     var cp_change_history = $codemirror.getValue();
-    
+
     var sectionArray = getSectionsData();
     if(sectionArray.length){
       var sectionsJson = sectionArray;
@@ -370,7 +370,7 @@ function createSectionBody(){
                 </div>
                 <div class="form-row mt-3">
                   <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Text</label>
-                  <select class="form-control col-xl-9 section_column_text selectpicker" data-max-options="2" multiple name="table_columns_text">
+                  <select class="form-control col-xl-9 section_column_text selectpicker" name="table_columns_text">
                    
                     </select>
                 </div>
@@ -504,7 +504,7 @@ function getSectionsData(){
         section.title =  title;
         section.type =  type;
         section.tableName = table;
-        section.headerColumns = column_text.join();
+        section.headerColumns = column_text;
         section.contentColumns = column_value.join();
 
         sectionArray.push(section);
