@@ -24,7 +24,7 @@
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="project-id">Project</label>
-               <select class="form-control fstdropdown-select" name="project-id" id="project-id" required>
+               <select class="form-control fstdropdown-select" name="project-id" id="project-id">
                 <option value="" disabled <?= isset($review['project-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -50,7 +50,7 @@
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="assigned-to">Assigned To</label>
                
-               <select class="form-control fstdropdown-select" name="assigned-to" id="assigned-to" required>
+               <select class="form-control fstdropdown-select" name="assigned-to" id="assigned-to">
                 <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -65,12 +65,29 @@
               </div>
             </div>
 
+            <div class="col-12 col-sm-4">
+                <div class="form-group">
+                  <label class = "font-weight-bold text-muted" for="category">Category</label>
+                  <select class="form-control fstdropdown-select" name="category" id="category">
+                    <option value="" disabled <?= isset($review['category']) ? '' : 'selected' ?>>
+                        Select
+                    </option>
+                    <?php foreach ($categoryList as $value): ?>
+                      <option 
+                        <?= isset($review['category']) ? (($review['category'] == $value) ? 'selected': '') : '' ?>
+                        value="<?=  $value ?>" ><?=  $value ?></option>
+                    <?php endforeach; ?>
+                    
+                  </select>
+                </div>
+            </div>
+
+
             <div class="col-12">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="context">Context</label>
-               <textarea data-adaptheight class="form-control" name="context" id="context" maxlength=200><?=
-                isset($review['context']) ? trim($review['context']) : ''
-                ?></textarea>
+                <input data-adaptheight type="text" class="form-control" required name="context" id="context"
+                value="<?= isset($review['context']) ? $review['context'] : '' ?>" >
               </div>
             </div>
 
@@ -99,7 +116,7 @@
                 <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="review-by">Reviewd By</label>
                 
-                <select class="form-control fstdropdown-select" name="review-by" id="review-by" required>
+                <select class="form-control fstdropdown-select" name="review-by" id="review-by">
                   <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>
                       Select
                   </option>
@@ -117,7 +134,7 @@
               <div class="col-12 col-sm-4">
                   <div class="form-group">
                     <label class = "font-weight-bold text-muted" for="status">Status</label>
-                    <select class="form-control fstdropdown-select" name="status" id="status" required>
+                    <select class="form-control fstdropdown-select" name="status" id="status">
                       <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
                           Select
                       </option>
@@ -132,7 +149,7 @@
               </div>
             
             </div>
-           
+            <br/><br/><br/><br/> 
           <div class="row">
          
             <div class="col-12 text-center mt-3" >

@@ -200,6 +200,7 @@ class Documents extends BaseController
 			$rules = [
 				'type' => 'required',
 				'project-id' => 'required',
+				'author' =>'required|min_length[3]|max_length[20]',
                 'status' => 'required',
 			];	
 
@@ -208,6 +209,7 @@ class Documents extends BaseController
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
+				'author' => $this->request->getVar('author'),
                 'file-name' => $this->request->getVar('file-name'),
 				'status' => $this->request->getVar('status'),
 				'json-object' => $this->request->getVar('json-object')
@@ -226,6 +228,9 @@ class Documents extends BaseController
 				
 				if($id > 0){
 					$newData['id'] = $id;
+					date_default_timezone_set('Asia/Kolkata');
+					$timestamp = date("Y-m-d H:i:s");
+					$newData['update-date'] = $timestamp;
 					$message = 'Plan successfully updated.';
 				}else{
 					$message = 'Plan successfully added.';

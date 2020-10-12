@@ -42,7 +42,7 @@ class DocumentTemplate extends BaseController
 			$newData = [
 				'name' => $name ,
 				'type' => $type,
-                'template-json-object' => $json
+                'template-json-object' => $json,
 			];
 			
 			if($id != ""){
@@ -52,7 +52,10 @@ class DocumentTemplate extends BaseController
 			$model = new DocumentTemplateModel();
 			$model->save($newData);
 
+			$newRecord = $model->where('type',$type)->first();
+
 			$response = array('success' => "True");
+			$response['id'] = $newRecord['id'];
 			
 			echo json_encode( $response );
 		}

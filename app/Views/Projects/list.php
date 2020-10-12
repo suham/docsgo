@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container1">
   <?php if (count($data) == 0): ?>
 
     <div class="alert alert-warning" role="alert">
@@ -7,58 +7,45 @@
     </div>
 
     <?php else: ?>
-    <div class="row">
+    
+      <table class="table table-striped table-hover table-responsive1">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Project Name</th>
+          <th scope="col">Project Version</th>
+          <th scope="col">Description</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">Status</th>
+          <th scope="col" style="width:125px">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($data as $key=>$row): ?>
+            <tr scope="row" id="<?php echo $row['project-id'];?>">
+                <td><?php echo $key+1; ?></td>
+                <td><?php echo $row['name'];?></td>
+                <td><?php echo $row['version'];?></td>
+                <td style="width:150px !important"><?php echo $row['description'];?></td>
+                <td><?php echo $row['start-date'];?></td>
+                <td><?php echo $row['end-date'];?></td>
+                <td><?php echo $row['status'];?></td>
+                <td>
+                    <a href="/projects/add/<?php echo $row['project-id'];?>" class="btn btn-warning">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <?php if (session()->get('is-admin')): ?>
+                    <a onclick="deleteProject(<?php echo $row['project-id'];?>)" class="btn btn-danger ml-2">
+                        <i class="fa fa-trash text-light"></i>
+                    </a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
 
-      <?php foreach ($data as $key=>$row): ?>
-        <div class="col-md-4 mt-2">
-          <div class="card ">
-            <div class="card-header bg-<?php echo $row['is-active'] == 'Active' ? 'primary' : 'secondary';?> text-white">
-              <h5><?php echo $row['is-active'];?></h5>
-            </div>
-
-            <div class="card-body text-center  ">
-              <h5 class="card-title"><?php echo $row['name'];?></h5>
-              <p class="card-text"><?php echo $row['description'];?></p>
-              <a title="Edit" href="/projects/add/<?php echo $row['project-id'];?>" class="btn btn-warning">
-                  <i class="fa fa-edit"></i>
-              </a>
-              <?php if (session()->get('is-admin')): ?>
-                <a title="Delete" onclick="deleteProject(<?php echo $row['project-id'];?>)" class="btn btn-danger ml-4">
-                    <i class="fa fa-trash text-light"></i>
-                </a>
-              <?php endif; ?>
-              <hr />
-              <p class="card-text">
-              <span class="badge  badge-pill badge-dark"><?php echo $row['start-date'];?></span> /
-              <span class="badge  badge-pill badge-dark"><?php echo $row['end-date'];?></span>
-                
-              </p>
-            </div>
-
-            <div class="card-footer text-muted text-center">
-              <div class="row">
-                <div class="col">
-                  <a href="/reviews/project/<?php echo $row['project-id'];?>" title="Reviews">
-                    <i class="fas fa-clipboard-list text-muted fa-lg"></i>
-                  </a>
-                </div>
-                <!-- <div class="col">
-                  <a href="" title="Observations"><i class="fas fa-sticky-note text-muted fa-lg"></i></a>
-                </div> -->
-                <div class="col">
-                  <a href="/documents/project/<?php echo $row['project-id'];?>" title="Documents">
-                    <i class="fas fa-folder-open text-muted fa-lg"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      <?php endforeach; ?>
-
-    </div>
 
   <?php endif; ?>
 </div>

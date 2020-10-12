@@ -16,6 +16,7 @@
           <th scope="col">Name</th>
           <th scope="col">Context</th>
           <th scope="col" style="min-width:125px;">Assigned To</th>
+          <th scope="col">Category</th>
           <th scope="col">Status</th>
           <th scope="col" style="min-width:125px;">Reviewed By</th>
           <th scope="col" style="min-width: 125px;">Actions</th>
@@ -29,11 +30,13 @@
                 <td><?php echo $row['review-name'];?></td>
                 <td><?php echo $row['context'];?></td>
                 <td><?php echo $teamMembers[$row['assigned-to']];?></td>
+                <td><?php echo $row['category'];?></td>
                 <td>
                   <button type="button" 
                           style="cursor: unset;"
                           class="btn btn-sm btn-outline-<?php
-                           echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Rejected' ? 'danger' : 'info');
+                           echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Request Change' ? 'danger' : 'info');
+                          //  echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Rejected' ? 'danger' : 'info');
                            ?>">
                           <?php echo $row['status'];?>
                   </button>

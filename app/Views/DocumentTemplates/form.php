@@ -557,6 +557,7 @@ function addTemplate (name, type, json) {
        
        response = JSON.parse(response);
        if (response.success == "True") {
+        templateId = response.id;
         showPopUp("Success", successMessage);
        } else {
         showPopUp("Failure", "Failed to add a new template!.");

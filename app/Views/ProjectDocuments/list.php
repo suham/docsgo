@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container1">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -14,6 +14,7 @@
           <th scope="col">#</th>
           <th scope="col">Project</th>
           <th scope="col">Title</th>
+          <th scope="col">Author</th>
           <th scope="col">Status</th>
           <th scope="col" style="min-width: 125px;">Update Date</th>
           <th scope="col" style="min-width: 125px;">Actions</th>
@@ -25,6 +26,7 @@
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $projects[$row['project-id']];?></td>
                 <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
+                <td><?php echo $row['author'];?></td>
                 <td><?php echo $row['status'];?></td>
                 <td><?php echo $row['update-date'];?></td>
                 <td>

@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class ReviewModel extends Model{
     protected $table = 'docsgo-reviews';
     protected $allowedFields = ["assigned-to","context","description","id","project-id",
-                                "review-by","review-name","review-ref","status"];
+                                "review-by","review-name","review-ref","status", "category"];
 
 
     public function getMappedRecords(){

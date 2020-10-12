@@ -4,6 +4,6 @@ use CodeIgniter\Model;
 
 class DocumentModel extends Model{
     protected $table = 'docsgo-documents';
-    protected $allowedFields = ["project-id","type","update-date","json-object","file-name","status"];
+    protected $allowedFields = ["project-id","type","author", "update-date","json-object","file-name","status"];
     
 }

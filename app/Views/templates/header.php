@@ -20,6 +20,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <title>DocsGo</title>
+    <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
+    <!-- <link rel="icon" href="<?=base_url()?>/favicon.ico" type="image/gif"> -->
     <style>
       .CodeMirror, .CodeMirror-scroll {
           height: auto;
@@ -100,39 +102,60 @@
             <li class="header-menu">
               <span>Manage</span>
             </li>
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects') 
-            || $uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'reviews')  ? 'active' : null) ?>">
-              <a href="#">
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects')
+            || $uri->getSegment(1) == 'reviews')  ? 'active' : null) ?>">
+              <a href="/projects">
                 <i class="fa fa-briefcase"></i>
                 <span>Project</span>
-                <span class="badge badge-pill badge-warning">New</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
               </a>
-              <div class="sidebar-submenu">
+              <!-- <div class="sidebar-submenu">
                 <ul>
                 <li>
+                    <a href="/reviews">Review Comments</a>
+                  </li>
+                  <li>
                     <a href="/projects">View/Add/Update</a>
                   </li>
-                  <!-- <li>
-                    <a href="/projects/add">Add New</a>
-                  </li> -->
                   <li>
-                    <a href="/reviews">Reviews</a>
+                    <a href="/projects/add">Add New</a>
                   </li>
                   <li>
                     <a href="/documents">Documents</a>
-                  </li>
-                  <li>
-                    <a href="/documents-templates">Templates</a>
-                  </li>
-                  
+                  </li>                  
                 </ul>
-              </div>
+              </div> -->
             </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-templatesents' ? 'active' : null) ?>">
+              <a href="/documents-templates">
+                <i class="fa fa-folder-open"></i>
+                <span>Templates</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents' ? 'active' : null) ?>">
+              <a href="/documents">
+                <i class="fa fa-folder-open"></i>
+                <span>Documents</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'reviews' ? 'active' : null) ?>">
+              <a href="/reviews">
+                <i class="fa fa-folder-open"></i>
+                <span>Review Comments</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
             <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-master' ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-folder-open"></i>
                 <span>References</span>
-                <span class="badge badge-pill badge-warning">New</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
               </a>
               <div class="sidebar-submenu">
                 <ul>
@@ -150,7 +173,7 @@
               <a href="#">
                 <i class="far fa-user"></i>
                 <span>Team</span>
-                <span class="badge badge-pill badge-warning">New</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
               </a>
               <div class="sidebar-submenu">
                 <ul>
@@ -163,6 +186,61 @@
                 </ul>
               </div>
              </li>
+
+             <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'issues' ? 'active' : null) ?>">
+              <a href="/issues">
+                <i class="fa fa-folder-open"></i>
+                <span>Issues/Observations</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'cybersecurity' ? 'active' : null) ?>">
+              <a href="/cybersecurity">
+                <i class="fa fa-folder-open"></i>
+                <span>Cybersecurity</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'soup' ? 'active' : null) ?>">
+              <a href="/soup">
+                <i class="fa fa-folder-open"></i>
+                <span>SOUP</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'risk-assessment' ? 'active' : null) ?>">
+              <a href="/risk-assessment">
+                <i class="fa fa-folder-open"></i>
+                <span>Risk Assessment</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'requirements') 
+            || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active' : null) ?>">
+              <a href="#">
+                <i class="fa fa-briefcase"></i>
+                <span>Traceability</span>
+                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+              </a>
+              <div class="sidebar-submenu">
+                <ul>
+                <li>
+                    <a href="/requirements">Requirements</a>
+                </li>
+                <li>
+                    <a href="/test-cases">Test cases</a>
+                  </li>
+                  <li>
+                    <a href="/traceability-matrix">Traceability Matrix</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            
             <!--<li class="sidebar-dropdown">
               <a href="#">
                 <i class="far fa-edit"></i>
