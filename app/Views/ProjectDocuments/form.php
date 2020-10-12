@@ -150,7 +150,7 @@
               <div class="tab-pane fade mt-3" id="section" role="tabpanel" aria-labelledby="section-tab">
                 <?php foreach ($sections as $section): ?>
                   <div class="col-12 mb-3">
-                    <div class="card">
+                    <div class="">
                       <div class="card-header text-white bg-dark">
                         <div class="row" style="margin-bottom:-10px">
                           <div class="col">
@@ -177,7 +177,7 @@
                           <?php endif; ?>
                         </div>
                       </div>
-                      <div class="card-body">
+                      <div class="card-body p-0">
                         <textarea class="form-control sections" name="<?=  $section["id"] ?>"
                           id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
                       </div>
