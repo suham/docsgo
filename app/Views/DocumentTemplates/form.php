@@ -37,19 +37,19 @@
             <?php endif; ?>
           </div>
 
-          <div>
+          <div class="card">
             <ul class="nav nav-tabs nav-justified mb-3" id="myTab" role="tablist">
               <li class="nav-item">
-                <a class="nav-link active" id="header-tab" data-toggle="tab" href="#header" role="tab"
+                <a class="nav-link active lead" id="header-tab" data-toggle="tab" href="#header" role="tab"
                   aria-controls="header" aria-selected="true">Header</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="section-tab" data-toggle="tab" href="#section" role="tab"
+                <a class="nav-link lead" id="section-tab" data-toggle="tab" href="#section" role="tab"
                   aria-controls="section" aria-selected="false">Sections</a>
               </li>
             </ul>
 
-            <div class="tab-content" id="myTabContent">
+            <div class="tab-content p-4" id="myTabContent">
               <div class="tab-pane fade show active mt-3" id="header" role="tabpanel" aria-labelledby="header-tab">
                 <div class="row justify-content-center">
                   <div class="col-12 col-sm-5 ">
