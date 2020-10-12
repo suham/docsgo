@@ -285,7 +285,7 @@
 
   $('#documentForm').submit(function (eventObj) {
 
-    const $codemirror1 = $('textarea[name="cp-change-history"]').nextAll('.CodeMirror')[0].CodeMirror;
+    var $codemirror1 = $('textarea[name="cp-change-history"]').nextAll('.CodeMirror')[0].CodeMirror;
     var changeHistory = $codemirror1.getValue();
 
     var allSections = $("textarea.sections");
@@ -394,8 +394,8 @@
       $("#cp-approval-matrix").val(jsonValue['cp-approval-matrix']);
       $("#cp-change-history").val(jsonValue['cp-change-history']);
 
-      const $codemirror1 = $('textarea[name="cp-change-history"]').nextAll('.CodeMirror')[0].CodeMirror;
-      $codemirror1.getDoc().setValue(section.content);
+      var $codemirror1 = $('textarea[name="cp-change-history"]').nextAll('.CodeMirror')[0].CodeMirror;
+      $codemirror1.getDoc().setValue(jsonValue["cp-change-history"]);
 
       var sections = jsonValue.sections;
       for (var i = 0; i < sections.length; i++) {
