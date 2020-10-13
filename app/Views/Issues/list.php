@@ -15,7 +15,7 @@
           <th scope="col">Issue</th>
           <th scope="col">Issue Description</th>
           <th scope="col">Source</th>
-          <th scope="col">Update Date</th>
+          <th scope="col" style="width:125px">Update Date</th>
           <th scope="col">Status</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>

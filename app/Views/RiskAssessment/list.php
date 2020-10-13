@@ -37,7 +37,7 @@
           <th scope="col">Occurrence</th>
           <th scope="col">Detectability</th>
           <th scope="col">RPN</th>
-          <th scope="col">Update Date</th>
+          <th scope="col" style="width:125px">Update Date</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>

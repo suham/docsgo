@@ -18,7 +18,7 @@
           <th scope="col">Purpose</th>
           <th scope="col">Validation</th>
           <th scope="col">Update Date</th>
-          <th scope="col">Status</th>
+          <th scope="col" style="width:125px">Status</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>

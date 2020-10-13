@@ -18,7 +18,7 @@
           <th scope="col">Design</th>
           <th scope="col">Code</th>
           <th scope="col">Testcase</th>
-          <th scope="col">Update Date</th>
+          <th scope="col" style="width:125px">Update Date</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>

@@ -17,7 +17,7 @@
           <th scope="col">Description</th>
           <th scope="col">Established Control</th>
           <th scope="col">Status</th>
-          <th scope="col">Last update</th>
+          <th scope="col" style="width:125px">Last update</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
