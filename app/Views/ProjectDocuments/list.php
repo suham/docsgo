@@ -17,7 +17,7 @@
           <th scope="col">Author</th>
           <th scope="col">Status</th>
           <th scope="col" style="min-width: 125px;">Update Date</th>
-          <th scope="col" style="min-width: 125px;">Actions</th>
+          <th scope="col" style="min-width: 175px;">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white">
@@ -30,11 +30,15 @@
                 <td><?php echo $row['status'];?></td>
                 <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
-                    <a href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
+                    <a title="Edit" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
+                    <a title="Download" href="docsgen/generateDocument.php?id=<?php echo $row['id'];?>&type=<?php echo $row['type'];?>" 
+                    class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
+                        <i class="fa fa-download"></i>
+                    </a>
                   <?php if (session()->get('is-admin')): ?>
-                    <a onclick="deletePlanDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                    <a title="Delete" onclick="deletePlanDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                         <i class="fa fa-trash text-light"></i>
                     </a>
                   <?php endif; ?>
