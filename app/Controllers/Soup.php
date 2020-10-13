@@ -7,7 +7,7 @@ class Soup extends BaseController
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Software Of Unknown Provenance (SOUP) List';
+		$data['pageTitle'] = 'Software Of Unknown Provenance (SOUP)';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/soup/add";
 
@@ -39,14 +39,14 @@ class Soup extends BaseController
 		helper(['form']);
 		$model = new SoupModel();
 		$data = [];
-		$data['pageTitle'] = 'Software Of Unknown Provenance (SOUP) List';
+		$data['pageTitle'] = 'Software Of Unknown Provenance (SOUP)';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/soup";
 		$data['soupStatus'] = ['Open', 'Close'];
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Software Of Unknown Provenance (SOUP)";
+			$data['formTitle'] = "Add SOUP";
 
 			$rules = [
 				'project' => 'required',

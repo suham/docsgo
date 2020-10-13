@@ -26,12 +26,28 @@
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
-                <td><?php echo $CNCRList[$row['cncr']];?></td>
+                <?php if (isset($CNCRList[$row['cncr']])): ?>
+                  <td><?php echo $CNCRList[$row['cncr']];?></td>
+                <?php else: ?>
+                  <td></td>
+                <?php endif; ?>
+                <?php if (isset($systemList[$row['sysreq']])): ?>
                 <td><?php echo $systemList[$row['sysreq']];?></td>
-                <td><?php echo $subSystemList[$row['subsysreq']];?></td>
+                <?php else: ?>
+                  <td></td>
+                <?php endif; ?>
+                <?php if (isset($subSystemList[$row['subsysreq']])): ?>
+                  <td><?php echo $subSystemList[$row['subsysreq']];?></td>
+                <?php else: ?>
+                  <td></td>
+                <?php endif; ?>
                 <td><?php echo $row['design']; ?></td>
                 <td><?php echo $row['code'];?></td>
-                <td><?php echo $testCases[$row['testcase']];?></td>
+                <?php if (isset($testCases[$row['testcase']])): ?>
+                  <td><?php echo $testCases[$row['testcase']];?></td>
+                  <?php else: ?>
+                  <td></td>
+                <?php endif; ?>
                 <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
                     <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">

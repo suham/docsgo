@@ -65,7 +65,21 @@ class TraceabilityMatrix extends BaseController
 		}else{
 			$data['action'] = "add/".$id;
 			$data['formTitle'] = "Update";
-			$data['member'] = $model->where('id',$id)->first();		
+			$data['member'] = $model->where('id',$id)->first();	
+			
+			// if($data['member']['cncr']) {
+			// 	$model = new RequirementsModel();
+			// 	$data1 = $model->where('id', $data['member']['cncr'])->where('type', 'CNCR')->first();
+			// 	// print_r ($data1);
+			// 	if($data1 && count($data1) >= 0){
+			// 	} else {
+			// 		// print_r ("eleleleelle");
+			// 		$data['member']['cncr'] = '';
+			// 	}
+			// }	
+			// $data['member']['cncr'] = $model->where('id',$id)->first();	
+			// $data['member']['sysreq'] = $model->where('id',$id)->first();	
+			// $data['member']['subsysreq'] = $model->where('id',$id)->first();		
 		}
 		
 		if ($this->request->getMethod() == 'post') {
@@ -104,7 +118,6 @@ class TraceabilityMatrix extends BaseController
 		$model = new RequirementsModel();
 		$data1 = $model->orderBy('type', 'asc')->findAll();	
 		$data['CNCRList'] = $this->requirementsTypeData($data1,'CNCR', 0);
-		$data['CNCRList1'] = json_encode ($this->requirementsTypeData($data1,'CNCR', 0));
 		$data['systemList'] = $this->requirementsTypeData($data1,'System', 0);
 		$data['subSystemList'] = $this->requirementsTypeData($data1,'Subsystem', 0);
 		$data['testCases'] = $this->getTestCases(0);

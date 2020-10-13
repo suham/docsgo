@@ -1,14 +1,6 @@
 
 <div class="container-old">
-<?php if (count($issues) == 0 && count($soup) == 0 && count($cybersecurity) == 0): ?>
-
-  <div class="alert alert-warning" role="alert">
-    No records found.
-  </div>
-
-  <?php else: ?>
-
-    <div class="row">
+<div class="row">
       <div class="col-12">
           <div class="form-group" readonly="readonly">
 
@@ -26,6 +18,13 @@
           </div>
       </div>
     </div>
+<?php if (count($issues) == 0 && count($soup) == 0 && count($cybersecurity) == 0): ?>
+
+  <div class="alert alert-warning" role="alert">
+    No records found.
+  </div>
+
+  <?php else: ?>
 
     <table class="table table-striped table-hover risk-assessment">
       <thead class="thead-dark" >

@@ -34,13 +34,35 @@ class RiskAssessment extends BaseController
 	}
 
 	public function setQueryData($type) {
-		if($type == 1)
-			$statusAt = 'All';
-		if($type == 2)
-			$statusAt = 'Open';
-		if($type == 3)
-			$statusAt = 'Close';
+		$statusAt = "";
+		switch ($type) {
+			case 1:
+					$statusAt = trim("All");
+					break;
+			case 2:
+					$statusAt = trim("Open");
+					break;
+			case 3:
+					$statusAt = trim("Close");
+					break;
+		}
 
+		//if($type == 1)
+		//      $statusAt ="All";
+		//if($type == 2)
+		//      $statusAt ="Open";
+		//if($type == 3)
+		//      $statusAt ="Close";
+
+		$statusAt = trim($statusAt);
+		$statusAt = trim($statusAt, ' ');
+		// print_r ($statusAt);
+		// print_r (strlen($statusAt));
+
+		$statusAt =  str_replace(' ', '', $statusAt);
+		$statusAt =  str_replace('  ','', $statusAt);
+
+		// print_r ($statusAt);
 		$data['issues'] = [];
 		$data['cybersecurity'] = [];
 		$data['soup'] = [];
@@ -72,7 +94,7 @@ class RiskAssessment extends BaseController
 			$model = new IssueModel();
 			$data['issues'] = $model->select('a.id, a.issue,a.issue_description,a.status,b.risk_type, b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
 			->from('docsgo-issues a')
-			->where('a.status',$statusAt)
+			->where('a.status',trim($statusAt))
 			->join('docsgo-risk-assessment b', 'a.id = b.issue_id', 'left')
 			->groupBy('a.id')
 			->findAll();
@@ -80,7 +102,7 @@ class RiskAssessment extends BaseController
 			$model = new SoupModel();
 			$data['soup'] = $model->select('a.id, a.soup,a.purpose,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
 			->from('docsgo-soup a')
-			->where('a.status', $statusAt)
+			->where('a.status', trim($statusAt))
 			->join('docsgo-risk-assessment b', 'a.id = b.soup_id', 'left')
 			->groupBy('a.id')
 			->findAll();
@@ -88,7 +110,7 @@ class RiskAssessment extends BaseController
 			$model = new CybersecurityModel();
 			$data['cybersecurity'] = $model->select('a.id, a.reference,a.description,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
 			->from('docsgo-cybersecurity a')
-			->where('a.status',$statusAt)
+			->where('a.status',trim($statusAt))
 			->join('docsgo-risk-assessment b', 'a.id = b.cybersecurity_id', 'left')
 			->groupBy('a.id')
 			->findAll();
