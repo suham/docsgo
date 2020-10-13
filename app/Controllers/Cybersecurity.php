@@ -73,12 +73,14 @@ class Cybersecurity extends BaseController
 		
 
 		if ($this->request->getMethod() == 'post') {
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'project_id' => $this->request->getVar('project'),
 				'reference' => $this->request->getVar('reference'),
 				'description' => $this->request->getVar('description'),
 				'control' => $this->request->getVar('control'),
-				'status' => $this->request->getVar('status')
+				'status' => $this->request->getVar('status'),
+				'update_date' => $currentTime,
 			];
 
 			$data['member'] = $newData;
@@ -88,9 +90,9 @@ class Cybersecurity extends BaseController
 
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update_date'] = $timestamp;
 					$message = 'Cybersecurity successfully updated.';
 				}else{
 					$message = 'Cybersecurity successfully added.';

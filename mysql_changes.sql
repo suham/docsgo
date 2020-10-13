@@ -135,5 +135,8 @@ ALTER TABLE `docsgo-status-options`
 ALTER TABLE `docsgo-status-options`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
   
-
+-- New Changes
 ALTER TABLE `docsgo-documents` CHANGE `update-date` `update-date` DATETIME NOT NULL;
+
+
+ALTER TABLE `docsgo-issues` CHANGE `update_date` `update_date` DATETIME NULL;

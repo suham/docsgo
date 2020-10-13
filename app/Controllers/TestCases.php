@@ -64,9 +64,11 @@ class TestCases extends BaseController
 		
 
 		if ($this->request->getMethod() == 'post') {
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'testcase' => $this->request->getVar('testcase'),
-				'description' => $this->request->getVar('description')
+				'description' => $this->request->getVar('description'),
+				'update_date' => $currentTime,
 			];
 
 			$data['member'] = $newData;
@@ -76,9 +78,9 @@ class TestCases extends BaseController
 
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update_date'] = $timestamp;
 					$message = 'Test Cases successfully updated.';
 				}else{
 					$message = 'Test Cases successfully added.';

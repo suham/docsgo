@@ -75,13 +75,15 @@ class Soup extends BaseController
 		
 
 		if ($this->request->getMethod() == 'post') {
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'project_id' => $this->request->getVar('project'),
 				'soup' => $this->request->getVar('soup'),
 				'version' => $this->request->getVar('version'),
 				'purpose' => $this->request->getVar('purpose'),
 				'validation' => $this->request->getVar('validation'),
-				'status' => $this->request->getVar('status')
+				'status' => $this->request->getVar('status'),
+				'update_date' => $currentTime,
 			];
 
 			$data['member'] = $newData;
@@ -91,9 +93,9 @@ class Soup extends BaseController
 
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update_date'] = $timestamp;
 					$message = 'Soup successfully updated.';
 				}else{
 					$message = 'Soup successfully added.';

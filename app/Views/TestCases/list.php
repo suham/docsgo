@@ -24,7 +24,7 @@
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $row['testcase']; ?></td>
                 <td><?php echo $row['description'];?></td>
-                <td><?php echo $row['update_date'];?></td>
+                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
                     <a href="/test-cases/add/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>

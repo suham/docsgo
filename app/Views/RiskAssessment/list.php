@@ -63,7 +63,7 @@
                   <td></td>
                 <?php endif; ?>
                 <td><?php echo $row['rpn'];?></td>
-                <td><?php echo $row['update_date'];?></td>
+                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
                     <a href="/risk-assessment/add/1/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>

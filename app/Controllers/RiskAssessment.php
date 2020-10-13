@@ -210,9 +210,11 @@ class RiskAssessment extends BaseController
 			}else{
 				if($id > 0){
 					$list = [];
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					$currentTime = gmdate("Y-m-d H:i:s");
+					
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					$newData['update_date'] = $currentTime;
 			
 					switch ($type) {
 						case 1:

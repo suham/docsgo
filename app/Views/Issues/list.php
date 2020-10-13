@@ -28,7 +28,7 @@
                 <td><?php echo $row['issue'];?></td>
                 <td><?php echo $row['issue_description'];?></td>
                 <td><?php echo $row['source'];?></td>
-                <td><?php echo $row['update_date'];?></td>
+                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td><?php echo $row['status'];?></td>
                 <td>
                     <a href="/issues/add/<?php echo $row['id'];?>" class="btn btn-warning">

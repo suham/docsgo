@@ -69,13 +69,15 @@ class TraceabilityMatrix extends BaseController
 		}
 		
 		if ($this->request->getMethod() == 'post') {
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'cncr' => $this->request->getVar('cncr'),
 				'sysreq' => $this->request->getVar('sysreq'),
 				'subsysreq' => $this->request->getVar('subsysreq'),
 				'design' => $this->request->getVar('design'),
 				'code' => $this->request->getVar('code'),
-				'testcase' => $this->request->getVar('testcase')
+				'testcase' => $this->request->getVar('testcase'),
+				'update_date' => $currentTime,
 			];
 
 			$data['member'] = $newData;
@@ -84,9 +86,9 @@ class TraceabilityMatrix extends BaseController
 			}else{
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update_date'] = $timestamp;
 					$message = 'Traceability Matrix successfully updated.';
 				}else{
 					$message = 'Traceability Matrix successfully added.';

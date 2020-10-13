@@ -31,7 +31,7 @@
                 <td><?php echo $row['version'];?></td>
                 <td><?php echo $row['purpose'];?></td>
                 <td><?php echo $row['validation'];?></td>
-                <td><?php echo $row['update_date'];?></td>
+                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td><?php echo $row['status'];?></td>
                 <td>
                     <a href="/soup/add/<?php echo $row['id'];?>" class="btn btn-warning">

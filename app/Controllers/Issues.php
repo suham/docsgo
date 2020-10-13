@@ -78,12 +78,15 @@ class Issues extends BaseController
 		
 
 		if ($this->request->getMethod() == 'post') {
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'project_id' => $this->request->getVar('project'),
 				'issue' => $this->request->getVar('issue'),
 				'issue_description' => $this->request->getVar('description'),
+				'update_date' => $currentTime,
 				'source' => $this->request->getVar('source'),
 				'status' => $this->request->getVar('status'),
+				
 			];
 
 			// $format = "%Y-%m-%d %h:%i %a";
@@ -97,9 +100,9 @@ class Issues extends BaseController
 			}else{
 				if($id > 0){
 					$newData['id'] = $id;
-					date_default_timezone_set('Asia/Kolkata');
-					$timestamp = date("Y-m-d H:i:s");
-					$newData['update_date'] = $timestamp;
+					// date_default_timezone_set('Asia/Kolkata');
+					// $timestamp = date("Y-m-d H:i:s");
+					// $newData['update_date'] = $timestamp;
 					$message = 'Issue successfully updated.';
 				}else{
 					$message = 'Issue successfully added.';
