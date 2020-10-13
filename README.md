@@ -29,6 +29,8 @@ Project plan, test plan, impact analysis, and reviews.
 are used in assigning projects, reviews, and reviewed by fields in
 various pages.
 
+## Dependencies
+`php-intl` and `php-zip` extensions should be installed for document generation.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
