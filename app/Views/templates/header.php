@@ -79,12 +79,12 @@
     <?php if (session()->get('isLoggedIn')): ?>
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
-        <div class="sidebar-brand text-center">
+        <div class="sidebar-brand text-center  bg-white">
           <a href="/projects" title="Project Data Reporting Tool" title="DocsGo">
             <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
           </a>
-          <div id="close-sidebar">
-            <i class="fas fa-times"></i>
+          <div id="close-sidebar" class=" text-dark">
+            <i class="fas fa-times" ></i>
           </div>
         </div>
         <!-- <div class="sidebar-header">
@@ -102,12 +102,10 @@
            
           </div>
         </div> -->
-        <div class="sidebar-header">
-        <div class="user-info">
-        <span class="user-name">
+        <div class="sidebar-header text-center">
+        <span class="user-name text-white">
               <strong><?= session()->get('name') ?></strong>
             </span>
-       </div>
        </div>
         <!-- sidebar-search  -->
         <div class="sidebar-menu">
