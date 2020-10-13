@@ -38,40 +38,7 @@
     <?php
       $uri = service('uri');
      ?>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-      <a class="navbar-brand" href="/">PRT</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <?php if (session()->get('isLoggedIn')): ?>
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item <?= ($uri->getSegment(1) == 'dashboard' ? 'active' : null) ?>">
-            <a class="nav-link"  href="/dashboard">Dashboard</a>
-          </li>
-          <li class="nav-item <?= ($uri->getSegment(1) == 'profile' ? 'active' : null) ?>">
-            <a class="nav-link" href="/profile">Profile</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav my-2 my-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-        </ul>
-      <?php else: ?>
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item <?= ($uri->getSegment(1) == '' ? 'active' : null) ?>">
-            <a class="nav-link" href="/">Login</a>
-          </li>
-          <li class="nav-item <?= ($uri->getSegment(1) == 'register' ? 'active' : null) ?>">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-        </ul>
-        <?php endif; ?>
-      </div>
-      </div>
-    </nav> -->
+
     <div class="page-wrapper chiller-theme toggled">
     <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
       <i class="fas fa-bars"></i>
@@ -87,167 +54,103 @@
             <i class="fas fa-times" ></i>
           </div>
         </div>
-        <!-- <div class="sidebar-header">
-          <div class="user-pic">
-          <a href="/profile" title="My Profile">
-          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-              alt="User picture">
-        </a>
-            
-          </div>
-          <div class="user-info">
-            <span class="user-name">
-              <strong><?= session()->get('name') ?></strong>
-            </span>
-           
-          </div>
-        </div> -->
+
         <div class="sidebar-header text-center">
         <span class="user-name text-white">
               <strong><?= session()->get('name') ?></strong>
             </span>
        </div>
-        <!-- sidebar-search  -->
+        
         <div class="sidebar-menu">
           <ul>
-            <li class="header-menu">
-              <span>Manage</span>
-            </li>
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects')
-            || $uri->getSegment(1) == 'reviews')  ? 'active' : null) ?>">
+            
+            <li>
               <a href="/projects">
-                <i class="fa fa-briefcase"></i>
-                <span>Project</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-              <!-- <div class="sidebar-submenu">
-                <ul>
-                <li>
-                    <a href="/reviews">Review Comments</a>
-                  </li>
-                  <li>
-                    <a href="/projects">View/Add/Update</a>
-                  </li>
-                  <li>
-                    <a href="/projects/add">Add New</a>
-                  </li>
-                  <li>
-                    <a href="/documents">Documents</a>
-                  </li>                  
-                </ul>
-              </div> -->
-            </li>
-
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-templatesents' ? 'active' : null) ?>">
-              <a href="/documents-templates">
-                <i class="fa fa-folder-open"></i>
-                <span>Templates</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+                <i class="fa fa-briefcase" style = "<?= ($uri->getSegment(1) == 'projects'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Projects</span>
               </a>
             </li>
 
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents' ? 'active' : null) ?>">
-              <a href="/documents">
-                <i class="fa fa-folder-open"></i>
-                <span>Documents</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+            <li>
+              <a href="/team">
+                <i class="fa fa-users" style = "<?= ($uri->getSegment(1) == 'team'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Team</span>
               </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'reviews' ? 'active' : null) ?>">
-              <a href="/reviews">
-                <i class="fa fa-folder-open"></i>
-                <span>Review Comments</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-master' ? 'active' : null) ?>">
-              <a href="#">
-                <i class="fa fa-folder-open"></i>
-                <span>References</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-              <div class="sidebar-submenu">
-                <ul>
-                  <li>
-                    <a href="/documents-master">View/Add/Update</a>
-                  </li>
-                  <!-- <li>
-                    <a href="/documents-master/add">Add New</a>
-                  </li> -->
-                </ul>
-              </div>
             </li>
             
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'team' ? 'active' : null) ?>">
-              <a href="#">
-                <i class="far fa-user"></i>
-                <span>Team</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-              <div class="sidebar-submenu">
-                <ul>
-                  <li>
-                    <a href="/team">View/Add/Update</a>
-                  </li>
-                  <!-- <li>
-                    <a href="/team/add">Add New</a>
-                  </li> -->
-                </ul>
-              </div>
-             </li>
-
-             <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'issues' ? 'active' : null) ?>">
-              <a href="/issues">
-                <i class="fa fa-folder-open"></i>
-                <span>Issues/Observations</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+            <li>
+              <a href="/reviews">
+                <i class="fa fa-list" style = "<?= ($uri->getSegment(1) == 'reviews'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Review Comments</span>
               </a>
             </li>
 
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'cybersecurity' ? 'active' : null) ?>">
-              <a href="/cybersecurity">
-                <i class="fa fa-folder-open"></i>
-                <span>Cybersecurity</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'soup' ? 'active' : null) ?>">
-              <a href="/soup">
-                <i class="fa fa-folder-open"></i>
-                <span>SOUP</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'risk-assessment' ? 'active' : null) ?>">
-              <a href="/risk-assessment">
-                <i class="fa fa-folder-open"></i>
-                <span>Risk Assessment</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
-              </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'requirements') 
-            || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active' : null) ?>">
+            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
-                <span>Traceability</span>
-                <!-- <span class="badge badge-pill badge-warning">New</span> -->
+                <span>Documents</span>
               </a>
-              <div class="sidebar-submenu">
+              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'display:block;' : '') ?>">
                 <ul>
-                <li>
-                    <a href="/requirements">Requirements</a>
-                </li>
-                <li>
-                    <a href="/test-cases">Test cases</a>
-                  </li>
+                  <li>
+                    <a href="/documents">Documents</a>
+                  </li>        
+                  <li>
+                    <a href="/documents-templates">Templates</a>
+                  </li>  
+                  <li>
+                    <a href="/documents-master">References</a>
+                  </li>            
+                </ul>
+              </div>
+            </li>
+
+     
+
+
+
+            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'active' : null) ?>">
+              <a href="#">
+                <i class="fa fa-lock"></i>
+                <span>Risk Assessment</span>
+              </a>
+              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'display:block;' : '') ?>">
+                <ul>
+                  <li>
+                    <a href="/risk-assessment">Risk Assessment</a>
+                  </li>   
+                  <li>
+                    <a href="/issues">Issues/Observations</a>
+                  </li>        
+                  <li>
+                    <a href="/cybersecurity">Cybersecurity</a>
+                  </li>  
+                  <li>
+                    <a href="/soup">SOUP</a>
+                  </li>            
+                </ul>
+              </div>
+            </li>
+
+
+
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active' : null) ?>">
+              <a href="#">
+                <i class="fa fa-search "></i>
+                <span>Traceability</span>
+              </a>
+              <div class="sidebar-submenu" style="<?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'display:block;' : null) ?>">
+                <ul>
                   <li>
                     <a href="/traceability-matrix">Traceability Matrix</a>
                   </li>
+                  <li>
+                    <a href="/requirements">Requirements</a>
+                  </li>
+                  <li>
+                    <a href="/test-cases">Test cases</a>
+                  </li>
+                  
                 </ul>
               </div>
             </li>
@@ -292,7 +195,7 @@
                 <i class="fa fa-folder"></i>
                 <span>Cybersecurity Compliance</span>
               </a>
-            </li> -->
+            </li>
           </ul>
         </div>
         <!-- sidebar-menu  -->

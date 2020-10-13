@@ -306,10 +306,10 @@
   /*--------------------------side-footer------------------------------*/
   
   .sidebar-footer {
-    position: absolute;
-    width: 100%;
+    position: fixed;
     bottom: 0;
     display: flex;
+    width: 260px;
   }
   
   .sidebar-footer > a {
