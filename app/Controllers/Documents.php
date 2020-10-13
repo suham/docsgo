@@ -6,7 +6,8 @@ use App\Models\TeamModel;
 use App\Models\DocumentTemplateModel;
 use App\Models\ReviewModel;
 use App\Models\DocumentsMasterModel;
-
+use App\Models\RequirementsModel;
+use App\Models\TraceabilityMatrixModel;
 class Documents extends BaseController
 {
     public function index()
@@ -88,6 +89,14 @@ class Documents extends BaseController
 		}else if($tableName == 'documentMaster'){
 			$references = new DocumentsMasterModel();
 			$data = $references->findAll();	
+			return $data;
+		}else if($tableName == 'requirements'){
+			$requirements = new RequirementsModel();
+			$data = $requirements->findAll();	
+			return $data;
+		}else if($tableName == 'traceabilityMatrix'){
+			$traceabilityMatrix = new TraceabilityMatrixModel();
+			$data = $traceabilityMatrix->getTraceabilityMatrix();	
 			return $data;
 		}else{
 			return [];

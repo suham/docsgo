@@ -245,6 +245,8 @@
   var teamsTable;
   var reviewsTable;
   var referencesTable;
+  var requirementsTable;
+  var traceabilityMatrixTable;
   var templateSections;
 
   $(document).ready(function () {
@@ -271,6 +273,12 @@
     <?php endif; ?>
     <?php if (isset($documentMaster)): ?>
       referencesTable = <?= json_encode($documentMaster) ?>;
+    <?php endif; ?>
+    <?php if (isset($requirements)): ?>
+      requirementsTable = <?= json_encode($requirements) ?>;
+    <?php endif; ?>
+    <?php if (isset($traceabilityMatrix)): ?>
+      traceabilityMatrixTable = <?= json_encode($traceabilityMatrix) ?>;
     <?php endif; ?>
 
     <?php if (isset($sections)): ?>
@@ -336,6 +344,10 @@
       table = reviewsTable;
     } else if (tableName == "documentMaster") {
       table = referencesTable;
+    } else if (tableName == "requirements") {
+      table = requirementsTable;
+    }else if (tableName == "traceabilityMatrix") {
+      table = traceabilityMatrixTable;
     }
     var indexes = columnValues.split(',');
     var separator = "";
@@ -354,7 +366,8 @@
       var record = table.find(x => x.id === id);
       content += "| ";
       indexes.forEach((index) => {
-        content += record[index].replace(/(\r\n|\n|\r)/gm, "") + " |";
+        var value = record[index];
+        content += value.replace(/(\r\n|\n|\r)/gm, "") + " |";
       });
       content += "\r\n";
     });
