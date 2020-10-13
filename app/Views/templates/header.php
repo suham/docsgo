@@ -79,13 +79,15 @@
     <?php if (session()->get('isLoggedIn')): ?>
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
-        <div class="sidebar-brand">
-          <a href="#" title="Project Data Reporting Tool">DocsGo</a>
+        <div class="sidebar-brand text-center">
+          <a href="/projects" title="Project Data Reporting Tool" title="DocsGo">
+            <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
+          </a>
           <div id="close-sidebar">
             <i class="fas fa-times"></i>
           </div>
         </div>
-        <div class="sidebar-header">
+        <!-- <div class="sidebar-header">
           <div class="user-pic">
           <a href="/profile" title="My Profile">
           <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
@@ -99,8 +101,14 @@
             </span>
            
           </div>
-        </div>
-       
+        </div> -->
+        <div class="sidebar-header">
+        <div class="user-info">
+        <span class="user-name">
+              <strong><?= session()->get('name') ?></strong>
+            </span>
+       </div>
+       </div>
         <!-- sidebar-search  -->
         <div class="sidebar-menu">
           <ul>
@@ -295,8 +303,8 @@
       <div class="sidebar-footer">
       <?php if (session()->get('is-admin')): ?>
         <a href="/admin/users">
-          <i class="fa fa-users"></i>
-          <span class="badge badge-pill badge-warning notification">!</span>
+          <i class="fa fa-users" style="font-size: 20px;" title="Registered Users"></i>
+          <span class="badge badge-pill badge-warning notification" style="font-size: 7px;">!</span>
         </a>
       <?php endif; ?>
         <!-- 
@@ -304,12 +312,13 @@
           <i class="fa fa-envelope"></i>
           <span class="badge badge-pill badge-success notification">7</span>
         </a>
-        <a href="#">
-          <i class="fa fa-cog"></i>
-          <span class="badge-sonar"></span>
-        </a> -->
-        <a href="/logout">
-          <i class="fa fa-power-off"></i>
+         -->
+        <a href="/profile">
+          <i class="fa fa-id-badge" style="font-size: 20px;" title="My Profile"></i>
+          <span class="badge badge-pill  badge-success notification" style="font-size: 7px;">&nbsp;</span>
+        </a>
+        <a href="/logout" title="Log Out">
+          <i class="fa fa-power-off" style="font-size: 20px;"></i>
         </a>
       </div>
     </nav>

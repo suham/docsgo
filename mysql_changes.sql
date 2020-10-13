@@ -140,3 +140,5 @@ ALTER TABLE `docsgo-documents` CHANGE `update-date` `update-date` DATETIME NOT N
 
 
 ALTER TABLE `docsgo-issues` CHANGE `update_date` `update_date` DATETIME NULL;
+
+ALTER TABLE `docsgo-projects` CHANGE `description` `description` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;

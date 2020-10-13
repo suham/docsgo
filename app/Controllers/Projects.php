@@ -52,7 +52,7 @@ class Projects extends BaseController
 			
 			$rules = [
 				'name' => 'required|min_length[3]|max_length[50]',
-				'description' => 'max_length[100]',
+				'description' => 'max_length[500]',
 				'version' => 'required|min_length[3]|max_length[10]',
 				'start-date' => 'required',
 				'status' => 'required',

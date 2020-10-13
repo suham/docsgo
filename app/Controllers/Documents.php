@@ -208,12 +208,14 @@ class Documents extends BaseController
 			];	
 
 			$data['type'] = $this->request->getVar('type');
+			$title =  $this->request->getVar('cp-line3');
+			$title =  str_replace(' ', '', $title);
 			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
 				'author' => $this->request->getVar('author'),
-                'file-name' => $this->request->getVar('file-name'),
+                'file-name' => $title,
 				'status' => $this->request->getVar('status'),
 				'update-date' => $currentTime,
 				'json-object' => $this->request->getVar('json-object'),

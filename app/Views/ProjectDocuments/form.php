@@ -215,7 +215,7 @@
                     </option>
                     <?php foreach ($planStatus as $key=>$value): ?>
                     <option
-                      <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $key) ? 'selected': '') : '' ?>
+                      <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $value) ? 'selected': '') : '' ?>
                       value="<?=  $value ?>"><?=  $value ?></option>
                     <?php endforeach; ?>
 
