@@ -2,6 +2,7 @@
 
 use App\Models\ProjectModel;
 use App\Models\IssueModel;
+use App\Models\RiskAssessmentModel;
 class Issues extends BaseController
 {
 		
@@ -138,6 +139,8 @@ class Issues extends BaseController
 			$id = $this->returnParams();
 			$model = new IssueModel();
 			$model->delete($id);
+			$model = new RiskAssessmentModel();
+			$model->where('issue_id', $id)->delete();
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}

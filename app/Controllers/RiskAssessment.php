@@ -145,40 +145,40 @@ class RiskAssessment extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/risk-assessment";
 		$dataList = [];
-		$data['riskAssessmentStatus'] = ['open-issue', 'soup', 'cybersecurity'];
+		$data['riskAssessmentStatus'] = ['Open-issue', 'SOUP', 'Cybersecurity'];
 
 		$issue_id = ''; $cybersecurity_id =''; $soup_id ='';
 		switch ($type) {
 			case 1:
 				$issue_id = $id;
 				$data['member'] = $model->where('issue_id',$id)->first();	
-				$risk_type = 'open-issue';
+				$risk_type = 'Open-issue';
 				$list =[];
 				$model1 = new IssueModel();
 				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'open-issue';
+				$data['member']['risk_type'] = 'Open-issue';
 				$data['member']['issue'] = $list['issue'];
 				$data['member']['description'] = $list['issue_description'];
 				break;
 			case 2:
 				$cybersecurity_id = $id;
 				$data['member'] = $model->where('cybersecurity_id',$id)->first();	
-				$risk_type = 'cybersecurity';	
+				$risk_type = 'Cybersecurity';	
 				$list =[];
 				$model1 = new CybersecurityModel();
 				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'cybersecurity';
+				$data['member']['risk_type'] = 'Cybersecurity';
 				$data['member']['issue'] = $list['reference'];
 				$data['member']['description'] = $list['description'];
 				break;
 			case 3:
 				$soup_id = $id;
 				$data['member'] = $model->where('soup_id',$id)->first();
-				$risk_type = 'soup';	
+				$risk_type = 'SOUP';	
 				$list =[];
 				$model1 = new SoupModel();
 				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'soup';
+				$data['member']['risk_type'] = 'SOUP';
 				$data['member']['issue'] = $list['soup'];
 				$data['member']['description'] = $list['purpose'];
 				break;

@@ -43,7 +43,7 @@
       <tbody  class="bg-white">
         <?php foreach ($issues as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> open-issue</td>
+                <td> Open-issue</td>
                 <td><?php echo $row['issue'];?></td>
                 <td><?php echo $row['issue_description'];?></td>
                 <?php if (isset($row['severity'])): ?>
@@ -62,7 +62,11 @@
                   <td></td>
                 <?php endif; ?>
                 <td><?php echo $row['rpn'];?></td>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
+                <?php if (isset($row['update_date'])): ?>
+                  <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
+                <?php else: ?>
+                  <td></td>
+                <?php endif; ?>
                 <td>
                     <a href="/risk-assessment/add/1/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
@@ -101,7 +105,7 @@
         <?php endforeach; ?>
         <?php foreach ($soup as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> Soup</td>
+                <td> SOUP </td>
                 <td><?php echo $row['soup'];?></td>
                 <td><?php echo $row['purpose'];?></td>
                 <?php if (isset($row['severity'])): ?>

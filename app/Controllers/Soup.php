@@ -2,6 +2,7 @@
 
 use App\Models\ProjectModel;
 use App\Models\SoupModel;
+use App\Models\RiskAssessmentModel;
 class Soup extends BaseController
 {
 	public function index()
@@ -130,6 +131,8 @@ class Soup extends BaseController
 			$id = $this->returnParams();
 			$model = new SoupModel();
 			$model->delete($id);
+			$model = new RiskAssessmentModel();
+			$model->where('soup_id', $id)->delete();
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}

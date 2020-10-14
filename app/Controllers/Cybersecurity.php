@@ -2,6 +2,7 @@
 
 use App\Models\ProjectModel;
 use App\Models\CybersecurityModel;
+use App\Models\RiskAssessmentModel;
 class Cybersecurity extends BaseController
 {
 	public function index()
@@ -127,6 +128,8 @@ class Cybersecurity extends BaseController
 			$id = $this->returnParams();
 			$model = new CybersecurityModel();
 			$model->delete($id);
+			$model = new RiskAssessmentModel();
+			$model->where('cybersecurity_id', $id)->delete();
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}

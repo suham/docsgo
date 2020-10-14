@@ -188,7 +188,7 @@ class TraceabilityMatrix extends BaseController
 
 
 	public function getIDDescription(){
-		if (session()->get('is-admin')){	
+		// if (session()->get('is-admin')){	
 			$params = $this->returnParamsAjax();
 			$id = $params[0];
 			$typeNO = $params[1];
@@ -210,24 +210,24 @@ class TraceabilityMatrix extends BaseController
 	
 			$response = array('success' => "True", 'description'=>$dataDescription);
 			echo json_encode( $response );
-		}
-		else{
-			$response = array('success' => "False");
-			echo json_encode( $response );
-		}
+		// }
+		// else{
+		// 	$response = array('success' => "False");
+		// 	echo json_encode( $response );
+		// }
 	}
 	
 	public function getTestCaseDescription(){
-		if (session()->get('is-admin')){	
+		// if (session()->get('is-admin')){	
 			$id = $this->returnParams();
 			$dataDescription = $this->getTestCases($id);
 	
 			$response = array('success' => "True", 'description'=>$dataDescription);
 			echo json_encode( $response );
-		}
-		else{
-			$response = array('success' => "False");
-			echo json_encode( $response );
-		}
+		// }
+		// else{
+		// 	$response = array('success' => "False");
+		// 	echo json_encode( $response );
+		// }
 	}
 }
