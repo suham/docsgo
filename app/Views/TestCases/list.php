@@ -12,7 +12,7 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Test Case</th>
+          <th scope="col">Test</th>
           <th scope="col">Description</th>
           <th scope="col" style="width:125px">Update Date</th>
           <th scope="col" style="width:125px">Action</th>

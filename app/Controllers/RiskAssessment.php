@@ -18,11 +18,11 @@ class RiskAssessment extends BaseController
 
 
 		// $data = $this->setQueryData(3);
-		$data = $this->setQueryData(3);
-		$data['pageTitle'] = 'Risk Assessment List';
+		$data = $this->setQueryData(2);
+		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = false;
 		$data['backUrl'] = false;
-		$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 0, "RDanchor3"=> 1);
+		$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 1, "RDanchor3"=> 0);
 
 		// echo date('Y-m-d H:i:s');
 
@@ -141,7 +141,7 @@ class RiskAssessment extends BaseController
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
-		$data['pageTitle'] = 'Risk Assessment List';
+		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/risk-assessment";
 		$dataList = [];
@@ -200,7 +200,7 @@ class RiskAssessment extends BaseController
 
 		}else{
 			$data['action'] = "add/".$type."/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update ".$risk_type;
 
 			$rules = [
 				'severity' => 'required',
@@ -296,7 +296,7 @@ class RiskAssessment extends BaseController
 		$id = $this->returnParams('type');
 		$data = [];
 		$data = $this->setQueryData($type);
-		$data['pageTitle'] = 'Risk Assessment List';
+		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = false;
 		$data['backUrl'] = false;
 
@@ -321,7 +321,7 @@ class RiskAssessment extends BaseController
 		// $this->index();
 
 		$data = [];
-		$data['pageTitle'] = 'Risk Assessment List';
+		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = false;
 		$data['backUrl'] = false;
 

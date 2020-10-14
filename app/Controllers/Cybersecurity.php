@@ -8,7 +8,7 @@ class Cybersecurity extends BaseController
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Cybersecurity List';
+		$data['pageTitle'] = 'Cybersecurity';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/cybersecurity/add";
 
@@ -40,7 +40,7 @@ class Cybersecurity extends BaseController
 		helper(['form']);
 		$model = new CybersecurityModel();
 		$data = [];
-		$data['pageTitle'] = 'Cybersecurity List';
+		$data['pageTitle'] = 'Cybersecurity';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/cybersecurity";
 		$data['cybersecurityStatus'] = ['Open', 'Close'];
@@ -59,7 +59,7 @@ class Cybersecurity extends BaseController
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Cybersecurity";
 
 			$rules = [
 				'project' => 'required',

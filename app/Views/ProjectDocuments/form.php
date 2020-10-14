@@ -110,7 +110,7 @@
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
-                        value="<?= isset($temp["cp-line3"]) ? $temp["cp-line3"] : '' ?>">
+                        value="<?= isset($temp["cp-line3"]) ? $temp["cp-line3"] : '' ?>" maxlength="64">
                     </div>
                   </div>
                   <div class="col-6">

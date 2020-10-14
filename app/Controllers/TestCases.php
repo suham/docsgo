@@ -6,7 +6,7 @@ class TestCases extends BaseController
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Test Cases';
+		$data['pageTitle'] = 'Test';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/test-cases/add";
 
@@ -37,13 +37,13 @@ class TestCases extends BaseController
 		helper(['form']);
 		$model = new TestCasesModel();
 		$data = [];
-		$data['pageTitle'] = 'Test Cases';
+		$data['pageTitle'] = 'Test';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/test-cases";
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Test Cases";
+			$data['formTitle'] = "Add Test";
 
 			$rules = [
 				'testcase' => 'required|min_length[3]|max_length[100]',
@@ -52,7 +52,7 @@ class TestCases extends BaseController
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Test";
 
 			$rules = [
 				'testcase' => 'required|min_length[3]|max_length[100]',

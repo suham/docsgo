@@ -9,7 +9,7 @@ class Issues extends BaseController
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Issues/Observations List';
+		$data['pageTitle'] = 'Issues/Observations';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/issues/add";
 		$data['addUpload'] = True;
@@ -44,7 +44,7 @@ class Issues extends BaseController
 		helper(['form']);
 		$model = new IssueModel();
 		$data = [];
-		$data['pageTitle'] = 'Issues/Observations List';
+		$data['pageTitle'] = 'Issues/Observations';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/issues";
 		$data['issueStatus'] = ['Open', 'Close'];
@@ -64,7 +64,7 @@ class Issues extends BaseController
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Issue/Observation";
 
 			$rules = [
 				'project' => 'required',

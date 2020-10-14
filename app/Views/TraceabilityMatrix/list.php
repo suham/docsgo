@@ -12,12 +12,12 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">CNCR</th>
-          <th scope="col">System Req</th>
-          <th scope="col">Subsystem Req</th>
+          <th scope="col">User Needs</th>
+          <th scope="col">System</th>
+          <th scope="col">Subsystem</th>
           <th scope="col">Design</th>
           <th scope="col">Code</th>
-          <th scope="col">Testcase</th>
+          <th scope="col">Test</th>
           <th scope="col" style="width:125px">Update Date</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>

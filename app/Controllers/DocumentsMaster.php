@@ -47,7 +47,7 @@ class DocumentsMaster extends BaseController
 			$data['formTitle'] = "Add Reference";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Reference";
 
 			$data['document'] = $model->where('id',$id)->first();		
 			

@@ -148,7 +148,7 @@
                     <a href="/requirements">Requirements</a>
                   </li>
                   <li>
-                    <a href="/test-cases">Test cases</a>
+                    <a href="/test-cases">Test</a>
                   </li>
                   
                 </ul>

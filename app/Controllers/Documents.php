@@ -197,12 +197,12 @@ class Documents extends BaseController
 			$data['formTitle'] = "Add Document";
 		}else{
 			$data['action'] = "add/".$type."/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Document";
 
 			$data['projectDocument'] = $model->where('id',$id)->first();	
 			$data['jsonTemplate'] = $data['projectDocument']['json-object'];	
 			$decodedJson = json_decode($data['jsonTemplate'], true);
-			
+			$data['formTitle'] = "Update " . $data['documentType'][$data['projectDocument']['type']]; ;			
 			$sections = $decodedJson[$type]["sections"];
 			$data["sections"] = $sections;
 		}

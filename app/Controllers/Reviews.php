@@ -89,7 +89,7 @@ class Reviews extends BaseController
 			$data['formTitle'] = "Add Review Comments";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Review Comments";
 			$data['review'] = $model->where('id',$id)->first();		
 		}
 		

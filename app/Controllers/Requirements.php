@@ -56,7 +56,7 @@ class Requirements extends BaseController
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Requirements";
 
 			$rules = [
 				'type' => 'required',

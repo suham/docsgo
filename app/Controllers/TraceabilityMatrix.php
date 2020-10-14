@@ -64,7 +64,7 @@ class TraceabilityMatrix extends BaseController
 			$data['formTitle'] = "Add Traceability Matrix";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Traceability Matrix";
 			$data['member'] = $model->where('id',$id)->first();	
 			
 			// if($data['member']['cncr']) {

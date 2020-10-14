@@ -82,6 +82,7 @@ class DocumentTemplate extends BaseController
 
 			$documentTemplate = $model->where('id',$id)->first();	
 			$data['documentTemplate'] = $documentTemplate;
+			$data['formTitle'] = "Update " . $documentTemplate['name'];
 			$template = json_decode($data['documentTemplate']["template-json-object"], true);		
 			$data['template'] = $template[$documentTemplate['type']];
 		}

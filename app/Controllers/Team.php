@@ -6,7 +6,7 @@ class Team extends BaseController
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Team List';
+		$data['pageTitle'] = 'Team';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/team/add";
 
@@ -36,7 +36,7 @@ class Team extends BaseController
 		helper(['form']);
 		$model = new TeamModel();
 		$data = [];
-		$data['pageTitle'] = 'Team List';
+		$data['pageTitle'] = 'Team';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/team";
 
@@ -51,7 +51,7 @@ class Team extends BaseController
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Member";
 
 			$rules = [
 				'name' => 'required|min_length[3]|max_length[64]',

@@ -22,7 +22,7 @@
             
             <div class="col-12 col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="cncr">CNCR</label>
+              <label class = "font-weight-bold text-muted" for="cncr">User Needs</label>
                <select class="form-control fstdropdown-select" name="cncr" id="cncr" onchange="getIDDescription('#cncr')">
                 <option value="" disabled <?= isset($member['cncr']) ? '' : 'selected' ?>>
                     Select
@@ -44,7 +44,7 @@
 
             <div class="col-12  col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="sysreq">System Requirement</label>
+              <label class = "font-weight-bold text-muted" for="sysreq">System</label>
                <select class="form-control fstdropdown-select" name="sysreq" id="sysreq" onchange="getIDDescription('#sysreq')">
                 <option value="" disabled <?= isset($member['sysreq']) ? '' : 'selected' ?>>
                     Select
@@ -67,7 +67,7 @@
 
             <div class="col-12   col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="subsysreq">Subsystem Requirement</label>
+              <label class = "font-weight-bold text-muted" for="subsysreq">Subsystem</label>
                <select class="form-control fstdropdown-select" name="subsysreq" id="subsysreq" onchange="getIDDescription('#subsysreq')">
                 <option value="" disabled <?= isset($member['subsysreq']) ? '' : 'selected' ?>>
                     Select
@@ -105,7 +105,7 @@
 
             <div class="col-12 col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="testcase">Testcase</label>
+              <label class = "font-weight-bold text-muted" for="testcase">Test</label>
                <select class="form-control fstdropdown-select" name="testcase" id="testcase" onchange="getTestCaseDescription('#testcase')">
                 <option value="" disabled <?= isset($member['testcase']) ? '' : 'selected' ?>>
                     Select
