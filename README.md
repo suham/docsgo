@@ -9,6 +9,8 @@ with Phabricator as an extension.
 PHP, MySQL. In the UI, the PRT should have option to show all data or only specific for a new
 release.
 
+![image](https://user-images.githubusercontent.com/27942487/95953177-1c7e2d80-0e17-11eb-93bb-254fb5729b6e.png)
+
 ## Problem
 There are several Project documents to create and maintain. As per 13485 and SDLC, documents
 at key development phases must be captured and controlled – reviews conducted at input and

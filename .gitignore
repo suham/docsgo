@@ -1,3 +1,5 @@
 /writable
 *.json.env
 .env
+getAllCommits.js
+.gitignore
