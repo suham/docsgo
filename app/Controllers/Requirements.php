@@ -127,28 +127,5 @@ class Requirements extends BaseController
 		}
 	}
 
-	// public function bulkInsert(){
-	// 	$data = $this->csv_to_array("CNCR.csv");
-	// 	$model = new RequirementsModel();
-	// 	$model->bulkInsert($data);
-	// 	echo "Success";
-	// }
-
-	private function csv_to_array($filename, $delimiter=',', $enclosure='"', $escape = '\\')
-	{
-		if(!file_exists($filename) || !is_readable($filename)) return false;
-
-		$header = null;
-		$data = array();
-		$lines = file($filename);
-
-		foreach($lines as $line) {
-			$values = str_getcsv($line, $delimiter, $enclosure, $escape);
-			if(!$header) $header = $values;
-			else $data[] = array_combine($header, $values);
-		}
-
-		return $data;
-	}
 
 }

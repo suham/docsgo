@@ -30,7 +30,6 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-// $routes->get('/requirments/bulkInsert', 'Requirements::bulkInsert', ['filter' => 'noauth']);
 
 $routes->get('/', 'Users::index', ['filter' => 'noauth']);
 $routes->get('logout', 'Users::logout');
@@ -112,6 +111,8 @@ $routes->post('documents-templates/addTemplate', 'DocumentTemplate::addTemplate'
 $routes->match(['get','post'],'documents-templates/add', 'DocumentTemplate::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-templates/add/(:num)', 'DocumentTemplate::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-templates/delete/(:num)', 'DocumentTemplate::delete',['filter' => 'auth']);
+
+$routes->get('bulk-insert', 'BulkInsert::index', ['filter' => 'auth']);
 /**
  * --------------------------------------------------------------------
  * Additional Routing

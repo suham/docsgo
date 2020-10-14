@@ -9,8 +9,7 @@ class RequirementsModel extends Model{
     public function bulkInsert($data){
         $db      = \Config\Database::connect();
         $builder = $db->table('docsgo-requirements');
-        $builder->insertBatch($data);
-		
+        $builder->insertBatch($data);		
     }
 
 }
