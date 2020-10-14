@@ -208,6 +208,7 @@ $(document).ready(function(){
     for(var i=0 ; i<sections.length; i++){
       var sectionTitle = sections[i].title;
       var sectionType = sections[i].type;
+      var sectionContent = sections[i].content;
       var sectionTableName = sections[i].tableName;
       var sectionHeaderColumns = sections[i].headerColumns;
       var sectionContentColumns = sections[i].contentColumns;
@@ -217,6 +218,7 @@ $(document).ready(function(){
 
       $(`#title_${sectionID}`).val(sectionTitle);
       $(`#type_${sectionID}`).val(sectionType);
+      $(`#content_${sectionID}`).val(sectionContent);
       
       if(sectionType == "database"){
         toggleSectionType(`type_${sectionID}`);
@@ -354,12 +356,18 @@ function createSectionBody(){
                 <label class="col-xl-3 col-form-label font-weight-bold text-muted">Title</label>
                 <input type="text" id='title_${sectionID}' class="form-control  col-xl-9 section_input  ">
               </div>
-              <div class="form-row mt-3">
-                <label class="col-xl-3 col-form-label font-weight-bold text-muted">Type</label>
-                <select id='type_${sectionID}' onchange="toggleSectionType('type_${sectionID}')" class="form-control col-xl-9 section_type" name="type" id="type">
-                  <option value="text">Text</option>
-                  <option value="database">Database</option>
-                </select>
+              <div class="text_fields">
+                <div class="form-row mt-3">
+                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Type</label>
+                  <select id='type_${sectionID}' onchange="toggleSectionType('type_${sectionID}')" class="form-control col-xl-9 section_type" name="type" id="type">
+                    <option value="text">Text</option>
+                    <option value="database">Database</option>
+                  </select>
+                </div>
+                <div class="form-row mt-3">
+                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Content</label>
+                  <input type="text" id='content_${sectionID}' class="form-control  col-xl-9  section_content">
+                </div>
               </div>
               <div class="database_fields d-none" id='db_${sectionID}'>
                 <div class="form-row mt-3">
@@ -468,6 +476,7 @@ function toggleSectionType(id){
 function getSectionsData(){
   var allTitles = $(".section_input");
   var allTypes = $(".section_type");
+  var allContents = $(".section_content");
   var tables = $("select.section_table");
   var columns_text = $("select.section_column_text");
   var columns_value = $("select.section_column_value");
@@ -478,6 +487,7 @@ function getSectionsData(){
     for(var i=0; i<allTitles.length; i++){
       var title = allTitles[i].value;
       var type = allTypes[i].value;
+      var content = allContents[i].value;
       var parent = allTitles[i].parentElement.parentElement;
       $(parent.getElementsByClassName('alert')).remove();
       if(title == ""){
@@ -503,6 +513,7 @@ function getSectionsData(){
         section.id = "section"+(i+1);
         section.title =  title;
         section.type =  type;
+        section.content = content;
         section.tableName = table;
         section.headerColumns = column_text;
         section.contentColumns = column_value.join();
@@ -514,6 +525,8 @@ function getSectionsData(){
         section.id = "section"+(i+1);
         section.title =  title
         section.type =  type;
+        section.content = content;
+
         sectionArray.push(section);
       }
       
