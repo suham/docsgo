@@ -30,6 +30,8 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+// $routes->get('/requirments/bulkInsert', 'Requirements::bulkInsert', ['filter' => 'noauth']);
+
 $routes->get('/', 'Users::index', ['filter' => 'noauth']);
 $routes->get('logout', 'Users::logout');
 $routes->match(['get','post'],'register', 'Users::register', ['filter' => 'noauth']);

@@ -47,7 +47,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="description">Description</label>
-                <textarea class="form-control" name="description" id="description" maxlength=100><?=
+                <textarea class="form-control" name="description" id="description" maxlength=500><?=
                   isset($member['description']) ? trim($member['description']) : ''
                   ?></textarea>
               </div>

@@ -144,3 +144,5 @@ ALTER TABLE `docsgo-issues` CHANGE `update_date` `update_date` DATETIME NULL;
 ALTER TABLE `docsgo-projects` CHANGE `description` `description` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE `docsgo-issues` CHANGE `status` `status` ENUM('Open', 'Close') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+ALTER TABLE `docsgo-requirements` CHANGE `description` `description` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;

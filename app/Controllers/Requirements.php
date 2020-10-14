@@ -50,8 +50,8 @@ class Requirements extends BaseController
 
 			$rules = [
 				'type' => 'required',
-				'requirement' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]|max_length[1000]',
+				'requirement' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]',
 			];
 
 		}else{
@@ -60,8 +60,8 @@ class Requirements extends BaseController
 
 			$rules = [
 				'type' => 'required',
-				'requirement' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]|max_length[1000]',
+				'requirement' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]',
 			];	
 
 			$data['member'] = $model->where('id',$id)->first();		
@@ -84,9 +84,6 @@ class Requirements extends BaseController
 
 				if($id > 0){
 					$newData['id'] = $id;
-					// date_default_timezone_set('Asia/Kolkata');
-					// $timestamp = date("Y-m-d H:i:s");
-					// $newData['update_date'] = $timestamp;
 					$message = 'Requirements updated.';
 				}else{
 					$message = 'Requirements successfully added.';
@@ -128,6 +125,30 @@ class Requirements extends BaseController
 			$response = array('success' => "False");
 			echo json_encode( $response );
 		}
+	}
+
+	// public function bulkInsert(){
+	// 	$data = $this->csv_to_array("CNCR.csv");
+	// 	$model = new RequirementsModel();
+	// 	$model->bulkInsert($data);
+	// 	echo "Success";
+	// }
+
+	private function csv_to_array($filename, $delimiter=',', $enclosure='"', $escape = '\\')
+	{
+		if(!file_exists($filename) || !is_readable($filename)) return false;
+
+		$header = null;
+		$data = array();
+		$lines = file($filename);
+
+		foreach($lines as $line) {
+			$values = str_getcsv($line, $delimiter, $enclosure, $escape);
+			if(!$header) $header = $values;
+			else $data[] = array_combine($header, $values);
+		}
+
+		return $data;
 	}
 
 }
