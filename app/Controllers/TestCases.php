@@ -46,8 +46,8 @@ class TestCases extends BaseController
 			$data['formTitle'] = "Add Test Cases";
 
 			$rules = [
-				'testcase' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]'
+				'testcase' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]'
 			];
 
 		}else{
@@ -55,8 +55,8 @@ class TestCases extends BaseController
 			$data['formTitle'] = "Update";
 
 			$rules = [
-				'testcase' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]'
+				'testcase' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]'
 			];	
 
 			$data['member'] = $model->where('id',$id)->first();		
