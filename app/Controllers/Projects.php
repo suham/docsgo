@@ -33,7 +33,7 @@ class Projects extends BaseController
 		$data['pageTitle'] = 'Projects';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/projects";
-		$data['isActiveList'] = ['Active', 'Completed'];
+		$data['statusList'] = ['Active', 'Completed'];
 		
 		$data['teamMembers'] = $teamModel->getManagers();	
 
@@ -52,18 +52,20 @@ class Projects extends BaseController
 			
 			$rules = [
 				'name' => 'required|min_length[3]|max_length[50]',
-				'description' => 'max_length[100]',
+				'description' => 'max_length[500]',
+				'version' => 'required|min_length[3]|max_length[10]',
 				'start-date' => 'required',
-				'is-active' => 'required',
+				'status' => 'required',
 			];	
 
 			$newData = [
 				'name' => $this->request->getVar('name'),
+				'version' => $this->request->getVar('version'),
 				'category' => $this->request->getVar('category'),
 				'start-date' => $this->request->getVar('start-date'),
 				'description' => trim($this->request->getVar('description')),
 				'end-date' => $this->request->getVar('end-date'),
-				'is-active' => $this->request->getVar('is-active'),
+				'status' => $this->request->getVar('status'),
 				'manager-id' => $this->request->getVar('manager-id'),
 			];
 

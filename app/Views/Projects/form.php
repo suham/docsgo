@@ -23,7 +23,7 @@
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="manager-id">Manager</label>
                
-               <select class="form-control fstdropdown-select" name="manager-id" id="manager-id" required>
+               <select class="form-control fstdropdown-select" name="manager-id" id="manager-id">
                 <option value="" disabled <?= isset($project['manager-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -37,11 +37,19 @@
 
               </div>
             </div>
-          
+
+            <div class="col-12">
+              <div class="form-group">
+              <label class = "font-weight-bold text-muted" for="version">Version</label>
+              <input required type="text" class="form-control" name="version" id="version"
+              value="<?= isset($project['version']) ? $project['version'] : '' ?>" >
+              </div>
+            </div>
+
             <div class="col-12">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="description">Description</label>
-               <textarea class="form-control" name="description" id="description" maxlength=100><?=
+               <textarea class="form-control" name="description" id="description" maxlength=500><?=
                 isset($project['description']) ? trim($project['description']) : ''
                 ?></textarea>
               </div>
@@ -66,14 +74,14 @@
           
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label class = "font-weight-bold text-muted" for="is-active">Status</label>
-               <select required class="form-control" name="is-active" id="is-active" >
-                <option value="" disabled <?= isset($project['is-active']) ? '' : 'selected' ?>>
+               <label class = "font-weight-bold text-muted" for="status">Status</label>
+               <select required class="form-control" name="status" id="status" >
+                <option value="" disabled <?= isset($project['status']) ? '' : 'selected' ?>>
                     Select
                 </option>
-                <?php foreach ($isActiveList as $value): ?>
+                <?php foreach ($statusList as $value): ?>
                   <option 
-                    <?= isset($project['is-active']) ? (($project['is-active'] == $value) ? 'selected': '') : '' ?>
+                    <?= isset($project['status']) ? (($project['status'] == $value) ? 'selected': '') : '' ?>
                     value="<?= $value ?>" >
                     <?= $value ?>
                   </option>

@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/assets/css/fstdropdown.css">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+   
     <script src="/assets/js/jquery-3.2.1.min.js"></script>
     <script src="/assets/js/popper.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
@@ -17,52 +20,25 @@
     <script src="/assets/js/fstdropdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <title>DocsGo</title>
+    <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
+    <!-- <link rel="icon" href="<?=base_url()?>/favicon.ico" type="image/gif"> -->
     <style>
       .CodeMirror, .CodeMirror-scroll {
-    height: auto;
-    min-height: 70px;
-}
+          height: auto;
+          min-height: 70px;
+      }
+      body{
+        font-family: "Open Sans";
+      }
     </style>
   </head>
   <body>
     <?php
       $uri = service('uri');
      ?>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-      <a class="navbar-brand" href="/">PRT</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <?php if (session()->get('isLoggedIn')): ?>
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item <?= ($uri->getSegment(1) == 'dashboard' ? 'active' : null) ?>">
-            <a class="nav-link"  href="/dashboard">Dashboard</a>
-          </li>
-          <li class="nav-item <?= ($uri->getSegment(1) == 'profile' ? 'active' : null) ?>">
-            <a class="nav-link" href="/profile">Profile</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav my-2 my-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-        </ul>
-      <?php else: ?>
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item <?= ($uri->getSegment(1) == '' ? 'active' : null) ?>">
-            <a class="nav-link" href="/">Login</a>
-          </li>
-          <li class="nav-item <?= ($uri->getSegment(1) == 'register' ? 'active' : null) ?>">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-        </ul>
-        <?php endif; ?>
-      </div>
-      </div>
-    </nav> -->
+
     <div class="page-wrapper chiller-theme toggled">
     <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
       <i class="fas fa-bars"></i>
@@ -70,93 +46,115 @@
     <?php if (session()->get('isLoggedIn')): ?>
     <nav id="sidebar" class="sidebar-wrapper">
       <div class="sidebar-content">
-        <div class="sidebar-brand">
-          <a href="#" title="Project Data Reporting Tool">DocsGo</a>
-          <div id="close-sidebar">
-            <i class="fas fa-times"></i>
+        <div class="sidebar-brand text-center  bg-white">
+          <a href="/projects" title="Project Data Reporting Tool" title="DocsGo">
+            <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
+          </a>
+          <div id="close-sidebar" class=" text-dark">
+            <i class="fas fa-times" ></i>
           </div>
         </div>
-        <div class="sidebar-header">
-          <div class="user-pic">
-          <a href="/profile" title="My Profile">
-          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-              alt="User picture">
-        </a>
-            
-          </div>
-          <div class="user-info">
-            <span class="user-name">
+
+        <div class="sidebar-header text-center">
+        <span class="user-name text-white">
               <strong><?= session()->get('name') ?></strong>
             </span>
-           
-          </div>
-        </div>
-       
-        <!-- sidebar-search  -->
+       </div>
+        
         <div class="sidebar-menu">
           <ul>
-            <li class="header-menu">
-              <span>Manage</span>
+            
+            <li>
+              <a href="/projects">
+                <i class="fa fa-briefcase" style = "<?= ($uri->getSegment(1) == 'projects'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Projects</span>
+              </a>
             </li>
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'projects') 
-            || $uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'reviews')  ? 'active' : null) ?>">
+
+            <li>
+              <a href="/team">
+                <i class="fa fa-users" style = "<?= ($uri->getSegment(1) == 'team'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Team</span>
+              </a>
+            </li>
+            
+            <li>
+              <a href="/reviews">
+                <i class="fa fa-list" style = "<?= ($uri->getSegment(1) == 'reviews'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Review Comments</span>
+              </a>
+            </li>
+
+            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
-                <span>Project</span>
-                <span class="badge badge-pill badge-warning">New</span>
+                <span>Documents</span>
               </a>
-              <div class="sidebar-submenu">
+              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'display:block;' : '') ?>">
                 <ul>
-                <li>
-                    <a href="/projects">View/Add/Update</a>
-                  </li>
-                  <!-- <li>
-                    <a href="/projects/add">Add New</a>
-                  </li> -->
                   <li>
                     <a href="/documents">Documents</a>
-                  </li>
+                  </li>        
                   <li>
-                    <a href="/reviews">Reviews</a>
-                  </li>
+                    <a href="/documents-templates">Templates</a>
+                  </li>  
+                  <li>
+                    <a href="/documents-master">References</a>
+                  </li>            
                 </ul>
               </div>
             </li>
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'documents-master' ? 'active' : null) ?>">
+
+     
+
+
+
+            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'active' : null) ?>">
               <a href="#">
-                <i class="fa fa-folder-open"></i>
-                <span>References</span>
-                <span class="badge badge-pill badge-warning">New</span>
+                <i class="fa fa-lock"></i>
+                <span>Risk Assessment</span>
               </a>
-              <div class="sidebar-submenu">
+              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'display:block;' : '') ?>">
                 <ul>
                   <li>
-                    <a href="/documents-master">View/Add/Update</a>
+                    <a href="/risk-assessment">Risk Assessment</a>
+                  </li>   
+                  <li>
+                    <a href="/issues">Issues/Observations</a>
+                  </li>        
+                  <li>
+                    <a href="/cybersecurity">Cybersecurity</a>
+                  </li>  
+                  <li>
+                    <a href="/soup">SOUP</a>
+                  </li>            
+                </ul>
+              </div>
+            </li>
+
+
+
+            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active' : null) ?>">
+              <a href="#">
+                <i class="fa fa-search "></i>
+                <span>Traceability</span>
+              </a>
+              <div class="sidebar-submenu" style="<?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'display:block;' : null) ?>">
+                <ul>
+                  <li>
+                    <a href="/traceability-matrix">Traceability Matrix</a>
                   </li>
-                  <!-- <li>
-                    <a href="/documents-master/add">Add New</a>
-                  </li> -->
+                  <li>
+                    <a href="/requirements">Requirements</a>
+                  </li>
+                  <li>
+                    <a href="/test-cases">Test cases</a>
+                  </li>
+                  
                 </ul>
               </div>
             </li>
             
-            <li class="sidebar-dropdown <?= ($uri->getSegment(1) == 'team' ? 'active' : null) ?>">
-              <a href="#">
-                <i class="far fa-user"></i>
-                <span>Team</span>
-                <span class="badge badge-pill badge-warning">New</span>
-              </a>
-              <div class="sidebar-submenu">
-                <ul>
-                  <li>
-                    <a href="/team">View/Add/Update</a>
-                  </li>
-                  <!-- <li>
-                    <a href="/team/add">Add New</a>
-                  </li> -->
-                </ul>
-              </div>
-             </li>
             <!--<li class="sidebar-dropdown">
               <a href="#">
                 <i class="far fa-edit"></i>
@@ -197,7 +195,7 @@
                 <i class="fa fa-folder"></i>
                 <span>Cybersecurity Compliance</span>
               </a>
-            </li> -->
+            </li>
           </ul>
         </div>
         <!-- sidebar-menu  -->
@@ -206,8 +204,8 @@
       <div class="sidebar-footer">
       <?php if (session()->get('is-admin')): ?>
         <a href="/admin/users">
-          <i class="fa fa-users"></i>
-          <span class="badge badge-pill badge-warning notification">!</span>
+          <i class="fa fa-users" style="font-size: 20px;" title="Registered Users"></i>
+          <span class="badge badge-pill badge-warning notification" style="font-size: 7px;">!</span>
         </a>
       <?php endif; ?>
         <!-- 
@@ -215,12 +213,13 @@
           <i class="fa fa-envelope"></i>
           <span class="badge badge-pill badge-success notification">7</span>
         </a>
-        <a href="#">
-          <i class="fa fa-cog"></i>
-          <span class="badge-sonar"></span>
-        </a> -->
-        <a href="/logout">
-          <i class="fa fa-power-off"></i>
+         -->
+        <a href="/profile">
+          <i class="fa fa-id-badge" style="font-size: 20px;" title="My Profile"></i>
+          <span class="badge badge-pill  badge-success notification" style="font-size: 7px;">&nbsp;</span>
+        </a>
+        <a href="/logout" title="Log Out">
+          <i class="fa fa-power-off" style="font-size: 20px;"></i>
         </a>
       </div>
     </nav>

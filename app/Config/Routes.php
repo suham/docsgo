@@ -30,6 +30,7 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+
 $routes->get('/', 'Users::index', ['filter' => 'noauth']);
 $routes->get('logout', 'Users::logout');
 $routes->match(['get','post'],'register', 'Users::register', ['filter' => 'noauth']);
@@ -54,6 +55,45 @@ $routes->match(['get','post'],'team/add', 'Team::add',['filter' => 'auth']);
 $routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth']);
 $routes->match(['get','post'],'team/delete/(:num)', 'Team::delete',['filter' => 'auth']);
 
+$routes->get('issues', 'Issues::index',['filter' => 'auth']);
+$routes->match(['get','post'],'issues/add', 'Issues::add',['filter' => 'auth']);
+$routes->match(['get','post'],'issues/add/(:num)', 'Issues::add',['filter' => 'auth']);
+$routes->match(['get','post'],'issues/delete/(:num)', 'Issues::delete',['filter' => 'auth']);
+
+$routes->get('cybersecurity', 'Cybersecurity::index',['filter' => 'auth']);
+$routes->match(['get','post'],'cybersecurity/add', 'Cybersecurity::add',['filter' => 'auth']);
+$routes->match(['get','post'],'cybersecurity/add/(:num)', 'Cybersecurity::add',['filter' => 'auth']);
+$routes->match(['get','post'],'cybersecurity/delete/(:num)', 'Cybersecurity::delete',['filter' => 'auth']);
+
+$routes->get('soup', 'Soup::index',['filter' => 'auth']);
+$routes->match(['get','post'],'soup/add', 'Soup::add',['filter' => 'auth']);
+$routes->match(['get','post'],'soup/add/(:num)', 'Soup::add',['filter' => 'auth']);
+$routes->match(['get','post'],'soup/delete/(:num)', 'Soup::delete',['filter' => 'auth']);
+
+$routes->get('risk-assessment', 'RiskAssessment::index',['filter' => 'auth']);
+$routes->match(['get','post'],'risk-assessment/add', 'RiskAssessment::add',['filter' => 'auth']);
+$routes->match(['get','post'],'risk-assessment/add/(:num)/(:num)', 'RiskAssessment::add',['filter' => 'auth']);
+$routes->match(['get','post'],'risk-assessment/delete/(:num)', 'RiskAssessment::delete',['filter' => 'auth']);
+$routes->match(['get','post'],'risk-assessment/view/(:num)/(:num)', 'RiskAssessment::view',['filter' => 'auth']);
+// $routes->match(['get','post'],'issues/delete/(:num)', 'Issues::delete',['filter' => 'auth']);
+
+$routes->get('requirements', 'Requirements::index',['filter' => 'auth']);
+$routes->match(['get','post'],'requirements/add', 'Requirements::add',['filter' => 'auth']);
+$routes->match(['get','post'],'requirements/add/(:num)', 'Requirements::add',['filter' => 'auth']);
+$routes->match(['get','post'],'requirements/delete/(:num)', 'Requirements::delete',['filter' => 'auth']);
+
+$routes->get('test-cases', 'TestCases::index',['filter' => 'auth']);
+$routes->match(['get','post'],'test-cases/add', 'TestCases::add',['filter' => 'auth']);
+$routes->match(['get','post'],'test-cases/add/(:num)', 'TestCases::add',['filter' => 'auth']);
+$routes->match(['get','post'],'test-cases/delete/(:num)', 'TestCases::delete',['filter' => 'auth']);
+
+$routes->get('traceability-matrix', 'TraceabilityMatrix::index',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/add', 'TraceabilityMatrix::add',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/add/(:num)', 'TraceabilityMatrix::add',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/delete/(:num)', 'TraceabilityMatrix::delete',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/getIDDescription/(:num)/(:num)', 'TraceabilityMatrix::getIDDescription',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/getTestCaseDescription/(:num)', 'TraceabilityMatrix::getTestCaseDescription',['filter' => 'auth']);
+
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
 $routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/add', 'Reviews::add',['filter' => 'auth']);
@@ -65,6 +105,14 @@ $routes->get('documents/project/(:num)', 'Documents::projectDocument',['filter' 
 $routes->match(['get','post'],'documents/add', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);
+
+$routes->get('documents-templates', 'DocumentTemplate::index',['filter' => 'auth']);
+$routes->post('documents-templates/addTemplate', 'DocumentTemplate::addTemplate',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/add', 'DocumentTemplate::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/add/(:num)', 'DocumentTemplate::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-templates/delete/(:num)', 'DocumentTemplate::delete',['filter' => 'auth']);
+
+$routes->get('bulk-insert', 'BulkInsert::index', ['filter' => 'auth']);
 /**
  * --------------------------------------------------------------------
  * Additional Routing

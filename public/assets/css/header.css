@@ -306,10 +306,10 @@
   /*--------------------------side-footer------------------------------*/
   
   .sidebar-footer {
-    position: absolute;
-    width: 100%;
+    position: fixed;
     bottom: 0;
     display: flex;
+    width: 260px;
   }
   
   .sidebar-footer > a {
@@ -469,6 +469,8 @@
       background: #3a3f48;
       box-shadow: 0px -1px 5px #282c33;
       border-top: 1px solid #464a52;
+      height: 40px;
+      padding-top: 6px;
   }
   
   .chiller-theme .sidebar-footer>a:first-child {

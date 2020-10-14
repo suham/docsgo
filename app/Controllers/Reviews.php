@@ -9,7 +9,7 @@ class Reviews extends BaseController
     public function index()
     {
         $data = [];
-		$data['pageTitle'] = 'Reviews';
+		$data['pageTitle'] = 'Review Comments';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/reviews/add";
 
@@ -75,17 +75,18 @@ class Reviews extends BaseController
 		helper(['form']);
 		$model = new ReviewModel();
 		$data = [];
-		$data['pageTitle'] = 'Reviews';
+		$data['pageTitle'] = 'Review Comments';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/reviews";
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
-		$data['reviewStatus'] = ['Change', 'Accepted', 'Rejected'];
+		$data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];
+		$data['categoryList'] = ["Document", "Test case", "Code", "Report"];
 		
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Review";
+			$data['formTitle'] = "Add Review Comments";
 		}else{
 			$data['action'] = "add/".$id;
 			$data['formTitle'] = "Update";
@@ -95,13 +96,14 @@ class Reviews extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			$rules = [
 				"project-id" => 'required',
-				"review-name" =>'required|max_length[64]',
+				"review-name" =>'required|max_length[20]',
 				"assigned-to" => 'required|max_length[50]',
-				"context" => 'max_length[200]',
-				"description" => 'max_length[400]',
+				"context" => 'required|max_length[200]',
+				"description" => 'required|max_length[400]',
 				"review-by" =>'required|max_length[50]',
 				"review-ref" => 'max_length[250]',
-				"status" => 'required'
+				"status" => 'required',
+				"category" => 'required'
 			];
 
 			$newData = [
@@ -112,7 +114,8 @@ class Reviews extends BaseController
 				"review-by" =>$this->request->getVar('review-by'),
 				"review-name" =>$this->request->getVar('review-name'),
 				"review-ref" => $this->request->getVar('review-ref'),
-				"status" => $this->request->getVar('status')
+				"status" => $this->request->getVar('status'),
+				"category" => $this->request->getVar('category')
 			];
 
 			$data['review'] = $newData;
