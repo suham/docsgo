@@ -99,6 +99,7 @@ $routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'au
 $routes->match(['get','post'],'reviews/add', 'Reviews::add',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/add/(:num)', 'Reviews::add',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/delete/(:num)', 'Reviews::delete',['filter' => 'auth']);
+$routes->post('reviews/addDocReview', 'Reviews::addDocReview',['filter' => 'auth']);
 
 $routes->get('documents', 'Documents::index',['filter' => 'auth']);
 $routes->get('documents/project/(:num)', 'Documents::projectDocument',['filter' => 'auth']);

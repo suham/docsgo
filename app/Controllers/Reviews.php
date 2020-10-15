@@ -3,6 +3,7 @@
 use App\Models\ReviewModel;
 use App\Models\ProjectModel;
 use App\Models\TeamModel;
+use App\Models\DocumentModel;
 
 class Reviews extends BaseController
 {
@@ -67,6 +68,49 @@ class Reviews extends BaseController
 			$id = intval($id);
 		}
 		return $id;
+	}
+
+	public function addDocReview(){
+		if ($this->request->getMethod() == 'post') {
+			$response = array();
+
+			$data = [
+				"project-id" => $this->request->getVar('projectId'),
+				"review-name" =>$this->request->getVar('reviewName'),
+				"category" => $this->request->getVar('category'),
+				"context" => $this->request->getVar('context'),
+				"description" => $this->request->getVar('description'),
+				"review-by" =>$this->request->getVar('reviewBy'),
+				"assigned-to" => $this->request->getVar('assignedTo'),
+				"review-ref" => $this->request->getVar('reviewRef'),
+				"status" => $this->request->getVar('status'),
+			];
+
+			
+			$id = $this->request->getVar('id');
+			$docId = $this->request->getVar('docId');
+			$model = new ReviewModel();
+
+			if($id != ""){
+				$model->update($id, $data);
+				$response['reviewId'] = $id;
+			}else{
+				$reviewId = $model->insert($data);
+
+				$docData = [
+					"review-id" => $reviewId 
+				];
+				$documentModel = new DocumentModel();
+				$documentModel->update($docId,$docData);
+				$response['reviewId'] = $reviewId;
+			}
+
+			
+			$response["success"] = "True";
+			$response['data'] = $data;
+
+			echo json_encode($response);
+		}
 	}
 	
 	public function add(){

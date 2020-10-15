@@ -457,3 +457,7 @@ ALTER TABLE `docsgo-risk-assessment` CHANGE `risk_type` `risk_type` ENUM('Open-i
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 ALTER TABLE `docsgo-requirements` CHANGE `description` `description` VARCHAR(2100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `docsgo-test-cases` CHANGE `description` `description` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+-- New Changes
+ALTER TABLE `docsgo-documents` ADD `review-id` INT NULL AFTER `project-id`;
+ALTER TABLE `docsgo-documents` ADD `author-id` INT NOT NULL AFTER `file-name`;

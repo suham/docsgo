@@ -3,10 +3,11 @@
     color: #f8f9fa !important;
     background-color: #6c757d !important;
   }
+  .reviewComments textarea { height: 300px; }
 </style>
-<div class="">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-9 mt-1 pt-3 pb-3 bg-white from-wrapper">
+
+  <div class="row pl-0 justify-content-center">
+    <div class="col-12 col-md-9 ml-0  mt-1 pt-3 pb-3 bg-white from-wrapper rounded">
       <div class="container">
 
         <?php if (session()->get('success') && (!isset($validation))): ?>
@@ -115,13 +116,13 @@
                   </div>
                   <div class="col-6">
                     <div class="form-group">
-                      <label class = "font-weight-bold text-muted" for="author">Author</label>
+                      <label class = "font-weight-bold text-muted" for="author-id">Author</label>
                       <select class="form-control selectpicker" data-live-search="true" data-size="8"
-                          id="author" name="author">
+                          id="author-id" name="author-id">
                           <option disabled selected value> -- select an author -- </option>
                           <?php foreach ($teams as $key=>$value): ?>
-                          <option <?= isset($projectDocument['author']) ? (($projectDocument['author'] == $value['name']) ? 'selected': '') : '' ?>
-                          value='<?=  $value['name'] ?>' >
+                          <option <?= isset($projectDocument['author-id']) ? (($projectDocument['author-id'] == $value['id']) ? 'selected': '') : '' ?>
+                          value='<?=  $value['id'] ?>' >
                             <?=  $value['name'] ?></option>
                           <?php endforeach; ?>
                       </select>
@@ -167,8 +168,20 @@
                     <div class="">
                       <div class="card-header text-white bg-dark">
                         <div class="row" style="margin-bottom:-10px">
-                          <div class="col">
-                            <p class="lead"><?=  $section["title"] ?></p>
+
+                          <div class="col-6">
+                            <div class="row">
+                              <?php if (isset($projectDocument['project-id'])): ?>
+                              <div class="col-2">
+                                <a href="#" class="btn btn-sm btn-warning" onclick="addComment('<?=$section['title']?>')" title="Add review comment">
+                                <i class="fas fa-comments text-dark"></i></a>
+                              </div>
+                              <?php endif; ?>
+                              <div class="col-8">
+                                <p class="lead "><?=  $section["title"] ?></p>
+                              </div>
+                            </div>
+                           
                           </div>
 
                           <?php if (isset($section["type"])): ?>
@@ -188,13 +201,29 @@
                                   Insert</button>
                               </div>
                             <?php endif; ?>
+
+                            <?php if ($section["type"] == "differential"): ?>
+                              <div class="col-6 ">
+                                <button type="button" id="btn_diff_eval_<?=  $section["id"] ?>" class="btn btn-sm btn-success text-white float-right mt-1"
+                                  onclick='evaluteDiff("<?=  $section["id"] ?>", "show")'>
+                                  Evaluate</button>
+                                <button type="button" id="btn_text_eval_<?=  $section["id"] ?>" class="btn btn-sm btn-success text-white float-right mt-1 d-none"
+                                  onclick='evaluteDiff("<?=  $section["id"] ?>", "hide")'>
+                                  Edit</button>
+                              </div>
+                            <?php endif; ?>
                           <?php endif; ?>
                         </div>
                       </div>
+                      <?php if (isset($section["type"])): ?>
                       <div class="card-body p-0">
+                        <?php if ($section["type"] == "differential"): ?>
+                          <div id="diffDiv_<?=  $section["id"] ?>"></div>
+                        <?php endif; ?>
                         <textarea class="form-control sections" name="<?=  $section["id"] ?>"
                           id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
                       </div>
+                      <?php endif; ?>
                     </div>
                   </div>
 
@@ -234,9 +263,34 @@
 
       </form>
     </div>
+    <?php if (isset($projectDocument['project-id'])): ?>
+    <div class="col reviewDiv"> 
+        <div class="from-wrapper mt-1 p-3 pb-3 bg-white rounded">
+          <div class="row">
+            <div class="col">
+              <h3>Review Comments</h3>
+            </div>
+            <div class="col text-center">
+              <a onclick="saveReview()" class="btn btn-primary mt-2 text-light">
+                <i class="fas fa-save "></i>
+                Save
+              </a>
+            </div>
+          </div>
+          <hr>
+          <div class="row justify-content-center">
+            <div class="col-11 table-warning text-muted rounded">
+              <p class="reviewCommentsPara font-weight-bold p-1 pt-3 ">
+              </p>
+            </div>
+            
+          </div>
+        </div>
+    </div>
+    <?php endif; ?>
   </div>
-</div>
-</div>
+
+
 
 <script>
   var type;
@@ -247,7 +301,31 @@
   var referencesTable;
   var requirementsTable;
   var traceabilityMatrixTable;
+  var documentsTable;
+  var riskAssessmentTable; 
+
   var templateSections;
+  var reviewComments = "";
+  var fileName = "";
+  var reviewedSection = [];
+
+  class Review {
+    constructor(){
+      this.id = '';
+      this.docId = '';
+      this.projectId = '';
+      this.reviewName = '';
+      this.category = '';
+      this.context = '';
+      this.description = '';
+      this.reviewBy = '';
+      this.assignedTo = '';
+      this.reviewRef = '';
+      this.status = '';
+    }
+  }
+
+  var documentReview = new Review();
 
   $(document).ready(function () {
     <?php if (isset($type)): ?>
@@ -257,6 +335,26 @@
     <?php if (isset($jsonTemplate)): ?>
       entireTemplate = <?= $jsonTemplate ?>;
     <?php endif; ?>
+    fileName = "<?= isset($projectDocument['file-name']) ? $projectDocument['file-name']: '' ?>";
+
+    documentReview.docId = "<?= isset($projectDocument['id']) ? $projectDocument['id']: '' ?>";
+    <?php if (isset($documentReview)): ?>
+      var savedReview = <?= json_encode($documentReview) ?> ;
+      documentReview.id = savedReview["id"];
+      documentReview.projectId = savedReview["project-id"];
+      documentReview.reviewName = savedReview["review-name"];
+      documentReview.category = savedReview["category"];
+      documentReview.context = savedReview["context"];
+      documentReview.description = savedReview["description"];
+      documentReview.reviewBy = savedReview["review-by"];
+      documentReview.assignedTo = savedReview["assigned-to"];
+      documentReview.reviewRef = savedReview["review-ref"];
+      documentReview.status = savedReview["status"];
+
+      reviewComments = documentReview.description;
+      var obj = $(".reviewCommentsPara").text(reviewComments);
+      obj.html(obj.html().replace(/\n/g,'<br/>'));
+   <?php endif; ?>
 
     <?php if (isset($existingDocs)): ?>
       <?php foreach($existingDocs as $key => $value) : ?>
@@ -280,12 +378,208 @@
     <?php if (isset($traceabilityMatrix)): ?>
       traceabilityMatrixTable = <?= json_encode($traceabilityMatrix) ?>;
     <?php endif; ?>
+    <?php if (isset($documents)): ?>
+      documentsTable = <?= json_encode($documents) ?>;
+    <?php endif; ?>
+    <?php if (isset($riskAssessment)): ?>
+      riskAssessmentTable = <?= json_encode($riskAssessment) ?>;
+    <?php endif; ?>
+
 
     <?php if (isset($sections)): ?>
       sections = <?= json_encode($sections) ?>;
     <?php endif; ?>
 
+    if(!reviewComments.length){
+      $(".reviewDiv").addClass('d-none');
+    }
+
   });
+
+  function saveReview(){
+    if(reviewComments == "") return;
+    
+    var teamOptions = "";
+    
+    teamsTable.forEach((data)=>{
+      teamOptions += `<option value="${data.id}">${data.name}</option>`;
+    });
+
+    var dialog = bootbox.dialog({
+      title: 'Add review comments',
+      message: `<div class="row justify-content-center saveModal">
+                <div class="col-12 col-md-6">
+                  <select class="form-control reviewedBy selectpicker" data-live-search="true" data-size="8" name="type" id="type">
+                    <option value="" disabled selected>
+                      Select Reviewer Name
+                    </option>
+                    ${teamOptions}
+                  </select>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12 col-md-6">
+                  <select class="form-control reviewCategory selectpicker" name="type" id="type">
+                    <option value="" disabled selected>
+                      Select Category
+                    </option>
+                    <option value="Document">Document</option>
+                    <option value="Test case">Test case</option>
+                    <option value="Code">Code</option>
+                    <option value="Report">Report</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-6">
+                  <select class="form-control reviewStatus selectpicker" name="type" id="type">
+                    <option value="" disabled selected>
+                      Select Status
+                    </option>
+                    <option value="Request Change">Request Change</option>
+                    <option value="Ready For Review">Ready For Review</option>
+                    <option value="Accepted">Accepted</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <textarea class="form-control reviewRef" maxlength="250"  placeholder="Reference" ></textarea>
+                </div>
+              </div>`,
+      buttons: {
+        cancel: {
+            label: "Cancel",
+            className: 'btn-secondary'
+        },
+        ok: {
+            label: "OK",
+            className: 'btn-primary',
+            callback: function(){
+                var reviewedBy = $("select.reviewedBy").val();
+                var reviewCategory = $("select.reviewCategory").val();
+                var reviewStatus = $("select.reviewStatus").val();
+                var reviewRef =  $(".reviewRef").val();
+                
+                if(reviewedBy ==  null || reviewCategory == null || reviewStatus == null){
+                  showPopUp('Error', "Reviewer name, review category and status are required.");
+                  
+                }else{
+                  
+                  documentReview.projectId = $("#project-id").val();
+                  documentReview.reviewName = fileName;
+                  documentReview.category = reviewCategory;
+                  documentReview.context = fileName;
+                  documentReview.description = reviewComments.trim();
+                  documentReview.reviewBy = reviewedBy;
+                  documentReview.assignedTo = $("#author-id").val();
+                  documentReview.reviewRef = reviewRef;
+                  documentReview.status = reviewStatus;
+
+                  console.log(documentReview);
+                  submitReviewComment(documentReview);
+                  
+                }
+              }
+        }
+      }
+    });
+
+    if(documentReview.reviewBy != ""){
+      $("select.reviewedBy").val(documentReview.reviewBy);
+      $("select.reviewCategory").val(documentReview.category);
+      $("select.reviewStatus").val(documentReview.status);
+      $(".reviewRef").text(documentReview.reviewRef);
+    }
+
+    $('.selectpicker').selectpicker('refresh');
+
+  }
+
+  function submitReviewComment(documentReview) {
+    var successMessage = "Review comment added successfully!."
+    if(documentReview["id"] != ""){
+      successMessage = "Review comment updated successfully!."
+    }
+        
+    $.ajax({
+      type: 'POST',
+      url: '/reviews/addDocReview',
+      data: documentReview,
+      success: function (response) {        
+        response = JSON.parse(response);
+        if (response.success == "True") {
+          documentReview["id"] = response.reviewId;
+          showPopUp("Success", successMessage);
+        } else {
+          showPopUp("Failure", "Failed to add a new template!.");
+        }
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    })
+
+ }
+
+ function showPopUp(title, message){
+  bootbox.alert({
+        title: title, 
+        message: message,
+        centerVertical: true,
+        backdrop: true
+    });
+}
+
+  function evaluteDiff(sectionId, visibility){
+    
+    if(visibility == "show"){
+     
+      const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
+      var sectionValue = $codemirror.getValue();
+      const targetElement = document.getElementById('diffDiv_'+sectionId);
+      const configuration = { drawFileList: true, matching: 'none', };
+
+      const diff2htmlUi = new Diff2HtmlUI(targetElement, sectionValue, configuration);
+      diff2htmlUi.draw();
+
+      $("#diffDiv_"+sectionId).removeClass('d-none');
+      
+      $("#btn_text_eval_"+sectionId).removeClass('d-none');
+      $("#btn_diff_eval_"+sectionId).addClass('d-none');
+    }else{
+      
+      $("#diffDiv_"+sectionId).addClass('d-none');
+      $("#btn_text_eval_"+sectionId).addClass('d-none');
+      $("#btn_diff_eval_"+sectionId).removeClass('d-none');
+    }
+   
+  }
+
+  function addComment(sectionName){
+    bootbox.prompt({
+      title: "Review Comments",
+      className: 'reviewComments',
+      inputType: 'textarea',
+        callback: function (result) {
+          if(result != null){
+           
+            reviewComments =  result;
+            reviewedSection.push(sectionName); 
+            
+            var obj = $(".reviewCommentsPara").text(reviewComments);
+            obj.html(obj.html().replace(/\n/g,'<br/>'));
+            $(".reviewDiv").removeClass('d-none');
+          }
+            
+        }
+    });
+    if(reviewComments != ""){reviewComments = reviewComments+ "\n\n"}
+    if(reviewedSection.includes(sectionName)){
+      sectionName = "";
+    }
+    var description = reviewComments+sectionName+ "\n";
+    $('.bootbox-input-textarea').val(description.trim());
+  
+  }
 
   $("#section-tab").click(function(){
     setTimeout(function(){ 
@@ -327,7 +621,7 @@
     entireTemplate[type]['cp-approval-matrix'] = $("#cp-approval-matrix").val();
     entireTemplate[type]['cp-change-history'] = changeHistory;
     entireTemplate[type]["sections"] = newSections;
-    console.log(entireTemplate);
+    // console.log(entireTemplate);
     $(this).append('<textarea type="hidden" name="json-object" style="display:none;">' + JSON.stringify(
       entireTemplate) + '</textarea>');
 
@@ -335,7 +629,7 @@
   });
 
   function insertTable(sectionId, tableName, columnValues) {
-    console.log(columnValues, sectionId);
+    
     var selectedIds = $("#select_" + sectionId).val();
     var table;
     if (tableName == "teams") {
@@ -348,7 +642,12 @@
       table = requirementsTable;
     }else if (tableName == "traceabilityMatrix") {
       table = traceabilityMatrixTable;
+    }else if (tableName == "documents") {
+      table = documentsTable;
+    }else if (tableName == "riskAssessment") {
+      table = riskAssessmentTable;
     }
+    
     var indexes = columnValues.split(',');
     var separator = "";
     for (var i = 0; i < indexes.length; i++) {
@@ -429,7 +728,7 @@
         var section = sections[i];
         $("#" + section.id).text(section.content);
 
-        const $codemirror = $('textarea[name="' + section.id + '"]').nextAll('.CodeMirror')[0].CodeMirror;
+        var $codemirror = $('textarea[name="' + section.id + '"]').nextAll('.CodeMirror')[0].CodeMirror;
         $codemirror.getDoc().setValue(section.content);
       }
 

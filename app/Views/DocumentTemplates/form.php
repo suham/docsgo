@@ -362,6 +362,7 @@ function createSectionBody(){
                   <select id='type_${sectionID}' onchange="toggleSectionType('type_${sectionID}')" class="form-control col-xl-9 section_type" name="type" id="type">
                     <option value="text">Text</option>
                     <option value="database">Database</option>
+                    <option value="differential">Git Diff</option>
                   </select>
                 </div>
                 <div class="form-row mt-3">

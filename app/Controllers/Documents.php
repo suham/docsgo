@@ -8,6 +8,7 @@ use App\Models\ReviewModel;
 use App\Models\DocumentsMasterModel;
 use App\Models\RequirementsModel;
 use App\Models\TraceabilityMatrixModel;
+use App\Models\RiskAssessmentModel;
 class Documents extends BaseController
 {
     public function index()
@@ -54,12 +55,7 @@ class Documents extends BaseController
 
 	private function getExistingDocs($type = ""){
 		$model = new DocumentModel();
-		if($type == ""){
-			$documents= $model->orderBy('update-date', 'desc')->findAll();	
-		}else{
-			$documents= $model->where('type',$type)->orderBy('update-date', 'desc')->findAll();	
-		}
-		
+		$documents= $model->getProjects($type);
 		for($i=0; $i<count($documents);$i++){
 			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
 		}
@@ -71,7 +67,9 @@ class Documents extends BaseController
 		$data = $model->where('status',"Approved")->findAll();	
 		$documents = [];
 		foreach($data as $document){
-			$documents[$document['id']] = $document['json-object'];
+			$temp['file-name'] = $document['file-name'];
+			$temp['json-object'] = $document['json-object'];
+			$documents[$document['id']] = $temp;
 		}
 		return json_encode($documents);
 	}
@@ -97,6 +95,14 @@ class Documents extends BaseController
 		}else if($tableName == 'traceabilityMatrix'){
 			$traceabilityMatrix = new TraceabilityMatrixModel();
 			$data = $traceabilityMatrix->getTraceabilityMatrix();	
+			return $data;
+		}else if($tableName == 'documents'){
+			$documents = new DocumentModel();
+			$data = $documents->findAll();	
+			return $data;
+		}else if($tableName == 'riskAssessment'){
+			$riskAssessment = new RiskAssessmentModel();
+			$data = $riskAssessment->findAll();	
 			return $data;
 		}else{
 			return [];
@@ -197,14 +203,19 @@ class Documents extends BaseController
 			$data['formTitle'] = "Add Document";
 		}else{
 			$data['action'] = "add/".$type."/".$id;
-			$data['formTitle'] = "Update Document";
 
 			$data['projectDocument'] = $model->where('id',$id)->first();	
 			$data['jsonTemplate'] = $data['projectDocument']['json-object'];	
 			$decodedJson = json_decode($data['jsonTemplate'], true);
-			$data['formTitle'] = "Update " . $data['documentType'][$data['projectDocument']['type']]; ;			
+			$data['formTitle'] = 	$data['projectDocument']['file-name'];		
 			$sections = $decodedJson[$type]["sections"];
 			$data["sections"] = $sections;
+
+			$reviewId = $data['projectDocument']['review-id'];
+			if($reviewId != null){
+				$reviewModel = new ReviewModel();
+				$data["documentReview"] = $reviewModel->find($reviewId);
+			}
 		}
 
 		if ($this->request->getMethod() == 'post') {
@@ -212,7 +223,7 @@ class Documents extends BaseController
 			$rules = [
 				'type' => 'required',
 				'project-id' => 'required',
-				'author' =>'required|min_length[3]|max_length[20]',
+				'author-id' =>'required',
                 'status' => 'required',
 			];	
 
@@ -223,7 +234,7 @@ class Documents extends BaseController
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
-				'author' => $this->request->getVar('author'),
+				'author-id' => $this->request->getVar('author-id'),
                 'file-name' => $title,
 				'status' => $this->request->getVar('status'),
 				'update-date' => $currentTime,

@@ -107,6 +107,10 @@ class DocumentTemplate extends BaseController
 		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
 		$tables['TraceabilityMatrix']['name'] = "traceabilityMatrix";
 		$tables['TraceabilityMatrix']['columns'] = "code,design,cncr,sysreq,subsysreq,testcase";
+		$tables['Documents']['name'] = "documents";
+		$tables['Documents']['columns'] = "file-name,author";
+		// $tables['RiskAssessment']['name'] = "riskAssessment";
+		// $tables['RiskAssessment']['columns'] = "cybersecurity_id,detectability,issue_id,occurrence,risk_type,rpn,severity,soup_id";
 		return $tables;
 	}
 	

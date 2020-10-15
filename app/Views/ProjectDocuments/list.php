@@ -26,7 +26,7 @@
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $projects[$row['project-id']];?></td>
                 <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
-                <td><?php echo $row['author'];?></td>
+                <td><?php echo $row['author-name'];?></td>
                 <td><?php echo $row['status'];?></td>
                 <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
