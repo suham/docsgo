@@ -261,6 +261,20 @@ CREATE TABLE `docsgo-users` (
   `is-admin` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `docsgo-traceability-options`
+--
+
+CREATE TABLE `docsgo-traceability-options` (
+  `id` int(11) NOT NULL,
+  `traceability_id` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `requirement_id` int(11) NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -356,6 +370,12 @@ ALTER TABLE `docsgo-users`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `docsgo-traceability-options`
+--
+ALTER TABLE `docsgo-traceability-options`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -444,6 +464,13 @@ ALTER TABLE `docsgo-traceability`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `docsgo-traceability-options`
+--
+ALTER TABLE `docsgo-traceability-options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+COMMIT;
+
+--
 -- AUTO_INCREMENT for table `docsgo-users`
 --
 ALTER TABLE `docsgo-users`
@@ -461,3 +488,6 @@ ALTER TABLE `docsgo-test-cases` CHANGE `description` `description` VARCHAR(500) 
 -- New Changes
 ALTER TABLE `docsgo-documents` ADD `review-id` INT NULL AFTER `project-id`;
 ALTER TABLE `docsgo-documents` ADD `author-id` INT NOT NULL AFTER `file-name`;
+
+--Alter requiremenst table enum values
+ALTER TABLE `docsgo-requirements` CHANGE `type` `type` ENUM('User Needs', 'System', 'Subsystem') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
