@@ -15,7 +15,7 @@ class Requirements extends BaseController
 		$data['projects'] = $this->getProjects();
 		$model = new RequirementsModel();
 		$data['data'] = $model->orderBy('requirement', 'asc')->findAll();
-		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'CNCR' => "CNCR");		
+		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");		
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -42,7 +42,7 @@ class Requirements extends BaseController
 		$data['pageTitle'] = 'Requirements';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/requirements";
-		$requirementStatus = array('System' => "System", 'Subsystem' => "Subsystem", 'CNCR' => "CNCR");
+		$requirementStatus = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");
 
 		if($id == ""){
 			$data['action'] = "add";
@@ -94,7 +94,7 @@ class Requirements extends BaseController
 				$session->setFlashdata('success', $message);
 			}
 		}
-		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'CNCR' => "CNCR");
+		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");
 		$data['projects'] = $this->getProjects();
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);

@@ -1,5 +1,18 @@
 
 <div class="container1">
+<!-- <div class="row">
+      <div class="col-12">
+          <div class="form-group" readonly="readonly">
+
+              <input type="radio" name="issues-status-type" id="TraceabilityRDBtn1" 
+              onclick="javascript:window.location.href='/traceability-matrix/view/1';" <?php //echo ($checkedVals['TraceabilityRDBtn1']) == 1 ? "checked" : ""; ?> /> List 
+              <input type="radio" name="issues-status-type" id="TraceabilityRDBtn2" 
+              onclick="javascript:window.location.href='/traceability-matrix/view/2';"  <?php //echo ($checkedVals['TraceabilityRDBtn2']) == 1 ? "checked" : ""; ?> /> Gaps
+
+          </div>
+      </div>
+    </div> -->
+
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -8,6 +21,7 @@
 
   <?php else: ?>
 
+    <?php if (($listView)): ?>
     <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
       <thead class="thead-dark">
         <tr>
@@ -15,10 +29,10 @@
           <th scope="col">User Needs</th>
           <th scope="col">System</th>
           <th scope="col">Subsystem</th>
+          <th scope="col">Test</th>
           <th scope="col">Design</th>
           <th scope="col">Code</th>
-          <th scope="col">Test</th>
-          <th scope="col" style="width:125px">Update Date</th>
+          <!-- <th scope="col" style="width:125px">Update Date</th> -->
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
@@ -26,29 +40,36 @@
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
-                <?php if (isset($CNCRList[$row['cncr']])): ?>
-                  <td><?php echo $CNCRList[$row['cncr']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($systemList[$row['sysreq']])): ?>
-                <td><?php echo $systemList[$row['sysreq']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($subSystemList[$row['subsysreq']])): ?>
-                  <td><?php echo $subSystemList[$row['subsysreq']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
+                <td><?php echo $row['User Needs'];?></td>
+                <td>
+                  <div>
+                  <?php foreach ($row['System'] as $key1=>$row1 ): ?>
+                  <div>
+                    <div><?php echo $row1['requirement'];?></div>
+                  </div>
+                  <?php endforeach; ?>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                  <?php foreach ($row['Subsystem'] as $key1=>$row1 ): ?>
+                  <div>
+                    <div><?php echo $row1['requirement'];?></div>
+                  </div>
+                  <?php endforeach; ?>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                  <?php foreach ($row['testcase'] as $key1=>$row1 ): ?>
+                  <div>
+                    <div><?php echo $row1['requirement'];?></div>
+                  </div>
+                  <?php endforeach; ?>
+                  </div>
+                </td>
                 <td><?php echo $row['design']; ?></td>
                 <td><?php echo $row['code'];?></td>
-                <?php if (isset($testCases[$row['testcase']])): ?>
-                  <td><?php echo $testCases[$row['testcase']];?></td>
-                  <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                 <td>
                     <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
@@ -63,7 +84,23 @@
         <?php endforeach; ?>
       </tbody>
     </table>
+    <?php endif; ?>
 
+<?php if (($gapView)): ?>
+  <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Category</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody  class="bg-white">
+    
+  </tbody>
+</table>
+<?php endif; ?>
 <?php endif; ?>
   
 </div>
