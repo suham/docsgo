@@ -74,7 +74,6 @@ class Documents extends BaseController
 		return json_encode($documents);
 	}
 
-	
 	private function getTablesData($tableName){
 		if($tableName == 'teams'){
 			$teamModel = new TeamModel();
@@ -98,7 +97,7 @@ class Documents extends BaseController
 			return $data;
 		}else if($tableName == 'documents'){
 			$documents = new DocumentModel();
-			$data = $documents->findAll();	
+			$data = $documents->getProjects();	
 			return $data;
 		}else if($tableName == 'riskAssessment'){
 			$riskAssessment = new RiskAssessmentModel();
@@ -144,7 +143,6 @@ class Documents extends BaseController
 		return [$type, $id];
 	}
 	
-
 	public function add(){
 		$model = new DocumentModel();
 		$params = $this->returnParams();
@@ -278,8 +276,6 @@ class Documents extends BaseController
 			}
 		
 		}
-
-
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);

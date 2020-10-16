@@ -14,7 +14,7 @@ class DocumentModel extends Model{
             $whereCondition = "WHERE docs.`type` = '".$type."' ";
         }
 
-        $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, team.`name` as `author-name`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`
+        $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, team.`name` as `author`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`
         FROM `docsgo-documents` AS docs
         INNER JOIN `docsgo-team-master` AS team ON docs.`author-id` = team.`id` 
         ".$whereCondition."
