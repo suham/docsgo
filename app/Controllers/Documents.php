@@ -221,9 +221,17 @@ class Documents extends BaseController
 			$rules = [
 				'type' => 'required',
 				'project-id' => 'required',
+				'cp-line3' => 'required|max_length[50]',
 				'author-id' =>'required',
                 'status' => 'required',
 			];	
+
+			$errors = [
+				'cp-line3' => [
+					'required' => 'Title is required.',
+					'max_length' => 'Title should not be more than 50 characters',
+				]
+			];
 
 			$data['type'] = $this->request->getVar('type');
 			$title =  $this->request->getVar('cp-line3');
@@ -255,7 +263,7 @@ class Documents extends BaseController
 			$data["sections"] = $sections;
 			$data['projectDocument'] = $newData;
 
-			if (! $this->validate($rules)) {
+			if (! $this->validate($rules, $errors)) {
 				$session = session();
 				$data['validation'] = $this->validator;
 			}else{
