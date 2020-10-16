@@ -9,7 +9,7 @@
   <?php else: ?>
 
     <table class="table table-striped table-hover table-responsive1">
-      <thead class="thead-dark">
+      <thead >
       <tr>
           <th scope="col">#</th>
           <th scope="col">Project</th>

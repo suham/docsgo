@@ -35,6 +35,11 @@ table {
   border-spacing: 0;
   min-width: 350px;
 }
+
+table tr th{
+  background-color: #31353d !important;
+  color: whitesmoke;
+}
 table tr th,
 table tr td {
  

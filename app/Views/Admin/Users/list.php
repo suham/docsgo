@@ -11,7 +11,7 @@
 
         <div class="table-responsive">
             <table class="table rounded table-striped table-hover table-responsive"  id="users-list">
-                <thead class="thead-dark">
+                <thead>
                     <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>

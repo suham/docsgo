@@ -23,7 +23,7 @@
 
     <?php if (($listView)): ?>
     <table class="table table-striped table-hover table-responsive" id="table1" >
-      <thead class="thead-dark">
+      <thead >
         <tr>
           <th scope="col">#</th>
           <th scope="col">User Needs</th>
@@ -88,7 +88,7 @@
 
 <?php if (($gapView)): ?>
   <table class="table table-striped table-hover table-responsive"  id="table2" >
-  <thead class="thead-dark">
+  <thead >
     <tr>
       <th scope="col">#</th>
       <th scope="col">Category</th>

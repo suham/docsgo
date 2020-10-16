@@ -9,7 +9,7 @@
   <?php else: ?>
     <div class="table-responsive">
       <table class="table table-striped table-hover"  id="document-master-list">
-        <thead class="thead-dark">
+        <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>

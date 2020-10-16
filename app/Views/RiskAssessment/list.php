@@ -27,7 +27,7 @@
   <?php else: ?>
 
     <table class="table table-striped table-hover risk-assessment">
-      <thead class="thead-dark" >
+      <thead >
         <tr>
           <th scope="col">Category</th>
           <th scope="col">Name</th>

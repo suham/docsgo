@@ -1,4 +1,5 @@
 
+
 <div class="row">
 <?php if (count($data) == 0): ?>
 
@@ -9,9 +10,9 @@
   <?php else: ?>
     <div class="col-12">
       <table class="table table-striped table-hover" id="reviews-list">
-        <thead class="thead-dark">
+        <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col" >#</th>
             <th scope="col">Project</th>
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
             <th scope="col" style="max-width:570px;word-wrap: break-word;"> Context</th>
