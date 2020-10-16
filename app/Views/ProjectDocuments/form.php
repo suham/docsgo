@@ -413,7 +413,13 @@
             const $codemirror = $('textarea[name="'+secId+'"]').nextAll('.CodeMirror')[0].CodeMirror;
             $codemirror.setValue(secVal);
             $codemirror.refresh();
-          
+            if(secType == "differential"){
+              if(secVal != ""){
+                evaluteDiff(secId, 'show');
+              }
+              
+            }
+            
         }
   });
 
