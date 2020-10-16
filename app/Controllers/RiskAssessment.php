@@ -20,8 +20,9 @@ class RiskAssessment extends BaseController
 		// $data = $this->setQueryData(3);
 		$data = $this->setQueryData(2);
 		$data['pageTitle'] = 'Risk Assessment';
-		$data['addBtn'] = false;
-		$data['backUrl'] = false;
+		$data['addBtn'] = true;
+		$data['addUrl'] = "/risk-assessment/add";
+		$data['backUrl'] = '/risk-assessment';
 		$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 1, "RDanchor3"=> 0);
 
 		// echo date('Y-m-d H:i:s');
@@ -62,82 +63,59 @@ class RiskAssessment extends BaseController
 		$statusAt =  str_replace(' ', '', $statusAt);
 		$statusAt =  str_replace('  ','', $statusAt);
 
-		// print_r ($statusAt);
-		$data['issues'] = [];
-		$data['cybersecurity'] = [];
-		$data['soup'] = [];
-		// helper(['form']);
-		$data['statusOptions'] = $this->getStatusOprions();
+		$data['occurrenceListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Rare');
+		$data['severityListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Minor/Minimal');
+		$data['detectabilityListOptions'] = array( 5=> 'Almost Certain', 4 => 'High', 3 => 'Moderate', 2 => 'Very Low', 1 => 'Impossible');
 
-		if($statusAt == 'All'){
-			$model = new IssueModel();
-			$data['issues'] = $model->select('a.id, a.issue,a.issue_description,a.status,b.risk_type, b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-issues a')
-			->join('docsgo-risk-assessment b', 'a.id = b.issue_id', 'left')
-			->groupBy('a.id')
-			->findAll();
-
-			$model = new SoupModel();
-			$data['soup'] = $model->select('a.id, a.soup,a.purpose,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-soup a')
-			->join('docsgo-risk-assessment b', 'a.id = b.soup_id', 'left')
-			->groupBy('a.id')
-			->findAll();
-
-			$model = new CybersecurityModel();
-			$data['cybersecurity'] = $model->select('a.id, a.reference,a.description,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-cybersecurity a')
-			->join('docsgo-risk-assessment b', 'a.id = b.cybersecurity_id', 'left')
-			->groupBy('a.id')
-			->findAll();
+		$model = new RiskAssessmentModel();
+		if($statusAt == 'All') {
+			$data['data'] = $model->orderBy('id', 'desc')->findAll();	
 		}else{
-			$model = new IssueModel();
-			$data['issues'] = $model->select('a.id, a.issue,a.issue_description,a.status,b.risk_type, b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-issues a')
-			->where('a.status',trim($statusAt))
-			->join('docsgo-risk-assessment b', 'a.id = b.issue_id', 'left')
-			->groupBy('a.id')
-			->findAll();
-
-			$model = new SoupModel();
-			$data['soup'] = $model->select('a.id, a.soup,a.purpose,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-soup a')
-			->where('a.status', trim($statusAt))
-			->join('docsgo-risk-assessment b', 'a.id = b.soup_id', 'left')
-			->groupBy('a.id')
-			->findAll();
-
-			$model = new CybersecurityModel();
-			$data['cybersecurity'] = $model->select('a.id, a.reference,a.description,a.status,b.risk_type,b.severity,b.occurrence,b.detectability,b.rpn,b.update_date')
-			->from('docsgo-cybersecurity a')
-			->where('a.status',trim($statusAt))
-			->join('docsgo-risk-assessment b', 'a.id = b.cybersecurity_id', 'left')
-			->groupBy('a.id')
-			->findAll();
+			$data['data'] = $model->where('status', $statusAt)->orderBy('id', 'desc')->findAll();	
 		}
 		return $data;
 	}
 
 	private function returnParams($param){
 		$uri = $this->request->uri;
-		$type = $uri->getSegment(3);
-		$id = $uri->getSegment(4);
-		if($id != ""){
-			$id = intval($id);
-		}
-		if($param == 'id'){
+		if(count($uri->getSegments()) <= 2){
+			$uri = $this->request->uri;
+			$id = $uri->getSegment(3);
+			if($id != ""){
+				$id = intval($id);
+			}
 			return $id;
-		}
-		if($param == 'type'){
-			return $type;
+		}else{
+			$type = $uri->getSegment(3);
+			$id = $uri->getSegment(4);
+			if($id != ""){
+				$id = intval($id);
+			}
+			if($param == 'id'){
+				return $id;
+			}
+			if($param == 'type'){
+				return $type;
+			}
 		}
 	}
 
+	private function returnParams1(){
+		$uri = $this->request->uri;
+		$id = $uri->getSegment(3);
+		if($id != ""){
+			$id = intval($id);
+		}
+		return $id;
+	}
+
 	public function add(){
-
-		$id = $this->returnParams('id');
-		$type = $this->returnParams('type');
-
+		if(count($this->request->uri->getSegments()) <= 2){
+			$id = $this->returnParams1();
+		}else{
+			$id = $this->returnParams('id');
+			$type = $this->returnParams('type');
+		}
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
@@ -145,86 +123,61 @@ class RiskAssessment extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/risk-assessment";
 		$dataList = [];
-		$data['riskAssessmentStatus'] = ['Open-issue', 'SOUP', 'Cybersecurity'];
-
-		$issue_id = ''; $cybersecurity_id =''; $soup_id ='';
-		switch ($type) {
-			case 1:
-				$issue_id = $id;
-				$data['member'] = $model->where('issue_id',$id)->first();	
-				$risk_type = 'Open-issue';
-				$list =[];
-				$model1 = new IssueModel();
-				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'Open-issue';
-				$data['member']['issue'] = $list['issue'];
-				$data['member']['description'] = $list['issue_description'];
-				break;
-			case 2:
-				$cybersecurity_id = $id;
-				$data['member'] = $model->where('cybersecurity_id',$id)->first();	
-				$risk_type = 'Cybersecurity';	
-				$list =[];
-				$model1 = new CybersecurityModel();
-				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'Cybersecurity';
-				$data['member']['issue'] = $list['reference'];
-				$data['member']['description'] = $list['description'];
-				break;
-			case 3:
-				$soup_id = $id;
-				$data['member'] = $model->where('soup_id',$id)->first();
-				$risk_type = 'SOUP';	
-				$list =[];
-				$model1 = new SoupModel();
-				$list = $model1->where('id',$id)->first();
-				$data['member']['risk_type'] = 'SOUP';
-				$data['member']['issue'] = $list['soup'];
-				$data['member']['description'] = $list['purpose'];
-				break;
-		}
-		$retriveData = [];
-		$retriveData['issue'] = $data['member']['issue'];
-		$retriveData['description'] = $data['member']['description'];
+		$data['riskCategory'] = ['Issue', 'Observation','Security','SOUP'];
+		$data['riskStatus'] = ['Open', 'Close'];
+		$data['projects'] = $this->getProjects();
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Risk Assessment";
+			$data['formTitle'] = "Add Risk Assessment";
 
 			$rules = [
+				'project'=> 'required',
+				'category'=> 'required',
+				'name' => 'required|min_length[3]|max_length[64]',
+				'description' => 'min_length[3]|max_length[500]',
+				'information' => 'required|min_length[5]|max_length[20]',
 				'severity' => 'required',
 				'occurrence' => 'required',
 				'detectability' => 'required',
 				'rpn' => 'required',
-			];
+				'status' => 'required',
+			];	
 
 		}else{
 			$data['action'] = "add/".$type."/".$id;
-			$data['formTitle'] = "Update ".$risk_type;
+			$data['formTitle'] = "Update Risk Assessment";//.$risk_type;
 
 			$rules = [
+				'project'=> 'required',
+				'category'=> 'required',
+				'name' => 'required|min_length[3]|max_length[64]',
+				'description' => 'min_length[3]|max_length[500]',
+				'information' => 'required|min_length[5]|max_length[20]',
 				'severity' => 'required',
 				'occurrence' => 'required',
 				'detectability' => 'required',
 				'rpn' => 'required',
+				'status' => 'required',
 			];	
+			$data['member'] = $model->where('id',$id)->first();		
 		}
 
 		if ($this->request->getMethod() == 'post') {
 			$newData = [
-				'risk_type' => $risk_type,
+				'project_id' => $this->request->getVar('project'),
+				'category' => $this->request->getVar('category'),
+				'name' => $this->request->getVar('name'),
+				'description' => $this->request->getVar('description'),
+				'information' => $this->request->getVar('information'),
 				'severity' => $this->request->getVar('severity'),
 				'occurrence' => $this->request->getVar('occurrence'),
 				'detectability' => $this->request->getVar('detectability'),
 				'rpn' => $this->request->getVar('rpn'),
-				'issue_id' => $issue_id,
-				'cybersecurity_id' => $cybersecurity_id,
-				'soup_id' => $soup_id
+				'status' => $this->request->getVar('status')
 			];
 			//Setting the existing data to member, if id is already exist(means its update action) getting that id to pass for update query
 			$data['member'] = $newData;
-			$data['member']['issue'] = $retriveData['issue'];
-			$data['member']['description'] = $retriveData['description'];
 	
 
 			if (! $this->validate($rules)) {
@@ -233,37 +186,12 @@ class RiskAssessment extends BaseController
 				if($id > 0){
 					$list = [];
 					$currentTime = gmdate("Y-m-d H:i:s");
-					
+					$newData['id'] = $id;
+
 					// date_default_timezone_set('Asia/Kolkata');
 					// $timestamp = date("Y-m-d H:i:s");
 					$newData['update_date'] = $currentTime;
 			
-					switch ($type) {
-						case 1:
-							$list = $model->where('issue_id',$id)->first();	
-							if($list && count($list) > 0){
-								if($list['id'] != 0){
-									$newData['id'] = $list['id'];
-								}
-							}
-							break;
-						case 2:
-							$list = $model->where('cybersecurity_id',$id)->first();	
-							if($list && count($list) > 0 ){
-								if($list['id'] != 0){
-									$newData['id'] = $list['id'];
-								}
-							}
-							break;
-						case 3:
-							$list = $model->where('soup_id',$id)->first();	
-							if($list && count($list) > 0 ){
-								if($list['id'] != 0){
-									$newData['id'] = $list['id'];
-								}
-							}
-							break;
-					}
 					$message = 'Risk Assessment successfully updated.';
 				}else{
 					$message = 'Risk Assessment successfully added.';
@@ -274,7 +202,10 @@ class RiskAssessment extends BaseController
 			}
 		}
 
-		$data['statusOptions'] = $this->getStatusOprions();
+		$data['occurrenceListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Rare');
+		$data['severityListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Minor/Minimal');
+		$data['detectabilityListOptions'] = array( 5=> 'Almost Certain', 4 => 'High', 3 => 'Moderate', 2 => 'Very Low', 1 => 'Impossible');
+
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('RiskAssessment/form', $data);
@@ -291,14 +222,27 @@ class RiskAssessment extends BaseController
 		return $optionList;
 	}
 
+	private function getProjects(){
+        $projectModel = new ProjectModel();
+        $data = $projectModel->findAll();	
+		$projects = [];
+		foreach($data as $project){
+			$projects[$project['project-id']] = $project['name'];
+		}
+		return $projects;
+	}
+
+
 	public function view() {
 		$type = $this->returnParams('id');
 		$id = $this->returnParams('type');
 		$data = [];
 		$data = $this->setQueryData($type);
 		$data['pageTitle'] = 'Risk Assessment';
-		$data['addBtn'] = false;
-		$data['backUrl'] = false;
+		$data['addBtn'] = true;
+		$data['addUrl'] = "/risk-assessment/add";
+		$data['backUrl'] = '/risk-assessment';
+
 
 		if($type == 1){
 			$data['checkedVals'] = array('RDanchor1' => 1, "RDanchor2"=> 0, "RDanchor3"=> 0);
@@ -316,32 +260,18 @@ class RiskAssessment extends BaseController
 
 	}
 
-
 	public function delete(){
-		// $this->index();
-
-		$data = [];
-		$data['pageTitle'] = 'Risk Assessment';
-		$data['addBtn'] = false;
-		$data['backUrl'] = false;
-
-
-		$response = array('success' => "True");
-		// echo json_encode( $response );
-
-
-
-		// if (session()->get('is-admin')){
-		// 	$id = $this->returnParams();
-		// 	$model = new IssueModel();
-		// 	$model->delete($id);
-		// 	$response = array('success' => "True");
-		// 	echo json_encode( $response );
-		// }
-		// else{
-		// 	$response = array('success' => "False");
-		// 	echo json_encode( $response );
-		// }
+		if (session()->get('is-admin')){
+			$id = $this->returnParams1();
+			$model = new RiskAssessmentModel();
+			$model->delete($id);
+			$response = array('success' => "True");
+			echo json_encode( $response );
+		}
+		else{
+			$response = array('success' => "False");
+			echo json_encode( $response );
+		}
 	}
 
 

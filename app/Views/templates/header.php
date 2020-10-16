@@ -112,27 +112,11 @@
 
 
 
-            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'active' : null) ?>">
-              <a href="#">
-                <i class="fa fa-lock"></i>
+            <li>
+              <a href="/risk-assessment">
+                <i class="fa fa-lock" style = "<?= ($uri->getSegment(1) == 'risk-assessment'   ? 'color:#16c7ff;' : null) ?>"></i>
                 <span>Risk Assessment</span>
               </a>
-              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'display:block;' : '') ?>">
-                <ul>
-                  <li>
-                    <a href="/risk-assessment">Risk Assessment</a>
-                  </li>   
-                  <li>
-                    <a href="/issues">Issues/Observations</a>
-                  </li>        
-                  <li>
-                    <a href="/cybersecurity">Cybersecurity</a>
-                  </li>  
-                  <li>
-                    <a href="/soup">SOUP</a>
-                  </li>            
-                </ul>
-              </div>
             </li>
 
 

@@ -12,14 +12,12 @@
                 </a>
             </div>
             <?php else: ?>
-                <?php if ($backUrl): ?>
                     <div class="col-sm-2 col-12 ">
                         <a class="btn btn-secondary text-light" href="<?= $backUrl ?>">
                         <i class="fa fa-chevron-left"></i> Back
                         </a>
                     </div>
                 <?php endif; ?>
-            <?php endif; ?>
         </div>
    </div>
 </div>

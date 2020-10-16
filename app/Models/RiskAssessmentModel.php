@@ -3,7 +3,7 @@
 use CodeIgniter\Model;
 
 class RiskAssessmentModel extends Model{
-    protected $table = 'docsgo-risk-assessment';
-    protected $allowedFields = ['risk_type', 'risk_details', 'failure', 'harm', 'mitigation', 'severity', 'occurrence', 'detectability', 'rpn', 'update_date', 'issue_id', 'cybersecurity_id', 'soup_id'];
+    protected $table = 'docsgo-risks';
+    protected $allowedFields = ['project_id', 'category', 'name', 'description', 'information', 'severity', 'occurrence', 'detectability', 'rpn', 'status', 'update_date'];
 
 }

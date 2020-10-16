@@ -18,7 +18,7 @@
           </div>
       </div>
     </div>
-<?php if (count($issues) == 0 && count($soup) == 0 && count($cybersecurity) == 0): ?>
+<?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
     No records found.
@@ -30,111 +30,86 @@
       <thead class="thead-dark" >
         <tr>
           <th scope="col">Category</th>
-          <th scope="col">Risk</th>
+          <th scope="col">Name</th>
           <th scope="col">Description</th>
+          <th scope="col">Information</th>
           <th scope="col">Severity</th>
           <th scope="col">Occurrence</th>
           <th scope="col">Detectability</th>
           <th scope="col">RPN</th>
-          <th scope="col" style="width:125px">Update Date</th>
+          <th scope="col">Status</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
       <tbody  class="bg-white">
-        <?php foreach ($issues as $key=>$row): ?>
+        <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> Open-issue</td>
-                <td><?php echo $row['issue'];?></td>
-                <td><?php echo $row['issue_description'];?></td>
+                <td><?php echo $row['category'];?> </td>
+                <td><?php echo $row['name'];?></td>
+                <td><?php echo $row['description'];?></td>
+                <td><?php echo $row['information'];?></td>
                 <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
+                  <td><?php echo $severityListOptions[$row['severity']];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
+                  <td><?php echo $occurrenceListOptions[$row['occurrence']];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
+                  <td><?php echo $detectabilityListOptions[$row['detectability']];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <td><?php echo $row['rpn'];?></td>
-                <?php if (isset($row['update_date'])): ?>
-                  <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
+                <td><?php echo $row['status'];?></td>
                 <td>
                     <a href="/risk-assessment/add/1/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <?php foreach ($cybersecurity as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> Cybersecurity</td>
-                <td><?php echo $row['reference']; ?></td>
-                <td><?php echo $row['description'];?></td>
-                <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['rpn'];?></td>
-                <td><?php echo $row['update_date'];?></td>
-                <td>
-                    <a href="/risk-assessment/add/2/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
+                    <?php if (session()->get('is-admin')): ?>
+                    <a onclick="deleteItem(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                        <i class="fa fa-trash text-light"></i>
                     </a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
-        <?php foreach ($soup as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> SOUP </td>
-                <td><?php echo $row['soup'];?></td>
-                <td><?php echo $row['purpose'];?></td>
-                <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['rpn'];?></td>
-                <td><?php echo $row['update_date'];?></td>
-                <td>
-                    <a href="/risk-assessment/add/3/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
+
       </tbody>
     </table>
 
 <?php endif; ?>
 </div>
+
+<script>
+ function deleteItem(id){
+
+    bootbox.confirm("Do you really want to delete record?", function(result) {
+      if(result){
+        $.ajax({
+           url: '/risk-assessment/delete/'+id,
+           type: 'GET',
+           success: function(response){
+              console.log(response);
+              console.log('/risk-assessment/delete/'+id);
+              response = JSON.parse(response);
+              if(response.success == "True"){
+                  $("#"+id).fadeOut(800)
+              }else{
+                 bootbox.alert('Record not deleted.');
+              }
+            }
+         });
+      }else{
+        console.log('Delete Cancelled');
+      }
+
+    });
+
+ }
+
+</script>
 
