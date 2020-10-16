@@ -236,12 +236,8 @@ CREATE TABLE `docsgo-test-cases` (
 
 CREATE TABLE `docsgo-traceability` (
   `id` int(11) NOT NULL,
-  `cncr` varchar(100) NOT NULL,
-  `sysreq` varchar(100) NOT NULL,
-  `subsysreq` varchar(100) NOT NULL,
   `design` varchar(100) NOT NULL,
   `code` varchar(100) NOT NULL,
-  `testcase` varchar(100) NOT NULL,
   `update_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
