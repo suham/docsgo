@@ -1,5 +1,5 @@
 
-<div class="">
+<div class="row">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -7,19 +7,19 @@
   </div>
 
   <?php else: ?>
-    <div class="table-responsive">
+    <div class="col-12">
       <table class="table table-striped table-hover" id="reviews-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Project</th>
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
-            <th scope="col" style="max-width:250px;word-wrap: break-word;"> Context</th>
-            <th scope="col" style="min-width:125px;">Assigned To</th>
+            <th scope="col" style="max-width:570px;word-wrap: break-word;"> Context</th>
+            <th scope="col" style="min-width:120px;">Assigned To</th>
             <th scope="col">Category</th>
             <th scope="col">Status</th>
-            <th scope="col" style="min-width:125px;">Reviewed By</th>
-            <th scope="col" style="min-width: 125px;">Actions</th>
+            <th scope="col" style="min-width:120px;">Reviewed By</th>
+            <th scope="col" style="min-width: 100px;">Actions</th>
           </tr>
         </thead>
         <tbody class="bg-white ">
@@ -28,7 +28,7 @@
                   <td><?php echo $key+1; ?></td>
                   <td><?php echo $projects[$row['project-id']];?></td>
                   <td style="max-width:125px;word-wrap: break-word;"><?php echo $row['review-name'];?></td>
-                  <td style="max-width:250px;word-wrap: break-word;"><?php echo $row['context'];?></td>
+                  <td style="max-width:570px;word-wrap: break-word;"><?php echo $row['context'];?></td>
                   <td><?php echo $teamMembers[$row['assigned-to']];?></td>
                   <td><?php echo $row['category'];?></td>
                   <td>
@@ -56,7 +56,9 @@
           <?php endforeach; ?>
         </tbody>
       </table>
+    
     </div>
+
 <?php endif; ?>
   
 </div>
@@ -88,7 +90,12 @@
  }
 
     $(document).ready( function () {
-      $('#reviews-list').DataTable();
+      $('#reviews-list').DataTable({
+        "responsive": true,
+        "scrollX": true,
+        "fixedHeader": true,
+        "autoWidth": false
+      });
     });
 
 

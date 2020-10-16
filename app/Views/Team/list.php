@@ -49,7 +49,11 @@
 
 <script>
   $(document).ready( function () {
-      $('#teams-list').DataTable();
+      $('#teams-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true
+    });
   });
  function deleteMember(id){
 

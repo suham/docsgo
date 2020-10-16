@@ -22,7 +22,7 @@
   <?php else: ?>
 
     <?php if (($listView)): ?>
-    <table class="table table-striped table-hover table-responsive" id="table1" style="display: inline-table;">
+    <table class="table table-striped table-hover table-responsive" id="table1" >
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -87,7 +87,7 @@
     <?php endif; ?>
 
 <?php if (($gapView)): ?>
-  <table class="table table-striped table-hover table-responsive"  id="table2" style="display: inline-table;">
+  <table class="table table-striped table-hover table-responsive"  id="table2" >
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
@@ -107,8 +107,16 @@
 
 <script>
 $(document).ready( function () {
-    $('#table1').DataTable();
-    $('#table2').DataTable();
+    $('#table1').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
+    $('#table2').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
 });
  function deleteTraceabilityMatrix(id){
 

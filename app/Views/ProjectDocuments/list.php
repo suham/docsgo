@@ -54,9 +54,16 @@
 
 <script>
   $(document).ready( function () {
-    $('#documents-list').DataTable();
+    var table = $('#documents-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
+
+
   });
 
+  
  function deletePlanDocument(id){
 
     bootbox.confirm("Do you really want to delete the plan document?", function(result) {

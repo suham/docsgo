@@ -52,7 +52,11 @@
 <script>
 
   $(document).ready( function () {
-    $('#issues-list').DataTable();
+    $('#issues-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
   });
 
  function deleteIssue(id){

@@ -47,7 +47,11 @@
 <script>
   
   $(document).ready( function () {
-    $('#test-cases-list').DataTable();
+    $('#test-cases-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
   });
 
  function deleteTestCase(id){

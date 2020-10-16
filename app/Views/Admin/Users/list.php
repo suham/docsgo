@@ -43,7 +43,11 @@
 
 <script>
 $(document).ready( function () {
-    $('#users-list').DataTable();
+    $('#users-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
 });
 
 function changeStatus(id){

@@ -8,7 +8,7 @@
 
   <?php else: ?>
 
-    <table class="table table-striped table-hover table-responsive" id="requirements-list" style="display: inline-table;">
+    <table class="table table-striped table-hover table-responsive" id="requirements-list" >
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -48,7 +48,11 @@
 
 <script>
   $(document).ready( function () {
-    $('#requirements-list').DataTable();
+    $('#requirements-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
   });
 
  function deleteRequirements(id){

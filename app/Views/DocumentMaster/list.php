@@ -47,7 +47,11 @@
 
 <script>
   $(document).ready( function () {
-    $('#document-master-list').DataTable();
+    $('#document-master-list').DataTable({
+      "responsive": true,
+      "scrollX": true,
+      "fixedHeader": true,
+    });
   });
 
  function deleteDocument(id){
