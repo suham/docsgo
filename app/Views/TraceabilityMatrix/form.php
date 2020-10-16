@@ -23,7 +23,7 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="cncr">User Needs</label>
-              <select class="form-control selectpicker" data-live-search="true" name="cncr[]" id="cncr" onchange="getIDDescription('#cncr')">
+              <select class="form-control selectpicker" name="cncr[]" id="cncr" onchange="getIDDescription('#cncr')">
                   <option value="" disabled>Choose your option</option>
                   <?php foreach ($CNCRList as $key=>$value): ?>
                   <option 
@@ -43,8 +43,8 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="sysreq">System</label>
-              <select class="form-control selectpicker" multiple id="multiple-select-form2" name="sysreq[]" id="sysreq" onchange="getIDDescription('#sysreq')">
-                  <option value="" disabled>Choose your option</option>
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="sysreq[]" id="sysreq" onchange="getIDDescription('#sysreq')">
+                  <option disabled value> Select System </option>
                   <?php foreach ($systemList as $key=>$value): ?>
                   <option 
                     <?= isset($systemKeys) ? ((in_array($key, $systemKeys)) ? 'selected': '') : '' ?>
@@ -64,8 +64,8 @@
             <div class="col-12   col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="subsysreq">Subsystem</label>
-              <select class="form-control selectpicker" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq" onchange="getIDDescription('#subsysreq')">
-                  <option value="" disabled>Choose your option</option>
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq" onchange="getIDDescription('#subsysreq')">
+                  <option disabled value> Select Subsystem </option>
                   <?php foreach ($subSystemList as $key=>$value): ?>
                   <option 
                     <?= isset($subsystemKeys) ? ((in_array($key, $subsystemKeys)) ? 'selected': '') : '' ?>
@@ -100,8 +100,8 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="testcase">Test</label>
-              <select class="form-control selectpicker" multiple id="multiple-select-form2" name="testcase[]" id="testcase" onchange="getTestCaseDescription('#testcase')">
-                  <option value="" disabled>Choose your option</option>
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="testcase[]" id="testcase" onchange="getTestCaseDescription('#testcase')">
+                  <option disabled value>Select Testcase</option>
                   <?php foreach ($testCases as $key=>$value): ?>
                   <option 
                     <?= isset($testcaseKeys) ? ((in_array($key, $testcaseKeys)) ? 'selected': '') : '' ?>
@@ -139,13 +139,6 @@
 
 <script>
 
-$(document).ready(function() {
-    // $('.multiple-select-form').selectpicker();
-    // $('.multiple-select-form').materialSelect();
-    // $('.mdb-select').materialSelect();
-
-    // $("#multiple-select-form2").val()
-  });
 
  function getIDDescription(type){
     var id = $(type).val();

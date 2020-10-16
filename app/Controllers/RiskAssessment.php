@@ -130,7 +130,7 @@ class RiskAssessment extends BaseController
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Risk Assessment";
-
+			$data['member']['status'] = 'Open';
 			$rules = [
 				'project'=> 'required',
 				'category'=> 'required',
