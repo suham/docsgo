@@ -339,7 +339,8 @@
     <?php endif; ?>
 
     <?php if (isset($jsonTemplate)): ?>
-      entireTemplate = <?= $jsonTemplate ?>;
+      entireTemplate = <?= json_encode($jsonTemplate) ?>;
+      entireTemplate = JSON.parse(entireTemplate);
     <?php endif; ?>
     fileName = "<?= isset($projectDocument['file-name']) ? $projectDocument['file-name']: '' ?>";
 

@@ -242,10 +242,14 @@ class Documents extends BaseController
 			$decodedJson = json_decode($jsonObject, true);
 			$sections = $decodedJson[$type]["sections"];
 			foreach($sections as $key=>$section){
-				if($section["type"] == "differential"){
-					$sectionValue = $this->request->getVar($section["id"]);
-					$sections[$key]["content"] = $sectionValue;
+				if(isset($section["type"])){
+					if($section["type"] == "differential"){
+						$sectionValue = $this->request->getVar($section["id"]);
+						$sections[$key]["content"] = $sectionValue;
+					}
 				}
+
+				
 			}
 			$decodedJson[$type]["sections"] = $sections;
 			$jsonObject = json_encode($decodedJson);
