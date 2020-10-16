@@ -270,7 +270,7 @@
       </form>
     </div>
     <?php if (isset($projectDocument['project-id'])): ?>
-    <div class="col reviewDiv"> 
+    <div class="col reviewDiv d-none"> 
         <div class="from-wrapper mt-1 p-3 pb-3 bg-white rounded">
           <div class="row">
             <div class="col">
@@ -400,6 +400,8 @@
 
     if(!reviewComments.length){
       $(".reviewDiv").addClass('d-none');
+    }else{
+      $(".reviewDiv").removeClass('d-none');
     }
 
   });
