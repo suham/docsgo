@@ -18,7 +18,7 @@
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
 
           <div class="row">
-            <div class="col-12 col-sm-6">
+            <div class="col-12 ">
               <h3><?= $formTitle ?></h3>
             </div>
             
@@ -215,15 +215,21 @@
                           <?php endif; ?>
                         </div>
                       </div>
-                      <?php if (isset($section["type"])): ?>
-                      <div class="card-body p-0">
-                        <?php if ($section["type"] == "differential"): ?>
-                          <div id="diffDiv_<?=  $section["id"] ?>"></div>
-                        <?php endif; ?>
-                        <textarea class="form-control sections" name="<?=  $section["id"] ?>"
-                          id="<?=  $section["id"] ?>"><?=  $section["content"] ?></textarea>
+
+                      
+                      <div class="card-body p-0">     
+                          
+                        <? if (isset($section["type"])): ?>
+                            <? if ($section["type"] == "differential"): ?>
+                              <div id="diffDiv_<?=  $section["id"] ?>" class="pb-2"></div>
+                            <? endif; ?>
+                        <? else : ?>
+                          <textarea class="form-control sections" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"></textarea>
+                        <? endif; ?>
+
                       </div>
-                      <?php endif; ?>
+                     
+                      
                     </div>
                   </div>
 
@@ -388,12 +394,27 @@
 
     <?php if (isset($sections)): ?>
       sections = <?= json_encode($sections) ?>;
+      
     <?php endif; ?>
 
     if(!reviewComments.length){
       $(".reviewDiv").addClass('d-none');
     }
 
+  });
+
+  window.addEventListener("load", function(){
+    for(var z =0; z< sections.length; z++){
+          const secType = sections[z].type;
+            
+            const secId = sections[z].id;
+            const secVal = sections[z].content;
+            $('#'+secId).val(secVal)
+            const $codemirror = $('textarea[name="'+secId+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+            $codemirror.setValue(secVal);
+            $codemirror.refresh();
+          
+        }
   });
 
   function saveReview(){
@@ -545,11 +566,20 @@
       
       $("#btn_text_eval_"+sectionId).removeClass('d-none');
       $("#btn_diff_eval_"+sectionId).addClass('d-none');
+      
+      var toolbar = $("#section1").closest('div').find('.editor-toolbar');
+      var codeMirror = $("#section1").closest('div').find('.CodeMirror');
+      $(toolbar).addClass('d-none');
+      $(codeMirror).addClass('d-none');
     }else{
       
       $("#diffDiv_"+sectionId).addClass('d-none');
       $("#btn_text_eval_"+sectionId).addClass('d-none');
       $("#btn_diff_eval_"+sectionId).removeClass('d-none');
+      var toolbar = $("#section1").closest('div').find('.editor-toolbar');
+      var codeMirror = $("#section1").closest('div').find('.CodeMirror');
+      $(toolbar).removeClass('d-none');
+      $(codeMirror).removeClass('d-none');
     }
    
   }
@@ -581,16 +611,18 @@
   
   }
 
+
+ 
+
   $("#section-tab").click(function(){
+
     setTimeout(function(){ 
-      $('textarea').each(function() {
-      var textarea = this.name;
-      if(textarea != ""){
-        var $cm = $('textarea[name="'+textarea+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+      for(var z =0; z< sections.length; z++){
+        const secId = sections[z].id;
+        var $cm = $('textarea[name="'+secId+'"]').nextAll('.CodeMirror')[0].CodeMirror;
         $cm.refresh();
       }
-      
-    });
+  
 
     }, 500);
 
@@ -609,10 +641,18 @@
     for (var i = 0; i < allSections.length; i++) {
       var sectionId = allSections[i].id;
       const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
-      var sectionValue = $codemirror.getValue();
+      var sectionValue = $codemirror.getValue();      
+
       var temp = sections.find(x => x.id === sectionId);
-      temp['content'] = sectionValue;
+      if(temp.type == "differential"){
+        temp['content'] = sectionId;
+      }else{
+        temp['content'] = sectionValue;
+      }
+      
+      
       newSections.push(temp);
+
     }
 
     entireTemplate[type]['cp-line3'] = $("#cp-line3").val();
@@ -621,9 +661,10 @@
     entireTemplate[type]['cp-approval-matrix'] = $("#cp-approval-matrix").val();
     entireTemplate[type]['cp-change-history'] = changeHistory;
     entireTemplate[type]["sections"] = newSections;
-    // console.log(entireTemplate);
-    $(this).append('<textarea type="hidden" name="json-object" style="display:none;">' + JSON.stringify(
-      entireTemplate) + '</textarea>');
+    console.log(entireTemplate);
+    var jsonObject = JSON.stringify(entireTemplate);
+    
+    $(this).append('<textarea name="json-object" style="display:none;">' + jsonObject + '</textarea>');
 
     return true;
   });

@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -13,8 +13,8 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Project</th>
-            <th scope="col">Name</th>
-            <th scope="col">Context</th>
+            <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
+            <th scope="col" style="max-width:250px;word-wrap: break-word;"> Context</th>
             <th scope="col" style="min-width:125px;">Assigned To</th>
             <th scope="col">Category</th>
             <th scope="col">Status</th>
@@ -27,8 +27,8 @@
               <tr scope="row" id="<?php echo $row['id'];?>">
                   <td><?php echo $key+1; ?></td>
                   <td><?php echo $projects[$row['project-id']];?></td>
-                  <td><?php echo $row['review-name'];?></td>
-                  <td><?php echo $row['context'];?></td>
+                  <td style="max-width:125px;word-wrap: break-word;"><?php echo $row['review-name'];?></td>
+                  <td style="max-width:250px;word-wrap: break-word;"><?php echo $row['context'];?></td>
                   <td><?php echo $teamMembers[$row['assigned-to']];?></td>
                   <td><?php echo $row['category'];?></td>
                   <td>

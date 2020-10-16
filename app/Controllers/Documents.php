@@ -231,6 +231,18 @@ class Documents extends BaseController
 			$title =  $this->request->getVar('cp-line3');
 			$title =  str_replace(' ', '', $title);
 			$currentTime = gmdate("Y-m-d H:i:s");
+
+			$jsonObject = $this->request->getVar('json-object');
+			$decodedJson = json_decode($jsonObject, true);
+			$sections = $decodedJson[$type]["sections"];
+			foreach($sections as $key=>$section){
+				if($section["type"] == "differential"){
+					$sectionValue = $this->request->getVar($section["id"]);
+					$sections[$key]["content"] = $sectionValue;
+				}
+			}
+			$decodedJson[$type]["sections"] = $sections;
+			$jsonObject = json_encode($decodedJson);
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
@@ -238,12 +250,10 @@ class Documents extends BaseController
                 'file-name' => $title,
 				'status' => $this->request->getVar('status'),
 				'update-date' => $currentTime,
-				'json-object' => $this->request->getVar('json-object'),
+				'json-object' => $jsonObject,
 			];
-			$data['jsonTemplate'] = $this->request->getVar('json-object');
-			$decodedJson = json_decode($data['jsonTemplate'], true);
-			
-			$sections = $decodedJson[$type]["sections"];
+
+			$data['jsonTemplate'] = $jsonObject;
 			$data["sections"] = $sections;
 			$data['projectDocument'] = $newData;
 
@@ -264,7 +274,7 @@ class Documents extends BaseController
 				
 				$model->save($newData);
 				$session = session();
-				$session->setFlashdata('success', 'Plan successfully added.');
+				$session->setFlashdata('success', $message);
 			}
 		
 		}

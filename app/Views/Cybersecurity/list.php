@@ -17,7 +17,7 @@
           <th scope="col">Description</th>
           <th scope="col">Established Control</th>
           <th scope="col">Status</th>
-          <th scope="col" style="width:125px">Last update</th>
+          <!-- <th scope="col" style="width:125px">Last update</th> -->
           <th scope="col" style="width:125px">Action</th>
         </tr>
       </thead>
@@ -30,7 +30,7 @@
                 <td><?php echo $row['description'];?></td>
                 <td><?php echo $row['control'];?></td>
                 <td><?php echo $row['status'];?></td>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp);?></td>
+                <!-- <td><?php //$timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp);?></td> -->
                 <td>
                     <a href="/cybersecurity/add/<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>

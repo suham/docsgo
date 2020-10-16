@@ -1,5 +1,5 @@
 
-<div class="container1">
+<div class="">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -8,16 +8,16 @@
 
   <?php else: ?>
 
-    <table class="table table-striped table-hover table-responsive1">
+    <table class="table table-striped table-hover table-responsive">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
           <th scope="col">Project</th>
           <th scope="col">SOUP Name</th>
           <th scope="col">Version</th>
-          <th scope="col">Purpose</th>
-          <th scope="col">Validation</th>
-          <th scope="col">Update Date</th>
+          <th scope="col" style="max-width:250px;word-wrap: break-word;">Purpose</th>
+          <th scope="col" style="max-width:250px;word-wrap: break-word;">Validation</th>
+          <!-- <th scope="col">Update Date</th> -->
           <th scope="col" style="width:125px">Status</th>
           <th scope="col" style="width:125px">Action</th>
         </tr>
@@ -29,9 +29,9 @@
                 <td><?php echo $projects[$row['project_id']];?></td>
                 <td><?php echo $row['soup']; ?></td>
                 <td><?php echo $row['version'];?></td>
-                <td><?php echo $row['purpose'];?></td>
-                <td><?php echo $row['validation'];?></td>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
+                <td style="max-width:250px;word-wrap: break-word;"><?php echo $row['purpose'];?></td>
+                <td style="max-width:250px;word-wrap: break-word;"><?php echo $row['validation'];?></td>
+                <!-- <td><?php //$timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td> -->
                 <td><?php echo $row['status'];?></td>
                 <td>
                     <a href="/soup/add/<?php echo $row['id'];?>" class="btn btn-warning">
