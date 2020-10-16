@@ -275,6 +275,26 @@ CREATE TABLE `docsgo-traceability-options` (
   `update_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+--
+-- Table structure for table `docsgo-risks`
+--
+
+CREATE TABLE `docsgo-risks` (
+  `id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `category` enum('Issue','Observation','Security','SOUP') NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `information` varchar(100) NOT NULL,
+  `severity` int(11) NOT NULL,
+  `occurrence` int(11) NOT NULL,
+  `detectability` int(11) NOT NULL,
+  `rpn` int(11) NOT NULL,
+  `status` enum('Open','Close') NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -373,6 +393,12 @@ ALTER TABLE `docsgo-users`
 -- Indexes for table `docsgo-traceability-options`
 --
 ALTER TABLE `docsgo-traceability-options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `docsgo-risks`
+--
+ALTER TABLE `docsgo-risks`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -475,6 +501,13 @@ COMMIT;
 --
 ALTER TABLE `docsgo-users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+--
+-- AUTO_INCREMENT for table `docsgo-risks`
+--
+ALTER TABLE `docsgo-risks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 ALTER TABLE `docsgo-risk-assessment` CHANGE `risk_type` `risk_type` ENUM('Open-issue','SOUP','Cybersecurity') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
