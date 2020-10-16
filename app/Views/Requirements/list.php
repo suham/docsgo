@@ -8,7 +8,7 @@
 
   <?php else: ?>
 
-    <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
+    <table class="table table-striped table-hover table-responsive" id="requirements-list" style="display: inline-table;">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -47,6 +47,10 @@
 </div>
 
 <script>
+  $(document).ready( function () {
+    $('#requirements-list').DataTable();
+  });
+
  function deleteRequirements(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {

@@ -10,7 +10,7 @@
     <?php else: ?>
 
         <div class="table-responsive">
-            <table class="table rounded table-striped table-hover table-responsive">
+            <table class="table rounded table-striped table-hover table-responsive"  id="users-list">
                 <thead class="thead-dark">
                     <tr>
                     <th scope="col">#</th>
@@ -42,6 +42,10 @@
 </div>
 
 <script>
+$(document).ready( function () {
+    $('#users-list').DataTable();
+});
+
 function changeStatus(id){
 
     console.log('change '+id );

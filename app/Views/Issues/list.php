@@ -7,7 +7,7 @@
   </div>
 
   <?php else: ?>
-    <table class="table table-striped table-hover table-responsive1">
+    <table class="table table-striped table-hover table-responsive1" id="issues-list">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -50,6 +50,11 @@
 </div>
 
 <script>
+
+  $(document).ready( function () {
+    $('#issues-list').DataTable();
+  });
+
  function deleteIssue(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {

@@ -8,7 +8,7 @@
 
   <?php else: ?>
     <div class="table-responsive">
-      <table class="table table-striped table-hover">
+      <table class="table table-striped table-hover"  id="document-master-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -46,6 +46,10 @@
 </div>
 
 <script>
+  $(document).ready( function () {
+    $('#document-master-list').DataTable();
+  });
+
  function deleteDocument(id){
 
     bootbox.confirm("Do you really want to delete the document?", function(result) {

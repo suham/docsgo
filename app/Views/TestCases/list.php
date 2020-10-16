@@ -8,7 +8,7 @@
 
   <?php else: ?>
 
-    <table class="table table-striped table-hover table-responsive1">
+    <table class="table table-striped table-hover table-responsive1"  id="test-cases-list">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -45,6 +45,11 @@
 </div>
 
 <script>
+  
+  $(document).ready( function () {
+    $('#test-cases-list').DataTable();
+  });
+
  function deleteTestCase(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {

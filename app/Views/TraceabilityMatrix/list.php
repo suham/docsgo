@@ -22,7 +22,7 @@
   <?php else: ?>
 
     <?php if (($listView)): ?>
-    <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
+    <table class="table table-striped table-hover table-responsive" id="table1" style="display: inline-table;">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -87,7 +87,7 @@
     <?php endif; ?>
 
 <?php if (($gapView)): ?>
-  <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
+  <table class="table table-striped table-hover table-responsive"  id="table2" style="display: inline-table;">
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
@@ -106,6 +106,10 @@
 </div>
 
 <script>
+$(document).ready( function () {
+    $('#table1').DataTable();
+    $('#table2').DataTable();
+});
  function deleteTraceabilityMatrix(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {

@@ -8,7 +8,7 @@
 
   <?php else: ?>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover"  id="documents-list">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -53,6 +53,10 @@
 </div>
 
 <script>
+  $(document).ready( function () {
+    $('#documents-list').DataTable();
+  });
+
  function deletePlanDocument(id){
 
     bootbox.confirm("Do you really want to delete the plan document?", function(result) {
