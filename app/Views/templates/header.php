@@ -93,7 +93,7 @@
             <li>
               <a href="/reviews">
                 <i class="fa fa-list" style = "<?= ($uri->getSegment(1) == 'reviews'   ? 'color:#16c7ff;' : null) ?>"></i>
-                <span>Review Comments</span>
+                <span>Review Register</span>
               </a>
             </li>
 

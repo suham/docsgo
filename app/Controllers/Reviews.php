@@ -10,12 +10,12 @@ class Reviews extends BaseController
     public function index()
     {
         $data = [];
-		$data['pageTitle'] = 'Review Comments';
+		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/reviews/add";
 
 		$model = new ReviewModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $model->orderBy('updated-at', 'desc')->findAll();	
 		
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
@@ -73,7 +73,7 @@ class Reviews extends BaseController
 	public function addDocReview(){
 		if ($this->request->getMethod() == 'post') {
 			$response = array();
-
+			$currentTime = gmdate("Y-m-d H:i:s");
 			$data = [
 				"project-id" => $this->request->getVar('projectId'),
 				"review-name" =>$this->request->getVar('reviewName'),
@@ -83,6 +83,7 @@ class Reviews extends BaseController
 				"review-by" =>$this->request->getVar('reviewBy'),
 				"assigned-to" => $this->request->getVar('assignedTo'),
 				"review-ref" => $this->request->getVar('reviewRef'),
+				'updated-at' => $currentTime,
 				"status" => $this->request->getVar('status'),
 			];
 
@@ -119,35 +120,38 @@ class Reviews extends BaseController
 		helper(['form']);
 		$model = new ReviewModel();
 		$data = [];
-		$data['pageTitle'] = 'Review Comments';
+		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/reviews";
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
 		$data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];
-		$data['categoryList'] = ["Document", "Test case", "Code", "Report"];
-		
+		// $data['categoryList'] = ["Document", "Test case", "Code", "Report"];
+		$data['categoryList'] = ["User Needs", "Plan", "Requirements", "Design",
+		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
+
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Review Comments";
+			$data['formTitle'] = "Add";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Review Comments";
+			
 			$data['review'] = $model->where('id',$id)->first();		
+			$data['formTitle'] = $data['review']['review-name'];
 		}
-		
+		$currentTime = gmdate("Y-m-d H:i:s");
 		if ($this->request->getMethod() == 'post') {
 			$rules = [
 				"project-id" => 'required',
 				"review-name" =>'required|max_length[20]',
 				"assigned-to" => 'required|max_length[50]',
-				"context" => 'required|max_length[200]',
+				"context" => 'required|max_length[60]',
 				"description" => 'required|max_length[400]',
 				"review-by" =>'required|max_length[50]',
 				"review-ref" => 'max_length[250]',
 				"status" => 'required',
-				"category" => 'required'
+				"category" => 'required',
 			];
 
 			$newData = [
@@ -159,6 +163,7 @@ class Reviews extends BaseController
 				"review-name" =>$this->request->getVar('review-name'),
 				"review-ref" => $this->request->getVar('review-ref'),
 				"status" => $this->request->getVar('status'),
+				'updated-at' => $currentTime,
 				"category" => $this->request->getVar('category')
 			];
 

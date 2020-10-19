@@ -162,7 +162,10 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade mt-3" id="section" role="tabpanel" aria-labelledby="section-tab">
+              <div class="tab-pane fade" id="section" role="tabpanel" aria-labelledby="section-tab">
+              <div class="d-flex flex-row-reverse ">
+                  <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+              </div>
                 <?php foreach ($sections as $section): ?>
                   <div class="col-12 mb-3">
                     <div class="">
@@ -310,7 +313,7 @@
   var documentsTable;
   var riskAssessmentTable; 
 
-  var templateSections;
+  var sections;
   var reviewComments = "";
   var fileName = "";
   var reviewedSection = [];
@@ -332,6 +335,7 @@
   }
 
   var documentReview = new Review();
+  var reviewCategory;
 
   $(document).ready(function () {
     <?php if (isset($type)): ?>
@@ -343,7 +347,7 @@
       entireTemplate = JSON.parse(entireTemplate);
     <?php endif; ?>
     fileName = "<?= isset($projectDocument['file-name']) ? $projectDocument['file-name']: '' ?>";
-
+    reviewCategory = <?= isset($reviewCategoryList)? json_encode($reviewCategoryList): '' ?>;
     documentReview.docId = "<?= isset($projectDocument['id']) ? $projectDocument['id']: '' ?>";
     <?php if (isset($documentReview)): ?>
       var savedReview = <?= json_encode($documentReview) ?> ;
@@ -407,7 +411,11 @@
   });
 
   window.addEventListener("load", function(){
-    for(var z =0; z< sections.length; z++){
+
+    setTimeout(function(){ 
+      
+      if(sections  != undefined){
+        for(var z =0; z< sections.length; z++){
           const secType = sections[z].type;
             
             const secId = sections[z].id;
@@ -424,15 +432,23 @@
             }
             
         }
-  });
+      }
+  
+      }, 500);
+
+ });
 
   function saveReview(){
     if(reviewComments == "") return;
     
-    var teamOptions = "";
+    var teamOptions = "", categoryOptions = "";
     
     teamsTable.forEach((data)=>{
       teamOptions += `<option value="${data.id}">${data.name}</option>`;
+    });
+
+    reviewCategory.forEach((value)=>{
+      categoryOptions += `<option value="${value}">${value}</option>`;
     });
 
     var dialog = bootbox.dialog({
@@ -449,14 +465,11 @@
               </div>
               <div class="row mt-3">
                 <div class="col-12 col-md-6">
-                  <select class="form-control reviewCategory selectpicker" name="type" id="type">
+                  <select class="form-control reviewCategory selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                     <option value="" disabled selected>
                       Select Category
                     </option>
-                    <option value="Document">Document</option>
-                    <option value="Test case">Test case</option>
-                    <option value="Code">Code</option>
-                    <option value="Report">Report</option>
+                    ${categoryOptions}
                   </select>
                 </div>
                 <div class="col-12 col-md-6">
@@ -639,6 +652,16 @@
   
 
   });
+
+  function reloadSections(){
+    console.log("Reload Sections");
+    for(var z =0; z< sections.length; z++){
+        const secId = sections[z].id;
+        var $cm = $('textarea[name="'+secId+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+        $cm.refresh();
+      }
+      return false;
+  }
 
   $('#documentForm').submit(function (eventObj) {
 

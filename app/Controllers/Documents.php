@@ -163,6 +163,8 @@ class Documents extends BaseController
 		$templateModel = new DocumentTemplateModel();
 		$existingTypes = $templateModel->getTypes();
 		$data['documentType'] = $existingTypes;
+		$data['reviewCategoryList'] = ["User Needs", "Plan", "Requirements", "Design",
+		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 
 		if($type != ""){
 			$templates = $this->getTemplates($type);

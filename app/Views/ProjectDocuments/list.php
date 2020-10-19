@@ -59,8 +59,6 @@
       "scrollX": true,
       "fixedHeader": true,
     });
-
-
   });
 
   

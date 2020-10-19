@@ -520,3 +520,6 @@ ALTER TABLE `docsgo-documents` ADD `author-id` INT NOT NULL AFTER `file-name`;
 
 --Alter requiremenst table enum values
 ALTER TABLE `docsgo-requirements` CHANGE `type` `type` ENUM('User Needs', 'System', 'Subsystem') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+ALTER TABLE `docsgo-reviews` CHANGE `category` `category` VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `docsgo-reviews` ADD `updated-at` datetime NOT NULL DEFAULT current_timestamp() AFTER `category`;

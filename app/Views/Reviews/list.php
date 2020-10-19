@@ -15,7 +15,7 @@
             <th scope="col" >#</th>
             <th scope="col">Project</th>
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
-            <th scope="col" style="max-width:570px;word-wrap: break-word;"> Context</th>
+            <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
             <th scope="col" style="min-width:120px;">Assigned To</th>
             <th scope="col">Category</th>
             <th scope="col">Status</th>
