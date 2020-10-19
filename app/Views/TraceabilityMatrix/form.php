@@ -23,7 +23,7 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="cncr">User Needs</label>
-              <select class="form-control selectpicker" name="cncr[]" id="cncr" onchange="getIDDescription('#cncr')">
+              <select class="form-control selectpicker"  data-live-search="true"  name="cncr[]" id="cncr" onchange="getIDDescription('#cncr')">
                   <option value="" disabled>Choose your option</option>
                   <?php foreach ($CNCRList as $key=>$value): ?>
                   <option 
