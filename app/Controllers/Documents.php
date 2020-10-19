@@ -63,15 +63,36 @@ class Documents extends BaseController
 	}
 	
 	public function getJson(){
+		// Type can be document or project
+		$type = $this->request->getVar('type');
+		$id = $this->request->getVar('id');
 		$model = new DocumentModel();
-		$data = $model->where('status',"Approved")->findAll();	
-		$documents = [];
-		foreach($data as $document){
-			$temp['file-name'] = $document['file-name'];
-			$temp['json-object'] = $document['json-object'];
-			$documents[$document['id']] = $temp;
+		if($type == "" && $id == ""){			
+			$data = $model->where('status',"Approved")->findAll();	
+			return json_encode($data);
+		}else{
+			if(($type == "document") || ($type == "project")){
+				if($id != ""){
+					if($type == "document"){
+						$data = $model->where('status',"Approved")->where('id',$id)->findAll();
+					}else if($type == "project"){
+						$data = $model->where('status',"Approved")->where('project-id',$id)->findAll();
+					}					
+					$documents = [];
+					foreach($data as $document){
+						$temp['file-name'] = $document['file-name'];
+						$temp['json-object'] = $document['json-object'];
+						$documents[$document['id']] = $temp;
+					}
+					return json_encode($documents);
+				}else{
+					echo "id not defined";
+				}
+			}else{
+				echo "Type not defiend";
+			}
 		}
-		return json_encode($documents);
+		
 	}
 
 	private function getTablesData($tableName){
