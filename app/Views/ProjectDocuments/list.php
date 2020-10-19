@@ -33,7 +33,7 @@
                     <a title="Edit" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <a title="Download" href="docsgen/generateDocument.php?id=<?php echo $row['id'];?>&type=<?php echo $row['type'];?>" 
+                    <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>" 
                     class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
                         <i class="fa fa-download"></i>
                     </a>
@@ -56,7 +56,6 @@
   $(document).ready( function () {
     var table = $('#documents-list').DataTable({
       "responsive": true,
-      "scrollX": true,
       "fixedHeader": true,
     });
   });
