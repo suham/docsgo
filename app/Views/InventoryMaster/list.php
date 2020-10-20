@@ -1,17 +1,26 @@
 
 <div class="container1">
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-12">
-      <div class="form-group" readonly="readonly">
-        <input type="radio" name="issues-status-type" id="RDanchor1" 
-        onclick="javascript:window.location.href='/inventory-master/view/1';" <?php echo ($checkedVals['RDanchor1']) == 1 ? "checked" : ""; ?> /> Active 
-        &nbsp;&nbsp;<input type="radio" name="issues-status-type" id="RDanchor2" 
-        onclick="javascript:window.location.href='/inventory-master/view/2';"  <?php echo ($checkedVals['RDanchor2']) == 1 ? "checked" : ""; ?> /> In Active
-        &nbsp;&nbsp;<input type="radio" name="issues-status-type" id="RDanchor3" 
-        onclick="javascript:window.location.href='/inventory-master/view/3';" <?php echo ($checkedVals['RDanchor3']) == 1 ? "checked" : ""; ?> /> Not Found
-        &nbsp;&nbsp;<input type="radio" name="issues-status-type" id="RDanchor3" 
-        onclick="javascript:window.location.href='/inventory-master/view/4';" <?php echo ($checkedVals['RDanchor4']) == 1 ? "checked" : ""; ?> /> Cal Overdue
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label onclick="javascript:window.location.href='/inventory-master/view/1';" 
+               class="btn btn-secondary <?= ($checkedVals['RDanchor1']) == 1 ? "active" : ""; ?>">
+          <input type="radio" name="options" id="RDanchor1"  autocomplete="off" checked> Active
+        </label>
+        <label onclick="javascript:window.location.href='/inventory-master/view/2';"
+                class="btn btn-secondary <?= ($checkedVals['RDanchor2']) == 1 ? "active" : ""; ?>">
+          <input type="radio" name="options" id="RDanchor2" autocomplete="off"> In Active
+        </label>
+        <label onclick="javascript:window.location.href='/inventory-master/view/3';"
+                class="btn btn-secondary <?= ($checkedVals['RDanchor3']) == 1 ? "active" : ""; ?>">
+          <input type="radio" name="options" id="RDanchor3" autocomplete="off">  Not Found
+        </label>
+        <label onclick="javascript:window.location.href='/inventory-master/view/4';" 
+                class="btn btn-secondary <?= ($checkedVals['RDanchor4']) == 1 ? "active" : ""; ?>">
+          <input type="radio" name="options" id="RDanchor3" autocomplete="off"> Cal Overdue
+        </label>
       </div>
+      
     </div>
   </div>
 
