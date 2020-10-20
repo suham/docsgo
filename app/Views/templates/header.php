@@ -156,7 +156,7 @@
             
             <li>
               <a href="/inventory-master">
-                <i class="fa fa-lock" style = "<?= ($uri->getSegment(1) == 'inventory-master'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <i class="fa fa-dolly-flatbed" style = "<?= ($uri->getSegment(1) == 'inventory-master'   ? 'color:#16c7ff;' : null) ?>"></i>
                 <span>Inventory Master</span>
               </a>
             </li>
