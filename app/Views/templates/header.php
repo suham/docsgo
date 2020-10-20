@@ -97,12 +97,12 @@
               </a>
             </li>
 
-            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'active' : null) ?>">
+            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'active' : null) ?>">
               <a href="#">
                 <i class="fa fa-briefcase"></i>
                 <span>Documents</span>
               </a>
-              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'display:block;' : '') ?>">
+              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'display:block;' : '') ?>">
                 <ul>
                   <li>
                     <a href="/documents">Documents</a>
@@ -112,7 +112,10 @@
                   </li>  
                   <li>
                     <a href="/documents-master">References</a>
-                  </li>            
+                  </li> 
+                  <!-- <li>
+                    <a href="/documents-acronyms">Acronyms</a>
+                  </li>                               -->
                 </ul>
               </div>
             </li>
@@ -150,7 +153,7 @@
                 </ul>
               </div>
             </li>
-            
+
             <!--<li class="sidebar-dropdown">
               <a href="#">
                 <i class="far fa-edit"></i>

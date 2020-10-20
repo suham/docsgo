@@ -50,6 +50,11 @@ $routes->match(['get','post'],'documents-master/add', 'DocumentsMaster::add',['f
 $routes->match(['get','post'],'documents-master/add/(:num)', 'DocumentsMaster::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-master/delete/(:num)', 'DocumentsMaster::delete',['filter' => 'auth']);
 
+$routes->get('documents-acronyms', 'Acronyms::index',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-acronyms/add', 'Acronyms::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-acronyms/add/(:num)', 'Acronyms::add',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-acronyms/delete/(:num)', 'Acronyms::delete',['filter' => 'auth']);
+
 $routes->get('team', 'Team::index',['filter' => 'auth']);
 $routes->match(['get','post'],'team/add', 'Team::add',['filter' => 'auth']);
 $routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth']);
@@ -93,6 +98,7 @@ $routes->match(['get','post'],'traceability-matrix/add/(:num)', 'TraceabilityMat
 $routes->match(['get','post'],'traceability-matrix/delete/(:num)', 'TraceabilityMatrix::delete',['filter' => 'auth']);
 $routes->match(['get','post'],'traceability-matrix/getIDDescription/(:num)/(:num)', 'TraceabilityMatrix::getIDDescription',['filter' => 'auth']);
 $routes->match(['get','post'],'traceability-matrix/getTestCaseDescription/(:num)', 'TraceabilityMatrix::getTestCaseDescription',['filter' => 'auth']);
+$routes->match(['get','post'],'traceability-matrix/view/(:num)/(:num)', 'TraceabilityMatrix::view',['filter' => 'auth']);
 
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
 $routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);
@@ -112,6 +118,11 @@ $routes->post('documents-templates/addTemplate', 'DocumentTemplate::addTemplate'
 $routes->match(['get','post'],'documents-templates/add', 'DocumentTemplate::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-templates/add/(:num)', 'DocumentTemplate::add',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-templates/delete/(:num)', 'DocumentTemplate::delete',['filter' => 'auth']);
+
+$routes->get('inventory-master', 'InventoryMaster::index',['filter' => 'auth']);
+$routes->match(['get','post'],'inventory-master/add', 'InventoryMaster::add',['filter' => 'auth']);
+$routes->match(['get','post'],'inventory-master/add/(:num)', 'InventoryMaster::add',['filter' => 'auth']);
+$routes->match(['get','post'],'inventory-master/delete/(:num)', 'InventoryMaster::delete',['filter' => 'auth']);
 
 $routes->get('bulk-insert', 'BulkInsert::index', ['filter' => 'auth']);
 /**
