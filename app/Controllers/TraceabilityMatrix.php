@@ -39,10 +39,6 @@ class TraceabilityMatrix extends BaseController
 
 			$query = $db->query($sql);
 			$data = $query->getResult('array');
-			$data1 = array_reverse($data);
-			// print_r ($data);
-			// print_r ('-------------------------');
-			// print_r ($data1);
 			 
 			$mainData = [];
 			foreach($data as $key=>$data){
