@@ -22,9 +22,12 @@
             
             <div class="col-12 col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="cncr">User Needs</label>
-              <select class="form-control selectpicker"  data-live-search="true"  name="cncr[]" id="cncr" onchange="getIDDescription('#cncr')">
-                  <option value="" disabled>Choose your option</option>
+              <label class = "font-weight-bold text-muted" for="userNeeds">User Needs</label>
+              
+              <select class="form-control fstdropdown-select" name="userNeeds[]" id="cncr" onchange="getIDDescription('#cncr')">
+              <option value="" disabled <?= isset($member['cncr']) ? '' : 'selected' ?>>
+                    Select User Needs
+                </option>
                   <?php foreach ($CNCRList as $key=>$value): ?>
                   <option 
                     <?= isset($cncrKeys) ? ((in_array($key, $cncrKeys)) ? 'selected': '') : '' ?>
@@ -142,29 +145,16 @@
 
  function getIDDescription(type){
     var id = $(type).val();
-    var typeUrl='';
-    switch(type) {
-      case  '#cncr':
-          typeUrl = 1;
-          break;
-      case  '#sysreq':
-          typeUrl = 2;
-          break;
-      case  '#subsysreq':
-          typeUrl = 3;
-          break;
-    }
+    var typeUrl = 1;
+    var descID = type+'_description';
     var result = true;
-      if(result){
+      if(id){
         $.ajax({
            url: '/traceability-matrix/getIDDescription/'+id+'/'+typeUrl,
            type: 'GET',
            success: function(response){
-              console.log("FORM respone:", response);
               response = JSON.parse(response);
               if(response.success == "True"){
-                console.log("response:", response);
-                var descID = type+'_description';
                   $(descID).html(response.description);
                   setTimeout(function(){
                     $(descID).css('border', '2px solid #CCCCCC');
@@ -176,35 +166,7 @@
             }
          });
       }else{
-        console.log('Delete Cancelled');
+        $(descID).html('').css('border', 'none');
       }
  }
-
-function getTestCaseDescription(type) {
-  var id = $(type).val();
-    var result = true;
-      if(result){
-        $.ajax({
-           url: '/traceability-matrix/getTestCaseDescription/'+id,
-           type: 'GET',
-           success: function(response){
-              // console.log("FORM respone:", response);
-              response = JSON.parse(response);
-              if(response.success == "True"){
-                console.log("response:", response);
-                var descID = type+'_description';
-                  $(descID).html(response.description);
-                  setTimeout(function(){
-                    $(descID).css('border', '2px solid #CCCCCC');
-                  },100);
-              }
-              else{
-                 bootbox.alert('Data not existed.');
-              }
-            }
-         });
-      }else{
-        console.log('Delete Cancelled');
-      }
-}
 </script>
