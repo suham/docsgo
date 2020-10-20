@@ -24,13 +24,13 @@
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="userNeeds">User Needs</label>
               
-              <select class="form-control fstdropdown-select" name="userNeeds[]" id="cncr" onchange="getIDDescription('#cncr')">
-              <option value="" disabled <?= isset($member['cncr']) ? '' : 'selected' ?>>
+              <select class="form-control fstdropdown-select" name="userNeeds[]" id="userNeeds" onchange="getIDDescription('#userNeeds')">
+              <option value="" disabled <?= isset($member['userNeeds']) ? '' : 'selected' ?>>
                     Select User Needs
                 </option>
-                  <?php foreach ($CNCRList as $key=>$value): ?>
+                  <?php foreach ($userNeedsList as $key=>$value): ?>
                   <option 
-                    <?= isset($cncrKeys) ? ((in_array($key, $cncrKeys)) ? 'selected': '') : '' ?>
+                    <?= isset($userNeedsListKeys) ? ((in_array($key, $userNeedsListKeys)) ? 'selected': '') : '' ?>
                     value="<?=  $key ?>" ><?=  $value ?></option>
                 <?php endforeach; ?>
               </select>
@@ -39,7 +39,7 @@
 
             <div class="col-12  col-sm-6">
               <div class="form-group">
-                <div id="cncr_description"></div>
+                <div id="userNeeds_description"></div>
               </div>
             </div>  
 

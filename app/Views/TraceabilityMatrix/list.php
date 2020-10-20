@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container1">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -9,7 +9,7 @@
   <?php else: ?>
 
   <?php if (($listView)): ?>
-    <div class="table-responsive" style="width:115%">
+    <div class="table-responsive1">
       
         <table class="table table-striped table-hover" id="table1" >
           <thead >

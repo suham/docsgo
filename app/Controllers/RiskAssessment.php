@@ -12,12 +12,8 @@ class RiskAssessment extends BaseController
 {
 	public function index()
     {
-		// $this->load->helper('date');
 		$data = [];
 
-
-
-		// $data = $this->setQueryData(3);
 		$data = $this->setQueryData(2);
 		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = true;
@@ -25,13 +21,10 @@ class RiskAssessment extends BaseController
 		$data['backUrl'] = '/risk-assessment';
 		$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 1, "RDanchor3"=> 0);
 
-		// echo date('Y-m-d H:i:s');
-
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('RiskAssessment/list',$data);
 		echo view('templates/footer');
-
 	}
 
 	public function setQueryData($type) {
@@ -48,18 +41,8 @@ class RiskAssessment extends BaseController
 					break;
 		}
 
-		//if($type == 1)
-		//      $statusAt ="All";
-		//if($type == 2)
-		//      $statusAt ="Open";
-		//if($type == 3)
-		//      $statusAt ="Close";
-
 		$statusAt = trim($statusAt);
 		$statusAt = trim($statusAt, ' ');
-		// print_r ($statusAt);
-		// print_r (strlen($statusAt));
-
 		$statusAt =  str_replace(' ', '', $statusAt);
 		$statusAt =  str_replace('  ','', $statusAt);
 
@@ -127,39 +110,27 @@ class RiskAssessment extends BaseController
 		$data['riskStatus'] = ['Open', 'Close'];
 		$data['projects'] = $this->getProjects();
 
+		$rules = [
+			'project'=> 'required',
+			'category'=> 'required',
+			'name' => 'required|min_length[3]|max_length[64]',
+			'description' => 'min_length[3]|max_length[500]',
+			'information' => 'required|min_length[5]|max_length[20]',
+			'severity' => 'required',
+			'occurrence' => 'required',
+			'detectability' => 'required',
+			'rpn' => 'required',
+			'status' => 'required',
+		];	
+
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Risk Assessment";
 			$data['member']['status'] = 'Open';
-			$rules = [
-				'project'=> 'required',
-				'category'=> 'required',
-				'name' => 'required|min_length[3]|max_length[64]',
-				'description' => 'min_length[3]|max_length[500]',
-				'information' => 'required|min_length[5]|max_length[20]',
-				'severity' => 'required',
-				'occurrence' => 'required',
-				'detectability' => 'required',
-				'rpn' => 'required',
-				'status' => 'required',
-			];	
 
 		}else{
 			$data['action'] = "add/".$type."/".$id;
 			$data['formTitle'] = "Update Risk Assessment";//.$risk_type;
-
-			$rules = [
-				'project'=> 'required',
-				'category'=> 'required',
-				'name' => 'required|min_length[3]|max_length[64]',
-				'description' => 'min_length[3]|max_length[500]',
-				'information' => 'required|min_length[5]|max_length[20]',
-				'severity' => 'required',
-				'occurrence' => 'required',
-				'detectability' => 'required',
-				'rpn' => 'required',
-				'status' => 'required',
-			];	
 			$data['member'] = $model->where('id',$id)->first();		
 		}
 
@@ -179,7 +150,6 @@ class RiskAssessment extends BaseController
 			//Setting the existing data to member, if id is already exist(means its update action) getting that id to pass for update query
 			$data['member'] = $newData;
 	
-
 			if (! $this->validate($rules)) {
 				$data['validation'] = $this->validator;
 			}else{
@@ -187,11 +157,7 @@ class RiskAssessment extends BaseController
 					$list = [];
 					$currentTime = gmdate("Y-m-d H:i:s");
 					$newData['id'] = $id;
-
-					// date_default_timezone_set('Asia/Kolkata');
-					// $timestamp = date("Y-m-d H:i:s");
 					$newData['update_date'] = $currentTime;
-			
 					$message = 'Risk Assessment successfully updated.';
 				}else{
 					$message = 'Risk Assessment successfully added.';

@@ -126,7 +126,7 @@ CREATE TABLE `docsgo-projects` (
 
 CREATE TABLE `docsgo-requirements` (
   `id` int(11) NOT NULL,
-  `type` enum('System','Subsystem','CNCR') NOT NULL,
+  `type` enum('System','Subsystem','User Needs') NOT NULL,
   `requirement` varchar(100) NOT NULL,
   `description` varchar(500) NOT NULL,
   `update_date` datetime NOT NULL DEFAULT current_timestamp()

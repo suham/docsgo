@@ -4,7 +4,7 @@ use CodeIgniter\Model;
 
 class TraceabilityMatrixModel extends Model{
     protected $table = 'docsgo-traceability';
-    protected $allowedFields = ['cncr', 'sysreq', 'subsysreq', 'design', 'code', 'testcase', 'update_date'];
+    protected $allowedFields = ['design', 'code', 'update_date'];
 
     public function getTraceabilityMatrix(){
         $db      = \Config\Database::connect();
@@ -19,6 +19,19 @@ class TraceabilityMatrixModel extends Model{
 
         $data = $query->getResult('array');
         
+        return $data;
+    }
+
+    public function getTraceabilityMatrixTabularData() {
+        $db      = \Config\Database::connect();
+        $sql = "SELECT  a.id, a.design, a.code, b.traceability_id, b.type, b.requirement_id, c.requirement,d.testcase
+        FROM `docsgo-traceability` AS a
+        LEFT JOIN `docsgo-traceability-options` AS b ON a.`id` = b.`traceability_id`
+        LEFT JOIN `docsgo-requirements` AS c ON c.`id` = b.`requirement_id` AND b.type != 'testcase'
+        LEFT JOIN `docsgo-test-cases` AS d ON b.`requirement_id` = d.`id`  AND b.type = 'testcase';";
+
+        $query = $db->query($sql);
+        $data = $query->getResult('array');
         return $data;
     }
 

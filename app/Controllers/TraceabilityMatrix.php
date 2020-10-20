@@ -30,16 +30,9 @@ class TraceabilityMatrix extends BaseController
 	private function setQueryData($type) {
 		if($type == 1){
 
-			$db      = \Config\Database::connect();
-			$sql = "SELECT  a.id, a.design, a.code, b.traceability_id, b.type, b.requirement_id, c.requirement,d.testcase
-			FROM `docsgo-traceability` AS a
-			LEFT JOIN `docsgo-traceability-options` AS b ON a.`id` = b.`traceability_id`
-			LEFT JOIN `docsgo-requirements` AS c ON c.`id` = b.`requirement_id` AND b.type != 'testcase'
-			LEFT JOIN `docsgo-test-cases` AS d ON b.`requirement_id` = d.`id`  AND b.type = 'testcase';";
-
-			$query = $db->query($sql);
-			$data = $query->getResult('array');
-			 
+			$model = new TraceabilityMatrixModel();
+			$data = $model->getTraceabilityMatrixTabularData();	
+			
 			$mainData = [];
 			foreach($data as $key=>$data){
 				$idx = -1;	
@@ -137,10 +130,10 @@ class TraceabilityMatrix extends BaseController
 				'code' => $this->request->getVar('code'),
 				'update_date' => $currentTime,
 			];
-			//Get all selected cncr/User Needs/System/Subsystem value's ids
-			$cncrList = []; $sysreqList = [];  $subsysreqList = []; $testcaseList = [];
+			//Get all selected User Needs/System/Subsystem value's ids
+			$userNeedsList = []; $sysreqList = [];  $subsysreqList = []; $testcaseList = [];
 
-			$cncrList = $this->request->getVar('userNeeds');
+			$userNeedsList = $this->request->getVar('userNeeds');
 			$sysreqList = $this->request->getVar('sysreq');
 			$subsysreqList = $this->request->getVar('subsysreq');
 			$testcaseList = $this->request->getVar('testcase');
@@ -167,7 +160,7 @@ class TraceabilityMatrix extends BaseController
 
 				//After saving/updating the traceability matrix, we need to store/update the selected all requirements(User Needs/System/Subsystem)
 				$model = new TraceabilityOptionsModel();
-				if(($cncrList)){
+				if(($userNeedsList)){
 					$model->where('traceability_id', $lastid)->where('type', 'User Needs')->delete();
 					$newData1 = [
 						'traceability_id' => $lastid,
@@ -218,33 +211,35 @@ class TraceabilityMatrix extends BaseController
 		$data1 = [];
 		$model = new RequirementsModel();
 		$data1 = $model->orderBy('type', 'asc')->findAll();	
-		$data['CNCRList'] = $this->requirementsTypeData($data1,'User Needs', 0);
+		$data['userNeedsList'] = $this->requirementsTypeData($data1,'User Needs', 0);
 		$data['systemList'] = $this->requirementsTypeData($data1,'System', 0);
 		$data['subSystemList'] = $this->requirementsTypeData($data1,'Subsystem', 0);
 		$data['testCases'] = $this->getTestCases(0);
 
 		$model = new TraceabilityOptionsModel();
-		$dt= array();
-		$keyData = $model->select('requirement_id')->where('traceability_id', $id)->where('type', 'User Needs')->findAll();
+		$dt= array(); $check = array('traceability_id' => $id, 'type' => 'User Needs');
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
 		foreach($keyData as $key=>$list){
 			array_push($dt,$list['requirement_id']);	
 		}
-		$data['cncrKeys'] = $dt;
-		$dt=[];
-		$keyData = $model->select('requirement_id')->where('traceability_id', $id)->where('type', 'System')->findAll();
+		$data['userNeedsListKeys'] = $dt;
+
+		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'System');
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
 		foreach($keyData as $key=>$list){
 			array_push($dt,$list['requirement_id']);
 		}
 		$data['systemKeys'] = $dt;
-		$dt=[];
 
-		$keyData = $model->select('requirement_id')->where('traceability_id', $id)->where('type', 'Subsystem')->findAll();
+		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'Subsystem');
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
 		foreach($keyData as $key=>$list){
 			array_push($dt,$list['requirement_id']);
 		}
 		$data['subsystemKeys'] = $dt;
 
-		$keyData = $model->select('requirement_id')->where('traceability_id', $id)->where('type', 'testcase')->findAll();
+		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'testcase');
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
 		foreach($keyData as $key=>$list){
 			array_push($dt,$list['requirement_id']);
 		}
