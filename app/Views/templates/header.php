@@ -113,9 +113,9 @@
                   <li>
                     <a href="/documents-master">References</a>
                   </li> 
-                  <!-- <li>
+                  <li>
                     <a href="/documents-acronyms">Acronyms</a>
-                  </li>                               -->
+                  </li>                              
                 </ul>
               </div>
             </li>
@@ -152,6 +152,13 @@
                   
                 </ul>
               </div>
+            </li>
+            
+            <li>
+              <a href="/inventory-master">
+                <i class="fa fa-lock" style = "<?= ($uri->getSegment(1) == 'inventory-master'   ? 'color:#16c7ff;' : null) ?>"></i>
+                <span>Inventory Master</span>
+              </a>
             </li>
 
             <!--<li class="sidebar-dropdown">

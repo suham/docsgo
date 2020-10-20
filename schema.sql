@@ -523,3 +523,66 @@ ALTER TABLE `docsgo-requirements` CHANGE `type` `type` ENUM('User Needs', 'Syste
 
 ALTER TABLE `docsgo-reviews` CHANGE `category` `category` VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `docsgo-reviews` ADD `updated-at` datetime NOT NULL DEFAULT current_timestamp() AFTER `category`;
+
+--
+-- Table structure for table `docsgo-inventory-master`
+--
+
+CREATE TABLE `docsgo-inventory-master` (
+  `id` int(11) NOT NULL,
+  `item` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `make` varchar(50) NOT NULL,
+  `model` varchar(50) NOT NULL,
+  `serial` varchar(50) NOT NULL,
+  `entry_date` date NOT NULL,
+  `retired_date` date NOT NULL,
+  `cal_date` date NOT NULL,
+  `cal_due` date NOT NULL,
+  `location` varchar(50) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `invoice_date` date NOT NULL,
+  `vendor` varchar(50) NOT NULL,
+  `status` enum('active','in-active','not-found','cal-overdue') NOT NULL,
+  `used_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for table `docsgo-inventory-master`
+--
+ALTER TABLE `docsgo-inventory-master`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for table `docsgo-inventory-master`
+--
+ALTER TABLE `docsgo-inventory-master`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+COMMIT;
+
+--
+-- Table structure for table `docsgo-acronyms`
+--
+
+CREATE TABLE `docsgo-acronyms` (
+  `id` int(11) NOT NULL,
+  `acronym` varchar(100) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for table `docsgo-acronyms`
+--
+ALTER TABLE `docsgo-acronyms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for table `docsgo-acronyms`
+--
+ALTER TABLE `docsgo-acronyms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
