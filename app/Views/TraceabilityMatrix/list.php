@@ -1,5 +1,5 @@
 
-<div class="container1">
+<div class="fluid-container">
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -8,10 +8,9 @@
 
   <?php else: ?>
 
-  <?php if (($listView)): ?>
-    <div class="table-responsive1">
+    <div class="">
       
-        <table class="table table-striped table-hover" id="table1" >
+        <table class="table table-striped table-hover" id="traceability-list" >
           <thead >
             <tr>
               <th scope="col">#</th>
@@ -21,45 +20,22 @@
               <th scope="col">Test</th>
               <th scope="col">Design</th>
               <th scope="col">Code</th>
-              <!-- <th scope="col" style="width:125px">Update Date</th> -->
               <th scope="col" style="width:125px">Action</th>
             </tr>
           </thead>
           <tbody  class="bg-white">
-            <?php foreach ($data as $key=>$row): ?>
+            <?php $count=1; foreach ($data as $key=>$row): ?>
                 <tr scope="row" id="<?php echo $row['id'];?>">
-                    <td><?php echo $key+1; ?></td>
-                    <td><?php echo $row['User Needs'];?></td>
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $row['cncr'];?></td>
+                    <td><?php echo $row['system'];?></td>
+                    <td><?php echo $row['subsysreq'];?></td>
                     <td>
-                      <div>
-                      <?php foreach ($row['System'] as $key1=>$row1 ): ?>
-                      <div>
-                        <div><?php echo $row1['requirement'];?></div>
-                      </div>
-                      <?php endforeach; ?>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                      <?php foreach ($row['Subsystem'] as $key1=>$row1 ): ?>
-                      <div>
-                        <div><?php echo $row1['requirement'];?></div>
-                      </div>
-                      <?php endforeach; ?>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                      <?php foreach ($row['testcase'] as $key1=>$row1 ): ?>
-                      <div>
-                        <div><?php echo $row1['requirement'];?></div>
-                      </div>
-                      <?php endforeach; ?>
-                      </div>
+                      <?php echo $row['testcase'];?>                      
                     </td>
                     <td><?php echo $row['design']; ?></td>
                     <td><?php echo $row['code'];?></td>
-                    <td>
+                    <td style="width:125px">
                         <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
                             <i class="fa fa-edit"></i>
                         </a>
@@ -75,44 +51,20 @@
         </table>
       
     </div>
-  <?php endif; ?>
-
-  <?php if (($gapView)): ?>
-    <div class="table-responsive">
-      
-        <table class="table table-striped table-hover"  id="table2" >
-        <thead >
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Category</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-          </tr>
-        </thead>
-        <tbody  class="bg-white"></tbody>
-        </table>
-      
-    </div>
-  <?php endif; ?>
-
-
-
 
   <?php endif; ?>
 </div>
+
 <script>
+
 $(document).ready( function () {
-    $('#table1').DataTable({
-      "responsive": true,
-      "autoWidth": false,
-      "fixedHeader": true,
-    });
-    $('#table2').DataTable({
+    $('#traceability-list').DataTable({
       "responsive": true,
       "autoWidth": false,
       "fixedHeader": true,
     });
 });
+
  function deleteTraceabilityMatrix(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {
@@ -140,4 +92,3 @@ $(document).ready( function () {
  }
 
 </script>
-

@@ -11,15 +11,13 @@ class TraceabilityMatrix extends BaseController
 	public function index()
     {
 		$data = [];
-		$dataList = $this->setQueryData(1);
-		$data['data'] = array_reverse($dataList);
 		$data['pageTitle'] = 'Traceability Matrix';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/traceability-matrix/add";
-		$data['listView'] = true;
-		$data['gapView'] = false;
+		
+		$model = new TraceabilityMatrixModel();
+		$data['data'] = $model->getTraceabilityData();
 
-		$data['checkedVals'] = array('TraceabilityRDBtn1' => 1, "TraceabilityRDBtn2"=> 0);
 		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -27,68 +25,7 @@ class TraceabilityMatrix extends BaseController
 		echo view('templates/footer');
 	}
 
-	private function setQueryData($type) {
-		if($type == 1){
-
-			$model = new TraceabilityMatrixModel();
-			$data = $model->getTraceabilityMatrixTabularData();	
-			
-			$mainData = [];
-			foreach($data as $key=>$data){
-				$idx = -1;	
-				$idList = array_column($mainData, 'id');
-				foreach($idList as $key1=>$data1){
-					if($data1 == $data['id']){
-						$idx = $key1;
-					}
-				}
-				if($idx >= 0) {
-					if($data['type'] == 'User Needs'){
-						$mainData[$idx]['User Needs'] = $data['requirement'];
-					}
-					if($data['type'] == 'System' && $data['requirement'] !=''){
-						$mainData[$idx]['System'][] = array('id'=>$data['requirement_id'], 'requirement'=>$data['requirement']);
-					}
-					if($data['type'] == 'Subsystem' && $data['requirement'] !=''){
-						$mainData[$idx]['Subsystem'][] = array('id'=>$data['requirement_id'], 'requirement'=>$data['requirement']);
-					}
-					if($data['type'] == 'testcase' && $data['testcase'] !=''){
-						$mainData[$idx]['testcase'][] = array('id'=>$data['requirement_id'], 'requirement'=>$data['testcase']);
-					}
-				}else{
-					$dataList = [];
-					$dataList['id'] = $data['id'];
-					$dataList['design'] = $data['design'];
-					$dataList['code'] = $data['code'];
-					$dataList['System'] = [];
-					$dataList['Subsystem']  = [];
-					$dataList['testcase'] = [];
-					if($data['type'] == 'User Needs'){
-						$dataList['User Needs'] = $data['requirement'];
-					}
-					if($data['type'] == 'System' && $data['requirement'] !=''){
-						$dataList['System'] = array('id'=>$data['requirement_id'], 'requirement'=>$data['requirement']);
-					}
-					if($data['type'] == 'Subsystem' && $data['requirement'] !=''){
-						$dataList['Subsystem'] = array('id'=>$data['requirement_id'], 'requirement'=>$data['requirement']);
-					}
-					if($data['type'] == 'testcase' && $data['testcase'] !=''){
-						$dataList['testcase'] = array('id'=>$data['requirement_id'], 'requirement'=>$data['testcase']);
-					}
-					$mainData[] = $dataList;						
-				}
-			}
-			return $mainData;
-
 	
-		}else {
-			$model = new TraceabilityMatrixModel();
-			$data['data'] = $model->orderBy('id', 'asc')->findAll();	
-			return $data;
-
-		}
-	}
-
 	private function returnParams(){
 		$uri = $this->request->uri;
 		$id = $uri->getSegment(3);
@@ -289,40 +226,6 @@ class TraceabilityMatrix extends BaseController
 		}
 	}
 
-	public function view() {
-		$id = $this->returnParams();
-		if($id == 1){
-
-			$data = [];
-			$data = $this->setQueryData(1);
-			$data['pageTitle'] = 'Traceability Matrix';
-			$data['addBtn'] = True;
-			$data['addUrl'] = "/traceability-matrix/add";
-			$data['listView'] = true;
-			$data['gapView'] = false;
-			$data['checkedVals'] = array('TraceabilityRDBtn1' => 1, "TraceabilityRDBtn2"=> 0);
-
-			echo view('templates/header');
-			echo view('templates/pageTitle', $data);
-			echo view('TraceabilityMatrix/list',$data);
-			echo view('templates/footer');
-		}else{
-			$data = [];
-			$data = $this->setQueryData(2);
-			$data['pageTitle'] = 'Traceability Matrix';
-			$data['addBtn'] = True;
-			$data['addUrl'] = "/traceability-matrix/add";
-			$data['listView'] = false;
-			$data['gapView'] = true;
-			$data['checkedVals'] = array('TraceabilityRDBtn1' => 0, "TraceabilityRDBtn2"=> 1);
-
-			echo view('templates/header');
-			echo view('templates/pageTitle', $data);
-			echo view('TraceabilityMatrix/list',$data);
-			echo view('templates/footer');
-		}
-
-	}
 
 	public function delete(){
 		if (session()->get('is-admin')){

@@ -114,7 +114,7 @@ class Documents extends BaseController
 			return $data;
 		}else if($tableName == 'traceabilityMatrix'){
 			$traceabilityMatrix = new TraceabilityMatrixModel();
-			$data = $traceabilityMatrix->getTraceabilityMatrix();	
+			$data = $traceabilityMatrix->getTraceabilityData();	
 			return $data;
 		}else if($tableName == 'documents'){
 			$documents = new DocumentModel();

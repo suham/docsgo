@@ -6,34 +6,64 @@ class TraceabilityMatrixModel extends Model{
     protected $table = 'docsgo-traceability';
     protected $allowedFields = ['design', 'code', 'update_date'];
 
-    public function getTraceabilityMatrix(){
+
+    public function getTraceabilityData(){
         $db      = \Config\Database::connect();
-        $sql = "SELECT  trace.id, trace.code, trace.design, req1.requirement as cncr, req2.requirement as sysreq, req3.requirement as subsysreq, tc.testcase
-        FROM `docsgo-traceability` AS trace
-        INNER JOIN `docsgo-requirements` AS req1 ON req1.`id` = trace.`cncr`
-        INNER JOIN `docsgo-requirements` AS req2 ON req2.`id` = trace.`sysreq`
-        INNER JOIN `docsgo-requirements` AS req3 ON req3.`id` = trace.`subsysreq`
-        INNER JOIN `docsgo-test-cases` AS tc ON tc.`id` = trace.`testcase`;";
-
-        $query = $db->query($sql);
-
-        $data = $query->getResult('array');
         
-        return $data;
-    }
-
-    public function getTraceabilityMatrixTabularData() {
-        $db      = \Config\Database::connect();
-        $sql = "SELECT  a.id, a.design, a.code, b.traceability_id, b.type, b.requirement_id, c.requirement,d.testcase
-        FROM `docsgo-traceability` AS a
-        LEFT JOIN `docsgo-traceability-options` AS b ON a.`id` = b.`traceability_id`
-        LEFT JOIN `docsgo-requirements` AS c ON c.`id` = b.`requirement_id` AND b.type != 'testcase'
-        LEFT JOIN `docsgo-test-cases` AS d ON b.`requirement_id` = d.`id`  AND b.type = 'testcase';";
+        $sql = " (SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', req.requirement) SEPARATOR '<br/>') as requirement
+        FROM `docsgo-requirements` req, `docsgo-traceability-options` options, `docsgo-traceability` AS trace
+        WHERE req.id = options.requirement_id and options.traceability_id and trace.id = options.traceability_id 
+        GROUP BY  options.traceability_id,options.type
+        ORDER BY trace.update_date)
+        UNION
+        (SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', testCases.testcase) SEPARATOR '<br/>') as testcase
+        FROM `docsgo-test-cases` AS testCases, `docsgo-traceability-options` options, `docsgo-traceability` AS trace
+        WHERE testCases.id = options.requirement_id and options.traceability_id and trace.id = options.traceability_id 
+        GROUP BY  options.traceability_id,options.type
+        ORDER BY trace.update_date);";
 
         $query = $db->query($sql);
-        $data = $query->getResult('array');
-        return $data;
+        $traceabilityData = $query->getResult('array');
+
+        $data = array();
+        foreach($traceabilityData as $row){
+            
+            $id = $row["id"];
+            $type = $row["type"];
+            $code = $row["code"];
+            $design = $row["design"];
+
+            $data[$id]["id"] = $id;
+            $data[$id]["code"] = $code;
+            $data[$id]["design"] = $design;
+            $requirement = $row["requirement"];
+
+            $temp = array();
+
+            if(array_key_exists($id, $data)){
+                $temp = $data[$id];
+            }
+
+            if($type == "Subsystem"){
+                 $data[$id]["subsysreq"] = $requirement;
+            }else if($type == "System"){
+                 $data[$id]["system"] = $requirement;
+            }else if($type == "testcase"){
+                 $data[$id]["testcase"] = $requirement;
+            }else {
+                $data[$id]["cncr"] = $requirement;
+            }
+        }
+
+        $matrix = array();
+        //Removing Index
+        foreach ($data as $row){
+            array_push($matrix, $row);
+        }
+        
+        return $matrix;
     }
+
 
 }
 
