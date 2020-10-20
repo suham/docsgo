@@ -9,7 +9,7 @@
   <?php else: ?>
 
   <?php if (($listView)): ?>
-    <div class="table-responsive">
+    <div class="table-responsive" style="width:115%">
       
         <table class="table table-striped table-hover" id="table1" >
           <thead >

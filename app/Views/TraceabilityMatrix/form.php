@@ -43,7 +43,7 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="sysreq">System</label>
-              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="sysreq[]" id="sysreq" onchange="getIDDescription('#sysreq')">
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="sysreq[]" id="sysreq">
                   <option disabled value> Select System </option>
                   <?php foreach ($systemList as $key=>$value): ?>
                   <option 
@@ -64,7 +64,7 @@
             <div class="col-12   col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="subsysreq">Subsystem</label>
-              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq" onchange="getIDDescription('#subsysreq')">
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq">
                   <option disabled value> Select Subsystem </option>
                   <?php foreach ($subSystemList as $key=>$value): ?>
                   <option 
@@ -100,7 +100,7 @@
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="testcase">Test</label>
-              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="testcase[]" id="testcase" onchange="getTestCaseDescription('#testcase')">
+              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="testcase[]" id="testcase">
                   <option disabled value>Select Testcase</option>
                   <?php foreach ($testCases as $key=>$value): ?>
                   <option 

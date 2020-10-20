@@ -235,11 +235,11 @@ class TraceabilityMatrix extends BaseController
 		$data['backUrl'] = "/traceability-matrix";
 
 		$rules = [
-			// 'cncr' => 'required',
+			'cncr' => 'required',
 			// 'sysreq' => 'required',
 			// 'subsysreq' => 'required',
-			'design' => 'required|min_length[3]|max_length[64]',
-			'code' => 'required|min_length[3]|max_length[64]',
+			// 'design' => 'required|min_length[3]|max_length[64]',
+			// 'code' => 'required|min_length[3]|max_length[64]',
 			// 'testcase' => 'required'
 		];
 
@@ -315,17 +315,15 @@ class TraceabilityMatrix extends BaseController
 				$model = new TraceabilityOptionsModel();
 				if(($cncrList)){
 					$model->where('traceability_id', $lastid)->where('type', 'User Needs')->delete();
-					// foreach($cncrList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'User Needs',
-							'requirement_id' => $this->request->getVar('cncr')
-						];	
-						$model->save($newData1);
-					// }
+					$newData1 = [
+						'traceability_id' => $lastid,
+						'type' => 'User Needs',
+						'requirement_id' => $this->request->getVar('cncr')
+					];	
+					$model->save($newData1);
 				}
-				if(count($sysreqList) > 0){
-					$model->where('traceability_id', $lastid)->where('type', 'System')->delete();
+				$model->where('traceability_id', $lastid)->where('type', 'System')->delete();
+				if(!empty($sysreqList) && count($sysreqList) > 0){
 					foreach($sysreqList as $key=>$list){
 						$newData1 = [
 							'traceability_id' => $lastid,
@@ -335,9 +333,9 @@ class TraceabilityMatrix extends BaseController
 						$model->save($newData1);
 					}
 				}
-				if(count($subsysreqList) > 0){
-					$model->where('traceability_id', $lastid)->where('type', 'Subsystem')->delete();
-					foreach($subsysreqList as $key=>$list){
+				$model->where('traceability_id', $lastid)->where('type', 'Subsystem')->delete();
+				if(!empty($subsysreqList) && count($subsysreqList) > 0){
+						foreach($subsysreqList as $key=>$list){
 						$newData1 = [
 							'traceability_id' => $lastid,
 							'type' => 'Subsystem',
@@ -346,9 +344,9 @@ class TraceabilityMatrix extends BaseController
 						$model->save($newData1);
 					}
 				}
-				if(count($testcaseList) > 0){	
-					$model->where('traceability_id', $lastid)->where('type', 'testcase')->delete();
-					foreach($testcaseList as $key=>$list){
+				$model->where('traceability_id', $lastid)->where('type', 'testcase')->delete();
+				if(!empty($testcaseList) && count($testcaseList) > 0){	
+						foreach($testcaseList as $key=>$list){
 						$newData1 = [
 							'traceability_id' => $lastid,
 							'type' => 'testcase',
