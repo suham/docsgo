@@ -7,18 +7,23 @@ use App\Models\TraceabilityOptionsModel;
 
 class TraceabilityMatrix extends BaseController
 {
-	public $mapData = array();
 	public function index()
     {
 		$data = [];
 		$data['pageTitle'] = 'Traceability Matrix';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/traceability-matrix/add";
-		
-		$model = new TraceabilityMatrixModel();
-		$data['data'] = $model->getTraceabilityData();
 
-		
+		$status = $this->request->getVar('status');
+		$model = new TraceabilityMatrixModel();
+		if($status == 'Open'){
+			$data['data'] = $model->getunmapedList();
+			$data['listViewDisplay'] = false;
+		}else{
+			$data['listViewDisplay'] = true;
+			$data['data'] = $model->getTraceabilityData();
+		}
+
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('TraceabilityMatrix/list',$data);

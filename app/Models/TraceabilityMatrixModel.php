@@ -61,9 +61,36 @@ class TraceabilityMatrixModel extends Model{
             array_push($matrix, $row);
         }
         
-        return $matrix;
+        return array_reverse($matrix);
     }
 
+    public function getunmapedList () {
+        $db      = \Config\Database::connect();
+        
+        $sql = "(SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='User Needs' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='User Needs')) 
+        UNION( SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='System' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='System'))) 
+        UNION( SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='SubSystem' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='SubSystem'))) 
+        UNION ( SELECT id, 'testcase' as type, testcase as requirement FROM `docsgo-test-cases` WHERE id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='testcase')));";
+        $query = $db->query($sql);
+        $unmappedData = $query->getResult('array');
+        
+        $data = []; $userNeeds = ""; $system = ""; $subSystem=""; $testCase="";
+        foreach($unmappedData as $row){ 
+            if($row['type'] == 'User Needs')
+                $userNeeds = $userNeeds.$row['requirement']."<br/>";
+            if($row['type'] == 'System')
+                $system = $system.$row['requirement']."<br/>";
+            if($row['type'] == 'Subsystem')
+                $subSystem = $subSystem.$row['requirement']."<br/>";
+            if($row['type'] == 'testcase')
+                $testCase = $testCase.$row['requirement']."<br/>";
+        };
+        $data['userNeedsList'] = $userNeeds;
+        $data['systemList'] = $system;
+        $data['subSystemList'] = $subSystem;
+        $data['testCaseList'] = $testCase;
+        return $data;
+    }
 
 }
 

@@ -95,8 +95,6 @@ $routes->match(['get','post'],'traceability-matrix/add', 'TraceabilityMatrix::ad
 $routes->match(['get','post'],'traceability-matrix/add/(:num)', 'TraceabilityMatrix::add',['filter' => 'auth']);
 $routes->match(['get','post'],'traceability-matrix/delete/(:num)', 'TraceabilityMatrix::delete',['filter' => 'auth']);
 $routes->match(['get','post'],'traceability-matrix/getIDDescription/(:num)/(:num)', 'TraceabilityMatrix::getIDDescription',['filter' => 'auth']);
-$routes->match(['get','post'],'traceability-matrix/getTestCaseDescription/(:num)', 'TraceabilityMatrix::getTestCaseDescription',['filter' => 'auth']);
-$routes->match(['get','post'],'traceability-matrix/view/(:num)/(:num)', 'TraceabilityMatrix::view',['filter' => 'auth']);
 
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
 $routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);

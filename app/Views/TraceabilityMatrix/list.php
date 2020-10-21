@@ -1,14 +1,31 @@
-
+<?php
+  $uri = service('uri');
+?>
 <div class="fluid-container">
-<?php if (count($data) == 0): ?>
+<div class="row mb-3">
+    <div class="col-12">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label onclick="javascript:window.location.href='/traceability-matrix';" 
+               class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+          <input type="radio" name="options"  autocomplete="off" checked> List
+        </label>
+        <label onclick="javascript:window.location.href='/traceability-matrix?status=Open';"
+                class="btn <?= ((strpos($uri,'/traceability-matrix?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
+          <input type="radio" name="options"  autocomplete="off"> Gap
+        </label>
+      </div>
+      
+    </div>
+  </div>
 
+<?php if ((count($data) == 0) && ($listViewDisplay == true)): ?>
   <div class="alert alert-warning" role="alert">
     No records found.
   </div>
 
   <?php else: ?>
-
-    <div class="">
+    <?php if (($listViewDisplay == true)): ?>
+      <div class="">
       
         <table class="table table-striped table-hover" id="traceability-list" >
           <thead >
@@ -47,16 +64,48 @@
             <?php endforeach; ?>
           </tbody>
         </table>
-      
     </div>
+    <?php endif; ?>  
+<?php endif; ?>
 
+<?php if ($listViewDisplay == false): ?>
+  <?php if ($data['userNeedsList'] == '' && $data['systemList'] == '' && $data['subSystemList'] == '' &&  $data['testCaseList']==''): ?>
+    <div class="alert alert-warning" role="alert">
+      No records found.
+    </div>
+  <?php else: ?>  
+        <table class="table table-striped table-hover" id="traceability-gaps" >
+          <thead >
+            <tr>
+              <th scope="col">User Needs</th>
+              <th scope="col">System</th>
+              <th scope="col">Subsystem</th>
+              <th scope="col">Test</th>
+            </tr>
+          </thead>
+          <tbody  class="bg-white">
+                <tr scope="row">
+                <td><?php echo $data['userNeedsList'];?></td>
+                <td><?php echo $data['systemList'];?></td>
+                <td><?php echo $data['subSystemList'];?></td>
+                <td><?php echo $data['testCaseList'];?></td>
+                </tr>
+          </tbody>
+        </table>
   <?php endif; ?>
+  <?php endif; ?>
+
 </div>
 
 <script>
 
 $(document).ready( function () {
     $('#traceability-list').DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      "fixedHeader": true,
+    });
+    $('#traceability-gaps').DataTable({
       "responsive": true,
       "autoWidth": false,
       "fixedHeader": true,
