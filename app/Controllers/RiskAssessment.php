@@ -65,8 +65,8 @@ class RiskAssessment extends BaseController
 
 		}else{
 			$data['action'] = "add?id=".$id;
-			$data['formTitle'] = "Update Risk Assessment";//.$risk_type;
 			$data['member'] = $model->where('id',$id)->first();		
+			$data['formTitle'] = $data['member']["name"];
 		}
 
 		if ($this->request->getMethod() == 'post') {
@@ -82,7 +82,7 @@ class RiskAssessment extends BaseController
 				'rpn' => $this->request->getVar('rpn'),
 				'status' => $this->request->getVar('status')
 			];
-			//Setting the existing data to member, if id is already exist(means its update action) getting that id to pass for update query
+			
 			$data['member'] = $newData;
 	
 			if (! $this->validate($rules)) {
