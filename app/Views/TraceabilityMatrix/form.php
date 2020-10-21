@@ -141,7 +141,9 @@
 
 
 <script>
-
+  $(document).ready(function(){
+    getIDDescription('#userNeeds');
+  });
 
  function getIDDescription(type){
     var id = $(type).val();
