@@ -161,50 +161,7 @@
               </a>
             </li>
 
-            <!--<li class="sidebar-dropdown">
-              <a href="#">
-                <i class="far fa-edit"></i>
-                <span>Update from Testlink</span>
-                
-              </a>
-              <div class="sidebar-submenu">
-                <ul>
-                  <li>
-                    <a href="#">Requirements</a>
-                  </li>
-                  <li>
-                    <a href="#">Test Cases</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="header-menu">
-              <span>Reports </span>
-              
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-book"></i>
-                <span>Traceability Matrix</span>
-                <span class="badge badge-pill badge-primary">Beta</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-list"></i>
-                <span>IEC 62304 Compliance</span>
-                
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-folder"></i>
-                <span>Cybersecurity Compliance</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <!-- sidebar-menu  -->
+           
       </div>
       <!-- sidebar-content  -->
       <div class="sidebar-footer">

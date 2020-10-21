@@ -77,9 +77,7 @@ $routes->match(['get','post'],'soup/delete/(:num)', 'Soup::delete',['filter' => 
 
 $routes->get('risk-assessment', 'RiskAssessment::index',['filter' => 'auth']);
 $routes->match(['get','post'],'risk-assessment/add', 'RiskAssessment::add',['filter' => 'auth']);
-$routes->match(['get','post'],'risk-assessment/add/(:num)/(:num)', 'RiskAssessment::add',['filter' => 'auth']);
-$routes->match(['get','post'],'risk-assessment/delete/(:num)', 'RiskAssessment::delete',['filter' => 'auth']);
-$routes->match(['get','post'],'risk-assessment/view/(:num)/(:num)', 'RiskAssessment::view',['filter' => 'auth']);
+$routes->match(['get','post'],'risk-assessment/delete', 'RiskAssessment::delete',['filter' => 'auth']);
 // $routes->match(['get','post'],'issues/delete/(:num)', 'Issues::delete',['filter' => 'auth']);
 
 $routes->get('requirements', 'Requirements::index',['filter' => 'auth']);

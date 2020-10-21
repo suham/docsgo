@@ -1,23 +1,28 @@
-
+<?php
+  $uri = service('uri');
+?>
 <div class="container-old">
-<div class="row">
-      <div class="col-12">
-          <div class="form-group" readonly="readonly">
 
-              <!-- <input type="radio" name="issues-status-type" id="RDanchor1" onclick="javascript:window.location.href='/risk-assessment/view/1/1';" checked="<?php //echo $checkedVals['RDanchor1']; ?>"/> All 
-              <input type="radio" name="issues-status-type" id="RDanchor2" onclick="javascript:window.location.href='/risk-assessment/view/1/2';" checked="<?php //echo $checkedVals['RDanchor2']; ?>"/> Open
-              <input type="radio" name="issues-status-type" id="RDanchor3" onclick="javascript:window.location.href='/risk-assessment/view/1/3';" checked="<?php //echo $checkedVals['RDanchor3']; ?>"/> Close -->
-
-              <input type="radio" name="issues-status-type" id="RDanchor1" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/1';" <?php echo ($checkedVals['RDanchor1']) == 1 ? "checked" : ""; ?> /> All 
-              <input type="radio" name="issues-status-type" id="RDanchor2" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/2';"  <?php echo ($checkedVals['RDanchor2']) == 1 ? "checked" : ""; ?> /> Open
-              <input type="radio" name="issues-status-type" id="RDanchor3" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/3';" <?php echo ($checkedVals['RDanchor3']) == 1 ? "checked" : ""; ?> /> Close
-
-          </div>
+    <div class="row mb-3">
+    <div class="col-12">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label onclick="javascript:window.location.href='/risk-assessment';" 
+               class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+          <input type="radio" name="options"  autocomplete="off" checked> All
+        </label>
+        <label onclick="javascript:window.location.href='/risk-assessment?status=Open';"
+                class="btn <?= ((strpos($uri,'/risk-assessment?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
+          <input type="radio" name="options"  autocomplete="off"> Open
+        </label>
+        <label onclick="javascript:window.location.href='/risk-assessment?status=Close';"
+                class="btn <?= ((strpos($uri,'/risk-assessment?status=Close')) ? " btn-primary" : "btn-secondary") ?>">
+          <input type="radio" name="options" autocomplete="off"> Close
+        </label>
       </div>
+      
     </div>
+  </div>
+
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -49,24 +54,24 @@
                 <td><?php echo $row['description'];?></td>
                 <td><?php echo $row['information'];?></td>
                 <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $severityListOptions[$row['severity']];?></td>
+                  <td><?php echo $row['severity'];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $occurrenceListOptions[$row['occurrence']];?></td>
+                  <td><?php echo $row['occurrence'];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $detectabilityListOptions[$row['detectability']];?></td>
+                  <td><?php echo $row['detectability'];?></td>
                 <?php else: ?>
                   <td></td>
                 <?php endif; ?>
                 <td><?php echo $row['rpn'];?></td>
                 <td><?php echo $row['status'];?></td>
                 <td>
-                    <a href="/risk-assessment/add/1/<?php echo $row['id'];?>" class="btn btn-warning">
+                    <a href="/risk-assessment/add?id=<?php echo $row['id'];?>" class="btn btn-warning">
                         <i class="fa fa-edit"></i>
                     </a>
                     <?php if (session()->get('is-admin')): ?>
@@ -90,11 +95,9 @@
     bootbox.confirm("Do you really want to delete record?", function(result) {
       if(result){
         $.ajax({
-           url: '/risk-assessment/delete/'+id,
+           url: '/risk-assessment/delete?id='+id,
            type: 'GET',
            success: function(response){
-              console.log(response);
-              console.log('/risk-assessment/delete/'+id);
               response = JSON.parse(response);
               if(response.success == "True"){
                   $("#"+id).fadeOut(800)

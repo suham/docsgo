@@ -10,7 +10,7 @@ class TraceabilityMatrixModel extends Model{
     public function getTraceabilityData(){
         $db      = \Config\Database::connect();
         
-        $sql = " (SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', req.requirement) SEPARATOR '<br/>') as requirement
+        $sql = "(SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', req.requirement) SEPARATOR '<br/>') as requirement
         FROM `docsgo-requirements` req, `docsgo-traceability-options` options, `docsgo-traceability` AS trace
         WHERE req.id = options.requirement_id and options.traceability_id and trace.id = options.traceability_id 
         GROUP BY  options.traceability_id,options.type

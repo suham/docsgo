@@ -97,18 +97,21 @@ class DocumentTemplate extends BaseController
 	private function returnTablesLayout(){
 		$tables = array();
 		// There should be no spaces between column value names
-		$tables['References']['name'] = "documentMaster";
-		$tables['References']['columns'] = "name,category,description,location,ref,status,version";
-		$tables['Teams']['name'] = "teams";
-		$tables['Teams']['columns'] = "name,email,responsibility,role";
-		$tables['Reviews']['name'] = "reviews";
-		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
-		$tables['Requirements']['name'] = "requirements";
-		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
-		$tables['TraceabilityMatrix']['name'] = "traceabilityMatrix";
-		$tables['TraceabilityMatrix']['columns'] = "cncr,system,subsysreq,design,code,testcase";
+		$tables['Acronyms']['name'] = "acronyms";
+		$tables['Acronyms']['columns'] = "acronym,description";
 		$tables['Documents']['name'] = "documents";
 		$tables['Documents']['columns'] = "file-name,author";
+		$tables['References']['name'] = "documentMaster";
+		$tables['References']['columns'] = "name,category,description,location,ref,status,version";
+		$tables['Requirements']['name'] = "requirements";
+		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
+		$tables['Reviews']['name'] = "reviews";
+		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
+		$tables['Teams']['name'] = "teams";
+		$tables['Teams']['columns'] = "name,email,responsibility,role";
+		$tables['TraceabilityMatrix']['name'] = "traceabilityMatrix";
+		$tables['TraceabilityMatrix']['columns'] = "cncr,system,subsysreq,design,code,testcase";
+		
 		// $tables['RiskAssessment']['name'] = "riskAssessment";
 		// $tables['RiskAssessment']['columns'] = "cybersecurity_id,detectability,issue_id,occurrence,risk_type,rpn,severity,soup_id";
 		return $tables;

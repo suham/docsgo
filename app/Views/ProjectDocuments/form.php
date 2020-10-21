@@ -312,6 +312,7 @@
   var traceabilityMatrixTable;
   var documentsTable;
   var riskAssessmentTable; 
+  var acronymsTable;
 
   var sections;
   var reviewComments = "";
@@ -395,7 +396,9 @@
     <?php if (isset($riskAssessment)): ?>
       riskAssessmentTable = <?= json_encode($riskAssessment) ?>;
     <?php endif; ?>
-
+    <?php if (isset($acronyms)): ?>
+      acronymsTable = <?= json_encode($acronyms) ?>;
+    <?php endif; ?>
 
     <?php if (isset($sections)): ?>
       sections = <?= json_encode($sections) ?>;
@@ -719,6 +722,8 @@
       table = documentsTable;
     }else if (tableName == "riskAssessment") {
       table = riskAssessmentTable;
+    }else if (tableName == "acronyms"){
+      table = acronymsTable;
     }
     
     var indexes = columnValues.split(',');
@@ -744,7 +749,8 @@
       content += "\r\n";
     });
     const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
-    $codemirror.getDoc().setValue(content);
+    const existingVal = $codemirror.getDoc().getValue();
+    $codemirror.getDoc().setValue(existingVal+"\n"+content);
   }
 
   $("#updateTemplate").click(function () {

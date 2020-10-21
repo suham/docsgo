@@ -9,6 +9,7 @@ use App\Models\DocumentsMasterModel;
 use App\Models\RequirementsModel;
 use App\Models\TraceabilityMatrixModel;
 use App\Models\RiskAssessmentModel;
+use App\Models\AcronymsModel;
 class Documents extends BaseController
 {
     public function index()
@@ -124,7 +125,12 @@ class Documents extends BaseController
 			$riskAssessment = new RiskAssessmentModel();
 			$data = $riskAssessment->findAll();	
 			return $data;
-		}else{
+		}else if($tableName == 'acronyms'){
+			$acronymsModel = new AcronymsModel();
+			$data = $acronymsModel->orderBy('acronym')->findAll();	
+			return $data;
+		}
+		else{
 			return [];
 		}
 	}

@@ -14,12 +14,15 @@ class RiskAssessment extends BaseController
     {
 		$data = [];
 
-		$data = $this->setQueryData(2);
 		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = true;
 		$data['addUrl'] = "/risk-assessment/add";
 		$data['backUrl'] = '/risk-assessment';
-		$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 1, "RDanchor3"=> 0);
+
+		$status = $this->request->getVar('status');
+
+		$model = new RiskAssessmentModel();
+		$data["data"] = $model->getRisks($status);
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -27,78 +30,10 @@ class RiskAssessment extends BaseController
 		echo view('templates/footer');
 	}
 
-	public function setQueryData($type) {
-		$statusAt = "";
-		switch ($type) {
-			case 1:
-					$statusAt = trim("All");
-					break;
-			case 2:
-					$statusAt = trim("Open");
-					break;
-			case 3:
-					$statusAt = trim("Close");
-					break;
-		}
 
-		$statusAt = trim($statusAt);
-		$statusAt = trim($statusAt, ' ');
-		$statusAt =  str_replace(' ', '', $statusAt);
-		$statusAt =  str_replace('  ','', $statusAt);
+	 function add(){
+		$id = $this->request->getVar('id');
 
-		$data['occurrenceListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Rare');
-		$data['severityListOptions'] = array( 5=> 'Very High', 4 => 'High', 3 => 'Moderate', 2 => 'Low', 1 => 'Minor/Minimal');
-		$data['detectabilityListOptions'] = array( 5=> 'Almost Certain', 4 => 'High', 3 => 'Moderate', 2 => 'Very Low', 1 => 'Impossible');
-
-		$model = new RiskAssessmentModel();
-		if($statusAt == 'All') {
-			$data['data'] = $model->orderBy('id', 'desc')->findAll();	
-		}else{
-			$data['data'] = $model->where('status', $statusAt)->orderBy('id', 'desc')->findAll();	
-		}
-		return $data;
-	}
-
-	private function returnParams($param){
-		$uri = $this->request->uri;
-		if(count($uri->getSegments()) <= 2){
-			$uri = $this->request->uri;
-			$id = $uri->getSegment(3);
-			if($id != ""){
-				$id = intval($id);
-			}
-			return $id;
-		}else{
-			$type = $uri->getSegment(3);
-			$id = $uri->getSegment(4);
-			if($id != ""){
-				$id = intval($id);
-			}
-			if($param == 'id'){
-				return $id;
-			}
-			if($param == 'type'){
-				return $type;
-			}
-		}
-	}
-
-	private function returnParams1(){
-		$uri = $this->request->uri;
-		$id = $uri->getSegment(3);
-		if($id != ""){
-			$id = intval($id);
-		}
-		return $id;
-	}
-
-	public function add(){
-		if(count($this->request->uri->getSegments()) <= 2){
-			$id = $this->returnParams1();
-		}else{
-			$id = $this->returnParams('id');
-			$type = $this->returnParams('type');
-		}
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
@@ -129,7 +64,7 @@ class RiskAssessment extends BaseController
 			$data['member']['status'] = 'Open';
 
 		}else{
-			$data['action'] = "add/".$type."/".$id;
+			$data['action'] = "add?id=".$id;
 			$data['formTitle'] = "Update Risk Assessment";//.$risk_type;
 			$data['member'] = $model->where('id',$id)->first();		
 		}
@@ -178,15 +113,6 @@ class RiskAssessment extends BaseController
 		echo view('templates/footer');
 	}
 	
-	private function getStatusOprions(){
-        $projectModel = new StatusOptionsModel();
-        $data = $projectModel->findAll();	
-		$optionList = [];
-		foreach($data as $option){
-			$optionList[$option['value']] = $option['name'];
-		}
-		return $optionList;
-	}
 
 	private function getProjects(){
         $projectModel = new ProjectModel();
@@ -198,37 +124,9 @@ class RiskAssessment extends BaseController
 		return $projects;
 	}
 
-
-	public function view() {
-		$type = $this->returnParams('id');
-		$id = $this->returnParams('type');
-		$data = [];
-		$data = $this->setQueryData($type);
-		$data['pageTitle'] = 'Risk Assessment';
-		$data['addBtn'] = true;
-		$data['addUrl'] = "/risk-assessment/add";
-		$data['backUrl'] = '/risk-assessment';
-
-
-		if($type == 1){
-			$data['checkedVals'] = array('RDanchor1' => 1, "RDanchor2"=> 0, "RDanchor3"=> 0);
-		}
-		if($type == 2){
-			$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 1, "RDanchor3"=> 0);
-		}
-		if($type == 3){
-			$data['checkedVals'] = array('RDanchor1' => 0, "RDanchor2"=> 0, "RDanchor3"=> 1);
-		}
-		echo view('templates/header');
-		echo view('templates/pageTitle', $data);
-		echo view('RiskAssessment/list',$data);
-		echo view('templates/footer');
-
-	}
-
 	public function delete(){
 		if (session()->get('is-admin')){
-			$id = $this->returnParams1();
+			$id = $this->request->getVar('id');
 			$model = new RiskAssessmentModel();
 			$model->delete($id);
 			$response = array('success' => "True");
