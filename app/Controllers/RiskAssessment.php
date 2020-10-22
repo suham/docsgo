@@ -55,7 +55,7 @@ class RiskAssessment extends BaseController
 			'category'=> 'required',
 			'name' => 'required|min_length[3]|max_length[64]',
 			'description' => 'min_length[3]|max_length[500]',
-			'information' => 'required|min_length[5]|max_length[20]',
+			'information' => 'required|min_length[3]|max_length[20]',
 			'severity' => 'required',
 			'occurrence' => 'required',
 			'detectability' => 'required',
