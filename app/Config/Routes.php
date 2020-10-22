@@ -60,25 +60,9 @@ $routes->match(['get','post'],'team/add', 'Team::add',['filter' => 'auth']);
 $routes->match(['get','post'],'team/add/(:num)', 'Team::add',['filter' => 'auth']);
 $routes->match(['get','post'],'team/delete/(:num)', 'Team::delete',['filter' => 'auth']);
 
-$routes->get('issues', 'Issues::index',['filter' => 'auth']);
-$routes->match(['get','post'],'issues/add', 'Issues::add',['filter' => 'auth']);
-$routes->match(['get','post'],'issues/add/(:num)', 'Issues::add',['filter' => 'auth']);
-$routes->match(['get','post'],'issues/delete/(:num)', 'Issues::delete',['filter' => 'auth']);
-
-$routes->get('cybersecurity', 'Cybersecurity::index',['filter' => 'auth']);
-$routes->match(['get','post'],'cybersecurity/add', 'Cybersecurity::add',['filter' => 'auth']);
-$routes->match(['get','post'],'cybersecurity/add/(:num)', 'Cybersecurity::add',['filter' => 'auth']);
-$routes->match(['get','post'],'cybersecurity/delete/(:num)', 'Cybersecurity::delete',['filter' => 'auth']);
-
-$routes->get('soup', 'Soup::index',['filter' => 'auth']);
-$routes->match(['get','post'],'soup/add', 'Soup::add',['filter' => 'auth']);
-$routes->match(['get','post'],'soup/add/(:num)', 'Soup::add',['filter' => 'auth']);
-$routes->match(['get','post'],'soup/delete/(:num)', 'Soup::delete',['filter' => 'auth']);
-
 $routes->get('risk-assessment', 'RiskAssessment::index',['filter' => 'auth']);
 $routes->match(['get','post'],'risk-assessment/add', 'RiskAssessment::add',['filter' => 'auth']);
 $routes->match(['get','post'],'risk-assessment/delete', 'RiskAssessment::delete',['filter' => 'auth']);
-// $routes->match(['get','post'],'issues/delete/(:num)', 'Issues::delete',['filter' => 'auth']);
 
 $routes->get('requirements', 'Requirements::index',['filter' => 'auth']);
 $routes->match(['get','post'],'requirements/add', 'Requirements::add',['filter' => 'auth']);

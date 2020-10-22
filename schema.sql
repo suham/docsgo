@@ -25,22 +25,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `docsgo-cybersecurity`
---
-
-CREATE TABLE `docsgo-cybersecurity` (
-  `id` int(11) NOT NULL,
-  `project_id` int(10) NOT NULL,
-  `reference` varchar(100) NOT NULL,
-  `description` varchar(200) NOT NULL,
-  `control` varchar(100) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `status` enum('Open','Close') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `docsgo-document-master`
 --
 
@@ -83,22 +67,6 @@ CREATE TABLE `docsgo-documents` (
   `file-name` varchar(50) DEFAULT NULL,
   `author` varchar(50) DEFAULT NULL,
   `status` enum('Draft','Approved','Rejected') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `docsgo-issues`
---
-
-CREATE TABLE `docsgo-issues` (
-  `id` int(11) NOT NULL,
-  `project_id` varchar(50) NOT NULL,
-  `issue` varchar(50) NOT NULL,
-  `issue_description` varchar(200) NOT NULL,
-  `update_date` datetime DEFAULT NULL,
-  `source` enum('Ticket','Observation') NOT NULL,
-  `status` enum('Open','Close') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -149,42 +117,6 @@ CREATE TABLE `docsgo-reviews` (
   `assigned-to` varchar(50) NOT NULL,
   `status` enum('Request Change','Ready For Review','Accepted') NOT NULL,
   `category` enum('Document','Test case','Code','Report') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `docsgo-risk-assessment`
---
-
-CREATE TABLE `docsgo-risk-assessment` (
-  `id` int(11) NOT NULL,
-  `risk_type` enum('open-issue','soup','cybersecurity') NOT NULL,
-  `severity` int(11) NOT NULL,
-  `occurrence` int(11) NOT NULL,
-  `detectability` int(11) NOT NULL,
-  `rpn` int(11) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `issue_id` int(11) DEFAULT NULL,
-  `cybersecurity_id` int(11) DEFAULT NULL,
-  `soup_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `docsgo-soup`
---
-
-CREATE TABLE `docsgo-soup` (
-  `id` int(11) NOT NULL,
-  `project_id` int(10) NOT NULL,
-  `soup` varchar(50) NOT NULL,
-  `version` varchar(50) NOT NULL,
-  `purpose` varchar(200) NOT NULL,
-  `validation` varchar(200) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `status` enum('Open','Close') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -291,15 +223,6 @@ CREATE TABLE `docsgo-risks` (
   `update_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `docsgo-cybersecurity`
---
-ALTER TABLE `docsgo-cybersecurity`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `docsgo-document-master`
@@ -320,12 +243,6 @@ ALTER TABLE `docsgo-documents`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `docsgo-issues`
---
-ALTER TABLE `docsgo-issues`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `docsgo-projects`
 --
 ALTER TABLE `docsgo-projects`
@@ -341,18 +258,6 @@ ALTER TABLE `docsgo-requirements`
 -- Indexes for table `docsgo-reviews`
 --
 ALTER TABLE `docsgo-reviews`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `docsgo-risk-assessment`
---
-ALTER TABLE `docsgo-risk-assessment`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `docsgo-soup`
---
-ALTER TABLE `docsgo-soup`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -402,12 +307,6 @@ ALTER TABLE `docsgo-risks`
 --
 
 --
--- AUTO_INCREMENT for table `docsgo-cybersecurity`
---
-ALTER TABLE `docsgo-cybersecurity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `docsgo-document-master`
 --
 ALTER TABLE `docsgo-document-master`
@@ -425,11 +324,6 @@ ALTER TABLE `docsgo-document-template`
 ALTER TABLE `docsgo-documents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `docsgo-issues`
---
-ALTER TABLE `docsgo-issues`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `docsgo-projects`
@@ -449,17 +343,6 @@ ALTER TABLE `docsgo-requirements`
 ALTER TABLE `docsgo-reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `docsgo-risk-assessment`
---
-ALTER TABLE `docsgo-risk-assessment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `docsgo-soup`
---
-ALTER TABLE `docsgo-soup`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `docsgo-status-options`
@@ -506,7 +389,6 @@ ALTER TABLE `docsgo-risks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
-ALTER TABLE `docsgo-risk-assessment` CHANGE `risk_type` `risk_type` ENUM('Open-issue','SOUP','Cybersecurity') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

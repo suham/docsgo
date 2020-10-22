@@ -2,9 +2,6 @@
 
 use App\Models\ProjectModel;
 use App\Models\TeamModel;
-use App\Models\IssueModel;
-use App\Models\SoupModel;
-use App\Models\CybersecurityModel;
 use App\Models\RiskAssessmentModel;
 use App\Models\StatusOptionsModel;
 use CodeIgniter\I18n\Time;
