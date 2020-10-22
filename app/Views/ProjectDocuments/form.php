@@ -36,7 +36,7 @@
           <div class="col-12 col-sm-6" style="margin:0 auto">
             <div class="form-group">
               <label class="font-weight-bold text-muted" for="type">Type</label>
-              <select class="form-control" name="type" id="type">
+              <select class="form-control selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                 <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
                   Select
                 </option>
@@ -639,20 +639,13 @@
  
 
   $("#section-tab").click(function(){
-
     setTimeout(function(){ 
       for(var z =0; z< sections.length; z++){
         const secId = sections[z].id;
         var $cm = $('textarea[name="'+secId+'"]').nextAll('.CodeMirror')[0].CodeMirror;
         $cm.refresh();
       }
-  
-
     }, 500);
-
-   
-  
-
   });
 
   function reloadSections(){

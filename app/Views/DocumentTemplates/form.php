@@ -3,6 +3,10 @@
     color: #f8f9fa !important;
     background-color: #6c757d !important;
   }
+
+  .CodeMirror{
+    width: 100%;
+  }
 </style>
 <div class="">
   <div class="row justify-content-center">
@@ -134,7 +138,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-change-history">Change History</label>
-                      <textarea data-adaptheight class="form-control" name="cp-change-history"
+                      <textarea class="form-control" name="cp-change-history"
                         id="cp-change-history"><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
                     </div>
                   </div>
@@ -178,9 +182,9 @@ var sectionCount = 0;
 var sectionID = 0;
 var tablesLayout;
 var existingTypes;
-var sectionStructure = {id:"", title: '', type: '', content: '', tableName:'', headerColumns:'', contentColumns:''};
 var templateId = "";
 var templateType = "";
+var sections;
 class Section {
   constructor(){
     this.id = "";
@@ -202,8 +206,7 @@ $(document).ready(function(){
     templateId = "<?= $documentTemplate['id'] ?>";
     templateType = "<?= $documentTemplate['type'] ?>";
     
-    
-    var sections = template.sections;
+    sections = template.sections;
     
     for(var i=0 ; i<sections.length; i++){
       var sectionTitle = sections[i].title;
@@ -219,7 +222,8 @@ $(document).ready(function(){
       $(`#title_${sectionID}`).val(sectionTitle);
       $(`#type_${sectionID}`).val(sectionType);
       $(`#content_${sectionID}`).val(sectionContent);
-      
+
+
       if(sectionType == "database"){
         toggleSectionType(`type_${sectionID}`);
         $(`#db_${sectionID}`).find("select.section_table").selectpicker('val', sectionTableName);
@@ -258,6 +262,16 @@ $(document).ready(function(){
 
   
 });
+
+$("#section-tab").click(function(){
+    setTimeout(function(){ 
+      for(var z =1; z<=sections.length; z++){
+        var contentName = 'content_'+z;
+        var $cm = $('textarea[name="'+contentName+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+        $cm.refresh();
+      }
+    }, 500);
+  });
 
 function submitForm(){
   var name = $("#name").val().trim();
@@ -365,31 +379,30 @@ function createSectionBody(){
                     <option value="differential">Git Diff</option>
                   </select>
                 </div>
+
+                <div class="database_fields d-none" id='db_${sectionID}'>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Table Name</label>
+                    <select class="form-control col-xl-9 section_table selectpicker"  name="table_name" onchange="tableChange('db_${sectionID}', this)">
+                      ${tableOptions}
+                    </select>
+                  </div>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Text</label>
+                    <select class="form-control col-xl-9 section_column_text selectpicker" name="table_columns_text"></select>
+                  </div>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Value</label>
+                    <select class="form-control col-xl-9 section_column_value selectpicker" data-actions-box="true" multiple name="table_columns_value"></select>
+                  </div>
+                </div>
+
                 <div class="form-row mt-3">
                   <label class="col-xl-3 col-form-label font-weight-bold text-muted">Content</label>
-                  <input type="text" id='content_${sectionID}' class="form-control  col-xl-9  section_content">
+                  <textarea id='content_${sectionID}' name='content_${sectionID}' class="form-control section_content"></textarea>
                 </div>
               </div>
-              <div class="database_fields d-none" id='db_${sectionID}'>
-                <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Table Name</label>
-                  <select class="form-control col-xl-9 section_table selectpicker"  name="table_name" onchange="tableChange('db_${sectionID}', this)">
-                    ${tableOptions}
-                  </select>
-                </div>
-                <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Text</label>
-                  <select class="form-control col-xl-9 section_column_text selectpicker" name="table_columns_text">
-                   
-                    </select>
-                </div>
-                <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Value</label>
-                  <select class="form-control col-xl-9 section_column_value selectpicker" data-actions-box="true" multiple name="table_columns_value">
-                   
-                    </select>
-                </div>
-              </div>
+             
             </div>`;
   return body;
 }
@@ -488,7 +501,9 @@ function getSectionsData(){
     for(var i=0; i<allTitles.length; i++){
       var title = allTitles[i].value;
       var type = allTypes[i].value;
-      var content = allContents[i].value;
+      // var content = allContents[i].value;
+      var $codemirror = $(allContents[i]).nextAll('.CodeMirror')[0].CodeMirror;
+      var content = $codemirror.getValue();
       var parent = allTitles[i].parentElement.parentElement;
       $(parent.getElementsByClassName('alert')).remove();
       if(title == ""){
