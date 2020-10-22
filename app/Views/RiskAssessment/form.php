@@ -94,8 +94,10 @@
               </div>
             </div>
 
-            <div>
+            <div class="col-12">
+              <div class="form-group">
                 <div id="severity-desc"></div>
+              </div>
             </div>
 
             <div class="col-12">
@@ -114,8 +116,10 @@
               </div>
             </div>
 
-            <div>
+            <div class="col-12">
+              <div class="form-group">
                 <div id="occurrence-desc"></div>
+              </div>
             </div>
 
             <div class="col-12">
@@ -134,8 +138,10 @@
               </div>
             </div>
 
-            <div>
+            <div class="col-12">
+              <div class="form-group">
                 <div id="detectability-desc"></div>
+              </div>
             </div>
 
             <div class="col-12">
