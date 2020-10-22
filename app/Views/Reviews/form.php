@@ -24,7 +24,7 @@
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="project-id">Project</label>
-               <select class="form-control fstdropdown-select" name="project-id" id="project-id">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project-id" id="project-id">
                 <option value="" disabled <?= isset($review['project-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -41,7 +41,7 @@
             <div class="col-12 col-sm-4">
                 <div class="form-group">
                   <label class = "font-weight-bold text-muted" for="category">Category</label>
-                  <select class="form-control fstdropdown-select" name="category" id="category">
+                  <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="category" id="category">
                     <option value="" disabled <?= isset($review['category']) ? '' : 'selected' ?>>
                         Select
                     </option>
@@ -63,11 +63,6 @@
               </div>
             </div>
 
-       
-
-           
-
-
             <div class="col-12 col-sm-8">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="context">Review Item</label>
@@ -79,7 +74,7 @@
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="assigned-to">Assigned To</label>
                
-               <select class="form-control fstdropdown-select" name="assigned-to" id="assigned-to">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="assigned-to" id="assigned-to">
                 <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -98,7 +93,7 @@
             <div class="col-12">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="description">Review Comment</label>
-               <textarea  class="form-control" name="description" id="description" maxlength=400><?=
+               <textarea  class="form-control" name="description" id="description" maxlength=1000><?=
                 isset($review['description']) ? trim($review['description']) : ''
                 ?></textarea>
             </div>
@@ -107,7 +102,7 @@
             <div class="col-12 ">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="review-ref">Author's Note</label>
-               <textarea  class="form-control" name="review-ref" id="review-ref" maxlength=250><?=
+               <textarea  class="form-control" name="review-ref" id="review-ref" maxlength=500><?=
                 isset($review['review-ref']) ? trim($review['review-ref']) : ''
                 ?></textarea>
               </div>
@@ -120,7 +115,7 @@
                 <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="review-by">Reviewed by</label>
                 
-                <select class="form-control fstdropdown-select" name="review-by" id="review-by">
+                <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="review-by" id="review-by">
                   <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>
                       Select
                   </option>
@@ -138,7 +133,7 @@
               <div class="col-12 col-sm-4">
                   <div class="form-group">
                     <label class = "font-weight-bold text-muted" for="status">Status</label>
-                    <select class="form-control fstdropdown-select" name="status" id="status">
+                    <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="status" id="status">
                       <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
                           Select
                       </option>

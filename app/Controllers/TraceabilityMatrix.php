@@ -14,9 +14,9 @@ class TraceabilityMatrix extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/traceability-matrix/add";
 
-		$status = $this->request->getVar('status');
+		$view = $this->request->getVar('view');
 		$model = new TraceabilityMatrixModel();
-		if($status == 'Open'){
+		if($view == 'gap'){
 			$data['data'] = $model->getunmapedList();
 			$data['listViewDisplay'] = false;
 		}else{

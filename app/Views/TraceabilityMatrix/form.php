@@ -24,7 +24,7 @@
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="userNeeds">User Needs</label>
               
-              <select class="form-control fstdropdown-select" name="userNeeds[]" id="userNeeds" onchange="getIDDescription('#userNeeds')">
+              <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="userNeeds[]" id="userNeeds" onchange="getIDDescription('#userNeeds')">
               <option value="" disabled <?= isset($member['userNeeds']) ? '' : 'selected' ?>>
                     Select User Needs
                 </option>

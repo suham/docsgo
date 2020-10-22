@@ -2,17 +2,17 @@
   $uri = service('uri');
 ?>
 <div class="fluid-container">
-<div class="row mb-3">
+  <div class="row mb-3">
     <div class="col-12">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label onclick="javascript:window.location.href='/traceability-matrix';" 
-               class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
-          <input type="radio" name="options"  autocomplete="off" checked> List
-        </label>
-        <label onclick="javascript:window.location.href='/traceability-matrix?status=Open';"
-                class="btn <?= ((strpos($uri,'/traceability-matrix?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
-          <input type="radio" name="options"  autocomplete="off"> Gap
-        </label>
+      <div class="btn-group btn-group-toggle">
+        <a href="/traceability-matrix" 
+            class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+           List
+        </a>
+        <a href="/traceability-matrix?view=gap"
+            class="btn <?= ((strpos($uri,'/traceability-matrix?view=gap'))  ? " btn-primary" : "btn-secondary") ?>">
+           Gap
+        </a>
       </div>
       
     </div>
@@ -69,7 +69,7 @@
 <?php endif; ?>
 
 <?php if ($listViewDisplay == false): ?>
-  <?php if ($data['userNeedsList'] == '' && $data['systemList'] == '' && $data['subSystemList'] == '' &&  $data['testCaseList']==''): ?>
+  <?php if (!count($data)): ?>
     <div class="alert alert-warning" role="alert">
       No records found.
     </div>
@@ -85,10 +85,10 @@
           </thead>
           <tbody  class="bg-white">
                 <tr scope="row">
-                <td><?php echo $data['userNeedsList'];?></td>
-                <td><?php echo $data['systemList'];?></td>
-                <td><?php echo $data['subSystemList'];?></td>
-                <td><?php echo $data['testCaseList'];?></td>
+                <td><?php if(isset($data['User Needs'])) { echo $data['User Needs']; } ?></td>
+                <td><?php if(isset($data['System'])) { echo $data['System']; }?></td>
+                <td><?php if(isset($data['Subsystem'])) { echo $data['Subsystem']; }?></td>
+                <td><?php if(isset($data['testcase'])) { echo $data['testcase']; }?></td>
                 </tr>
           </tbody>
         </table>

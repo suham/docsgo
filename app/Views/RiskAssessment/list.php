@@ -5,19 +5,19 @@
 
     <div class="row mb-3">
     <div class="col-12">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label onclick="javascript:window.location.href='/risk-assessment';" 
-               class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
-          <input type="radio" name="options"  autocomplete="off" checked> All
-        </label>
-        <label onclick="javascript:window.location.href='/risk-assessment?status=Open';"
-                class="btn <?= ((strpos($uri,'/risk-assessment?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
-          <input type="radio" name="options"  autocomplete="off"> Open
-        </label>
-        <label onclick="javascript:window.location.href='/risk-assessment?status=Close';"
-                class="btn <?= ((strpos($uri,'/risk-assessment?status=Close')) ? " btn-primary" : "btn-secondary") ?>">
-          <input type="radio" name="options" autocomplete="off"> Close
-        </label>
+      <div class="btn-group btn-group-toggle" >
+        <a href="/risk-assessment" 
+           class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+          All
+        </a>
+        <a href="/risk-assessment?status=Open"
+            class="btn <?= ((strpos($uri,'/risk-assessment?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
+          Open
+        </a>
+        <a href="/risk-assessment?status=Close"
+            class="btn <?= ((strpos($uri,'/risk-assessment?status=Close')) ? " btn-primary" : "btn-secondary") ?>">
+           Close
+        </a>
       </div>
       
     </div>

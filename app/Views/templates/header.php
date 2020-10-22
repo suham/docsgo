@@ -3,39 +3,36 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/css/header.css">
-    <link href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/fstdropdown.css">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"> --> 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.22/fc-3.3.1/fh-3.1.7/r-2.2.6/datatables.min.css"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="/assets/css/simplemde_v1.11.1.min.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-select_v1.13.14.min.css" />
+    
+    <!-- For Showing Code Diff  -->
+    <link rel="stylesheet" href="/assets/css/github_diff.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/diff2html.min.css" />
+
+    <!-- For Datatables -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/datatables.min.css"/>
 
 
-    <script src="/assets/js/jquery-3.2.1.min.js"></script>
-    <script src="/assets/js/popper.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/bootbox.min.js"></script>
-    <script src="/assets/js/fstdropdown.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
-    <!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> -->
-
- 
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.22/fc-3.3.1/fh-3.1.7/r-2.2.6/datatables.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap4-toggle.min.js"></script>
+    <script type="text/javascript" src="/assets/js/simplemde.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/assets/js/diff2html-ui.min.js"></script>
+    <script type="text/javascript" src="/assets/js/datatables.min.js"></script>
 
 
     <title>DocsGo</title>
     <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
-    <!-- <link rel="icon" href="<?=base_url()?>/favicon.ico" type="image/gif"> -->
     <style>
       .CodeMirror, .CodeMirror-scroll {
           height: auto;

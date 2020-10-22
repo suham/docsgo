@@ -136,7 +136,7 @@
             <div class="col-12 col-sm-4">
             <div class="form-group">
                <label class = "font-weight-bold text-muted" for="status">Status</label>
-               <select class="form-control" name="status" id="status" >
+               <select class="form-control  selectpicker" data-size="8" name="status" id="status" >
                 <option value="" disabled <?= isset($member['status']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -154,7 +154,7 @@
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="used_by">Used By</label>
-               <select class="form-control fstdropdown-select" name="used_by" id="used_by">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="used_by" id="used_by">
                 <option value="" disabled <?= isset($member['used_by']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -171,7 +171,7 @@
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="updated_by">Updated By</label>
                
-               <select class="form-control fstdropdown-select" name="updated_by" id="updated_by">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="updated_by" id="updated_by">
                 <option value="" disabled <?= isset($member['updated_by']) ? '' : 'selected' ?>>
                     Select
                 </option>

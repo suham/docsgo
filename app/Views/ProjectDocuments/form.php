@@ -71,7 +71,7 @@
                   <div class="col-12 col-sm-4">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="project-id">Project</label>
-                      <select class="form-control fstdropdown-select" name="project-id" id="project-id">
+                      <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project-id" id="project-id">
                         <option value="" disabled <?= isset($projectDocument['project-id']) ? '' : 'selected' ?>>
                           Select
                         </option>
@@ -89,7 +89,7 @@
                   <div class="col-12 col-sm-6">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
-                      <select class="form-control fstdropdown-select" name="existingDocs" id="existingDocs">
+                      <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="existingDocs" id="existingDocs">
                         <option value="" selected>
                           Select
                         </option>
@@ -163,14 +163,14 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="section" role="tabpanel" aria-labelledby="section-tab">
-              <div class="d-flex flex-row-reverse ">
+              <!-- <div class="d-flex flex-row-reverse ">
                   <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
-              </div>
+              </div> -->
                 <?php foreach ($sections as $section): ?>
                   <div class="col-12 mb-3">
-                    <div class="">
+                    
                       <div class="card-header text-white bg-dark">
-                        <div class="row" style="margin-bottom:-10px">
+                        <div class="row" >
 
                           <div class="col-6">
                             <div class="row">
@@ -218,22 +218,19 @@
                           <?php endif; ?>
                         </div>
                       </div>
-
                       
                       <div class="card-body p-0">     
                           
-                        <? if (isset($section["type"])): ?>
-                            <? if ($section["type"] == "differential"): ?>
-                              <div id="diffDiv_<?=  $section["id"] ?>" class="pb-2"></div>
-                            <? endif; ?>
-                        <? else : ?>
-                          <textarea class="form-control sections" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"></textarea>
-                        <? endif; ?>
+                        <?php if (isset($section["type"])): ?>
+                            <?php if ($section["type"] == "differential"): ?>
+                              <div id="diffDiv_<?=  $section["id"] ?>" ></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <textarea class="form-control sections" name="<?=  $section["id"] ?>" id="<?=  $section["id"] ?>"></textarea>
+                        
 
                       </div>
                      
-                      
-                    </div>
                   </div>
 
 
@@ -592,19 +589,21 @@
       $("#btn_text_eval_"+sectionId).removeClass('d-none');
       $("#btn_diff_eval_"+sectionId).addClass('d-none');
       
-      var toolbar = $("#section1").closest('div').find('.editor-toolbar');
-      var codeMirror = $("#section1").closest('div').find('.CodeMirror');
+      var toolbar = $("#"+sectionId).closest('div').find('.editor-toolbar');
+      var codeMirrorDiv = $("#"+sectionId).closest('div').find('.CodeMirror');
       $(toolbar).addClass('d-none');
-      $(codeMirror).addClass('d-none');
+      $(codeMirrorDiv).addClass('d-none');
     }else{
       
       $("#diffDiv_"+sectionId).addClass('d-none');
       $("#btn_text_eval_"+sectionId).addClass('d-none');
       $("#btn_diff_eval_"+sectionId).removeClass('d-none');
-      var toolbar = $("#section1").closest('div').find('.editor-toolbar');
-      var codeMirror = $("#section1").closest('div').find('.CodeMirror');
+      var toolbar = $("#"+sectionId).closest('div').find('.editor-toolbar');
+      var codeMirrorDiv = $("#"+sectionId).closest('div').find('.CodeMirror');
       $(toolbar).removeClass('d-none');
-      $(codeMirror).removeClass('d-none');
+      $(codeMirrorDiv).removeClass('d-none');
+      const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
+      $codemirror.refresh();
     }
    
   }

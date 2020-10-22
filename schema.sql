@@ -586,3 +586,8 @@ ALTER TABLE `docsgo-acronyms`
 ALTER TABLE `docsgo-acronyms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
+
+
+ALTER TABLE `docsgo-reviews` CHANGE `description` `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `docsgo-reviews` CHANGE `context` `context` VARCHAR(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `docsgo-reviews` CHANGE `review-ref` `review-ref` VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;

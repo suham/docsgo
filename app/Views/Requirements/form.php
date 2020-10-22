@@ -23,7 +23,7 @@
             <div class="col-12">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="type">Type</label>
-               <select class="form-control fstdropdown-select" name="type" id="type">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                 <option value="" disabled <?= isset($member['type']) ? '' : 'selected' ?>>
                     Select
                 </option>

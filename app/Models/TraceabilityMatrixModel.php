@@ -10,17 +10,18 @@ class TraceabilityMatrixModel extends Model{
     public function getTraceabilityData(){
         $db      = \Config\Database::connect();
         
-        $sql = "(SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', req.requirement) SEPARATOR '<br/>') as requirement
+        $sql = "SELECT *
+        FROM ((SELECT options.traceability_id as id, options.type, trace.code, trace.design, trace.update_date,GROUP_CONCAT(CONCAT_WS(',', req.requirement) ORDER BY req.requirement SEPARATOR '<br/>') as requirement
         FROM `docsgo-requirements` req, `docsgo-traceability-options` options, `docsgo-traceability` AS trace
         WHERE req.id = options.requirement_id and options.traceability_id and trace.id = options.traceability_id 
         GROUP BY  options.traceability_id,options.type
-        ORDER BY trace.update_date)
-        UNION
-        (SELECT options.traceability_id as id, options.type, trace.code, trace.design, GROUP_CONCAT(CONCAT_WS(',', testCases.testcase) SEPARATOR '<br/>') as testcase
+        )
+        UNION 
+        (SELECT options.traceability_id as id, options.type, trace.code, trace.design, trace.update_date, GROUP_CONCAT(CONCAT_WS(',', testCases.testcase) ORDER BY testCases.testcase SEPARATOR '<br/>') as testcase
         FROM `docsgo-test-cases` AS testCases, `docsgo-traceability-options` options, `docsgo-traceability` AS trace
         WHERE testCases.id = options.requirement_id and options.traceability_id and trace.id = options.traceability_id 
         GROUP BY  options.traceability_id,options.type
-        ORDER BY trace.update_date);";
+        )) AS TMATRIX ORDER BY update_date desc;";
 
         $query = $db->query($sql);
         $traceabilityData = $query->getResult('array');
@@ -61,34 +62,34 @@ class TraceabilityMatrixModel extends Model{
             array_push($matrix, $row);
         }
         
-        return array_reverse($matrix);
+        return $matrix;
     }
 
     public function getunmapedList () {
         $db      = \Config\Database::connect();
+
+        $sql = "(SELECT GROUP_CONCAT(CONCAT_WS(',', req.requirement)  ORDER BY req.requirement SEPARATOR '<br/>' ) as requirement, type
+        FROM `docsgo-requirements` req
+        WHERE req.id NOT IN (
+            SELECT options.requirement_id
+             FROM `docsgo-traceability-options` as options
+        ) 
+        GROUP BY req.type)
+        UNION
+        (SELECT GROUP_CONCAT(CONCAT_WS(',', tests.testcase)  ORDER BY tests.testcase SEPARATOR '<br/>') as requirement, 'testcase' as type
+        FROM `docsgo-test-cases` tests
+        WHERE tests.id NOT IN (
+            SELECT options.requirement_id
+             FROM `docsgo-traceability-options` as options
+        ))";
         
-        $sql = "(SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='User Needs' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='User Needs')) 
-        UNION( SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='System' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='System'))) 
-        UNION( SELECT id, type, requirement FROM `docsgo-requirements` WHERE type='SubSystem' AND (id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='SubSystem'))) 
-        UNION ( SELECT id, 'testcase' as type, testcase as requirement FROM `docsgo-test-cases` WHERE id NOT IN ( SELECT requirement_id FROM `docsgo-traceability-options` WHERE type='testcase')));";
         $query = $db->query($sql);
         $unmappedData = $query->getResult('array');
+        $data = array();
+        foreach($unmappedData as $row){
+            $data[$row["type"]] = $row["requirement"];
+        }
         
-        $data = []; $userNeeds = ""; $system = ""; $subSystem=""; $testCase="";
-        foreach($unmappedData as $row){ 
-            if($row['type'] == 'User Needs')
-                $userNeeds = $userNeeds.$row['requirement']."<br/>";
-            if($row['type'] == 'System')
-                $system = $system.$row['requirement']."<br/>";
-            if($row['type'] == 'Subsystem')
-                $subSystem = $subSystem.$row['requirement']."<br/>";
-            if($row['type'] == 'testcase')
-                $testCase = $testCase.$row['requirement']."<br/>";
-        };
-        $data['userNeedsList'] = $userNeeds;
-        $data['systemList'] = $system;
-        $data['subSystemList'] = $subSystem;
-        $data['testCaseList'] = $testCase;
         return $data;
     }
 

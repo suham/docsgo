@@ -33,7 +33,15 @@
       $('textarea').each(function () {
          var simplemde = new SimpleMDE({
             element: this,
-            status: false,
+            status: [{
+                     className: "characters",
+                     defaultValue: function(el) {
+                        el.innerHTML = "0";
+                     },
+                     onUpdate: function(el) {
+                        el.innerHTML = simplemde.value().length;
+                     }
+                  }],
             showIcons: ["code", "table"],
          });
          simplemde.codemirror.refresh();

@@ -127,7 +127,7 @@ class Reviews extends BaseController
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
 		$data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];
-		// $data['categoryList'] = ["Document", "Test case", "Code", "Report"];
+		
 		$data['categoryList'] = ["User Needs", "Plan", "Requirements", "Design",
 		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 
@@ -144,14 +144,23 @@ class Reviews extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			$rules = [
 				"project-id" => 'required',
-				"review-name" =>'required|max_length[20]',
-				"assigned-to" => 'required|max_length[50]',
+				"review-name" =>'required|max_length[64]',
+				"assigned-to" => 'required',
 				"context" => 'required|max_length[60]',
-				"description" => 'required|max_length[400]',
-				"review-by" =>'required|max_length[50]',
-				"review-ref" => 'max_length[250]',
+				"description" => 'required',
+				"review-by" =>'required',
+				"review-ref" => 'max_length[500]',
 				"status" => 'required',
 				"category" => 'required',
+			];
+
+			$errors = [
+				'description' => [
+					'required' => 'Review Comment is required.',
+				],
+				'review-ref' => [
+					'max_length' => "Author's should not exceed 500 characters",
+				]
 			];
 
 			$newData = [
@@ -169,7 +178,7 @@ class Reviews extends BaseController
 
 			$data['review'] = $newData;
 
-			if (! $this->validate($rules)) {
+			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
 			}else{
 

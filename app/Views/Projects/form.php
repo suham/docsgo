@@ -23,7 +23,7 @@
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="manager-id">Manager</label>
                
-               <select class="form-control fstdropdown-select" name="manager-id" id="manager-id">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="manager-id" id="manager-id">
                 <option value="" disabled <?= isset($project['manager-id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -75,7 +75,7 @@
             <div class="col-12 col-sm-4">
               <div class="form-group">
                <label class = "font-weight-bold text-muted" for="status">Status</label>
-               <select required class="form-control" name="status" id="status" >
+               <select required class="form-control selectpicker" data-size="8" name="status" id="status" >
                 <option value="" disabled <?= isset($project['status']) ? '' : 'selected' ?>>
                     Select
                 </option>

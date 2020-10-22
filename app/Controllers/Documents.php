@@ -303,9 +303,6 @@ class Documents extends BaseController
 				
 				if($id > 0){
 					$newData['id'] = $id;
-					// date_default_timezone_set('Asia/Kolkata');
-					// $timestamp = date("Y-m-d H:i:s");
-					// $newData['update-date'] = $timestamp;
 					$message = 'Plan successfully updated.';
 				}else{
 					$message = 'Plan successfully added.';

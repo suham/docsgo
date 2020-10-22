@@ -24,7 +24,7 @@
             <div class="col-12">
               <div class="form-group" readonly="readonly" id="risk_type_selection">
               <label class = "font-weight-bold text-muted" for="project">Project</label>
-               <select class="form-control fstdropdown-select" name="project" id="project">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project" id="project">
                 <option value="" disabled <?= isset($member['project_id']) ? '' : 'selected' ?>>
                     Select
                 </option>
@@ -40,7 +40,7 @@
             <div class="col-12">
               <div class="form-group" id="risk_name">
               <label class = "font-weight-bold text-muted" for="category">Category</label>
-                  <select class="form-control fstdropdown-select" name="category" id="category">
+                  <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="category" id="category">
                     <option value="" disabled <?= isset($member['category']) ? '' : 'selected' ?>>
                         Select
                     </option>
@@ -81,7 +81,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="severity">Severity</label>
-                  <select class="form-control fstdropdown-select" onchange="calculateRPNValue()" name="severity" id="severity" >
+                  <select class="form-control  selectpicker" data-live-search="true" data-size="8" onchange="calculateRPNValue()" name="severity" id="severity" >
                     <option value="" disabled <?= isset($member['severity']) ? '' : 'selected' ?>>
                       Select
                     </option>
@@ -101,7 +101,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="occurrence">Occurrence</label>
-                  <select class="form-control fstdropdown-select" onchange="calculateRPNValue()" name="occurrence" id="occurrence" >
+                  <select class="form-control  selectpicker" data-live-search="true" data-size="8" onchange="calculateRPNValue()" name="occurrence" id="occurrence" >
                     <option value="" disabled <?= isset($member['occurrence']) ? '' : 'selected' ?>>
                       Select
                     </option>
@@ -121,7 +121,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="detectability">Detectability</label>
-                  <select class="form-control fstdropdown-select" onchange="calculateRPNValue()" name="detectability" id="detectability" >
+                  <select class="form-control  selectpicker" data-live-search="true" data-size="8" onchange="calculateRPNValue()" name="detectability" id="detectability" >
                     <option value="" disabled <?= isset($member['detectability']) ? '' : 'selected' ?>>
                       Select
                     </option>
@@ -151,7 +151,7 @@
             <div class="col-12 col-sm-8">
                 <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="status">Status</label>
-                    <select class="form-control fstdropdown-select" name="status" id="status">
+                    <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="status" id="status">
                       <option value="" disabled <?= isset($member['status']) ? '' : 'selected' ?>>
                           Select
                       </option>
