@@ -119,7 +119,6 @@ $routes->get('inventory-master', 'InventoryMaster::index',['filter' => 'auth']);
 $routes->match(['get','post'],'inventory-master/add', 'InventoryMaster::add',['filter' => 'auth']);
 $routes->match(['get','post'],'inventory-master/add/(:num)', 'InventoryMaster::add',['filter' => 'auth']);
 $routes->match(['get','post'],'inventory-master/delete/(:num)', 'InventoryMaster::delete',['filter' => 'auth']);
-$routes->match(['get','post'],'inventory-master/view/(:num)', 'InventoryMaster::view',['filter' => 'auth']);
 
 $routes->get('bulk-insert', 'BulkInsert::index', ['filter' => 'auth']);
 /**

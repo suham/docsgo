@@ -33,13 +33,21 @@ class RiskAssessment extends BaseController
 
 	 function add(){
 		$id = $this->request->getVar('id');
-
+		//handling the backUrl view, Which is selected previously 
+		$backUrl = '/risk-assessment';
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'status')) {
+				$urlAr = explode("=", $urlStr);
+				$backUrl = '/risk-assessment?status='.$urlAr[count($urlAr)-1];
+			}
+		}
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
 		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = False;
-		$data['backUrl'] = "/risk-assessment";
+		$data['backUrl'] = $backUrl;
 		$dataList = [];
 		$data['riskCategory'] = ['Issue', 'Observation','Security','SOUP'];
 		$data['riskStatus'] = ['Open', 'Close'];

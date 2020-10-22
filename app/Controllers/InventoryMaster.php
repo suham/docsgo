@@ -15,18 +15,20 @@ class InventoryMaster extends BaseController
 		$data['backUrl'] = '/inventory-master';
 
 		$model = new InventoryMasterModel();
-		$data['data'] = $model->where('status', 'active')->orderBy('id', 'desc')->findAll();	
+		$view = $this->request->getVar('view');
+		if($view == '')
+			$view = 'active';
+
+		$data['data'] = $model->where('status', $view)->orderBy('id', 'desc')->findAll();	
 		$data['today_date'] = gmdate("Y-m-d H:i:s");
 		$data['statusList'] = ['active', 'in-active', 'not-found', 'cal-overdue'];
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
-		$data['checkedVals'] = array('RDanchor1' => 1, "RDanchor2"=> 0, "RDanchor3"=> 0,"RDanchor4"=> 0);
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('InventoryMaster/list',$data);
 		echo view('templates/footer');
-
 	}
 
 	private function returnParams(){
@@ -43,8 +45,8 @@ class InventoryMaster extends BaseController
 		if(isset($_SERVER['HTTP_REFERER'])){
 			$urlStr = $_SERVER['HTTP_REFERER'];
 			if (strpos($urlStr, 'view')) {
-				$urlAr = explode("/", $urlStr);
-				$backUrl = '/inventory-master/view/'.$urlAr[count($urlAr)-1];
+				$urlAr = explode("=", $urlStr);
+				$backUrl = '/inventory-master?view='.$urlAr[count($urlAr)-1];
 			}
 		}
 		$id = $this->returnParams();
@@ -131,47 +133,6 @@ class InventoryMaster extends BaseController
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('InventoryMaster/form', $data);
-		echo view('templates/footer');
-	}
-	
-	public function view() {
-		$id = $this->returnParams();
-		$activeChk1 = 0; $activeChk2 = 0; $activeChk3 = 0; $activeChk4 = 0;
-		switch ($id) {
-			case 1:
-				$type="active";
-				$activeChk1 = 1;
-				break;
-			case 2:
-				$type="in-active";
-				$activeChk2 = 1;
-				break;
-			case 3:
-				$type="not-found";
-				$activeChk3 = 1;
-				break;
-			case 4:
-				$type="cal-overdue";
-				$activeChk4 = 1;
-				break;
-		}
-		$data = [];
-		$data['pageTitle'] = 'Inventory Master';
-		$data['addBtn'] = true;
-		$data['addUrl'] = "/inventory-master/add";
-		$data['backUrl'] = '/inventory-master';
-
-		$model = new InventoryMasterModel();
-		$data['data'] = $model->where('status', $type)->orderBy('id', 'desc')->findAll();	
-		$data['today_date'] = gmdate("Y-m-d H:i:s");
-		$data['statusList'] = ['active', 'in-active', 'not-found', 'cal-overdue'];
-		$teamModel = new TeamModel();
-		$data['teamMembers'] = $teamModel->getMembers();
-		$data['checkedVals'] = array('RDanchor1' => $activeChk1, "RDanchor2"=> $activeChk2, "RDanchor3"=> $activeChk3,"RDanchor4"=> $activeChk4);
-
-		echo view('templates/header');
-		echo view('templates/pageTitle', $data);
-		echo view('InventoryMaster/list',$data);
 		echo view('templates/footer');
 	}
 
