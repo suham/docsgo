@@ -1,26 +1,27 @@
-
+<?php
+  $uri = service('uri');
+?>
 <div class="container1">
   <div class="row mb-3">
     <div class="col-12">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label onclick="javascript:window.location.href='/inventory-master/view/1';" 
-               class="btn <?= ($checkedVals['RDanchor1']) == 1 ? " btn-primary" : "btn-secondary"; ?>">
-          <input type="radio" name="options" id="RDanchor1"  autocomplete="off" checked> Active
-        </label>
-        <label onclick="javascript:window.location.href='/inventory-master/view/2';"
-                class="btn <?= ($checkedVals['RDanchor2']) == 1 ? " btn-primary" : "btn-secondary"; ?>">
-          <input type="radio" name="options" id="RDanchor2" autocomplete="off"> In Active
-        </label>
-        <label onclick="javascript:window.location.href='/inventory-master/view/3';"
-                class="btn <?= ($checkedVals['RDanchor3']) == 1 ? " btn-primary" : "btn-secondary"; ?>">
-          <input type="radio" name="options" id="RDanchor3" autocomplete="off">  Not Found
-        </label>
-        <label onclick="javascript:window.location.href='/inventory-master/view/4';" 
-                class="btn <?= ($checkedVals['RDanchor4']) == 1 ? " btn-primary" : "btn-secondary"; ?>">
-          <input type="radio" name="options" id="RDanchor3" autocomplete="off"> Cal Overdue
-        </label>
-      </div>
-      
+        <div class="btn-group btn-group-toggle">
+          <a href="/inventory-master" 
+              class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+            Active
+          </a>
+          <a href="/inventory-master?view=in-active"
+              class="btn <?= ((strpos($uri,'/inventory-master?view=in-active'))  ? " btn-primary" : "btn-secondary") ?>">
+            In Active
+          </a>
+          <a href="/inventory-master?view=not-found"
+              class="btn <?= ((strpos($uri,'/inventory-master?view=not-found'))  ? " btn-primary" : "btn-secondary") ?>">
+            Not Found
+          </a>
+          <a href="/inventory-master?view=cal-overdue"
+              class="btn <?= ((strpos($uri,'/inventory-master?view=cal-overdue'))  ? " btn-primary" : "btn-secondary") ?>">
+            Cal Overdue
+          </a>
+        </div>      
     </div>
   </div>
 
