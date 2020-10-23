@@ -172,7 +172,7 @@
                       <div class="card-header text-white bg-dark">
                         <div class="row" >
 
-                          <div class="col-6">
+                          <div class="col-<?= (isset($section["type"])) ? ($section["type"] == "text" ? '12' : '6') : '12'?>">
                             <div class="row">
                               <div class="col">
                                 <div class="input-group">
