@@ -6,7 +6,7 @@
   .reviewComments textarea { height: 300px; }
 </style>
 
-  <div class="row pl-0 justify-content-center">
+  <div class="row pl-0 justify-content-center pt-0">
     <div class="col-12 col-md-9 ml-0 pb-3 from-wrapper rounded" style="min-height:400px;">
       <div class="container pl-0 pr-0">
 
@@ -87,8 +87,8 @@
                     </div>
                   </div>
                   <?php if (count($existingDocs)): ?>
-                  <div class="col-12 col-sm-2"></div>
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm-4"></div>
+                  <div class="col-12 col-sm-4">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
                       <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="existingDocs" id="existingDocs">
@@ -109,14 +109,14 @@
                 </div>
                 <?php $decodedJson = json_decode($jsonTemplate, true);$temp = $decodedJson[$type]; ?>
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col-4">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
                         value="<?= isset($temp["cp-line3"]) ? $temp["cp-line3"] : '' ?>" maxlength="64">
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-4">
                     <div class="form-group">
                       <label class = "font-weight-bold text-muted" for="author-id">Author</label>
                       <select class="form-control selectpicker" data-live-search="true" data-size="8"
@@ -131,14 +131,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-sm-6">
-                    <div class="form-group">
-                      <label class="font-weight-bold text-muted" for="cp-line4">Document ID</label>
-                      <input type="text" class="form-control" name="cp-line4" id="cp-line4"
-                        value="<?= isset($temp["cp-line4"]) ? $temp["cp-line4"] : '' ?>">
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm-4">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line5">Revision</label>
                       <input type="text" class="form-control" name="cp-line5" id="cp-line5"
@@ -146,14 +139,25 @@
                     </div>
                   </div>
 
-
-                  <div class="col-12">
+                  <div class="col-12 col-sm-9">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-approval-matrix">Approval Matrix</label>
                       <input type="text" class="form-control" name="cp-approval-matrix" id="cp-approval-matrix"
                         value="<?= isset($temp["cp-approval-matrix"]) ? $temp["cp-approval-matrix"] : '' ?>">
                     </div>
                   </div>
+
+                  <div class="col-12 col-sm-3">
+                    <div class="form-group">
+                      <label class="font-weight-bold text-muted" for="cp-line4">Document ID</label>
+                      <input type="text" class="form-control" name="cp-line4" id="cp-line4"
+                        value="<?= isset($temp["cp-line4"]) ? $temp["cp-line4"] : '' ?>">
+                    </div>
+                  </div>
+                 
+
+
+                 
 
                   <div class="col-12">
                     <div class="form-group">
@@ -250,10 +254,10 @@
               <div class="col-12 col-sm-3"></div>
               <div class="col-12 col-sm-4">
                 <div class="form-group">
-                  <label class="font-weight-bold text-muted" for="status">Status</label>
+                  <!-- <label class="font-weight-bold text-muted" for="status">Status</label> -->
                   <select class="form-control" name="status" id="status">
-                    <option value="" disabled <?= isset($projectDocument['status']) ? '' : 'selected' ?>>
-                      Select
+                    <option value="" disabled >
+                      Select Status
                     </option>
                     <?php foreach ($planStatus as $key=>$value): ?>
                     <option
@@ -264,7 +268,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-12 col-sm-4 " style="margin-top:1.8rem">
+              <div class="col-12 col-sm-4 " >
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>

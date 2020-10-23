@@ -48,7 +48,7 @@
       $uri = service('uri');
      ?>
 
-    <div class="page-wrapper chiller-theme toggled">
+    <div class="page-wrapper chiller-theme toggled ">
     <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
       <i class="fas fa-bars"></i>
     </a>
@@ -163,17 +163,16 @@
       <!-- sidebar-content  -->
       <div class="sidebar-footer">
       <?php if (session()->get('is-admin')): ?>
+        <a href="/admin/settings">
+          <i class="fa fa-cog" style="font-size: 20px;" title="Settings"></i>
+          <span class="badge badge-pill badge-danger notification" style="font-size: 7px;">&nbsp;</span>
+        </a>
         <a href="/admin/users">
           <i class="fa fa-users" style="font-size: 20px;" title="Registered Users"></i>
-          <span class="badge badge-pill badge-warning notification" style="font-size: 7px;">!</span>
+          <span class="badge badge-pill badge-warning notification" style="font-size: 7px;">&nbsp;</span>
         </a>
+        
       <?php endif; ?>
-        <!-- 
-        <a href="#">
-          <i class="fa fa-envelope"></i>
-          <span class="badge badge-pill badge-success notification">7</span>
-        </a>
-         -->
         <a href="/profile">
           <i class="fa fa-id-badge" style="font-size: 20px;" title="My Profile"></i>
           <span class="badge badge-pill  badge-success notification" style="font-size: 7px;">&nbsp;</span>
