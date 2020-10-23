@@ -7,7 +7,7 @@
 </style>
 
   <div class="row pl-0 justify-content-center">
-    <div class="col-12 col-md-9 ml-0  mt-1 pt-3 pb-3 bg-white from-wrapper rounded">
+    <div class="col-12 col-md-9 ml-0 pb-3 from-wrapper rounded" style="min-height:400px;">
       <div class="container pl-0 pr-0">
 
         <?php if (session()->get('success') && (!isset($validation))): ?>
@@ -17,28 +17,17 @@
         <?php endif; ?>
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
 
-          <div class="row">
-            <div class="col-12 ">
+          <div class="row card-header pt-3 rounded" style="background-color: #fff;">
+            <div class="col-8 ">
               <h3><?= $formTitle ?></h3>
             </div>
-            
-          </div>
-          <hr>
-          <?php if (isset($validation)): ?>
-          <div class="col-12">
-            <div class="alert alert-danger" role="alert">
-              <?= $validation->listErrors() ?>
-            </div>
-          </div>
-          <?php endif; ?>
 
-
-          <div class="col-12 col-sm-6" style="margin:0 auto">
-            <div class="form-group">
-              <label class="font-weight-bold text-muted" for="type">Type</label>
-              <select class="form-control selectpicker" data-live-search="true" data-size="8" name="type" id="type">
+            <div class="col-4" >
+            <div class="form-group mb-0">
+              
+              <select class="form-control selectpicker" data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
                 <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
-                  Select
+                  Select Document Type
                 </option>
                 <?php foreach ($documentType as $key=>$value): ?>
                 <option
@@ -50,6 +39,19 @@
             </div>
 
           </div>
+            
+          </div>
+         
+          <?php if (isset($validation)): ?>
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              <?= $validation->listErrors() ?>
+            </div>
+          </div>
+          <?php endif; ?>
+
+
+       
 
 
           <?php if (isset($sections)): ?>
@@ -65,8 +67,8 @@
               </li>
             </ul>
 
-            <div class="tab-content pt-1 pl-0 pr-0" id="myTabContent">
-              <div class="tab-pane fade show active pl-3 pr-3" id="header" role="tabpanel" aria-labelledby="header-tab">
+            <div class="tab-content pt-1 pl-3 pr-3" id="myTabContent">
+              <div class="tab-pane fade show active " id="header" role="tabpanel" aria-labelledby="header-tab">
                 <div class="row">
                   <div class="col-12 col-sm-4">
                     <div class="form-group">
@@ -167,7 +169,7 @@
                   <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
               </div> -->
                 <?php foreach ($sections as $section): ?>
-                  <div class="col-12 mb-3 pl-0 pr-0">
+                  <div class="col-12 mb-3 pl-1 pr-1">
                     
                       <div class="card-header text-white bg-dark">
                         <div class="row" >
@@ -276,7 +278,7 @@
     </div>
     <?php if (isset($projectDocument['project-id'])): ?>
     <div class="col reviewDiv d-none"> 
-        <div class="from-wrapper mt-1 p-3 pb-3 bg-white rounded">
+        <div class="from-wrapper p-3 pb-3 bg-white rounded">
           <div class="row">
             <div class="col">
               <h3>Review Comments</h3>
