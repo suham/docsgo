@@ -8,7 +8,7 @@
 
   <div class="row pl-0 justify-content-center">
     <div class="col-12 col-md-9 ml-0  mt-1 pt-3 pb-3 bg-white from-wrapper rounded">
-      <div class="container">
+      <div class="container pl-0 pr-0">
 
         <?php if (session()->get('success') && (!isset($validation))): ?>
         <div class="alert alert-success" role="alert">
@@ -65,8 +65,8 @@
               </li>
             </ul>
 
-            <div class="tab-content p-4" id="myTabContent">
-              <div class="tab-pane fade show active mt-4" id="header" role="tabpanel" aria-labelledby="header-tab">
+            <div class="tab-content pt-1 pl-0 pr-0" id="myTabContent">
+              <div class="tab-pane fade show active pl-3 pr-3" id="header" role="tabpanel" aria-labelledby="header-tab">
                 <div class="row">
                   <div class="col-12 col-sm-4">
                     <div class="form-group">
@@ -167,21 +167,26 @@
                   <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
               </div> -->
                 <?php foreach ($sections as $section): ?>
-                  <div class="col-12 mb-3">
+                  <div class="col-12 mb-3 pl-0 pr-0">
                     
                       <div class="card-header text-white bg-dark">
                         <div class="row" >
 
                           <div class="col-6">
                             <div class="row">
-                              <?php if (isset($projectDocument['project-id'])): ?>
-                              <div class="col-2">
-                                <a href="#" class="btn btn-sm btn-warning" onclick="addComment('<?=$section['title']?>')" title="Add review comment">
-                                <i class="fas fa-comments text-dark"></i></a>
-                              </div>
-                              <?php endif; ?>
-                              <div class="col-8">
-                                <p class="lead "><?=  $section["title"] ?></p>
+                              <div class="col">
+                                <div class="input-group">
+                                  <?php if (isset($projectDocument['project-id'])): ?>
+                                  <div>
+                                    <div class="pr-3 pt-1">
+                                      <a href="#" class="btn btn-sm btn-outline-warning " onclick="addComment('<?=$section['title']?>')" title="Add review comment">
+                                        <i class="fas fa-list "></i>
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <?php endif; ?>
+                                  <p class="lead mb-0 pt-1 "><?=  $section["title"] ?></p> 
+                                </div>
                               </div>
                             </div>
                            
@@ -199,7 +204,7 @@
                                 </select>
                               </div>
                               <div class="col-1 ">
-                                <button type="button" class="btn btn-sm btn-success text-white float-right mt-1"
+                                <button type="button" class="btn btn-sm btn-outline-light float-right mt-1"
                                   onclick='insertTable("<?=  $section["id"] ?>","<?=$section["tableName"] ?>", "<?=  $section["contentColumns"] ?>" )'>
                                   Insert</button>
                               </div>
@@ -207,10 +212,10 @@
 
                             <?php if ($section["type"] == "differential"): ?>
                               <div class="col-6 ">
-                                <button type="button" id="btn_diff_eval_<?=  $section["id"] ?>" class="btn btn-sm btn-success text-white float-right mt-1"
+                                <button type="button" id="btn_diff_eval_<?=  $section["id"] ?>" class="btn btn-sm  btn-outline-light float-right mt-1"
                                   onclick='evaluteDiff("<?=  $section["id"] ?>", "show")'>
                                   Evaluate</button>
-                                <button type="button" id="btn_text_eval_<?=  $section["id"] ?>" class="btn btn-sm btn-success text-white float-right mt-1 d-none"
+                                <button type="button" id="btn_text_eval_<?=  $section["id"] ?>" class="btn btn-sm  btn-outline-light float-right mt-1 d-none"
                                   onclick='evaluteDiff("<?=  $section["id"] ?>", "hide")'>
                                   Edit</button>
                               </div>
