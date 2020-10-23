@@ -109,7 +109,7 @@
                 </div>
                 <?php $decodedJson = json_decode($jsonTemplate, true);$temp = $decodedJson[$type]; ?>
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-6">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
@@ -131,7 +131,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-sm-4">
+                  <div class="col-12 col-sm-2">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line5">Revision</label>
                       <input type="text" class="form-control" name="cp-line5" id="cp-line5"
