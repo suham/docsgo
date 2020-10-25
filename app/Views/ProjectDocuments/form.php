@@ -155,10 +155,6 @@
                     </div>
                   </div>
                  
-
-
-                 
-
                   <div class="col-12">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-change-history">Change History</label>
@@ -169,9 +165,9 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="section" role="tabpanel" aria-labelledby="section-tab">
-              <!-- <div class="d-flex flex-row-reverse ">
-                  <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
-              </div> -->
+                <!-- <div class="d-flex flex-row-reverse ">
+                    <a href="#" onclick="reloadSections()" class="btn btn-success mb-2"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                </div> -->
                 <?php foreach ($sections as $section): ?>
                   <div class="col-12 mb-3 pl-1 pr-1">
                     

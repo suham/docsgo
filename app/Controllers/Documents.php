@@ -250,7 +250,7 @@ class Documents extends BaseController
 			$rules = [
 				'type' => 'required',
 				'project-id' => 'required',
-				'cp-line3' => 'required|max_length[50]',
+				'cp-line3' => 'required|max_length[60]',
 				'author-id' =>'required',
                 'status' => 'required',
 			];	
@@ -258,7 +258,7 @@ class Documents extends BaseController
 			$errors = [
 				'cp-line3' => [
 					'required' => 'Title is required.',
-					'max_length' => 'Title should not be more than 50 characters',
+					'max_length' => 'Title should not be more than 60 characters',
 				]
 			];
 

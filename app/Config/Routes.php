@@ -37,6 +37,8 @@ $routes->match(['get','post'],'register', 'Users::register', ['filter' => 'noaut
 $routes->match(['get','post'],'profile', 'Users::profile',['filter' => 'auth']);
 $routes->match(['get','post'],'admin/users', 'Users::viewUsers',['filter' => 'auth']);
 $routes->post('admin/users/updateStatus', 'Users::updateAdminStatus',['filter' => 'auth']);
+$routes->match(['get','post'],'admin/settings', 'Settings::index',['filter' => 'auth']);
+$routes->post('admin/settings/addEnums', 'Settings::addEnums',['filter' => 'auth']);
 
 $routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
 

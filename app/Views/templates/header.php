@@ -59,7 +59,7 @@
           <a href="/projects" title="Project Data Reporting Tool" title="DocsGo">
             <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
           </a>
-          <div id="close-sidebar" class=" text-dark">
+          <div id="close-sidebar" class=" text-dark" style="padding: 16px;">
             <i class="fas fa-times" ></i>
           </div>
         </div>
