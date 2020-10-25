@@ -31,6 +31,18 @@ Project plan, test plan, impact analysis, and reviews.
 are used in assigning projects, reviews, and reviewed by fields in
 various pages.
 
+## Installation
+Docsgo is very easy to install and deploy in a Docker container. All setup related files are located in docsgo_docker folder.
+
+By default, the Docker will expose port 80, so change this within the Dockerfile if necessary. 
+
+```sh
+$ docker-compose up
+```
+
+Verify the deployment by navigating to your server address in your preferred browser.
+[http://localhost/](http://localhost)
+
 ## Dependencies
 `php-intl` and `php-zip` extensions should be installed for document generation.
 
