@@ -35,8 +35,8 @@
               <th scope="col">System</th>
               <th scope="col">Subsystem</th>
               <th scope="col">Test</th>
-              <th scope="col">Design</th>
-              <th scope="col">Code</th>
+              <!-- <th scope="col">Design</th>
+              <th scope="col">Code</th> -->
               <th scope="col" style="width:125px">Action</th>
             </tr>
           </thead>
@@ -48,8 +48,7 @@
                     <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
                     <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
                     <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
-                    <td><?php echo $row['design']; ?></td>
-                    <td><?php echo $row['code'];?></td>
+                   
                     <td style="width:125px">
                         <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
                             <i class="fa fa-edit"></i>
