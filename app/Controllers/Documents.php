@@ -282,6 +282,7 @@ class Documents extends BaseController
 			}
 			$decodedJson[$type]["sections"] = $sections;
 			$jsonObject = json_encode($decodedJson);
+			
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
@@ -305,6 +306,8 @@ class Documents extends BaseController
 					$newData['id'] = $id;
 					$message = 'Plan successfully updated.';
 				}else{
+					$documentCategory = $decodedJson[$type]["template-category"];
+					$newData['category'] = $documentCategory;
 					$message = 'Plan successfully added.';
 				}
 				

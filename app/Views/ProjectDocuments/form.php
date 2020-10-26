@@ -417,6 +417,16 @@
 
   });
 
+  $("#project-id").change(function(){
+    var type = $( "#type option:selected" ).text();
+    var projectName = $( "#project-id option:selected" ).text();
+    var title = $("#cp-line3").val();
+
+    if(title == ""){
+       $("#cp-line3").val(type+","+projectName);
+      }
+  });
+
   window.addEventListener("load", function(){
 
     setTimeout(function(){ 

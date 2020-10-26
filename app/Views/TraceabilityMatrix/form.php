@@ -22,7 +22,7 @@
             
             <div class="col-12 col-sm-6">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="userNeeds">User Needs</label>
+              <label class = "font-weight-bold text-muted" for="userNeeds" >User Needs</label>
               
               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="userNeeds[]" id="userNeeds" onchange="getIDDescription('#userNeeds')">
               <option value="" disabled <?= isset($member['userNeeds']) ? '' : 'selected' ?>>
@@ -57,17 +57,17 @@
               </div>
             </div>
 
-            <div class="col-12  col-sm-6">
+            <!-- <div class="col-12  col-sm-6">
               <div class="form-group">
                 <div id="sysreq_description"></div>
               </div>
-            </div>  
+            </div>   -->
 
 
             <div class="col-12   col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="subsysreq">Subsystem</label>
-              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq">
+              <select class="form-control selectpicker" data-live-search="true" data-size="8" multiple id="multiple-select-form2" name="subsysreq[]" id="subsysreq">
                   <option disabled value> Select Subsystem </option>
                   <?php foreach ($subSystemList as $key=>$value): ?>
                   <option 
@@ -78,32 +78,16 @@
               </div>
             </div>
 
-            <div class="col-12  col-sm-6">
+            <!-- <div class="col-12  col-sm-6">
               <div class="form-group">
                 <div id="subsysreq_description"></div>
               </div>
             </div>  
-
-            <div class="col-12">
-              <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="design">Design</label>
-              <input type="text" class="form-control" name="design" id="design"
-              value="<?= isset($member['design']) ? $member['design'] : '' ?>" >
-              </div>
-            </div>
-
-            <div class="col-12">
-              <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="code">Code</label>
-              <input type="text" class="form-control" name="code" id="code"
-              value="<?= isset($member['code']) ? $member['code'] : '' ?>" >
-              </div>
-            </div>
-
+             -->
             <div class="col-12 col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="testcase">Test</label>
-              <select class="form-control selectpicker" data-live-search="true" multiple id="multiple-select-form2" name="testcase[]" id="testcase">
+              <select class="form-control selectpicker" data-live-search="true" data-size="8"  multiple id="multiple-select-form2" name="testcase[]" id="testcase">
                   <option disabled value>Select Testcase</option>
                   <?php foreach ($testCases as $key=>$value): ?>
                   <option 
@@ -114,6 +98,24 @@
               </div>
             </div>
 
+            <div class="col-12">
+              <div class="form-group">
+              <label class = "font-weight-bold text-muted" for="design">Design</label>
+              <textarea name="design" id="design" class="form-control section_content"><?= isset($member['design']) ? $member['design'] : '' ?></textarea>
+             
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+              <label class = "font-weight-bold text-muted" for="code">Code</label>
+              <textarea  name="code" id="code" class="form-control section_content"><?= isset($member['code']) ? $member['code'] : '' ?></textarea>
+              
+              </div>
+            </div>
+
+        
+
             <div class="col-12  col-sm-6" >
               <div class="form-group">
                 <div id="testcase_description" style="border: 1ps solid black;"></div>
@@ -122,7 +124,6 @@
 
           </div>
 
-          <br/><br/><br/><br/>
           <div class="row">
             <div class="col-12 col-sm-4">
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -143,6 +144,9 @@
 <script>
   $(document).ready(function(){
     getIDDescription('#userNeeds');
+    
+    $('[data-toggle="popover"]').popover();
+
   });
 
  function getIDDescription(type){

@@ -4,7 +4,7 @@ use CodeIgniter\Model;
 
 class DocumentModel extends Model{
     protected $table = 'docsgo-documents';
-    protected $allowedFields = ["project-id","review-id","type","author-id", "update-date","json-object","file-name","status"];
+    protected $allowedFields = ["project-id","review-id","type","category","author-id", "update-date","json-object","file-name","status"];
     
     public function getProjects($type = ""){
         $db      = \Config\Database::connect();
