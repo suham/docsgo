@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Models\DropdownSettingsModel;
+use App\Models\SettingsModel;
 
 class Settings extends BaseController
 {
@@ -12,7 +12,7 @@ class Settings extends BaseController
         $data['addBtn'] = false;
         $data['backUrl'] = '/projects';
 
-        $model = new DropdownSettingsModel();
+        $model = new SettingsModel();
         $data['dropdownData'] = $model->where('type', 'dropdown')->findAll();		
         $data['configData'] = $model->where('type', 'url')->findAll();	
 
@@ -43,7 +43,7 @@ class Settings extends BaseController
                     echo json_encode($validation->getErrors());
                 }else{
                     $newData = ["id" => $id, "identifier" => $identifier, "options" => $options];
-                    $model = new DropdownSettingsModel();
+                    $model = new SettingsModel();
                     $model->save($newData);
                     $response = array('success' => "True");
                     echo json_encode($response);

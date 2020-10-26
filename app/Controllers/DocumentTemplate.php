@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Models\DocumentTemplateModel;
+use App\Models\SettingsModel;
 
 class DocumentTemplate extends BaseController
 {
@@ -73,6 +74,15 @@ class DocumentTemplate extends BaseController
 		$existingTypes = $model->getTypes();
 		$data['existingTypes'] = implode(",", array_keys($existingTypes));
 
+		$settingsModel = new SettingsModel();
+		 $templateCategory = $settingsModel->where("identifier","templateCategory")->first();
+		
+		 if($templateCategory["options"] != null){
+			$data["templateCategory"] = json_decode( $templateCategory["options"], true );
+		 }else{
+			$data["templateCategory"] = [];
+		 }
+		 
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Template";

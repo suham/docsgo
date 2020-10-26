@@ -59,7 +59,7 @@
                   <div class="col-12 col-sm-5 ">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="name">Name</label>
-                      <input type="text" class="form-control" name="name" id="name"
+                      <input type="text" class="form-control" name="name" id="name" required
                         value="<?= isset($documentTemplate['name']) ? $documentTemplate['name'] : '' ?>">
                     </div>
                   </div>
@@ -85,11 +85,28 @@
 
                   
 
-                  <div class="col-12 col-sm-12">
+                  <div class="col-12 col-sm-8">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
                         value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-4">
+                    <div class="form-group">
+                      <label class="font-weight-bold text-muted" for="template-category">Category</label>
+                      <select class="form-control selectpicker" id="template-category"  name="template-category" >
+                        <option value="" disabled <?= isset($template["template-category"]) ? '' : 'selected' ?>>
+                          Select Category
+                        </option>
+                        <?php foreach ($templateCategory as $category): ?>
+                        <option
+                          <?= isset($template["template-category"]) ? (($template["template-category"] == $category["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $category["value"] ?>"><?=  $category["value"] ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    
                     </div>
                   </div>
                   
@@ -155,7 +172,7 @@
                     </button>
                   </div>
                   <div class="col col-lg-2">
-                    <a onclick="addSection()" title="Add Section" class="btn btn-success float-right">
+                    <a onclick="addSection('NEW')" title="Add Section" class="btn btn-success float-right">
                       <i class="fa fa-plus text-light"></i>
                     </a>
                   </div>
@@ -217,7 +234,7 @@ $(document).ready(function(){
       var sectionContentColumns = sections[i].contentColumns;
       
 
-      addSection();
+      addSection("EXISTING");
 
       $(`#title_${sectionID}`).val(sectionTitle);
       $(`#type_${sectionID}`).val(sectionType);
@@ -264,19 +281,22 @@ $(document).ready(function(){
 });
 
 $("#section-tab").click(function(){
-    setTimeout(function(){ 
-      for(var z =1; z<=sections.length; z++){
-        var contentName = 'content_'+z;
-        var $cm = $('textarea[name="'+contentName+'"]').nextAll('.CodeMirror')[0].CodeMirror;
-        $cm.refresh();
-      }
-    }, 500);
+    if(sections != undefined){
+      setTimeout(function(){ 
+        for(var z =1; z<=sections.length; z++){
+          var contentName = 'content_'+z;
+          var $cm = $('textarea[name="'+contentName+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+          $cm.refresh();
+        }
+      }, 500);
+    }
   });
 
 function submitForm(){
   var name = $("#name").val().trim();
   var name_arr = name.toLowerCase().split(',');
   var type = "";
+  var templateCategory = $("#template-category").val();
 
   if(templateType == ""){
     if(name_arr.length){
@@ -301,6 +321,8 @@ function submitForm(){
   }else if(spaceCheck(name))
   {
    $('.alert-div').html(returnAlert('Name should not contain spaces.'));
+  }else if(templateCategory == null){
+    $('.alert-div').html(returnAlert('Please assign a "Category" to the template.'));
   }else{
     var cp_icon = "";
     var cp_line1 = $("#cp-line1").val();
@@ -320,7 +342,7 @@ function submitForm(){
     if(sectionArray.length){
       var sectionsJson = sectionArray;
       
-      var template_json_object = {"cp-icon":cp_icon, "cp-line1": cp_line1, "cp-line2": cp_line2, "cp-line3": cp_line3,
+      var template_json_object = {"cp-icon":cp_icon, "template-category": templateCategory, "cp-line1": cp_line1, "cp-line2": cp_line2, "cp-line3": cp_line3,
         "cp-line4": cp_line4, "cp-line5": cp_line5, "cp-approval-matrix": cp_approval_matrix, "cp-change-history": cp_change_history,
         "section-font": section_font, "section-font-size": section_font_size, "sections": sectionsJson };
       var mainJson = {};
@@ -407,7 +429,7 @@ function createSectionBody(){
   return body;
 }
 
-function addSection(){
+function addSection(flag){
  
   var header = createSectionHeader();
   var body = createSectionBody();
@@ -422,6 +444,28 @@ function addSection(){
   $(".sections-container").append(card);
   $(".section_table").selectpicker();
   $("#totalSections").text(sectionCount.toString());
+  // var $cm = $('textarea[name="content_'+sectionID+'"]').nextAll('.CodeMirror')[0];
+  // if ($cm == undefined){
+    
+  // }
+  if(flag == "NEW"){
+    var simplemde = new SimpleMDE({
+            element: $(`#content_${sectionID}`)[0],
+            status: [{
+                     className: "characters",
+                     defaultValue: function(el) {
+                        el.innerHTML = "0";
+                     },
+                     onUpdate: function(el) {
+                        el.innerHTML = simplemde.value().length;
+                     }
+                  }],
+            showIcons: ["code", "table"],
+      });
+    
+  }
+
+    
 }
 
 function deleteSection(id){

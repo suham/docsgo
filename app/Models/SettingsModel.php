@@ -2,7 +2,7 @@
 
 use CodeIgniter\Model;
 
-class DropdownSettingsModel extends Model{
+class SettingsModel extends Model{
     protected $table = 'docsgo-settings';
     protected $allowedFields = ['type', 'identifier', 'options'];
 }
