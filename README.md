@@ -45,6 +45,11 @@ Verify the deployment by navigating to your server address in your preferred bro
 
 ## Dependencies
 `php-intl` and `php-zip` extensions should be installed for document generation.
+To avoid truncating of requirements and testcases mapping in Traceability matrix add this line to `/etc/mysql/my.cnf`
+```sql
+[mysqld]
+group_concat_max_len=15000
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
