@@ -178,7 +178,6 @@ class Reviews extends BaseController
 				"context" => 'required|max_length[60]',
 				"description" => 'required',
 				"review-by" =>'required',
-				"review-ref" => 'max_length[500]',
 				"status" => 'required',
 				"category" => 'required',
 			];
@@ -186,9 +185,6 @@ class Reviews extends BaseController
 			$errors = [
 				'description' => [
 					'required' => 'Review Comment is required.',
-				],
-				'review-ref' => [
-					'max_length' => "Author's should not exceed 500 characters",
 				]
 			];
 
@@ -196,6 +192,7 @@ class Reviews extends BaseController
 				"assigned-to" => $this->request->getVar('assigned-to'),
 				"context" => $this->request->getVar('context'),
 				"description" => $this->request->getVar('description'),
+				"code-diff" => $this->request->getVar('code-diff'),
 				"project-id" => $this->request->getVar('project-id'),
 				"review-by" =>$this->request->getVar('review-by'),
 				"review-name" =>$this->request->getVar('review-name'),
