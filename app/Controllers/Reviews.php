@@ -4,6 +4,7 @@ use App\Models\ReviewModel;
 use App\Models\ProjectModel;
 use App\Models\TeamModel;
 use App\Models\DocumentModel;
+use App\Models\SettingsModel;
 
 class Reviews extends BaseController
 {
@@ -14,9 +15,30 @@ class Reviews extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/reviews/add";
 
+		$settingsModel = new SettingsModel();
+		$reviewStatus = $settingsModel->where("identifier","documentStatus")->first();
+		if($reviewStatus["options"] != null){
+			$data["reviewStatus"] = json_decode( $reviewStatus["options"], true );
+		 }else{
+			$data["reviewStatus"] = [];
+		 }
+
+		$view = $this->request->getVar('view');
 		$model = new ReviewModel();
-		$data['data'] = $model->orderBy('updated-at', 'desc')->findAll();	
+
+		if($view == ''){
+			$reviewStatusOptions = json_decode( $reviewStatus["options"], true );
+			if($reviewStatusOptions != null){
+				$selectedStatus = $reviewStatusOptions[0]["value"];
+				$data['data'] = $model->where("status",$selectedStatus)->orderBy('updated-at', 'desc')->findAll();			
+				$data['selectedStatus'] = $selectedStatus;
+			}
+		}else{
+			$data['data'] = $model->where("status",$view)->orderBy('updated-at', 'desc')->findAll();	
+			$data['selectedStatus'] = $view;
+		}
 		
+
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
@@ -126,8 +148,15 @@ class Reviews extends BaseController
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
-		$data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];
-		
+		// $data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];
+		$settingsModel = new SettingsModel();
+		$reviewStatus = $settingsModel->where("identifier","documentStatus")->first();
+		if($reviewStatus["options"] != null){
+			$data["reviewStatus"] = json_decode( $reviewStatus["options"], true );
+		 }else{
+			$data["reviewStatus"] = [];
+		 }
+
 		$data['categoryList'] = ["User Needs", "Plan", "Requirements", "Design",
 		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 

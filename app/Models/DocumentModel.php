@@ -6,12 +6,16 @@ class DocumentModel extends Model{
     protected $table = 'docsgo-documents';
     protected $allowedFields = ["project-id","review-id","type","category","author-id", "update-date","json-object","file-name","status"];
     
-    public function getProjects($type = ""){
+    public function getProjects($type = "", $status = ""){
         $db      = \Config\Database::connect();
         
         $whereCondition = "";
         if($type != ""){
             $whereCondition = "WHERE docs.`type` = '".$type."' ";
+        }
+
+        if($status != ""){
+            $whereCondition = "WHERE docs.`status` = '".$status."' ";
         }
 
         $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, team.`name` as `author`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`

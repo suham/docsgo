@@ -32,9 +32,11 @@
                           <a href="/documents-master/add/<?php echo $row['id'];?>" class="btn btn-warning">
                               <i class="fa fa-edit"></i>
                           </a>
+                          <?php if (session()->get('is-admin')): ?>
                           <a onclick="deleteDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                               <i class="fa fa-trash text-light"></i>
                           </a>
+                          <?php endif; ?>
                       </td>
                   </tr>
               <?php endforeach; ?>

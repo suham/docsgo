@@ -255,10 +255,10 @@
                     <option value="" disabled >
                       Select Status
                     </option>
-                    <?php foreach ($planStatus as $key=>$value): ?>
-                    <option
-                      <?= isset($projectDocument['status']) ? (($projectDocument['status'] == $value) ? 'selected': '') : '' ?>
-                      value="<?=  $value ?>"><?=  $value ?></option>
+                    <?php foreach ($documentStatus as $docStatus): ?>
+                        <option
+                          <?= isset($projectDocument["status"]) ? (($projectDocument["status"] == $docStatus["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $docStatus["value"] ?>"><?=  $docStatus["value"] ?></option>
                     <?php endforeach; ?>
 
                   </select>

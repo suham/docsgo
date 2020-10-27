@@ -134,13 +134,13 @@
                   <div class="form-group">
                     <label class = "font-weight-bold text-muted" for="status">Status</label>
                     <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="status" id="status">
-                      <option value="" disabled <?= isset($review['status']) ? '' : 'selected' ?>>
+                      <option value="" disabled >
                           Select
                       </option>
-                      <?php foreach ($reviewStatus as $value): ?>
+                      <?php foreach ($reviewStatus as $rev): ?>
                         <option 
-                          <?= isset($review['status']) ? (($review['status'] == $value) ? 'selected': '') : '' ?>
-                          value="<?=  $value ?>" ><?=  $value ?></option>
+                          <?= isset($review['status']) ? (($review['status'] == $rev["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $rev["value"] ?>" ><?=  $rev["value"] ?></option>
                       <?php endforeach; ?>
                       
                     </select>

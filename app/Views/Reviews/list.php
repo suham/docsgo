@@ -1,10 +1,28 @@
 
-
+<?php
+  $uri = service('uri');
+?>
+<div class="row ">
+    <div class="col-12">
+      <div class="btn-group btn-group-toggle">
+        <?php foreach ($reviewStatus as $revStatus): ?>
+          <a href="/reviews?view=<?=  $revStatus["value"] ?>" 
+            class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+            <?=  $revStatus["value"] ?>
+          </a>
+        <?php endforeach; ?>
+      </div>
+      
+    </div>
+</div>
 <div class="row">
+
 <?php if (count($data) == 0): ?>
 
-  <div class="alert alert-warning" role="alert">
-    No records found.
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      No records found.
+    </div>
   </div>
 
   <?php else: ?>
@@ -18,7 +36,6 @@
             <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
             <th scope="col" style="min-width:120px;">Assigned To</th>
             <th scope="col">Category</th>
-            <th scope="col">Status</th>
             <th scope="col" style="min-width:120px;">Reviewed By</th>
             <th scope="col" style="min-width: 100px;">Actions</th>
           </tr>
@@ -32,16 +49,6 @@
                   <td style="max-width:570px;word-wrap: break-word;"><?php echo $row['context'];?></td>
                   <td><?php echo $teamMembers[$row['assigned-to']];?></td>
                   <td><?php echo $row['category'];?></td>
-                  <td>
-                    <button type="button" 
-                            style="cursor: unset;"
-                            class=" mt-1 btn btn-sm btn-outline-<?php
-                            echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Request Change' ? 'danger' : 'info');
-                            //  echo $row['status'] == 'Accepted' ? 'success' : ($row['status'] == 'Rejected' ? 'danger' : 'info');
-                            ?>">
-                            <?php echo $row['status'];?>
-                    </button>
-                  </td>
                   <td><?php echo $teamMembers[$row['review-by']];?></td>
                   <td>
                       <a href="/reviews/add/<?php echo $row['id'];?>" class="btn btn-warning">

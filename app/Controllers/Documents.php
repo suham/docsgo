@@ -10,6 +10,7 @@ use App\Models\RequirementsModel;
 use App\Models\TraceabilityMatrixModel;
 use App\Models\RiskAssessmentModel;
 use App\Models\AcronymsModel;
+use App\Models\SettingsModel;
 class Documents extends BaseController
 {
     public function index()
@@ -19,7 +20,29 @@ class Documents extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/documents/add";
 
-		$data['data'] = $this->getExistingDocs();
+		$settingsModel = new SettingsModel();
+		$documentStatus = $settingsModel->where("identifier","documentStatus")->first();
+		if($documentStatus["options"] != null){
+			$data["documentStatus"] = json_decode( $documentStatus["options"], true );
+		 }else{
+			$data["documentStatus"] = [];
+		 }
+
+		$view = $this->request->getVar('view');
+
+		if($view == ''){
+			$documentStatusOptions = json_decode( $documentStatus["options"], true );
+			if($documentStatusOptions != null){
+				$selectedStatus = $documentStatusOptions[0]["value"];
+				$data['data'] = $this->getExistingDocs("",$selectedStatus);			
+				$data['selectedStatus'] = $selectedStatus;
+			}
+			
+		}else{
+			$data['data'] = $this->getExistingDocs("", $view);
+			$data['selectedStatus'] = $view;
+		}
+		
 		$data['projects'] = $this->getProjects();
 
 		echo view('templates/header');
@@ -54,9 +77,9 @@ class Documents extends BaseController
 		echo view('templates/footer');
 	}
 
-	private function getExistingDocs($type = ""){
+	private function getExistingDocs($type = "", $status = ""){
 		$model = new DocumentModel();
-		$documents= $model->getProjects($type);
+		$documents= $model->getProjects($type, $status);
 		for($i=0; $i<count($documents);$i++){
 			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
 		}
@@ -182,7 +205,14 @@ class Documents extends BaseController
 		$data['pageTitle'] = 'Documents';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents";
-		$data['planStatus'] = ['Draft', 'Approved', 'Rejected'];
+		$settingsModel = new SettingsModel();
+		$documentStatus = $settingsModel->where("identifier","documentStatus")->first();
+		if($documentStatus["options"] != null){
+			$data["documentStatus"] = json_decode( $documentStatus["options"], true );
+		 }else{
+			$data["documentStatus"] = [];
+		 }
+		// $data['planStatus'] = ['Draft', 'Approved', 'Rejected'];
 		$data['projects'] = $this->getProjects();
 		$data['template'] = "";
 		$data['type'] = $type;
