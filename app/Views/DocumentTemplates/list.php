@@ -14,9 +14,8 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <?php if (session()->get('is-admin')): ?>
-                  <th scope="col" style="min-width:125px;">Action</th>
-                <?php endif; ?>
+                <th scope="col" style="min-width:125px;">Action</th>
+                
               </tr>
             </thead>
             <tbody class="bg-white ">
@@ -24,16 +23,18 @@
               <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $row['name'];?></td>
-                <?php if (session()->get('is-admin')): ?>
+              
                 <td>
                   <a href="/documents-templates/add/<?php echo $row['id'];?>" class="btn btn-warning">
                     <i class="fa fa-edit"></i>
                   </a>
+                  <?php if (session()->get('is-admin')): ?>
                   <a onclick="deleteTemplate(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                     <i class="fa fa-trash text-light"></i>
                   </a>
+                  <?php endif; ?>
                 </td>
-                <?php endif; ?>
+                
               </tr>
               <?php endforeach; ?>
             </tbody>
