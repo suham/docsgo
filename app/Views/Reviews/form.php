@@ -186,7 +186,7 @@ var review;
   $(document).ready(function () {
     <?php if (isset($review)): ?>
       review = <?= json_encode($review) ?>;
-      if(review["code-diff"] != null){
+      if(review["code-diff"] != null && review["code-diff"] != ""){
         var differential = review["code-diff"];
           $('#code-diff').val(differential)
         setTimeout(function(){ 
