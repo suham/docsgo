@@ -42,30 +42,31 @@
                         </div>
                         <div class="col-12 col-sm-4 ">
                             <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="template-category-list"
-                                    data-toggle="list" href="#templateCategoryList" role="tab"
-                                    aria-controls="home">Template Category</a>
-                                <a class="list-group-item list-group-item-action" id="document-status-list"
+                                <a class="list-group-item list-group-item-action active" id="document-status-list"
                                     data-toggle="list" href="#documentStatusList" role="tab"
                                     aria-controls="profile">Document Status</a>
+
+                                <a class="list-group-item list-group-item-action" id="review-category-list"
+                                    data-toggle="list" href="#reviewCategoryList" role="tab"
+                                    aria-controls="profile">Review Category</a>
+                                
+                                <a class="list-group-item list-group-item-action" id="risk-category-list"
+                                    data-toggle="list" href="#riskCategoryList" role="tab"
+                                    aria-controls="profile">Risk Category</a>
+
+                                <a class="list-group-item list-group-item-action " id="template-category-list"
+                                    data-toggle="list" href="#templateCategoryList" role="tab"
+                                    aria-controls="home">Template Category</a>
+
+                                <a class="list-group-item list-group-item-action" id="user-role-list"
+                                    data-toggle="list" href="#userRoleList" role="tab"
+                                    aria-controls="profile">User Role</a>
                             </div>
                         </div>
                         <div class="col-12 col-sm-8 pt-4 pt-sm-0">
                             <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="templateCategoryList" role="tabpanel"
-                                    aria-labelledby="template-category-list">
-                                    
-                                    <div class="row ">
-                                        <div class="col-10">
-                                            <ul class="list-group templateCategory"></ul>
-                                        </div>
-                                        <div class="col-2">
-                                            <button class="btn btn-primary"
-                                                onclick="addValue('Template Category', 'templateCategory')">Add</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="documentStatusList" role="tabpanel"
+
+                                <div class="tab-pane fade show active" id="documentStatusList" role="tabpanel"
                                     aria-labelledby="document-status-list">
                                     
                                     <div class="row ">
@@ -78,6 +79,63 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="riskCategoryList" role="tabpanel"
+                                    aria-labelledby="risk-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-10">
+                                            <ul class="list-group riskCategory"></ul>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Risk Category', 'riskCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="reviewCategoryList" role="tabpanel"
+                                    aria-labelledby="review-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-10">
+                                            <ul class="list-group reviewCategory"></ul>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Review Category', 'reviewCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade  " id="templateCategoryList" role="tabpanel"
+                                    aria-labelledby="template-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-10">
+                                            <ul class="list-group templateCategory"></ul>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Template Category', 'templateCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="userRoleList" role="tabpanel"
+                                    aria-labelledby="review-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-10">
+                                            <ul class="list-group userRole"></ul>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('User Role', 'userRole')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -19,9 +19,9 @@ class Reviews extends BaseController
 		$reviewStatus = $settingsModel->where("identifier","documentStatus")->first();
 		if($reviewStatus["options"] != null){
 			$data["reviewStatus"] = json_decode( $reviewStatus["options"], true );
-		 }else{
-			$data["reviewStatus"] = [];
-		 }
+		}else{
+		$data["reviewStatus"] = [];
+		}
 
 		$view = $this->request->getVar('view');
 		$model = new ReviewModel();
@@ -157,8 +157,15 @@ class Reviews extends BaseController
 			$data["reviewStatus"] = [];
 		 }
 
-		$data['categoryList'] = ["User Needs", "Plan", "Requirements", "Design",
-		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
+		$reviewCategory = $settingsModel->where("identifier","reviewCategory")->first();
+		if($reviewCategory["options"] != null){
+			$data["reviewCategory"] = json_decode( $reviewCategory["options"], true );
+		}else{
+		$data["reviewCategory"] = [];
+		}
+
+		// $data['categoryList'] = ["User Needs", "Plan", "Requirements", "Design",
+		//  "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 
 		if($id == ""){
 			$data['action'] = "add";

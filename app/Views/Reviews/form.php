@@ -45,12 +45,13 @@
                     <option value="" disabled <?= isset($review['category']) ? '' : 'selected' ?>>
                         Select
                     </option>
-                    <?php foreach ($categoryList as $value): ?>
-                      <option 
-                        <?= isset($review['category']) ? (($review['category'] == $value) ? 'selected': '') : '' ?>
-                        value="<?=  $value ?>" ><?=  $value ?></option>
+
+                    <?php foreach ($reviewCategory as $revCat): ?>
+                        <option 
+                          <?= isset($review['category']) ? (($review['category'] == $revCat["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $revCat["value"] ?>" ><?=  $revCat["value"] ?></option>
                     <?php endforeach; ?>
-                    
+
                   </select>
                 </div>
             </div>

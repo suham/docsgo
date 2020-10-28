@@ -30,8 +30,19 @@
             <div class="col-12  col-sm-6">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="role">Role</label>
-              <input type="text" class="form-control" name="role" id="role"
-              value="<?= isset($member['role']) ? $member['role'] : '' ?>" >
+              <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="role" id="role">
+                  <option value="" disabled <?= isset($member['role']) ? '' : 'selected' ?>>
+                      Select
+                  </option>
+
+                  <?php foreach ($userRole as $user_role): ?>
+                      <option 
+                        <?= isset($member['role']) ? (($member['role'] == $user_role["value"]) ? 'selected': '') : '' ?>
+                        value="<?=  $user_role["value"] ?>" ><?=  $user_role["value"] ?></option>
+                  <?php endforeach; ?>
+
+                </select>
+
               </div>
             </div>
 

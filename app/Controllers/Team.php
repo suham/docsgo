@@ -1,6 +1,8 @@
 <?php namespace App\Controllers;
 
 use App\Models\TeamModel;
+use App\Models\SettingsModel;
+
 class Team extends BaseController
 {
 	public function index()
@@ -39,6 +41,14 @@ class Team extends BaseController
 		$data['pageTitle'] = 'Team';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/team";
+
+		$settingsModel = new SettingsModel();
+		$userRole = $settingsModel->where("identifier","userRole")->first();
+		if($userRole["options"] != null){
+			$data["userRole"] = json_decode( $userRole["options"], true );
+		}else{
+			$data["userRole"] = [];
+		}
 
 		if($id == ""){
 			$data['action'] = "add";
