@@ -25,7 +25,7 @@
             <div class="col-4" >
               <div class="form-group mb-0">
                 
-                <select class="form-control selectpicker" <?= isset($projectDocument["id"]) ? 'disabled' : '' ?> data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
+                <select class="form-control selectpicker" data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
                   <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
                     Select Document Type
                   </option>

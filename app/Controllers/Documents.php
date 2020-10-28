@@ -51,19 +51,6 @@ class Documents extends BaseController
 			$data['selectedProject'] = $project_id;
 			$data['selectedStatus'] = $view;
 		}
-
-		// if($view == ''){
-		// 	$documentStatusOptions = json_decode( $documentStatus["options"], true );
-		// 	if($documentStatusOptions != null){
-		// 		$selectedStatus = $documentStatusOptions[0]["value"];
-		// 		$data['data'] = $this->getExistingDocs("",$selectedStatus);			
-		// 		$data['selectedStatus'] = $selectedStatus;
-		// 	}
-			
-		// }else{
-		// 	$data['data'] = $this->getExistingDocs("", $view);
-		// 	$data['selectedStatus'] = $view;
-		// }
 		
 		$data['projects'] = $this->getProjects();
 
