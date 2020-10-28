@@ -23,25 +23,47 @@ class Documents extends BaseController
 		$settingsModel = new SettingsModel();
 		$documentStatus = $settingsModel->where("identifier","documentStatus")->first();
 		if($documentStatus["options"] != null){
-			$data["documentStatus"] = json_decode( $documentStatus["options"], true );
-		 }else{
-			$data["documentStatus"] = [];
-		 }
+			$documentStatusOptions = json_decode( $documentStatus["options"], true );
+			$data["documentStatus"] = $documentStatusOptions;
+		}else{
+		$data["documentStatus"] = [];
+		}
 
 		$view = $this->request->getVar('view');
+		$project_id = $this->request->getVar('project_id');
 
-		if($view == ''){
-			$documentStatusOptions = json_decode( $documentStatus["options"], true );
+		if($view == '' || $project_id == ''){
+			//Initial Case
+			$projectModel = new ProjectModel();
+			$activeProject = $projectModel->where("status","Active")->first();	
+			$selectedProject = $activeProject['project-id'];
+			$data['selectedProject'] = $selectedProject;
+
+			// $documentStatusOptions = json_decode( $documentStatus["options"], true );
 			if($documentStatusOptions != null){
 				$selectedStatus = $documentStatusOptions[0]["value"];
-				$data['data'] = $this->getExistingDocs("",$selectedStatus);			
+				$data['data'] = $this->getExistingDocs("",$selectedStatus,$selectedProject);			
 				$data['selectedStatus'] = $selectedStatus;
 			}
-			
+
 		}else{
-			$data['data'] = $this->getExistingDocs("", $view);
+			$data['data'] = $this->getExistingDocs("",$view,$project_id);	
+			$data['selectedProject'] = $project_id;
 			$data['selectedStatus'] = $view;
 		}
+
+		// if($view == ''){
+		// 	$documentStatusOptions = json_decode( $documentStatus["options"], true );
+		// 	if($documentStatusOptions != null){
+		// 		$selectedStatus = $documentStatusOptions[0]["value"];
+		// 		$data['data'] = $this->getExistingDocs("",$selectedStatus);			
+		// 		$data['selectedStatus'] = $selectedStatus;
+		// 	}
+			
+		// }else{
+		// 	$data['data'] = $this->getExistingDocs("", $view);
+		// 	$data['selectedStatus'] = $view;
+		// }
 		
 		$data['projects'] = $this->getProjects();
 
@@ -77,9 +99,9 @@ class Documents extends BaseController
 		echo view('templates/footer');
 	}
 
-	private function getExistingDocs($type = "", $status = ""){
+	private function getExistingDocs($type = "", $status = "", $project_id = ""){
 		$model = new DocumentModel();
-		$documents= $model->getProjects($type, $status);
+		$documents= $model->getProjects($type, $status, $project_id);
 		for($i=0; $i<count($documents);$i++){
 			$documents[$i]['json-object'] = json_decode($documents[$i]['json-object'], true);
 		}

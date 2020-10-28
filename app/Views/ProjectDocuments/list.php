@@ -3,19 +3,33 @@
   $uri = service('uri');
 ?>
 <div class="container">
+
   <div class="row mb-3">
-      <div class="col-12">
-        <div class="btn-group btn-group-toggle">
-          <?php foreach ($documentStatus as $docStatus): ?>
-            <a href="/documents?view=<?=  $docStatus["value"] ?>" 
-              class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-light") ?>">
-              <?=  $docStatus["value"] ?>
-            </a>
-          <?php endforeach; ?>
-        </div>
-        
+    <div class="col-9">
+      <div class="btn-group btn-group-toggle">
+        <?php foreach ($documentStatus as $docStatus): ?>
+          <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+            <input type="radio" name="view" value="<?=  $docStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $docStatus["value"]) ? "checked" : "") ?>>  <?=  $docStatus["value"] ?>
+          </label>
+        <?php endforeach; ?>
       </div>
+      
+    </div>
+    <div class="col-3" >
+      <div class="form-group mb-0">
+        <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
+          <option value="" disabled >
+            Select Project
+          </option>
+          <?php foreach ($projects as $key=>$value): ?>
+            <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+    </div>
   </div>
+  
 <?php if (count($data) == 0): ?>
 
   <div class="alert alert-warning" role="alert">
@@ -30,7 +44,6 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Project</th>
           <th scope="col">Title</th>
           <th scope="col">Author</th>
           <th scope="col" style="min-width: 125px;">Update Date</th>
@@ -41,7 +54,6 @@
         <?php foreach ($data as $key=>$row): ?>
             <tr scope="row" id="<?php echo $row['id'];?>">
                 <td><?php echo $key+1; ?></td>
-                <td><?php echo $projects[$row['project-id']];?></td>
                 <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
                 <td><?php echo $row['author'];?></td>
                 <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
@@ -101,6 +113,13 @@
     });
 
  }
+
+ function getData(){
+    var selectedView = $("input[name='view']:checked").val();
+    var selectedProjectId = $("#projects").val();
+    var url = `documents?view=${selectedView}&project_id=${selectedProjectId}`
+    window.location = url;
+  }
 
 </script>
 

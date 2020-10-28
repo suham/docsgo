@@ -20,21 +20,33 @@ class Reviews extends BaseController
 		if($reviewStatus["options"] != null){
 			$data["reviewStatus"] = json_decode( $reviewStatus["options"], true );
 		}else{
-		$data["reviewStatus"] = [];
+			$data["reviewStatus"] = [];
 		}
 
 		$view = $this->request->getVar('view');
+		$project_id = $this->request->getVar('project_id');
+
 		$model = new ReviewModel();
 
-		if($view == ''){
+		if($view == '' || $project_id == ''){
+			//Initial Case
+			$projectModel = new ProjectModel();
+			$activeProject = $projectModel->where("status","Active")->first();	
+			$selectedProject = $activeProject['project-id'];
+			$data['selectedProject'] = $selectedProject;
+
 			$reviewStatusOptions = json_decode( $reviewStatus["options"], true );
 			if($reviewStatusOptions != null){
 				$selectedStatus = $reviewStatusOptions[0]["value"];
-				$data['data'] = $model->where("status",$selectedStatus)->orderBy('updated-at', 'desc')->findAll();			
+				$data['data'] = $model->where("status",$selectedStatus)
+									  ->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();			
 				$data['selectedStatus'] = $selectedStatus;
 			}
+
 		}else{
-			$data['data'] = $model->where("status",$view)->orderBy('updated-at', 'desc')->findAll();	
+			$data['data'] = $model->where("status",$view)
+								  ->where("project-id",$project_id)->orderBy('updated-at', 'desc')->findAll();	
+			$data['selectedProject'] = $project_id;
 			$data['selectedStatus'] = $view;
 		}
 		

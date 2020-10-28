@@ -3,16 +3,28 @@
   $uri = service('uri');
 ?>
 <div class="row ">
-    <div class="col-12">
+    <div class="col-9">
       <div class="btn-group btn-group-toggle">
         <?php foreach ($reviewStatus as $revStatus): ?>
-          <a href="/reviews?view=<?=  $revStatus["value"] ?>" 
-            class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
-            <?=  $revStatus["value"] ?>
-          </a>
+          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+            <input type="radio" name="view" value="<?=  $revStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $revStatus["value"]) ? "checked" : "") ?>>  <?=  $revStatus["value"] ?>
+          </label>
         <?php endforeach; ?>
       </div>
       
+    </div>
+    <div class="col-3" >
+      <div class="form-group mb-0">
+        <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
+          <option value="" disabled >
+            Select Project
+          </option>
+          <?php foreach ($projects as $key=>$value): ?>
+            <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
     </div>
 </div>
 <div class="row">
@@ -31,7 +43,6 @@
         <thead>
           <tr>
             <th scope="col" >#</th>
-            <th scope="col">Project</th>
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
             <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
             <th scope="col" style="min-width:120px;">Assigned To</th>
@@ -44,7 +55,6 @@
           <?php foreach ($data as $key=>$row): ?>
               <tr scope="row" id="<?php echo $row['id'];?>">
                   <td><?php echo $key+1; ?></td>
-                  <td><?php echo $projects[$row['project-id']];?></td>
                   <td style="max-width:125px;word-wrap: break-word;"><?php echo $row['review-name'];?></td>
                   <td style="max-width:570px;word-wrap: break-word;"><?php echo $row['context'];?></td>
                   <td><?php echo $teamMembers[$row['assigned-to']];?></td>
@@ -105,6 +115,13 @@
         "autoWidth": false
       });
     });
+
+  function getData(){
+    var selectedView = $("input[name='view']:checked").val();
+    var selectedProjectId = $("#projects").val();
+    var url = `reviews?view=${selectedView}&project_id=${selectedProjectId}`
+    window.location = url;
+  }
 
 
 </script>

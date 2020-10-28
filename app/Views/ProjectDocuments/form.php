@@ -23,22 +23,22 @@
             </div>
 
             <div class="col-4" >
-            <div class="form-group mb-0">
-              
-              <select class="form-control selectpicker" data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
-                <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
-                  Select Document Type
-                </option>
-                <?php foreach ($documentType as $key=>$value): ?>
-                <option
-                  <?= isset($projectDocument["type"]) ? (($projectDocument["type"] == $key) ? 'selected readonly': '') : '' ?>
-                  value="<?=  $key ?>"><?=  $value ?></option>
-                <?php endforeach; ?>
+              <div class="form-group mb-0">
+                
+                <select class="form-control selectpicker" <?= isset($projectDocument["id"]) ? 'disabled' : '' ?> data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
+                  <option value="" disabled <?= isset($projectDocument["type"]) ? '' : 'selected' ?>>
+                    Select Document Type
+                  </option>
+                  <?php foreach ($documentType as $key=>$value): ?>
+                  <option
+                    <?= isset($projectDocument["type"]) ? (($projectDocument["type"] == $key) ? 'selected': '') : '' ?>
+                    value="<?=  $key ?>"><?=  $value ?></option>
+                  <?php endforeach; ?>
 
-              </select>
+                </select>
+              </div>
+
             </div>
-
-          </div>
             
           </div>
          
@@ -88,7 +88,7 @@
                   </div>
                   <?php if (count($existingDocs)): ?>
                   <div class="col-12 col-sm-4"></div>
-                  <div class="col-12 col-sm-4">
+                  <div class="col-12 col-sm-4 <?= isset($projectDocument["id"]) ? 'd-none' : '' ?>">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="existingDocs">Fill From Existing</label>
                       <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="existingDocs" id="existingDocs">
