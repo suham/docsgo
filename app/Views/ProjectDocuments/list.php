@@ -2,81 +2,88 @@
 <?php
   $uri = service('uri');
 ?>
-<div class="container">
+
 
   <div class="row mb-3">
-    <div class="col-9">
-      <div class="btn-group btn-group-toggle">
-        <?php foreach ($documentStatus as $docStatus): ?>
-          <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-light") ?>">
-            <input type="radio" name="view" value="<?=  $docStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $docStatus["value"]) ? "checked" : "") ?>>  <?=  $docStatus["value"] ?>
-          </label>
-        <?php endforeach; ?>
-      </div>
-      
-    </div>
     <div class="col-3" >
-      <div class="form-group mb-0">
-        <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
-          <option value="" disabled >
-            Select Project
-          </option>
-          <?php foreach ($projects as $key=>$value): ?>
-            <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
+        <div class="form-group mb-0">
+          <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
+            <option value="" disabled >
+              Select Project
+            </option>
+            <?php foreach ($projects as $key=>$value): ?>
+              <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+      </div>
+      <div class="col-9">
+        <div class="btn-group btn-group-toggle">
+          <?php foreach ($documentStatus as $docStatus): ?>
+            <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+              <input type="radio" name="view" value="<?=  $docStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $docStatus["value"]) ? "checked" : "") ?>>  <?=  $docStatus["value"] ?>
+            </label>
           <?php endforeach; ?>
-        </select>
+        </div>
+        
       </div>
 
-    </div>
   </div>
   
-<?php if (count($data) == 0): ?>
 
-  <div class="alert alert-warning" role="alert">
-    No records found.
-  </div>
+
+<div class="row">
+
+  <?php if (count($data) == 0): ?>
+
+    <div class="col-12">
+      <div class="alert alert-warning" role="alert">
+        No records found.
+      </div>
+    </div>
 
   <?php else: ?>
 
+    <div class="col-12">
+      <table class="table table-striped table-hover"  id="documents-list">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col" style="min-width: 125px;">Update Date</th>
+            <th scope="col" style="min-width: 175px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <?php foreach ($data as $key=>$row): ?>
+              <tr scope="row" id="<?php echo $row['id'];?>">
+                  <td><?php echo $key+1; ?></td>
+                  <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
+                  <td><?php echo $row['author'];?></td>
+                  <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
+                  <td>
+                      <a title="Edit" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
+                          <i class="fa fa-edit"></i>
+                      </a>
+                      <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>" 
+                      class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
+                          <i class="fa fa-download"></i>
+                      </a>
+                    <?php if (session()->get('is-admin')): ?>
+                      <a title="Delete" onclick="deletePlanDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                          <i class="fa fa-trash text-light"></i>
+                      </a>
+                    <?php endif; ?>
+                  </td>
+              </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
 
-
-    <table class="table table-striped table-hover"  id="documents-list">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Title</th>
-          <th scope="col">Author</th>
-          <th scope="col" style="min-width: 125px;">Update Date</th>
-          <th scope="col" style="min-width: 175px;">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white">
-        <?php foreach ($data as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td><?php echo $key+1; ?></td>
-                <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
-                <td><?php echo $row['author'];?></td>
-                <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
-                <td>
-                    <a title="Edit" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                    <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>" 
-                    class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
-                        <i class="fa fa-download"></i>
-                    </a>
-                  <?php if (session()->get('is-admin')): ?>
-                    <a title="Delete" onclick="deletePlanDocument(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                        <i class="fa fa-trash text-light"></i>
-                    </a>
-                  <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-
-<?php endif; ?>
+  <?php endif; ?>
   
 </div>
 
@@ -84,7 +91,7 @@
   $(document).ready( function () {
     var table = $('#documents-list').DataTable({
       "responsive": true,
-      "fixedHeader": true,
+      "autoWidth": false
     });
   });
 

@@ -3,16 +3,7 @@
   $uri = service('uri');
 ?>
 <div class="row ">
-    <div class="col-9">
-      <div class="btn-group btn-group-toggle">
-        <?php foreach ($reviewStatus as $revStatus): ?>
-          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
-            <input type="radio" name="view" value="<?=  $revStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $revStatus["value"]) ? "checked" : "") ?>>  <?=  $revStatus["value"] ?>
-          </label>
-        <?php endforeach; ?>
-      </div>
-      
-    </div>
+   
     <div class="col-3" >
       <div class="form-group mb-0">
         <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
@@ -26,7 +17,19 @@
       </div>
 
     </div>
+
+    <div class="col-9 ">
+      <div class="btn-group btn-group-toggle ">
+        <?php foreach ($reviewStatus as $revStatus): ?>
+          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+            <input type="radio" name="view" value="<?=  $revStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $revStatus["value"]) ? "checked" : "") ?>>  <?=  $revStatus["value"] ?>
+          </label>
+        <?php endforeach; ?>
+      </div>
+      
+    </div>
 </div>
+
 <div class="row">
 
 <?php if (count($data) == 0): ?>
@@ -110,8 +113,6 @@
     $(document).ready( function () {
       $('#reviews-list').DataTable({
         "responsive": true,
-        "scrollX": true,
-        "fixedHeader": true,
         "autoWidth": false
       });
     });
