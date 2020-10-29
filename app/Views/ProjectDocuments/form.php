@@ -199,7 +199,7 @@
                               <div class="col-5">
                                 <select class="form-control selectpicker" data-actions-box="true" data-live-search="true" data-size="8"
                                   id="select_<?=  $section["id"] ?>" multiple>
-                                  <?php foreach (${$section["tableName"]} as $key=>$value): ?>
+                                  <?php foreach ($lookUpTables[$section["tableName"]] as $key=>$value): ?>
                                   <option value='<?=  $value['id'] ?>'>
                                     <?=  $value[$section["headerColumns"] ] ?></option>
                                   <?php endforeach; ?>
@@ -309,14 +309,7 @@
   var type;
   var entireTemplate;
   var existingDocs = [];
-  var teamsTable;
-  var reviewsTable;
-  var referencesTable;
-  var requirementsTable;
-  var traceabilityMatrixTable;
-  var documentsTable;
-  var riskAssessmentTable; 
-  var acronymsTable;
+  var lookUpTables;
 
   var sections;
   var reviewComments = "";
@@ -379,29 +372,10 @@
       <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php if (isset($teams)): ?>
-      teamsTable = <?= json_encode($teams) ?>;
-    <?php endif; ?>
-    <?php if (isset($reviews)): ?>
-      reviewsTable = <?= json_encode($reviews) ?>;
-    <?php endif; ?>
-    <?php if (isset($documentMaster)): ?>
-      referencesTable = <?= json_encode($documentMaster) ?>;
-    <?php endif; ?>
-    <?php if (isset($requirements)): ?>
-      requirementsTable = <?= json_encode($requirements) ?>;
-    <?php endif; ?>
-    <?php if (isset($traceabilityMatrix)): ?>
-      traceabilityMatrixTable = <?= json_encode($traceabilityMatrix) ?>;
-    <?php endif; ?>
-    <?php if (isset($documents)): ?>
-      documentsTable = <?= json_encode($documents) ?>;
-    <?php endif; ?>
-    <?php if (isset($riskAssessment)): ?>
-      riskAssessmentTable = <?= json_encode($riskAssessment) ?>;
-    <?php endif; ?>
-    <?php if (isset($acronyms)): ?>
-      acronymsTable = <?= json_encode($acronyms) ?>;
+
+
+    <?php if (isset($lookUpTables)): ?>
+      lookUpTables = <?= json_encode($lookUpTables) ?>;
     <?php endif; ?>
 
     <?php if (isset($sections)): ?>
@@ -459,7 +433,7 @@
     if(reviewComments == "") return;
     
     var teamOptions = "", categoryOptions = "";
-    
+    var teamsTable = lookUpTables['teams'];
     teamsTable.forEach((data)=>{
       teamOptions += `<option value="${data.id}">${data.name}</option>`;
     });
@@ -716,50 +690,73 @@
   function insertTable(sectionId, tableName, columnValues) {
     
     var selectedIds = $("#select_" + sectionId).val();
-    var table;
-    if (tableName == "teams") {
-      table = teamsTable;
-    } else if (tableName == "reviews") {
-      table = reviewsTable;
-    } else if (tableName == "documentMaster") {
-      table = referencesTable;
-    } else if (tableName == "requirements") {
-      table = requirementsTable;
-    }else if (tableName == "traceabilityMatrix") {
-      table = traceabilityMatrixTable;
-    }else if (tableName == "documents") {
-      table = documentsTable;
-    }else if (tableName == "riskAssessment") {
-      table = riskAssessmentTable;
-    }else if (tableName == "acronyms"){
-      table = acronymsTable;
+    var table = lookUpTables[tableName];
+    var dataFormat = "table";
+    if (tableName == "traceabilityMatrix") {
+      dataFormat = "list";
     }
-    
-    var indexes = columnValues.split(',');
-    var separator = "";
-    for (var i = 0; i < indexes.length; i++) {
-      separator += "|-------";
-    }
-    separator += "|";
 
+    var indexes = columnValues.split(',');
     var content = "";
-    content += "| " + columnValues.replaceAll(',', " | ") + " |";
-    content = content.toUpperCase();
-    content += "\r\n";
-    content += separator;
-    content += "\r\n";
-    selectedIds.forEach((id) => {
-      var record = table.find(x => x.id === id);
-      content += "| ";
-      indexes.forEach((index) => {
-        var value = record[index];
-        content += value.replace(/(\r\n|\n|\r)/gm, "") + " |";
+
+    if(dataFormat == "table"){
+
+      var thead = "| " + columnValues.toUpperCase().replaceAll(',', " | ") + " |\n";
+      
+      indexes.forEach((index, i) => {
+        thead += "|-------";
+
+        if(i == (indexes.length-1)){
+          thead += "|\r\n";
+        }
+
       });
-      content += "\r\n";
-    });
+
+      content = thead;
+      
+      selectedIds.forEach((id) => {
+        var record = table.find(x => x.id === id);
+       
+        indexes.forEach((index, j) => {
+          if(j == 0){
+            content += "| ";
+          }
+
+          var value = record[index];
+          content += value.replace(/(\r\n|\n|\r)/gm, "") + " |";
+
+          if(j == (indexes.length-1)){
+            content += "\n";
+          }
+        });
+       
+      });
+
+    }else{
+      
+      selectedIds.forEach((id) => {
+        var record = table.find(x => x.id === id);
+        indexes.forEach((index, i) => {
+          var value = record[index];
+          content += "|"+index.toUpperCase()+"|"+value.replace(/(\r\n|\n|\r)/gm, "") + "|\r\n";
+          if(i == 0){
+            content += "|---------|---------|\r\n";
+          }
+          if(i == (indexes.length-1)){
+            content += "\n";
+          }
+          
+        });
+        
+      });
+
+
+    }
+
     const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
     const existingVal = $codemirror.getDoc().getValue();
     $codemirror.getDoc().setValue(existingVal+"\n"+content);
+
   }
 
   $("#updateTemplate").click(function () {

@@ -240,12 +240,17 @@ class Documents extends BaseController
 			$sections = $decodedJson[$type]["sections"];
 			$data["sections"] = $sections;
 			$data['projectDocument']["type"] = $type;
-			$data['existingDocs'] = $this->getExistingDocs($type);
+			if($id == ""){
+				$data['existingDocs'] = $this->getExistingDocs($type);
+			}else{
+				$data['existingDocs'] = [];
+			}
 			foreach ($sections as $section){
 				if(array_key_exists('type', $section)){
 					if($section['type'] == 'database'){
 						if(!array_key_exists($section['tableName'] , $data)){
-							$data[$section['tableName']] = $this->getTablesData($section['tableName']);
+							// $data[$section['tableName']] = $this->getTablesData($section['tableName']);
+							$data["lookUpTables"][$section['tableName']] = $this->getTablesData($section['tableName']);
 						}
 					}
 				}
