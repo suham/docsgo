@@ -3,6 +3,7 @@
 require_once '../../vendor/autoload.php';
 require_once 'Parsedown.php';
 require_once 'ParsedownExtra.php';
+require_once('../vendor/phpoffice/phpword/src/PhpWord/style/Border.php');
 
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
@@ -10,6 +11,7 @@ $Extra->setMarkupEscaped(true);
 
 $id = filter_input(INPUT_GET, 'id');
 $type = filter_input(INPUT_GET, 'type');
+$time = time();
 
 if($type == "project"){
     $URL = 'http://localhost/documents/getJson?type=project&id='.$id;
@@ -18,15 +20,22 @@ if($type == "project"){
 } else {
     exit;
 }
-echo $URL;
+
 $str = file_get_contents($URL);
 $lastIndex = strrpos($str, '}');
 $str = substr($str, 0, $lastIndex + 1);
 
-$time = time();
-
 function sectionNumber($str) {
     return (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
+}
+
+function addTableStylesToContent($rawContent){
+    $fontFamily = 'Arial, sans-serif';
+    $fontSize = '11';
+    $replaceContent = str_replace("<table>", '<table style="border-spacing:0 10px; font-family:'.$fontFamily.'; font-size: '.$fontSize.';width: 100%; padding: 10px; border: 1px #000000 solid; border-collapse: collapse;" border="1" cellpadding="5">', $rawContent);
+    $replaceContent = str_replace("<th>", "<th style='padding-top: 8px;font-weight: bold; height: 50px;text-align: left; background-color:#6487d1;'>", $replaceContent);
+    $replaceContent = str_replace("<td>", "<td style='padding-top: 8px;text-align: left;'>", $replaceContent);
+    return $replaceContent;
 }
 
 $jsonGetId = json_decode($str, true);
@@ -40,7 +49,6 @@ $idArray = array_keys($jsonGetId);
 $count = 0;
 foreach ($idArray as $id) {
     $jsonMain = json_decode($str, true);
-//    $projectVersion = $jsonMain[$id]['project-version'];
     $fileName = str_replace(",","_",$jsonMain[$id]['file-name'] . ".docx");
     $jsonObj = json_decode($jsonMain[$id]['json-object'], true);
     $documentType = array_keys($jsonObj);
@@ -71,14 +79,6 @@ foreach ($idArray as $id) {
         ),
             )
     );
-
-    $fancyTableStyleName = 'Fancy Table';
-    $fancyTableStyle = array('borderSize' => 6, 'cellMargin' => 20, 'layout' => \PhpOffice\PhpWord\Style\Table::LAYOUT_FIXED);
-    $fancyTableFirstRowStyle = array('borderBottomSize' => 18, 'borderBottomColor' => '0000FF', 'name' => 'Arial', 'bgColor' => '989b9c');
-    $fancyTableCellStyle = array('valign' => 'center');
-    $fancyTableCellBtlrStyle = array('valign' => 'center', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR);
-    $fancyTableFontStyle = array('bold' => true, 'size' => 11, 'name' => 'Arial');
-    $phpWord->addTableStyle($fancyTableStyleName, $fancyTableStyle, $fancyTableFirstRowStyle);
 
 //Header for all pages
     $subsequent = $section->addHeader();
@@ -128,8 +128,10 @@ foreach ($idArray as $id) {
     $fontStyle['name'] = $json['section-font'];
     $fontStyle['size'] = $json['section-font-size'];
     $fontStyle['bold'] = FALSE;
-//$section = $phpWord->addSection();
-    \PhpOffice\PhpWord\Shared\Html::addHtml($section, $Extra->text($json['cp-change-history']));
+
+    $tableContent = $Extra->text($json['cp-change-history']);
+    $tableContent = addTableStylesToContent($tableContent);
+    \PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContent, FALSE, FALSE);
 
     $section->addTextBreak();
 
@@ -153,12 +155,18 @@ foreach ($idArray as $id) {
     $section = $phpWord->addSection();
 
     for ($i = 0; $i < count($json['sections']); $i++) {
-        $section->addTitle($i + 1 . ".0 " . $json['sections'][$i]['title']);
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $Extra->text(htmlspecialchars($json['sections'][$i]['content'])));
+        $section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
+        $contentSection = $Extra->text(htmlspecialchars($json['sections'][$i]['content']));
+        if(strpos($contentSection, '<table>') !== false){
+            $tableContentFormatted = addTableStylesToContent($contentSection);
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
+        } else {
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
+        }
+        
 //        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $Extra->text($json['sections'][$i]['content']));
         $section->addTextBreak();
     }
-
     // Saving the document as OOXML file...
     \PhpOffice\PhpWord\Settings::setCompatibility(false);
     $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
@@ -235,5 +243,3 @@ foreach ($idArray as $id) {
         exit;
     }
 }
-
-
