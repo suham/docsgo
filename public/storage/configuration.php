@@ -8,7 +8,7 @@ return [
     'download_inline' => ['pdf'], // download inline in the browser, array of extensions, use * for all
 
     'frontend_config' => [
-        'app_name' => 'FileGator',
+        'app_name' => 'DocsGo - Storage',
         'app_version' => APP_VERSION,
         'language' => 'english',
         'logo' => '/Docsgo-Logo.png',

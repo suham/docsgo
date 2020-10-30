@@ -65,7 +65,7 @@
         </div>
 
         <div class="sidebar-header text-center">
-        <span class="user-name text-white">
+            <span class="user-name text-white">
               <strong><?= session()->get('name') ?></strong>
             </span>
        </div>
@@ -117,10 +117,6 @@
               </div>
             </li>
 
-     
-
-
-
             <li>
               <a href="/risk-assessment">
                 <i class="fa fa-lock" style = "<?= ($uri->getSegment(1) == 'risk-assessment'   ? 'color:#16c7ff;' : null) ?>"></i>
@@ -158,6 +154,13 @@
               </a>
             </li>
 
+            <hr style="background-color: #434343;" />
+            <li>
+              <a target="_blank" href="/storage/repo">
+                <i class="fa fa-cloud" ></i>
+                <span>Storage</span>
+              </a>
+            </li>
            
       </div>
       <!-- sidebar-content  -->
