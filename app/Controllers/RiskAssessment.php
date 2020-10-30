@@ -17,21 +17,32 @@ class RiskAssessment extends BaseController
 		$data['backUrl'] = '/risk-assessment';
 
 		$status = $this->request->getVar('status');
+		$type = $this->request->getVar('type');
 		$data['isSyncEnabled'] = false;
+		$data['riskCategorySelected'] = 'Vulnerability';
+
+		$model = new RiskAssessmentModel();
 		if($status == 'sync'){
 			$status = '';
 			$project_id = $this->request->getVar('project_id');
 			$res = $this->syncRecords($project_id);
 			$data['isSyncEnabled'] = true;
+			$data["data"] = $model->getRisks('All', 'Vulnerability');
+		}else{
+			if($status == '' && $type == '') {
+				$data["data"] = $model->getRisks('All', 'Vulnerability');
+			}else {
+				$data["data"] = $model->getRisks($status, $type);
+				$data['riskCategorySelected'] = $type;
+			}	
 		}
-		$model = new RiskAssessmentModel();
-		$data["data"] = $model->getRisks($status);
 
 		$data['projects'] = $this->getProjects();
 		$projectModel = new ProjectModel();
 		$activeProject = $projectModel->where("status","Active")->first();	
 		$selectedProject = $activeProject['project-id'];
 		$data['selectedProject'] = $selectedProject;
+		$data['riskCategory'] = ['Open-Issue', 'Vulnerability', 'SOUP'];
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -42,37 +53,46 @@ class RiskAssessment extends BaseController
 	function syncRecords($id){
 		$model = new RiskAssessmentModel();
 		$sonarRecords = $model->getSonarRecords();
-		$issuesCount = count($sonarRecords);
 		$vulnerabilitiesList = $model->getVulnerabilitiesList();
-		foreach( $sonarRecords as $record){
-			$alreadyExit = false;
-			foreach( $vulnerabilitiesList as $vul ){
-				$filename = substr($record->component, stripos($record->component, ":") + 1, -1);
-				$textRange = $record->textRange;
-				$arr2 = json_decode($vul['description']);
-				if( $record->message == $vul['risk'] && $filename == $arr2->filename && $textRange == $arr2->textRange ){
-					$alreadyExit = true;
-				}		
-			}
-			if( ! $alreadyExit ){
-				$description['filename'] = substr($record->component, stripos($record->component, ":") + 1, -1);
-				$description['textRange'] = $record->textRange;
+		if( $sonarRecords ){
+			foreach( $sonarRecords as $record){
+				$alreadyExist = false;
+				foreach( $vulnerabilitiesList as $vul ){
+					$filename = substr($record->component, stripos($record->component, ":") + 1, strlen($record->component));
+					$textRange = $record->textRange;
+					$arr = json_decode($vul['description']);
+					if( $record->message == $vul['risk'] && $filename == $arr->filename && $textRange == $arr->textRange ){
+						$alreadyExist = true;
+					}		
+				}
+				if( ! $alreadyExist ){
+					try {
+						$description['filename'] = substr($record->component, stripos($record->component, ":") + 1, strlen($record->component));
+						$description['textRange'] = $record->textRange;
+						$description['tags'] = $record->tags;
 
-				$newData = [
-					'project_id' => $id,
-					'risk_type' => $record->type,
-					'risk' => $record->message,
-					'component' => substr($record->component, 0 , stripos($record->component, ":")),
-					'description' => json_encode($description),
-					'status' => 'Open'
-				];
-				$model->save($newData);
+						$newData = [
+							'project_id' => $id,
+							'risk_type' => $record->type,
+							'risk' => $record->message,
+							'component' => substr($record->component, 0, stripos($record->component, ":")),
+							'description' => json_encode($description),
+							'status' => 'Open'
+						];
+						$model->save($newData);
+					} catch(Exception $e) {
+							error_log($e);
+					}
+				}
 			}
+			return true;
+		} else {
+			error_log("[Docsgo] [RiskAssessment.syncRecords] [INFO] Sonarqube vulnerabilities list is empty.");
+			return true;
 		}
-		return;
 	}
 
-	 function add(){
+	function add(){
 		$id = $this->request->getVar('id');
 		//handling the backUrl view, Which is selected previously 
 		$backUrl = '/risk-assessment';
@@ -138,6 +158,7 @@ class RiskAssessment extends BaseController
 				$postDataMatrix['Detectability'] = ($this->request->getVar('Detectability-status-type')) ? explode('/', $this->request->getVar('Detectability-status-type'))[1] : '';
 				$postDataMatrix['RPN'] = $this->request->getVar('rpn');
 				$newData['rpn'] = $this->request->getVar('rpn');
+				$newData['base_score'] = '';
 			}
 			if($riskType == 'Vulnerability'){
 				$postDataMatrix['Attack Vector'] = ($this->request->getVar('AttackVector-status-type')) ? explode('/', $this->request->getVar('AttackVector-status-type'))[1] : '';
@@ -149,7 +170,8 @@ class RiskAssessment extends BaseController
 				$postDataMatrix['Integrity Impact'] = ($this->request->getVar('IntegrityImpact-status-type')) ? explode('/', $this->request->getVar('IntegrityImpact-status-type'))[1] : '';
 				$postDataMatrix['Availability Impact'] = ($this->request->getVar('AvailabilityImpact-status-type')) ? explode('/', $this->request->getVar('AvailabilityImpact-status-type'))[1] : '';
 				$postDataMatrix['base_score'] = 'basic value 10';
-			
+				$newData['rpn'] = '';
+				$newData['base_score'] = $this->request->getVar('baseScore');
 			}
 			foreach($data['jsonObj']['risk-assessment']['fmea'] as $key=>$value){
 				$data['jsonObj']['risk-assessment']['fmea'][$key]['value'] = $postDataMatrix[$value['category']];
