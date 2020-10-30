@@ -127,7 +127,7 @@
                                     <?php foreach ($value1['options'] as $key2=>$value2):?>
                                         <div class="btn <?php echo (($value1['value']) ==  $value2['title'])? "btn-primary" : "btn-secondary"; ?> "  <?php echo $key2;?>
                                           id="matrixAnchor<?php echo str_replace(' ', '', $value1['category']);echo $key2;?>" title="<?php echo $value2['description'];?>" onclick="toggleVulnerabilityTabs('<?php echo str_replace(' ', '', $value1['category']);?>', <?php echo $key2;?>)">
-                                              <input type="radio" name="<?php echo str_replace(' ', '', $value1['category']);?>-status-type" 
+                                              <input type="radio" name="<?php echo str_replace(' ', '', $value1['category']);?>-status-type" class="<?php echo str_replace(' ', '', $value1['category']);?>-status-type"
                                               value="<?php echo $value2['value'].'/'.$value2['title'];?>" <?php echo (($value1['value']) ==  $value2['title'])? "checked" : ""; ?> /> <?php echo $value2['title'];?>
                                         </div>
                                         &nbsp;
@@ -211,9 +211,29 @@ function toggleVulnerabilityTabs(id, id1) {
   $(idVal).removeClass("btn-secondary").addClass('btn-primary');
   var activeList = $('.btn-vulnerability-toggle .btn-primary input');
   var rpn=1;
+  var postDataClaMatrix = {
+				'AttackVector': '','AttackComplexity':'','PrivilegesRequired':'','UserInteraction':'', 'Scope':'',
+				'ConfidentialityImpact':'', 'IntegrityImpact':'','AvailabilityImpact':''
+  };
+  var PR_Changed_Data = {'None':0.85, "Low":0.68, "High":0.5}; 
   for(var i=0; i<activeList.length; i++){
-      console.log("li:", activeList[i], $(activeList[i]).val());
       $(activeList[i]).attr('checked', true);
+      var scopeName = ($(activeList[i]).val()).split('/')[1]
+        
+        var selName = ($(activeList[i]).attr('name')).replace('-status-type', '');
+        var selNameVal  = ($(activeList[i]).val()).split('/')[0];
+        postDataClaMatrix[selName] = selNameVal;
+
+        //#Checking the PR values based on the selected SCOPE
+        if($(activeList[i]).attr('name') == 'Scope-status-type' && scopeName == 'Changed'){
+          var PRV = $('input[name=PrivilegesRequired-status-type]:checked').val();
+          var NLW = (PRV !='' && PRV != undefined) ? (PRV.split('/')[1]) : '';
+          postDataClaMatrix['PrivilegesRequired'] = PR_Changed_Data[NLW];
+        }
+  }
+  if($('input[name=Scope-status-type]:checked').val() != undefined){
+    var scopeAttr = ($('input[name=Scope-status-type]:checked').val()).split('/')[1];
+    calculateBaseScore(postDataClaMatrix, scopeAttr);
   }
 }
 
@@ -228,6 +248,33 @@ function toggleVulnerability() {
   }else{
     $('#data-vulnerability-matrix, #data-vulnerability-baseScore-matrix').css('display', 'none');
   }
+}
+
+function calculateBaseScore(data, scopeAt){
+  var CVSS_exploitabilityCoefficient = 8.22;
+  var CVSS_scopeCoefficient = 1.08;
+  var baseScore;
+  var impactSubScore;
+  var exploitabalitySubScore = CVSS_exploitabilityCoefficient * data['AttackVector'] * data['AttackComplexity'] * data['PrivilegesRequired'] * data['UserInteraction'];
+  var impactSubScoreMultiplier = (1 - ((1 - data['ConfidentialityImpact']) * (1 - data['IntegrityImpact']) * (1 - data['AvailabilityImpact'])));
+  if (scopeAt === 'Unchanged') {
+    impactSubScore = data['Scope'] * impactSubScoreMultiplier;
+  } else {
+    impactSubScore = data['Scope'] * (impactSubScoreMultiplier - 0.029) - 3.25 * Math.pow(impactSubScoreMultiplier - 0.02, 15);
+  }
+  if (impactSubScore <= 0) {
+    baseScore = 0;
+  } else {
+    if (scopeAt === 'Unchanged') {
+      baseScore = CVSSroundUp1(Math.min((exploitabalitySubScore + impactSubScore), 10));
+    } else {
+      baseScore = CVSSroundUp1(Math.min((exploitabalitySubScore + impactSubScore) * CVSS_scopeCoefficient, 10));
+    }
+  }
+  $('#baseScore').val(baseScore);
+}
+function CVSSroundUp1(d){
+  return Math.ceil (d * 10) / 10;
 }
 
 </script>
