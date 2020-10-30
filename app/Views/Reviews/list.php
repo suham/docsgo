@@ -2,9 +2,9 @@
 <?php
   $uri = service('uri');
 ?>
-<div class="row ">
+<div class="row p-2 p-md-4">
    
-    <div class="col-3" >
+    <div class="col-12 col-md-3" >
       <div class="form-group mb-0">
         <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
           <option value="" disabled >
@@ -18,7 +18,7 @@
 
     </div>
 
-    <div class="col-9 ">
+    <div class="col-12 col-md-9 pt-3 pb-3 pt-md-0 pb-md-0">
       <div class="btn-group btn-group-toggle ">
         <?php foreach ($reviewStatus as $revStatus): ?>
           <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
@@ -30,7 +30,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row p-0 p-md-4">
 
 <?php if (count($data) == 0): ?>
 

@@ -49,8 +49,7 @@ $routes->match(['get','post'],'projects/add', 'Projects::add',['filter' => 'auth
 
 $routes->get('documents-master', 'DocumentsMaster::index',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-master/add', 'DocumentsMaster::add',['filter' => 'auth']);
-$routes->match(['get','post'],'documents-master/add/(:num)', 'DocumentsMaster::add',['filter' => 'auth']);
-$routes->match(['get','post'],'documents-master/delete/(:num)', 'DocumentsMaster::delete',['filter' => 'auth']);
+$routes->match(['get','post'],'documents-master/delete', 'DocumentsMaster::delete',['filter' => 'auth']);
 
 $routes->get('documents-acronyms', 'Acronyms::index',['filter' => 'auth']);
 $routes->match(['get','post'],'documents-acronyms/add', 'Acronyms::add',['filter' => 'auth']);

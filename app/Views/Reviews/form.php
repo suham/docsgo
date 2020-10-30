@@ -1,4 +1,4 @@
-<div class="">
+<div class="p-0 p-md-4">
   <div class="row justify-content-center">
     <div class="col-12 col-md-9 ml-0 pb-3 pt-3 from-wrapper rounded bg-white">
       <div class="container">

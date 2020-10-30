@@ -46,6 +46,10 @@
                                     data-toggle="list" href="#documentStatusList" role="tab"
                                     aria-controls="profile">Document Status</a>
 
+                                <a class="list-group-item list-group-item-action" id="reference-category-list"
+                                    data-toggle="list" href="#referenceCategoryList" role="tab"
+                                    aria-controls="profile">Reference Category</a>
+
                                 <a class="list-group-item list-group-item-action" id="review-category-list"
                                     data-toggle="list" href="#reviewCategoryList" role="tab"
                                     aria-controls="profile">Review Category</a>
@@ -80,20 +84,20 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="riskCategoryList" role="tabpanel"
-                                    aria-labelledby="risk-category-list">
+                                <div class="tab-pane fade" id="referenceCategoryList" role="tabpanel"
+                                    aria-labelledby="reference-category-list">
                                     
                                     <div class="row ">
                                         <div class="col-10">
-                                            <ul class="list-group riskCategory"></ul>
+                                            <ul class="list-group referenceCategory"></ul>
                                         </div>
                                         <div class="col-2">
                                             <button class="btn btn-primary"
-                                                onclick="addValue('Risk Category', 'riskCategory')">Add</button>
+                                                onclick="addValue('Reference Category', 'referenceCategory')">Add</button>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="tab-pane fade" id="reviewCategoryList" role="tabpanel"
                                     aria-labelledby="review-category-list">
                                     
@@ -104,6 +108,20 @@
                                         <div class="col-2">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Review Category', 'reviewCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="riskCategoryList" role="tabpanel"
+                                    aria-labelledby="risk-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-10">
+                                            <ul class="list-group riskCategory"></ul>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Risk Category', 'riskCategory')">Add</button>
                                         </div>
                                     </div>
                                 </div>
