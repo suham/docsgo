@@ -42,9 +42,10 @@ class Projects extends BaseController
 			$data['formTitle'] = "Add Project";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Project";
+			
 
-			$data['project'] = $model->where('project-id',$id)->first();			
+			$data['project'] = $model->where('project-id',$id)->first();		
+			$data['formTitle'] = $data['project']["name"];	
 		}
 
 

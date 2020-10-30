@@ -1,6 +1,5 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-1 pt-3 pb-3 bg-white from-wrapper">
+  <div class="row p-0 p-md-4 justify-content-center">
+    <div class="col-12 col-md-6 bg-white p-4 from-wrapper">
       <div class="container">
         <h3><?= $user['name'] ?></h3>
         <hr>
@@ -54,4 +53,4 @@
       </div>
     </div>
   </div>
-</div>
+

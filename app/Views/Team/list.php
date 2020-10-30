@@ -1,14 +1,17 @@
 
-<div class="container">
+<div class="row p-0 p-md-4 justify-content-center">
 <?php if (count($data) == 0): ?>
 
-  <div class="alert alert-warning" role="alert">
-    No records found.
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      No records found.
+    </div>
   </div>
 
+
   <?php else: ?>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover table-responsive" id="teams-list">
+    <div class="col-12">
+      <table class="table table-striped table-hover" id="teams-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -51,8 +54,7 @@
   $(document).ready( function () {
       $('#teams-list').DataTable({
       "responsive": true,
-      "scrollX": true,
-      "fixedHeader": true
+      "autoWidth": false
     });
   });
  function deleteMember(id){
