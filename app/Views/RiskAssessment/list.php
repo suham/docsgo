@@ -5,7 +5,7 @@
   <div class="row">
       <div class="col-3">
         <div class="form-group mb-0">
-          <select class="form-control selectpicker" onchange="getData()" id="projects" name="projects" data-style="btn-secondary" data-live-search="true" data-size="8" >
+          <select class="form-control selectpicker" id="projects" name="projects" data-style="btn-secondary" data-live-search="true" data-size="8" >
             <option value="" disabled >
               Select Project
             </option>
@@ -109,7 +109,6 @@ $(document).ready(function(){
 });
 
 function getData(){
-  console.log("getDatagetData");
   var selectedView = $("input[name='view']:checked").val();
   var selectedProjectId = $("#projects").val();
   var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`

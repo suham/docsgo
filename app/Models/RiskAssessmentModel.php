@@ -55,35 +55,54 @@ class RiskAssessmentModel extends Model{
     }
 
     function getSonarRecords(){
-        $SONAR_IP = '13.233.238.97';
-        $BASE_URL = 'sonar/api';
-        $vulnerabilities = json_encode([]);
+        $settingsModel = new SettingsModel();
 
-        try {
-            $ch = curl_init();  
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-            curl_setopt($ch, CURLOPT_URL, "http://$SONAR_IP:9000/$BASE_URL/issues/search?types=VULNERABILITY"); 
-            $result = curl_exec($ch); 
-            curl_close($ch);
-
-            $data = json_decode($result);
-            if( $data->total ){
-                $count = $data->total;  
-                $pageCount = floor($count/100);
-                if( $count != 0 && $pageCount >= 0 ){
-                    for( $i = 0; $i <= $pageCount; $i++ ){
-                        $pageIndex = ++$i;
-                        $curlReq = curl_init();  
-                        curl_setopt($curlReq, CURLOPT_RETURNTRANSFER, 1); 
-                        curl_setopt($curlReq, CURLOPT_URL, "http://$SONAR_IP:9000/$BASE_URL/issues/search?types=VULNERABILITY&pageIndex=$pageIndex"); 
-                        $res = curl_exec($curlReq); 
-                        $vulnerabilities = (object) array_merge( (array) $vulnerabilities, (array) json_decode($res));
+        $serverConfig = $settingsModel->getSettings("third-party");
+        
+        $serverDetails = json_decode($serverConfig[0]['options']);
+        $BASE_URL = "";
+        foreach( $serverDetails as $server ){
+            if($server->key == "sonar"){
+                $BASE_URL= $server->value;
+            }
+        }
+        
+        $vulnerabilities = [];
+        if( $BASE_URL){
+            try {
+                $ch = curl_init();  
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+                curl_setopt($ch, CURLOPT_URL, "$BASE_URL/api/issues/search?types=VULNERABILITY&statuses=OPEN"); 
+                $result = curl_exec($ch); 
+                curl_close($ch);
+    
+                $data = json_decode($result);
+                // print_r($data);
+                if( $data->total ){
+                    $count = $data->total;  
+                    $pageCount = floor($count/100);
+                    if( $pageCount == 0 ){
+                        $pageCount = 1;
+                    }        
+                    if( $count != 0 && $pageCount > 0 ){
+                        for( $i = 1; $i <= $pageCount; $i++ ){
+                            $pageIndex = $i;
+                            $curlReq = curl_init();  
+                            curl_setopt($curlReq, CURLOPT_RETURNTRANSFER, 1); 
+                            curl_setopt($curlReq, CURLOPT_URL, "$BASE_URL/api/issues/search?types=VULNERABILITY&statuses=OPEN&pageIndex=$pageIndex"); 
+                            $res = curl_exec($curlReq); 
+                            $tmp = json_decode($res);
+                            $vulnerabilities = array_merge( $vulnerabilities, $tmp->issues);
+                        }
                     }
                 }
+            } catch(Exception $e){
+                error_log($e);
+                return false;
             }
-        } catch(Exception $e){
-            error_log($e);
-        }
-        return $vulnerabilities->issues;
+            return $vulnerabilities;
+        } else {
+            return false;
+        }        
     }
 }
