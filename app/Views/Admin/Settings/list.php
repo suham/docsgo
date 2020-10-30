@@ -21,7 +21,7 @@
 </style>
 
 
-<div class="row  justify-content-center">
+<div class="row  justify-content-center  p-0 p-md-4">
     <div class="col-12  col-md-10 col-lg-7">
         <div class="card  mt-2">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -34,8 +34,8 @@
                         aria-controls="config" aria-selected="false">Config</a>
                 </li>
             </ul>
-            <div class="tab-content pt-1 pl-3 pr-3" id="myTabContent">
-                <div class="tab-pane fade  show active  p-3" id="enum" role="tabpanel" aria-labelledby="enum-tab">
+            <div class="tab-content  p-md-4 p-2" id="myTabContent">
+                <div class="tab-pane fade  show active " id="enum" role="tabpanel" aria-labelledby="enum-tab">
                     <div class="row">
                         <div class="col-12" id="enumAlert">
                             <div class="alertDiv"></div>
@@ -74,10 +74,10 @@
                                     aria-labelledby="document-status-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group documentStatus"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Document Status', 'documentStatus')">Add</button>
                                         </div>
@@ -88,10 +88,10 @@
                                     aria-labelledby="reference-category-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group referenceCategory"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Reference Category', 'referenceCategory')">Add</button>
                                         </div>
@@ -102,10 +102,10 @@
                                     aria-labelledby="review-category-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group reviewCategory"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Review Category', 'reviewCategory')">Add</button>
                                         </div>
@@ -116,10 +116,10 @@
                                     aria-labelledby="risk-category-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group riskCategory"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Risk Category', 'riskCategory')">Add</button>
                                         </div>
@@ -130,10 +130,10 @@
                                     aria-labelledby="template-category-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group templateCategory"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Template Category', 'templateCategory')">Add</button>
                                         </div>
@@ -144,10 +144,10 @@
                                     aria-labelledby="review-category-list">
                                     
                                     <div class="row ">
-                                        <div class="col-10">
+                                        <div class="col-9">
                                             <ul class="list-group userRole"></ul>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('User Role', 'userRole')">Add</button>
                                         </div>
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade p-3" id="config" role="tabpanel" aria-labelledby="config-tab">
+                <div class="tab-pane fade" id="config" role="tabpanel" aria-labelledby="config-tab">
                     <div class="alertDiv"></div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
