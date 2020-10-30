@@ -29,11 +29,16 @@ class RiskAssessmentModel extends Model{
         return $data;
     }
 
-    function getRisks($status = '') {
+    function getRisks($status = '', $type = '') {
         $db      = \Config\Database::connect();
-        $whereCondition = "";
-        if($status != ""){
-            $whereCondition = " WHERE status = '".$status."' ";
+        $whereCondition = ""; $riskType = 'Vulnerability';
+        $riskCategory = ['Open-Issue', 'Vulnerability', 'SOUP'];
+        if(in_array($type, $riskCategory)) 
+            $riskType = $type;
+        if($status == "All"){
+            $whereCondition = " WHERE risk_type = '".$riskType."' ";
+        }else{
+            $whereCondition = " WHERE risk_type = '".$riskType."' AND status = '".$status."' ";
         }
         $sql = "SELECT * from `docsgo-risks` ". $whereCondition . "ORDER BY update_date;";
         $query = $db->query($sql);

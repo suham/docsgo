@@ -1,6 +1,6 @@
 <?php
   $uri = service('uri');
-?>
+  ?>
 <div class="container-old">
   <div class="row">
       <div class="col-3">
@@ -16,33 +16,54 @@
         </div>
       </div>
 
+      <div>
+        <div class="form-group mb-0" style="width: 150px">
+          <select class="form-control selectpicker" onchange="getSelectedStatusData(0)" id="riskTypes" name="riskTypes" data-style="btn-secondary" data-live-search="true" data-size="8" >
+            <option value="" disabled >
+              Select Project
+            </option>
+            <?php foreach ($riskCategory as $value): ?>
+              <option  <?= (($riskCategorySelected == $value) ? "selected" : "") ?> value="<?=  $value ?>"><?=  $value ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+
+      &nbsp;
       <div class="row mb-3">
         <div class="col-12">
-          <a href="#" onclick="getData()"
+          <div class="btn-group btn-group-toggle" >
+          <!-- -->
+          <div id="data-open-issue-soup-matrix">
+                <div  class="col-12">
+                    <div class="form-group">
+                      <div class="btn-group btn-group-toggle btn-security-toggle" id="listblock" >
+                      <div class="btn <?= ( (!strpos($uri,'?') || (strpos($uri, 'status=All')) || (strpos($uri, 'status=sync'))) ? "btn-primary" : "btn-secondary") ?> id="RDanchor" title="" onclick="getSelectedStatusData(1)">
+                            <input type="radio" name="status-type" value="All" id="status-type1" /> All
+                          </div>
+                          <div class="btn <?= (strpos($uri, 'status=Open') ? "btn-primary" : "btn-secondary") ?>" id="RDanchor" title="" onclick="getSelectedStatusData(2)">
+                            <input type="radio" name="status-type" value="Open"  id="status-type2"/> Open
+                          </div>
+                          <div class="btn <?= (strpos($uri, 'status=Close') ? "btn-primary" : "btn-secondary") ?>" id="RDanchor" title="" onclick="getSelectedStatusData(3)">
+                            <input type="radio" name="status-type" value="Close"  id="status-type3"/> Close
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3" style="margin-left:45%">
+        <div class="col-12">
+          <a href="#" onclick="getSyncData()"
               class="btn <?= (($isSyncEnabled) ? " btn-primary" : "btn-secondary") ?>">
             Sync
           </a>
         </div>
       </div>
-      &nbsp;
-      <div class="row mb-3">
-      <div class="col-12">
-        <div class="btn-group btn-group-toggle" >
-          <a href="/risk-assessment" 
-            class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
-            All
-          </a>
-          <a href="/risk-assessment?status=Open"
-              class="btn <?= ((strpos($uri,'/risk-assessment?status=Open'))  ? " btn-primary" : "btn-secondary") ?>">
-            Open
-          </a>
-          <a href="/risk-assessment?status=Close"
-              class="btn <?= ((strpos($uri,'/risk-assessment?status=Close')) ? " btn-primary" : "btn-secondary") ?>">
-            Close
-          </a>
-        </div>
-      </div>
-    </div>
+
   </div>
 
 <?php if (count($data) == 0): ?>
@@ -59,7 +80,6 @@
           <th scope="col">#</th>
           <th scope="col">Risk Type</th>
           <th scope="col">Risk</th>
-          <th scope="col">Mitigation</th>
           <th scope="col">Base Score</th>
           <th scope="col">RPN</th>
           <th scope="col">Status</th>
@@ -72,7 +92,6 @@
                 <td><?php echo $key+1; ?></td>
                 <td><?php echo $row['risk_type'];?> </td>
                 <td><?php echo $row['risk'];?></td>
-                <td><?php echo $row['mitigation'];?></td>
                 <?php if (isset($row['base_score']) && $row['base_score'] !=0 ): ?>
                   <td><?php echo $row['base_score'];?></td>
                 <?php else: ?><td> -- </td><?php endif; ?>
@@ -108,10 +127,33 @@ $(document).ready(function(){
     });
 });
 
-function getData(){
-  var selectedView = $("input[name='view']:checked").val();
+function getSyncData(){
   var selectedProjectId = $("#projects").val();
   var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
+  console.log("url:", url);
+  window.location = url;
+}
+
+function getSelectedRiskTypeData() {
+  var selectedRisk = $("#riskTypes").val();
+  var url = `risk-assessment?type=${selectedRisk}`
+  console.log("url:", url);
+  window.location = url;
+}
+
+function getSelectedStatusData(id) {
+  var idVal,obj,status,riskType,url;
+  riskType = $("#riskTypes").val();
+  if(id != 0){
+    $('#listblock  div').removeClass('btn-primary').addClass('btn-secondary');
+    idVal = "#status-type"+id;
+    $(idVal).parent().removeClass("btn-secondary").addClass('btn-primary');
+    obj = {1:"All", 2:"Open", 3:"Close"};
+    status = obj[id];
+    url = `risk-assessment?status=${status}&type=${riskType}`
+  }else{
+    url = `risk-assessment?status=All&type=${riskType}`
+  }
   console.log("url:", url);
   window.location = url;
 }

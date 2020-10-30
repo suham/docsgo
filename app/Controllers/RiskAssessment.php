@@ -17,21 +17,32 @@ class RiskAssessment extends BaseController
 		$data['backUrl'] = '/risk-assessment';
 
 		$status = $this->request->getVar('status');
+		$type = $this->request->getVar('type');
 		$data['isSyncEnabled'] = false;
+		$data['riskCategorySelected'] = 'Vulnerability';
+
+		$model = new RiskAssessmentModel();
 		if($status == 'sync'){
 			$status = '';
 			$project_id = $this->request->getVar('project_id');
 			$res = $this->syncRecords($project_id);
 			$data['isSyncEnabled'] = true;
+			$data["data"] = $model->getRisks('All', 'Vulnerability');
+		}else{
+			if($status == '' && $type == '') {
+				$data["data"] = $model->getRisks('All', 'Vulnerability');
+			}else {
+				$data["data"] = $model->getRisks($status, $type);
+				$data['riskCategorySelected'] = $type;
+			}	
 		}
-		$model = new RiskAssessmentModel();
-		$data["data"] = $model->getRisks($status);
 
 		$data['projects'] = $this->getProjects();
 		$projectModel = new ProjectModel();
 		$activeProject = $projectModel->where("status","Active")->first();	
 		$selectedProject = $activeProject['project-id'];
 		$data['selectedProject'] = $selectedProject;
+		$data['riskCategory'] = ['Open-Issue', 'Vulnerability', 'SOUP'];
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -160,6 +171,7 @@ class RiskAssessment extends BaseController
 				$postDataMatrix['Availability Impact'] = ($this->request->getVar('AvailabilityImpact-status-type')) ? explode('/', $this->request->getVar('AvailabilityImpact-status-type'))[1] : '';
 				$postDataMatrix['base_score'] = 'basic value 10';
 				$newData['rpn'] = '';
+				$newData['base_score'] = $this->request->getVar('baseScore');
 			}
 			foreach($data['jsonObj']['risk-assessment']['fmea'] as $key=>$value){
 				$data['jsonObj']['risk-assessment']['fmea'][$key]['value'] = $postDataMatrix[$value['category']];
