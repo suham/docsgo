@@ -7,6 +7,11 @@
             <a href="<?= $addUrl ?>" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Add
             </a>
+            <?php if (isset($AddMoreBtn)): ?>
+                <a href="#" class="btn btn-primary get-risks-sync">
+                   <i class="fa fa-plus"></i> <?php echo $AddMoreBtnText; ?>
+                </a>
+            <?php endif; ?>
         </div>
         <?php else: ?>
         <div class="col-sm-2 col-2 ">

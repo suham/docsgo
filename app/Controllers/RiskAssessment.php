@@ -14,6 +14,8 @@ class RiskAssessment extends BaseController
 		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = true;
 		$data['addUrl'] = "/risk-assessment/add";
+		$data['AddMoreBtn'] = true;
+		$data['AddMoreBtnText'] = "Get Risks";
 		$data['backUrl'] = '/risk-assessment';
 
 		$status = $this->request->getVar('status');
@@ -96,13 +98,6 @@ class RiskAssessment extends BaseController
 		$id = $this->request->getVar('id');
 		//handling the backUrl view, Which is selected previously 
 		$backUrl = '/risk-assessment';
-		if(isset($_SERVER['HTTP_REFERER'])){
-			$urlStr = $_SERVER['HTTP_REFERER'];
-			if (strpos($urlStr, 'status')) {
-				$urlAr = explode("=", $urlStr);
-				$backUrl = '/risk-assessment?status='.$urlAr[count($urlAr)-1];
-			}
-		}
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
@@ -157,8 +152,7 @@ class RiskAssessment extends BaseController
 				$postDataMatrix['Occurrence'] = ($this->request->getVar('Occurrence-status-type')) ? explode('/', $this->request->getVar('Occurrence-status-type'))[1] : '';	
 				$postDataMatrix['Detectability'] = ($this->request->getVar('Detectability-status-type')) ? explode('/', $this->request->getVar('Detectability-status-type'))[1] : '';
 				$postDataMatrix['RPN'] = $this->request->getVar('rpn');
-				$newData['rpn'] = $this->request->getVar('rpn');
-				$newData['base_score'] = '';
+				$newData['baseScore_severity'] = $this->request->getVar('rpn');
 			}
 			if($riskType == 'Vulnerability'){
 				$postDataMatrix['Attack Vector'] = ($this->request->getVar('AttackVector-status-type')) ? explode('/', $this->request->getVar('AttackVector-status-type'))[1] : '';
@@ -170,8 +164,7 @@ class RiskAssessment extends BaseController
 				$postDataMatrix['Integrity Impact'] = ($this->request->getVar('IntegrityImpact-status-type')) ? explode('/', $this->request->getVar('IntegrityImpact-status-type'))[1] : '';
 				$postDataMatrix['Availability Impact'] = ($this->request->getVar('AvailabilityImpact-status-type')) ? explode('/', $this->request->getVar('AvailabilityImpact-status-type'))[1] : '';
 				$postDataMatrix['base_score'] = $this->request->getVar('baseScore');
-				$newData['rpn'] = '';
-				$newData['base_score'] = $this->request->getVar('baseScore');
+				$newData['baseScore_severity'] = $this->request->getVar('baseScore');
 			}
 			foreach($data['jsonObj']['risk-assessment']['fmea'] as $key=>$value){
 				$data['jsonObj']['risk-assessment']['fmea'][$key]['value'] = $postDataMatrix[$value['category']];

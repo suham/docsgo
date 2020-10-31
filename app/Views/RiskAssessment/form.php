@@ -74,9 +74,10 @@
 
             <div class="col-12">
               <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="mitigation">Mitigation</label>
-                <input type="text" class="form-control" name="mitigation" id="mitigation"
-                value="<?= isset($member['mitigation']) ? $member['mitigation'] : '' ?>" >
+              <label class = "font-weight-bold text-muted" for="mitigation" >Mitigation</label>
+                <textarea class="form-control" name="mitigation" id="mitigation" maxlength=100><?=
+                isset($member['mitigation']) ? trim($member['mitigation']) : ''
+                ?></textarea>
               </div>
             </div>
 
@@ -107,7 +108,7 @@
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="rpn">Risk Priority Number (RPN)</label>
                 <input type="text" class="form-control" name="rpn" id="rpn" readonly
-                value="<?= isset($member['rpn']) ? $member['rpn'] : '' ?>" >
+                value="<?= isset($member['baseScore_severity']) ? $member['baseScore_severity'] : '' ?>" >
               </div>
             </div>
 
@@ -147,7 +148,7 @@
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="baseScore">Base Score</label>
                 <input type="text" class="form-control" name="baseScore" id="baseScore" readonly
-                value="<?= (isset($member['base_score']) && $member['base_score'] !=0 ) ? $member['base_score'] : '' ?>" >
+                value="<?= (isset($member['baseScore_severity']) && $member['baseScore_severity'] !=0 ) ? $member['baseScore_severity'] : '' ?>" >
               </div>
             </div>
 

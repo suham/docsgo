@@ -4,7 +4,7 @@ use CodeIgniter\Model;
 
 class RiskAssessmentModel extends Model{
     protected $table = 'docsgo-risks';
-    protected $allowedFields = ['project_id', 'risk_type', 'risk', 'description', 'component', 'mitigation', 'severity', 'occurrence', 'detectability', 'rpn', 'base_score','status', 'assessment', 'update_date'];
+    protected $allowedFields = ['project_id', 'risk_type', 'risk', 'description', 'component', 'mitigation', 'baseScore_severity','status', 'assessment', 'update_date'];
 
     function getRisksOld($status = ""){
         $db      = \Config\Database::connect();

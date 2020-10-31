@@ -53,17 +53,6 @@
             </div>
           </div>
         </div>
-     
-
-      
-        <div class="col-2">
-          <a href="#" onclick="getSyncData()"
-              class="btn <?= (($isSyncEnabled) ? " btn-primary" : "btn-secondary") ?>">
-            Sync
-          </a>
-        </div>
-      
-
   </div>
 
   <div class="row p-0 p-md-4">
@@ -82,8 +71,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Risk Type</th>
                 <th scope="col">Risk</th>
-                <th scope="col">Base Score</th>
-                <th scope="col">RPN</th>
+                <th scope="col"> <?= (($riskCategorySelected == 'Vulnerability') ? " Base Score" : "RPN") ?> </th>
                 <th scope="col">Status</th>
                 <th scope="col" style="width:125px">Action</th>
               </tr>
@@ -94,12 +82,9 @@
                       <td><?php echo $key+1; ?></td>
                       <td><?php echo $row['risk_type'];?> </td>
                       <td><?php echo $row['risk'];?></td>
-                      <?php if (isset($row['base_score']) && $row['base_score'] !=0 ): ?>
-                        <td><?php echo $row['base_score'];?></td>
-                      <?php else: ?><td> -- </td><?php endif; ?>
-                      <?php if (isset($row['rpn']) && $row['rpn'] !=0 ): ?>
-                        <td><?php echo $row['rpn'];?></td>
-                      <?php else: ?><td> -- </td><?php endif; ?>
+                      <?php if (isset($row['baseScore_severity']) && $row['baseScore_severity'] !=0): ?>
+                  <td><?php echo $row['baseScore_severity'];?></td>
+                <?php else: ?><td> -- </td><?php endif; ?>
                       <td><?php echo $row['status'];?></td>
                       <td>
                           <a href="/risk-assessment/add?id=<?php echo $row['id'];?>" class="btn btn-warning">
@@ -129,14 +114,14 @@ $(document).ready(function(){
       "autoWidth": false,
       "fixedHeader": true,
     });
+    $('.get-risks-sync').click(function(){
+      var selectedProjectId = $("#projects").val();
+      var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
+      console.log("url:", url);
+      window.location = url;
+    });
 });
 
-function getSyncData(){
-  var selectedProjectId = $("#projects").val();
-  var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
-  console.log("url:", url);
-  window.location = url;
-}
 
 function getSelectedRiskTypeData() {
   var selectedRisk = $("#riskTypes").val();
