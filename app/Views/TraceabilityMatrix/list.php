@@ -1,8 +1,7 @@
 <?php
   $uri = service('uri');
 ?>
-<div class="fluid-container">
-  <div class="row mb-3">
+  <div class="row p-2 p-md-4 mb-3">
     <div class="col-12">
       <div class="btn-group btn-group-toggle">
         <a href="/traceability-matrix" 
@@ -18,83 +17,89 @@
     </div>
   </div>
 
-<?php if ((count($data) == 0) && ($listViewDisplay == true)): ?>
-  <div class="alert alert-warning" role="alert">
-    No records found.
+  <div class="row p-0 p-md-4">
+    <?php if ((count($data) == 0) && ($listViewDisplay == true)): ?>
+      <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+          No records found.
+        </div>
+      </div>
+      <?php else: ?>
+        <?php if (($listViewDisplay == true)): ?>
+          <div class="col-12">
+          
+            <table class="table table-striped table-hover" id="traceability-list" >
+              <thead >
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">User Needs</th>
+                  <th scope="col">System</th>
+                  <th scope="col">Subsystem</th>
+                  <th scope="col">Test</th>
+                  <!-- <th scope="col">Design</th>
+                  <th scope="col">Code</th> -->
+                  <th scope="col" style="width:125px">Action</th>
+                </tr>
+              </thead>
+              <tbody  class="bg-white">
+                <?php $count=1; foreach ($data as $key=>$row): ?>
+                    <tr scope="row" id="<?php echo $row['id'];?>">
+                        <td><?php echo $count++; ?></td>
+                        <td><?php echo $row['cncr'];?></td>
+                        <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
+                        <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
+                        <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
+                      
+                        <td style="width:125px">
+                            <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <?php if (session()->get('is-admin')): ?>
+                            <a onclick="deleteTraceabilityMatrix(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                                <i class="fa fa-trash text-light"></i>
+                            </a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+        </div>
+        <?php endif; ?>  
+    <?php endif; ?>
+
+    <?php if ($listViewDisplay == false): ?>
+      <?php if (!count($data)): ?>
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            No records found.
+          </div>
+        </div>
+      <?php else: ?>  
+        <div class="col-12">
+            <table class="table table-striped table-hover" id="traceability-gaps" >
+              <thead >
+                <tr>
+                  <th scope="col">User Needs</th>
+                  <th scope="col">System</th>
+                  <th scope="col">Subsystem</th>
+                  <th scope="col">Test</th>
+                </tr>
+              </thead>
+              <tbody  class="bg-white">
+                    <tr scope="row">
+                    <td><?php if(isset($data['User Needs'])) { echo $data['User Needs']; } ?></td>
+                    <td><?php if(isset($data['System'])) { echo $data['System']; }?></td>
+                    <td><?php if(isset($data['Subsystem'])) { echo $data['Subsystem']; }?></td>
+                    <td><?php if(isset($data['testcase'])) { echo $data['testcase']; }?></td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>
+      <?php endif; ?>
+      <?php endif; ?>
+
   </div>
-
-  <?php else: ?>
-    <?php if (($listViewDisplay == true)): ?>
-      <div class="">
-      
-        <table class="table table-striped table-hover" id="traceability-list" >
-          <thead >
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">User Needs</th>
-              <th scope="col">System</th>
-              <th scope="col">Subsystem</th>
-              <th scope="col">Test</th>
-              <!-- <th scope="col">Design</th>
-              <th scope="col">Code</th> -->
-              <th scope="col" style="width:125px">Action</th>
-            </tr>
-          </thead>
-          <tbody  class="bg-white">
-            <?php $count=1; foreach ($data as $key=>$row): ?>
-                <tr scope="row" id="<?php echo $row['id'];?>">
-                    <td><?php echo $count++; ?></td>
-                    <td><?php echo $row['cncr'];?></td>
-                    <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
-                    <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
-                    <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
-                   
-                    <td style="width:125px">
-                        <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <?php if (session()->get('is-admin')): ?>
-                        <a onclick="deleteTraceabilityMatrix(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                            <i class="fa fa-trash text-light"></i>
-                        </a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-    </div>
-    <?php endif; ?>  
-<?php endif; ?>
-
-<?php if ($listViewDisplay == false): ?>
-  <?php if (!count($data)): ?>
-    <div class="alert alert-warning" role="alert">
-      No records found.
-    </div>
-  <?php else: ?>  
-        <table class="table table-striped table-hover" id="traceability-gaps" >
-          <thead >
-            <tr>
-              <th scope="col">User Needs</th>
-              <th scope="col">System</th>
-              <th scope="col">Subsystem</th>
-              <th scope="col">Test</th>
-            </tr>
-          </thead>
-          <tbody  class="bg-white">
-                <tr scope="row">
-                <td><?php if(isset($data['User Needs'])) { echo $data['User Needs']; } ?></td>
-                <td><?php if(isset($data['System'])) { echo $data['System']; }?></td>
-                <td><?php if(isset($data['Subsystem'])) { echo $data['Subsystem']; }?></td>
-                <td><?php if(isset($data['testcase'])) { echo $data['testcase']; }?></td>
-                </tr>
-          </tbody>
-        </table>
-  <?php endif; ?>
-  <?php endif; ?>
-
-</div>
 
 <script>
 

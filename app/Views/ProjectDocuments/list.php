@@ -4,7 +4,7 @@
 ?>
 
 
-  <div class="row mb-3">
+  <div class="row p-2 p-md-4 mb-3">
     <div class="col-3" >
         <div class="form-group mb-0">
           <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
@@ -33,7 +33,7 @@
   
 
 
-<div class="row">
+<div class="row p-0 p-md-4">
 
   <?php if (count($data) == 0): ?>
 

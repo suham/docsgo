@@ -1,8 +1,8 @@
 <?php
   $uri = service('uri');
   ?>
-<div class="container-old">
-  <div class="row">
+
+  <div class="row p-2 p-md-4 mb-3">
       <div class="col-3">
         <div class="form-group mb-0">
           <select class="form-control selectpicker" id="projects" name="projects" data-style="btn-secondary" data-live-search="true" data-size="8" >
@@ -16,8 +16,8 @@
         </div>
       </div>
 
-      <div>
-        <div class="form-group mb-0" style="width: 150px">
+      <div class="col-3">
+        <div class="form-group mb-0">
           <select class="form-control selectpicker" onchange="getSelectedStatusData(0)" id="riskTypes" name="riskTypes" data-style="btn-secondary" data-live-search="true" data-size="8" >
             <option value="" disabled >
               Select Project
@@ -29,9 +29,9 @@
         </div>
       </div>
 
-      &nbsp;
-      <div class="row mb-3">
-        <div class="col-12">
+   
+      
+        <div class="col-4">
           <div class="btn-group btn-group-toggle" >
           <!-- -->
           <div id="data-open-issue-soup-matrix">
@@ -53,70 +53,74 @@
             </div>
           </div>
         </div>
-      </div>
+     
 
-      <div class="row mb-3" style="margin-left:45%">
-        <div class="col-12">
+      
+        <div class="col-2">
           <a href="#" onclick="getSyncData()"
               class="btn <?= (($isSyncEnabled) ? " btn-primary" : "btn-secondary") ?>">
             Sync
           </a>
         </div>
+      
+
+  </div>
+
+  <div class="row p-0 p-md-4">
+    <?php if (count($data) == 0): ?>
+      <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+          No records found.
+        </div>
       </div>
 
+      <?php else: ?>
+        <div class="col-12">
+          <table class="table table-striped table-hover risk-assessment" id="risk-assessment-list">
+            <thead >
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Risk Type</th>
+                <th scope="col">Risk</th>
+                <th scope="col">Base Score</th>
+                <th scope="col">RPN</th>
+                <th scope="col">Status</th>
+                <th scope="col" style="width:125px">Action</th>
+              </tr>
+            </thead>
+            <tbody  class="bg-white">
+              <?php foreach ($data as $key=>$row): ?>
+                  <tr scope="row" id="<?php echo $row['id'];?>">
+                      <td><?php echo $key+1; ?></td>
+                      <td><?php echo $row['risk_type'];?> </td>
+                      <td><?php echo $row['risk'];?></td>
+                      <?php if (isset($row['base_score']) && $row['base_score'] !=0 ): ?>
+                        <td><?php echo $row['base_score'];?></td>
+                      <?php else: ?><td> -- </td><?php endif; ?>
+                      <?php if (isset($row['rpn']) && $row['rpn'] !=0 ): ?>
+                        <td><?php echo $row['rpn'];?></td>
+                      <?php else: ?><td> -- </td><?php endif; ?>
+                      <td><?php echo $row['status'];?></td>
+                      <td>
+                          <a href="/risk-assessment/add?id=<?php echo $row['id'];?>" class="btn btn-warning">
+                              <i class="fa fa-edit"></i>
+                          </a>
+                          <?php if (session()->get('is-admin')): ?>
+                          <a onclick="deleteItem(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                              <i class="fa fa-trash text-light"></i>
+                          </a>
+                          <?php endif; ?>
+                      </td>
+                  </tr>
+              <?php endforeach; ?>
+
+            </tbody>
+          </table>
+        </div>
+
+    <?php endif; ?>
   </div>
 
-<?php if (count($data) == 0): ?>
-
-  <div class="alert alert-warning" role="alert">
-    No records found.
-  </div>
-
-  <?php else: ?>
-
-    <table class="table table-striped table-hover risk-assessment" id="risk-assessment-list">
-      <thead >
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Risk Type</th>
-          <th scope="col">Risk</th>
-          <th scope="col">Base Score</th>
-          <th scope="col">RPN</th>
-          <th scope="col">Status</th>
-          <th scope="col" style="width:125px">Action</th>
-        </tr>
-      </thead>
-      <tbody  class="bg-white">
-        <?php foreach ($data as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td><?php echo $key+1; ?></td>
-                <td><?php echo $row['risk_type'];?> </td>
-                <td><?php echo $row['risk'];?></td>
-                <?php if (isset($row['base_score']) && $row['base_score'] !=0 ): ?>
-                  <td><?php echo $row['base_score'];?></td>
-                <?php else: ?><td> -- </td><?php endif; ?>
-                <?php if (isset($row['rpn']) && $row['rpn'] !=0 ): ?>
-                  <td><?php echo $row['rpn'];?></td>
-                <?php else: ?><td> -- </td><?php endif; ?>
-                <td><?php echo $row['status'];?></td>
-                <td>
-                    <a href="/risk-assessment/add?id=<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                    <?php if (session()->get('is-admin')): ?>
-                    <a onclick="deleteItem(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                        <i class="fa fa-trash text-light"></i>
-                    </a>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-
-      </tbody>
-    </table>
-
-<?php endif; ?>
-</div>
 
 <script>
 $(document).ready(function(){

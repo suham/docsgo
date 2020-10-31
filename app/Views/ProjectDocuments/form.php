@@ -17,7 +17,7 @@
         <?php endif; ?>
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
 
-          <div class="row card-header pt-3 rounded" style="background-color: #fff;">
+          <div class="row card-header pt-3 mt-3 rounded" style="background-color: #fff;">
             <div class="col-8 ">
               <h3><?= $formTitle ?></h3>
             </div>
