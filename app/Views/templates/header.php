@@ -152,6 +152,12 @@
                         <ion-icon name="cart-outline" class="nav__icon"></ion-icon>
                         <span class="nav__name">Inventory</span>
                     </a>
+
+                    <a target="_blank" href="/storage/repo" title="Storage"
+                      class="nav__link my_nav_link">
+                        <ion-icon name="cloud-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Storage</span>
+                    </a>
                 </div>
 
                 
