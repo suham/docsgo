@@ -47,39 +47,40 @@
       }
 
 
- .page-content {
-    overflow-x: hidden;
-  }
+    .page-content {
+        overflow-x: hidden;
+      }
 
-  .my_nav_link{
-    color:#12192C;
-  }
+      .my_nav_link{
+        color:#12192C;
+      }
 
-  .my_nav_link:hover{
-    color:white;
-    text-decoration:none;
-  }
+      .my_nav_link:hover{
+        color:white;
+        text-decoration:none;
+      }
 
-  .sidebar-footer{
-    position: fixed;
-    bottom: 0px;
-    padding: 8px;
-  }
+      .sidebar-footer{
+        position: fixed;
+        bottom: 0px;
+        padding: 8px;
+        width: 210px;
+      }
 
-  .sidebar-footer a:hover{
-    color:black;
-  }
+      .sidebar-footer a:hover{
+        color:black;
+      }
 
-  .collapse__menu li:hover a{
-    background-color: white;
-    color: black !important;
-    border-radius: 10px;
-    text-decoration:none;
-  }
+      .collapse__menu li:hover a{
+        background-color: white;
+        color: black !important;
+        border-radius: 10px;
+        text-decoration:none;
+      }
 
-  .collapse:hover a{
-    color:white;
-  }
+      .collapse:hover a{
+        color:white;
+      }
 
     </style>
   </head>
@@ -160,32 +161,32 @@
                     <span class="nav__name">Log Out</span>
             </a>
             <div class="sidebar-footer  d-none" id="footer-icons" >
-              <div class="row" >
-                <div class="col">
-                <a href="/admin/settings"  title="Settings"> 
-                  <ion-icon name="settings-outline" class="nav__icon "></ion-icon>
-                  
-                </a>
-
-                </div>
-                <div class="col">
-                <a href="/admin/users"  title="Registered Users">
-                  <ion-icon name="people-circle-outline" class="nav__icon "></ion-icon>
-                </a>
-
-                </div>
-                <div class="col">
-                <a href="/profile"  title="My Profile">
-                  <ion-icon name="person-circle-outline" class="nav__icon "></ion-icon>
-                </a>
-                </div>
-                <div class="col">
-                <a href="/logout" title="Log Out">
-                  <ion-icon name="log-out-outline" class="nav__icon "></ion-icon>
-                </a>
+            <div class="row justify-content-center" >
+              <?php $col="col-6"; if (session()->get('is-admin')): $col="col-3";?>
+                  <div class="<?= $col ?>">
+                    <a href="/admin/settings"  title="Settings"> 
+                      <ion-icon name="settings-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                      
+                    </a>
+                  </div>
+                  <div class="<?= $col ?>">
+                    <a href="/admin/users"  title="Registered Users">
+                      <ion-icon name="people-circle-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                    </a>
+                  </div>
+                  <?php endif; ?>
+                  <div class="<?= $col ?>">
+                    <a href="/profile"  title="My Profile">
+                      <ion-icon name="person-circle-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                    </a>
+                  </div>
+                  <div class="<?= $col ?>">
+                    <a href="/logout" title="Log Out">
+                      <ion-icon name="log-out-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
                
 
 
