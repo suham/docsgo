@@ -1,15 +1,14 @@
-
-<div class="container">
+<div class="row p-2 p-md-4 mb-3">
 <?php if (count($data) == 0): ?>
-
-  <div class="alert alert-warning" role="alert">
-    No records found.
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      No records found.
+    </div>
   </div>
-
   <?php else: ?>
 
 
-    <div class="table-responsive">
+    <div class="col-12">
 
     <table class="table table-striped table-hover" id="acronyms-list">
       <thead class="thead-dark">
@@ -54,7 +53,6 @@
     var table = $('#acronyms-list').DataTable({
       "responsive": true,
       "autoWidth": false,
-      "fixedHeader": true,
     });
   });
 
