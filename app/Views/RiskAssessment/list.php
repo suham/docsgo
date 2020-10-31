@@ -18,13 +18,15 @@
 
       <div class="col-3">
         <div class="form-group mb-0">
-          <select class="form-control selectpicker" onchange="getSelectedStatusData(0)" id="riskTypes" name="riskTypes" data-style="btn-secondary" data-live-search="true" data-size="8" >
-            <option value="" disabled >
-              Select Project
-            </option>
-            <?php foreach ($riskCategory as $value): ?>
-              <option  <?= (($riskCategorySelected == $value) ? "selected" : "") ?> value="<?=  $value ?>"><?=  $value ?></option>
-            <?php endforeach; ?>
+        <select class="form-control selectpicker" onchange="getSelectedStatusData(0)" data-live-search="true" data-size="8" name="riskTypes" id="riskTypes" data-style="btn-secondary" data-live-search="true" data-size="8" >
+              <option value="" disabled <?= isset($riskCategorySelected) ? '' : 'selected' ?>>
+                      Select Risk
+                  </option>
+                  <?php foreach ($riskCategory as $list): ?>
+                    <option 
+                      <?= isset($riskCategorySelected) ? (($riskCategorySelected == $list["value"]) ? 'selected': '') : '' ?>
+                      value="<?=  $list["value"] ?>" ><?=  $list["value"] ?></option>
+                  <?php endforeach; ?>
           </select>
         </div>
       </div>

@@ -4,6 +4,7 @@ use App\Models\ProjectModel;
 use App\Models\TeamModel;
 use App\Models\RiskAssessmentModel;
 use App\Models\StatusOptionsModel;
+use App\Models\SettingsModel;
 use CodeIgniter\I18n\Time;
 class RiskAssessment extends BaseController
 {
@@ -44,7 +45,7 @@ class RiskAssessment extends BaseController
 		$activeProject = $projectModel->where("status","Active")->first();	
 		$selectedProject = $activeProject['project-id'];
 		$data['selectedProject'] = $selectedProject;
-		$data['riskCategory'] = ['Open-Issue', 'Vulnerability', 'SOUP'];
+		$data['riskCategory'] = $this->getRiskTypecategories();
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -105,7 +106,7 @@ class RiskAssessment extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = $backUrl;
 		$dataList = [];
-		$data['riskCategory'] = ['Open-Issue', 'Vulnerability', 'SOUP'];
+		$data['riskCategory'] = $this->getRiskTypecategories();
 		$data['riskStatus'] = ['Open', 'Close'];
 		$data['projects'] = $this->getProjects();
 
@@ -205,7 +206,18 @@ class RiskAssessment extends BaseController
 		echo view('RiskAssessment/form', $data);
 		echo view('templates/footer');
 	}
-	
+
+	private function getRiskTypecategories() {
+		$settingsModel = new SettingsModel();
+		$riskCategory = $settingsModel->where("identifier","riskCategory")->first();
+		if($riskCategory["options"] != null){
+			$data = json_decode( $riskCategory["options"], true );
+		}else{
+			$data = [];
+		}
+		return $data;
+	}
+
 	private function getProjects(){
         $projectModel = new ProjectModel();
         $data = $projectModel->findAll();	

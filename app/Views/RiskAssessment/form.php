@@ -28,7 +28,7 @@
               <label class = "font-weight-bold text-muted" for="project">Project</label>
                <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project" id="project">
                <option value="" disabled <?= (isset($member['project_id']) && ($member['project_id'] != 0) ) ? '' : 'selected' ?>>
-                    Select
+                    Select Project
                 </option>
                 <?php foreach ($projects as $key=>$value): ?>
                   <option 
@@ -44,12 +44,12 @@
               <label class = "font-weight-bold text-muted" for="risk_type">Risk Type</label>
                   <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="risk_type" id="risk_type" onchange="toggleVulnerability()">
                     <option value="" disabled <?= isset($member['risk_type']) ? '' : 'selected' ?>>
-                        Select
+                        Select Risk
                     </option>
-                    <?php foreach ($riskCategory as $value): ?>
-                      <option 
-                      <?= isset($member['risk_type']) ? (($member['risk_type'] == $value) ? 'selected': '') : '' ?>
-                        value="<?=  $value ?>" ><?=  $value ?></option>
+                    <?php foreach ($riskCategory as $list): ?>
+                          <option 
+                            <?= isset($member['risk_type']) ? (($member['risk_type'] == $list["value"]) ? 'selected': '') : '' ?>
+                            value="<?=  $list["value"] ?>" ><?=  $list["value"] ?></option>
                     <?php endforeach; ?>                    
                   </select>
               </div>
