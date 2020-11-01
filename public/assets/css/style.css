@@ -2,6 +2,18 @@ body{
   background-color: #fff;
 }
 
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  width: #1e1e24;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+
 .form-color{
   background-color:#e9ecef !important; 
   border-radius: 7px;
