@@ -59,7 +59,7 @@
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="risk">Risk</label>
               <input type="text" class="form-control" name="risk" id="risk"
-              value="<?= isset($member['risk']) ? $member['risk'] : '' ?>" >
+              value="<?= isset($member['risk']) ? htmlentities($member['risk']) : '' ?>" >
               </div>
             </div>
 
