@@ -12,7 +12,7 @@
 <?php else: ?>
 
     <div class="col-12">
-      <table class="table table-striped table-hover"  id="document-master-list">
+      <table class="table  table-hover"  id="document-master-list">
         <thead>
           <tr>
             <th scope="col">#</th>

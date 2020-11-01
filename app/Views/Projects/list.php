@@ -10,7 +10,7 @@
     </div>
     <?php else: ?>
       <div class="col-12">
-        <table id="project-list" class="table table-striped table-hover">
+        <table id="project-list" class="table  table-hover">
         <thead >
           <tr>
             <th scope="col">#</th>

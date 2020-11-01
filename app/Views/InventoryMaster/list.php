@@ -36,7 +36,7 @@
 
     <div class="col-12">
 
-      <table class="table table-striped table-hover" id="inventory-list">
+      <table class="table  table-hover" id="inventory-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>

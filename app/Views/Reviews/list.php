@@ -21,7 +21,7 @@
     <div class="col-12 col-md-9 pt-3 pb-3 pt-md-0 pb-md-0">
       <div class="btn-group btn-group-toggle ">
         <?php foreach ($reviewStatus as $revStatus): ?>
-          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-secondary") ?>">
             <input type="radio" name="view" value="<?=  $revStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $revStatus["value"]) ? "checked" : "") ?>>  <?=  $revStatus["value"] ?>
           </label>
         <?php endforeach; ?>
@@ -42,7 +42,7 @@
 
   <?php else: ?>
     <div class="col-12">
-      <table class="table table-striped table-hover" id="reviews-list">
+      <table class="table  table-hover" id="reviews-list">
         <thead>
           <tr>
             <th scope="col" >#</th>

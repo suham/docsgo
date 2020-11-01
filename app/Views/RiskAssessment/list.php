@@ -67,7 +67,7 @@
 
       <?php else: ?>
         <div class="col-12">
-          <table class="table table-striped table-hover risk-assessment" id="risk-assessment-list">
+          <table class="table table-hover risk-assessment" id="risk-assessment-list">
             <thead >
               <tr>
                 <th scope="col">#</th>

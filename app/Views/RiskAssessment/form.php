@@ -1,8 +1,8 @@
 <style>
 [uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}
 </style>
-  <div class="row">
-    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-1 pt-3 pb-3 bg-white from-wrapper">
+  <div class="row  p-0 p-md-4 justify-content-center">
+    <div class="col-12 col-md-10 col-xl-6 mt-1 pt-3 pb-3 form-color">
 
       <div class="container">
         <h3><?= $formTitle ?></h3>
@@ -23,7 +23,7 @@
               </div>
             <?php endif; ?>
 
-            <div class="col-12">
+            <div class="col-6">
               <div class="form-group" readonly="readonly" id="risk_type_selection">
               <label class = "font-weight-bold text-muted" for="project">Project</label>
                <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project" id="project">
@@ -39,7 +39,7 @@
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-6">
               <div class="form-group" id="risk_name">
               <label class = "font-weight-bold text-muted" for="risk_type">Risk Type</label>
                   <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="risk_type" id="risk_type" onchange="toggleVulnerability()">
@@ -81,9 +81,9 @@
               </div>
             </div>
 
-            <div id="data-open-issue-soup-matrix">
+            <div class="col-12" id="data-open-issue-soup-matrix">
               <?php foreach ($fmeaList as $key=>$value): ?>
-                <div  class="col-12">
+                <div >
                   <?php if (($value['id']) < 4 ): ?>
                     <div class="form-group">
                       <label class = "font-weight-bold text-muted" for="mitigation"><?php echo $value['category'];?></label>
@@ -104,7 +104,7 @@
               <?php endforeach; ?>
             </div>
 
-            <div class="col-12" id="data-open-issue-soup-rpn-matrix">
+            <div class="col-12 col-sm-6 mt-3" id="data-open-issue-soup-rpn-matrix">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="rpn">Risk Priority Number (RPN)</label>
                 <input type="text" class="form-control" name="rpn" id="rpn" readonly
@@ -112,18 +112,26 @@
               </div>
             </div>
 
-            <div id="data-vulnerability-matrix">
-              <?php foreach ($cvssList as $key=>$value): ?>
-                  <div class="col-12">
+            <div class="col-12" id="data-vulnerability-matrix">
+              <div class="row">
+              <?php $count=0; foreach ($cvssList as $key=>$value): $count++;?>
+                  <div class="col-<?= ($count == 1) ? '8' : '4' ?>">
                     <div class="form-group">
                     <?php if($key !='Score'): ?>
-                      <label class = "font-weight-bold text-muted" for="mitigation"><h4><?php echo $key; ?></h4></label>
-                      <br/>
+                      <div class="row">
+                        <div class="col-12">
+                          <label class = "font-weight-bold text-muted" for="mitigation"><h4><?php echo $key; ?></h4></label>
+                        </div>
+                      </div>
                         <?php foreach ($value as $key1=>$value1): ?>
                             <div class="col-12">
                               <div class="form-group">
-                                <label class = "font-weight-bold text-muted" for="mitigation"><?php echo $value1['category']; ?></label>
-                                <br/>
+                                <div class="row">
+                                 <div class="col-12">
+                                    <label class = "font-weight-bold text-muted" for="mitigation"><?php echo $value1['category']; ?></label>
+                                  </div>
+                                </div>
+                          
                                 <div class="btn-group btn-group-toggle btn-vulnerability-toggle" id="vulnerability<?php echo str_replace(' ', '', $value1['category']);?>" >
                                     <?php foreach ($value1['options'] as $key2=>$value2):?>
                                         <div class="btn <?php echo (($value1['value']) ==  $value2['title'])? "btn-primary" : "btn-secondary"; ?> "  <?php echo $key2;?>
@@ -136,15 +144,16 @@
                                 </div>
                               </div>
                             </div>
-                            <br/>
+                            
                         <?php endforeach; ?>
                       <?php endif; ?>
                     </div>
                   </div>
               <?php endforeach; ?>
+              </div>
             </div>
 
-            <div class="col-12" id="data-vulnerability-baseScore-matrix">
+            <div class="col-12 col-sm-6 mt-3" id="data-vulnerability-baseScore-matrix">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="baseScore">Base Score</label>
                 <input type="text" class="form-control" name="baseScore" id="baseScore" readonly
@@ -152,9 +161,9 @@
               </div>
             </div>
 
-          </div>
-          <div class="row mt-sm-2">
-            <div class="col-12 col-sm-8">
+          
+          
+            <div class="col-12 col-sm-6 mt-3">
                 <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="status">Status</label>
                     <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="status" id="status">
@@ -169,14 +178,17 @@
                     </select>
                 </div>
             </div>
-          </div>
+         
 
-          <br/><br/><br/>
-          <div class="row">
-            <div class="col-12 col-sm-4">
-              <button type="submit" class="btn btn-primary">Submit</button>
+         <div class="col-12  mt-3">
+          <div class="row justify-content-center">
+              <div class="col-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
             </div>
-          </div>
+         </div>
+       
+
         </form>
       </div>
     </div>

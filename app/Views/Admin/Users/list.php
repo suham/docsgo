@@ -10,7 +10,7 @@
 
         <?php else: ?>
             
-        <table class="table rounded table-striped table-hover"  id="users-list">
+        <table class="table rounded  table-hover"  id="users-list">
             <thead>
                 <tr>
                 <th scope="col">#</th>

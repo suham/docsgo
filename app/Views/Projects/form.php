@@ -1,5 +1,5 @@
 <div class="row p-0 p-md-4">
-  <div class="col-12 col-sm8- offset-sm-2 col-md-7 offset-md-3 mt-1 pt-3 pb-3 bg-white from-wrapper">
+  <div class="col-12 col-sm8- offset-sm-2 col-md-7 offset-md-3 mt-1 pt-3 pb-3 form-color ">
     <div class="container">
       <h3><?= $formTitle ?></h3>
       <hr>

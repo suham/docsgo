@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-12 col-md-7 col-lg-6">
+  <div class="col-12 col-md-7 col-lg-6 mt-3">
     <div class="container">
       <?php if (count($data) == 0): ?>
 
@@ -9,7 +9,7 @@
 
       <?php else: ?>
         <div class="table-responsive">
-          <table class="table table-striped table-hover">
+          <table class="table  table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>

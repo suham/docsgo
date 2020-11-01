@@ -1,7 +1,7 @@
 <?php
   $uri = service('uri');
 ?>
-  <div class="row p-2 p-md-4 mb-3">
+  <div class="row p-0 p-md-4">
     <div class="col-12">
       <div class="btn-group btn-group-toggle">
         <a href="/traceability-matrix" 
@@ -28,7 +28,7 @@
         <?php if (($listViewDisplay == true)): ?>
           <div class="col-12">
           
-            <table class="table table-striped table-hover" id="traceability-list" >
+            <table class="table  table-hover" id="traceability-list" >
               <thead >
                 <tr>
                   <th scope="col">#</th>
@@ -77,7 +77,7 @@
         </div>
       <?php else: ?>  
         <div class="col-12">
-            <table class="table table-striped table-hover" id="traceability-gaps" >
+            <table class="table  table-hover" id="traceability-gaps" >
               <thead >
                 <tr>
                   <th scope="col">User Needs</th>

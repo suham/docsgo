@@ -10,10 +10,10 @@
 </style>
 <div class="">
   <div class="row justify-content-center">
-    <div class="col-12 col-md-9 mt-1 pt-3 pb-3 bg-white from-wrapper">
+    <div class="col-12 col-md-9 mt-3 pt-3 pb-3 ">
       <div class="container">
         
-        <div class="row">
+        <div class="row form-color p-3">
           <div class="col-12 col-sm-6">
             <h3><?= $formTitle ?></h3>
           </div>
@@ -41,7 +41,7 @@
             <?php endif; ?>
           </div>
 
-          <div class="card">
+          <div class="card form-color">
             <ul class="nav nav-tabs nav-justified mb-3" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active lead" id="header-tab" data-toggle="tab" href="#header" role="tab"

@@ -10,7 +10,7 @@
 
     <div class="col-12">
 
-    <table class="table table-striped table-hover" id="acronyms-list">
+    <table class="table  table-hover" id="acronyms-list">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>

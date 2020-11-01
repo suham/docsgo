@@ -21,7 +21,7 @@
       <div class="col-9">
         <div class="btn-group btn-group-toggle">
           <?php foreach ($documentStatus as $docStatus): ?>
-            <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-light") ?>">
+            <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus["value"]) ? " btn-primary" : "btn-secondary") ?>">
               <input type="radio" name="view" value="<?=  $docStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $docStatus["value"]) ? "checked" : "") ?>>  <?=  $docStatus["value"] ?>
             </label>
           <?php endforeach; ?>
@@ -46,7 +46,7 @@
   <?php else: ?>
 
     <div class="col-12">
-      <table class="table table-striped table-hover"  id="documents-list">
+      <table class="table  table-hover"  id="documents-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>

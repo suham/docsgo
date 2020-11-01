@@ -7,7 +7,7 @@
 </style>
 
   <div class="row pl-0 justify-content-center pt-0">
-    <div class="col-12 col-md-9 ml-0 pb-3 from-wrapper rounded" style="min-height:400px;">
+    <div class="col-12 col-md-9 ml-0 pb-3 mt-3 " style="min-height:400px;">
       <div class="container pl-0 pr-0">
 
         <?php if (session()->get('success') && (!isset($validation))): ?>
@@ -17,7 +17,7 @@
         <?php endif; ?>
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
 
-          <div class="row card-header pt-3 mt-3 rounded" style="background-color: #fff;">
+          <div class="row card-header pt-3 mt-3 form-color" >
             <div class="col-8 ">
               <h3><?= $formTitle ?></h3>
             </div>
@@ -55,7 +55,7 @@
 
 
           <?php if (isset($sections)): ?>
-          <div class="card  mt-2">
+          <div class="card  mt-2 form-color">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active lead" id="header-tab" data-toggle="tab" href="#header" role="tab"

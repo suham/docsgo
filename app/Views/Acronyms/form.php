@@ -1,6 +1,6 @@
 
   <div class="row">
-    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-1 pt-3 pb-3 bg-white from-wrapper">
+    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-3 pt-3 pb-3 from-wrapper form-color">
 
       <div class="container">
         <h3><?= $formTitle ?></h3>
@@ -41,9 +41,8 @@
           </div>
 
 
-          <br/><br/><br/>
-          <div class="row">
-            <div class="col-12 col-sm-4">
+          <div class="row justify-content-center">
+            <div class="col-2">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </div>

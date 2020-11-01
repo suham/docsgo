@@ -11,7 +11,7 @@
 
   <?php else: ?>
     <div class="col-12">
-      <table class="table table-striped table-hover" id="teams-list">
+      <table class="table  table-hover" id="teams-list">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
