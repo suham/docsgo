@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
-    <!-- <link rel="stylesheet" href="/assets/css/header.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
     <link rel="stylesheet" href="/assets/css/bootstrap4-toggle.min.css" />
@@ -47,7 +46,7 @@
       }
 
 
-    .page-content {
+      .page-content {
         overflow-x: hidden;
       }
 
