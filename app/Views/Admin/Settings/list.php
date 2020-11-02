@@ -53,6 +53,10 @@
                                 <a class="list-group-item list-group-item-action" id="review-category-list"
                                     data-toggle="list" href="#reviewCategoryList" role="tab"
                                     aria-controls="profile">Review Category</a>
+
+                                <a class="list-group-item list-group-item-action" id="requirement-category-list"
+                                    data-toggle="list" href="#requirementCategoryList" role="tab"
+                                    aria-controls="profile">Requirement Category</a>
                                 
                                 <a class="list-group-item list-group-item-action" id="risk-category-list"
                                     data-toggle="list" href="#riskCategoryList" role="tab"
@@ -108,6 +112,20 @@
                                         <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Review Category', 'reviewCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="requirementCategoryList" role="tabpanel"
+                                    aria-labelledby="requirement-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-9">
+                                            <ul class="list-group requirementsCategory"></ul>
+                                        </div>
+                                        <div class="col-3">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Requirement Category', 'requirementsCategory')">Add</button>
                                         </div>
                                     </div>
                                 </div>
