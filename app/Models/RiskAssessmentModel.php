@@ -18,7 +18,7 @@ class RiskAssessmentModel extends Model{
         }else{
             $whereCondition = " WHERE risk_type = '".$riskType."' AND status = '".$status."' ";
         }
-        $sql = "SELECT * from `docsgo-risks` ". $whereCondition . "ORDER BY update_date;";
+        $sql = "SELECT * from `docsgo-risks` ". $whereCondition . "ORDER BY update_date desc;";
         $query = $db->query($sql);
         $data = $query->getResult('array');
         return $data;
@@ -28,7 +28,7 @@ class RiskAssessmentModel extends Model{
         $db = \Config\Database::connect();
 
         $whereCondition = " WHERE risk_type = 'Vulnerability' "; 
-        $sql = "SELECT * FROM `docsgo-risks` ". $whereCondition . "ORDER BY update_date;";
+        $sql = "SELECT * FROM `docsgo-risks` ". $whereCondition . "ORDER BY update_date desc;";
         $query = $db->query($sql);
         $data = $query->getResult('array');
         return $data;
@@ -45,6 +45,80 @@ class RiskAssessmentModel extends Model{
         $data = $query->getResult('array');
 
         return $data; 
+    }
+
+    function getRisksForDocuments(){
+        $db      = \Config\Database::connect();
+        $sql = "SELECT * from `docsgo-risks` ORDER BY update_date desc;";
+        $query = $db->query($sql);
+        $result = $query->getResult('array');
+        $data = array();
+        
+    // $data['assessment'] = $row['assessment'];
+       
+
+
+        foreach($result as $row){
+            $temp = array();
+            $temp['baseScore_severity'] = $row['baseScore_severity'];
+            $temp['component'] = $row['component'];
+            $temp['description'] = $row['description'];
+            $temp['id'] = $row['id'];
+            $temp['mitigation'] = $row['mitigation'];
+            $temp['project_id'] = $row['project_id'];
+            $temp['risk'] = $row['risk'];
+            $temp['risk_type'] = $row['risk_type'];
+            $temp['status'] = $row['status'];
+            
+            if($row['assessment'] == "" ){
+                $temp['assessment'] = "";
+            }else{
+                $assessment = json_decode( $row['assessment'], true );
+                if($assessment["risk-assessment"]["cvss"][0]["Score"][0]["value"] == ""){
+                    //FMEA
+                    $fmea = $assessment["risk-assessment"]["fmea"];
+                    $content = "<ol>";
+                    foreach($fmea as $section){
+                        $content .= "<li>".($section["category"])." => ";
+                        if($section["value"] == ""){
+                            $section["value"] = "--";
+                        }
+                        $content .= " ".$section["value"]."</li>";
+                    }
+                    $content .= "</ol>";
+                    $temp['assessment'] = $content;
+                }else{
+                    //CVSS
+                    $cvss = $assessment["risk-assessment"]["cvss"][0];
+                    $temp['assessment'] = "";
+                    foreach($cvss as $key=>$metric){
+                        if($key == "Score"){
+                            $key = "CVSS 3.1 ". $key;
+                        }
+                        $content = "**".strtoupper($key)."** <br/>";
+                        $content .= "<ol>";
+                        foreach($metric as $section){
+                            $content .= "<li>".$section["category"] . " => ";
+                            if($section["value"] == ""){
+                                $section["value"] = "--";
+                            }
+                            $content .= " ".$section["value"]."</li>";
+                        }
+                        $content .= "</ol>";
+                        $temp['assessment'] .= $content .  "<br/>" ;
+                    }
+                    
+                }
+            }
+           
+            array_push($data, $temp);
+        }
+
+        return $data;
+    }
+
+    function formatAssesment($data){
+
     }
 
 

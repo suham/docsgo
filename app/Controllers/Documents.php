@@ -155,7 +155,7 @@ class Documents extends BaseController
 			return $data;
 		}else if($tableName == 'riskAssessment'){
 			$riskAssessment = new RiskAssessmentModel();
-			$data = $riskAssessment->findAll();	
+			$data = $riskAssessment->getRisksForDocuments();	
 			return $data;
 		}else if($tableName == 'acronyms'){
 			$acronymsModel = new AcronymsModel();

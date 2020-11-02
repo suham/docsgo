@@ -16,7 +16,7 @@ body::-webkit-scrollbar-thumb {
 
 .form-color{
   background-color:#e9ecef !important; 
-  border-radius: 7px;
+  border-radius: 7px !important;
 }
 .form-wrapper label{
   font-weight: bold;

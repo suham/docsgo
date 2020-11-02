@@ -50,10 +50,6 @@
           </div>
           <?php endif; ?>
 
-
-       
-
-
           <?php if (isset($sections)): ?>
           <div class="card  mt-2 form-color">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -692,7 +688,7 @@
     var selectedIds = $("#select_" + sectionId).val();
     var table = lookUpTables[tableName];
     var dataFormat = "table";
-    if (tableName == "traceabilityMatrix") {
+    if (tableName == "traceabilityMatrix" || tableName == "riskAssessment") {
       dataFormat = "list";
     }
 

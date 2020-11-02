@@ -117,13 +117,14 @@ class DocumentTemplate extends BaseController
 		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
 		$tables['Reviews']['name'] = "reviews";
 		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
+		$tables['RiskAssessment']['name'] = "riskAssessment";
+		$tables['RiskAssessment']['columns'] = "risk_type,risk,description,component,mitigation,assessment,baseScore_severity,status";
 		$tables['Teams']['name'] = "teams";
 		$tables['Teams']['columns'] = "name,email,responsibility,role";
 		$tables['TraceabilityMatrix']['name'] = "traceabilityMatrix";
 		$tables['TraceabilityMatrix']['columns'] = "cncr,system,subsysreq,design,code,testcase";
 		
-		// $tables['RiskAssessment']['name'] = "riskAssessment";
-		// $tables['RiskAssessment']['columns'] = "cybersecurity_id,detectability,issue_id,occurrence,risk_type,rpn,severity,soup_id";
+
 		return $tables;
 	}
 	
