@@ -1,13 +1,16 @@
+<style>
+body{
+  padding:0px;
+}
+</style>
 <div class="container">
-  <div class="row">
-    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 mt-5 pt-2 pb-3 bg-white from-wrapper">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-8 col-md-6 col-lg-5 mt-5 pt-2 pb-3 form-color">
       <div class="container">
         <div class="row">
-<div class="col"> <h3 class="mt-5">Login</h3></div>
-<div class="col">     <img class="float-right" src="/Docsgo-Logo.png" height="100px" width="100px" alt="Card image cap"></div>
+            <div class="col"><h3 class="mt-5 text-muted">Login</h3></div>
+            <div class="col"><img class="float-right" src="/Docsgo-Logo.png" height="100px" width="100px" alt="Card image cap"></div>
         </div>
- 
-       
         <hr>
         <?php if (session()->get('success')): ?>
           <div class="alert alert-success" role="alert">
