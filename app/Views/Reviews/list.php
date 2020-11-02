@@ -49,8 +49,8 @@
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
             <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
             <th scope="col" style="min-width:120px;">Assigned To</th>
-            <th scope="col">Category</th>
             <th scope="col" style="min-width:120px;">Reviewed By</th>
+            <th scope="col" style="min-width: 125px;">Update Date</th>
             <th scope="col" style="min-width: 100px;">Actions</th>
           </tr>
         </thead>
@@ -61,8 +61,8 @@
                   <td style="max-width:125px;word-wrap: break-word;"><?php echo $row['review-name'];?></td>
                   <td style="max-width:570px;word-wrap: break-word;"><?php echo $row['context'];?></td>
                   <td><?php echo $teamMembers[$row['assigned-to']];?></td>
-                  <td><?php echo $row['category'];?></td>
                   <td><?php echo $teamMembers[$row['review-by']];?></td>
+                  <td><?php $timestamp = strtotime($row['updated-at']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                   <td>
                       <a href="/reviews/add/<?php echo $row['id'];?>" class="btn btn-warning">
                           <i class="fa fa-edit"></i>

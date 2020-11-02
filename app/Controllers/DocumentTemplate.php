@@ -15,7 +15,7 @@ class DocumentTemplate extends BaseController
 		
 
 		$model = new DocumentTemplateModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $model->orderBy('name')->findAll();	
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
