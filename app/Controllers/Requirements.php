@@ -13,9 +13,15 @@ class Requirements extends BaseController
 
 		// helper(['form']); 
 		$data['projects'] = $this->getProjects();
-		$model = new RequirementsModel();
-		$data['data'] = $model->orderBy('requirement', 'asc')->findAll();
 		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");		
+		$status = $this->request->getVar('status');
+		$data['requirementSelected'] = $status;
+		if($status == 'All' || $status == ''){
+			$status ='';
+			$data['requirementSelected'] = 'User Needs';
+		}
+		$model = new RequirementsModel();
+		$data["data"] = $model->getRequirements($status);
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);

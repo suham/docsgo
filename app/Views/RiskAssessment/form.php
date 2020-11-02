@@ -113,6 +113,7 @@
             </div>
 
             <div class="col-12" id="data-vulnerability-matrix">
+            <h4><label class = "font-weight-bold text-muted">CVSS 3.1 Base Risk Assessment</label></h4>
               <div class="row">
               <?php $count=0; foreach ($cvssList as $key=>$value): $count++;?>
                   <div class="col-<?= ($count == 1) ? '8' : '4' ?>">

@@ -71,9 +71,9 @@
             <thead >
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Risk Type</th>
                 <th scope="col">Risk</th>
-                <th scope="col"> <?= (($riskCategorySelected == 'Vulnerability') ? " Base Score" : "RPN") ?> </th>
+                <th scope="col">Mitigation</th>
+                <th scope="col"> <?= (($riskCategorySelected == 'Vulnerability') ? "CVSS 3.1 Base Score" : "RPN") ?> </th>
                 <th scope="col">Status</th>
                 <th scope="col" style="width:125px">Action</th>
               </tr>
@@ -82,8 +82,8 @@
               <?php foreach ($data as $key=>$row): ?>
                   <tr scope="row" id="<?php echo $row['id'];?>">
                       <td><?php echo $key+1; ?></td>
-                      <td><?php echo $row['risk_type'];?> </td>
                       <td><?php echo $row['risk'];?></td>
+                      <td><?php echo $row['mitigation'];?></td>
                       <?php if (isset($row['baseScore_severity']) && $row['baseScore_severity'] !=0): ?>
                   <td><?php echo $row['baseScore_severity'];?></td>
                 <?php else: ?><td> -- </td><?php endif; ?>

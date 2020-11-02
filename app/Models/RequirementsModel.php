@@ -12,4 +12,16 @@ class RequirementsModel extends Model{
         $builder->insertBatch($data);		
     }
 
+    function getRequirements($status = '') {
+        $db      = \Config\Database::connect();
+        $whereCondition = "";
+        if($status != ""){
+            $whereCondition = " WHERE type = '".$status."' ";
+        }
+        $sql = "SELECT * from `docsgo-requirements` ". $whereCondition . "ORDER BY update_date;";
+        $query = $db->query($sql);
+        $data = $query->getResult('array');
+        return $data;
+    }
+
 }

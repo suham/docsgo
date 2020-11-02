@@ -1,3 +1,19 @@
+<div class="row p-2 p-md-4 mb-3">
+    <div class="col-3">
+      <div class="form-group mb-0">
+        <select class="form-control selectpicker" onchange="getSelectedStatusData()" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
+            <option value=""  <?= (isset($requirementSelected) && ($requirementSelected != '')) ? '' : 'selected' ?>>
+                Select Type
+            </option>
+            <?php foreach ($requirementStatus as $key=>$value): ?>
+              <option 
+                <?= isset($requirementSelected) ? (($requirementSelected == $key) ? 'selected': '') : '' ?>
+                value="<?=  $key ?>" ><?=  $value ?></option>
+            <?php endforeach; ?>
+        </select>
+      </div>
+    </div>
+</div>
 
 <div class="row p-0 p-md-4">
 <?php if (count($data) == 0): ?>
@@ -15,7 +31,6 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Type</th>
             <th scope="col">Requirement</th>
             <th scope="col">Description</th>
             <th scope="col" style="width:125px">Update Date</th>
@@ -26,7 +41,6 @@
           <?php foreach ($data as $key=>$row): ?>
               <tr scope="row" id="<?php echo $row['id'];?>">
                   <td><?php echo $key+1; ?></td>
-                  <td><?php echo $row['type']; ?></td>
                   <td><?php echo $row['requirement'];?></td>
                   <td><?php echo $row['description'];?></td>
                   <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
@@ -86,6 +100,17 @@
     });
 
  }
+
+ function getSelectedStatusData(id) {
+  var url, requirementType;
+  requirementType = $("#requirementType").val();
+  console.log("requirementType:", requirementType);
+  if(requirementType == '') {
+    requirementType = 'All';
+  }
+  url = `requirements?status=${requirementType}`;
+  window.location = url;
+}
 
 </script>
 
