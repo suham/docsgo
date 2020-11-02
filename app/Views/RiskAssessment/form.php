@@ -75,7 +75,7 @@
             <div class="col-12">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="mitigation" >Mitigation</label>
-                <textarea class="form-control" name="mitigation" id="mitigation" maxlength=100><?=
+                <textarea class="form-control" name="mitigation" id="mitigation" ><?=
                 isset($member['mitigation']) ? trim($member['mitigation']) : ''
                 ?></textarea>
               </div>
