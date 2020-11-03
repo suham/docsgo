@@ -28,7 +28,7 @@ function sectionNumber($str) {
     return (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
 }
 
-function addTableStylesToContent($rawContent) {
+function addTableStylesToContent($rawContent){
     $fontFamily = 'Arial, sans-serif';
     $fontSize = '11';
     $replaceContent = str_replace("<table>", '<table style="border-spacing:0 10px; font-family:' . $fontFamily . '; font-size: ' . $fontSize . ';width: 100%; padding: 10px; border: 1px #000000 solid; border-collapse: collapse;" border="1" cellpadding="5">', $rawContent);
@@ -49,7 +49,8 @@ $idArray = array_keys($jsonGetId);
 $count = 0;
 foreach ($idArray as $id) {
     $jsonMain = json_decode($str, true);
-    $fileName = str_replace(",","_",$jsonMain[$id]['file-name'] . ".docx");
+    $fileNameLev1 = str_replace(",", "_", $jsonMain[$id]['file-name'] . ".docx");
+    $fileName = str_replace(" ", "_", $fileNameLev1);
     $jsonObj = json_decode($jsonMain[$id]['json-object'], true);
     $documentType = array_keys($jsonObj);
     $json = $jsonObj[$documentType[0]];
@@ -176,7 +177,7 @@ foreach ($idArray as $id) {
     $count++;
     
     if ($type == "project") {
-        $directoryName = "Documents_".$main_id;
+        $directoryName = "Documents_" . $main_id;
 
         if (!is_dir($directoryName)) {
             mkdir($directoryName, 0777);
@@ -211,7 +212,7 @@ foreach ($idArray as $id) {
             header('Pragma: public');
             header('Content-Length: ' . filesize($zip_file));
             flush();
-//            readfile($zip_file);
+            readfile($zip_file);
             if (is_dir($directoryName)) {
                 foreach ($filesToDelete as $file) {
                     unlink($file);
@@ -224,14 +225,14 @@ foreach ($idArray as $id) {
     } else {
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=' . $fileName);
+        header('Content-Disposition: attachment; filename=' . basename($fileName));
         header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         header('Content-Length: ' . filesize($fileName));
         flush();
-//        readfile($fileName);
+        readfile($fileName);
         unlink($fileName);
         exit;
     }
