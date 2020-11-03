@@ -208,7 +208,7 @@ foreach ($idArray as $id) {
             header('Pragma: public');
             header('Content-Length: ' . filesize($zip_file));
             flush();
-            readfile($zip_file);
+//            readfile($zip_file);
             if (is_dir($directoryName)) {
                 foreach ($filesToDelete as $file) {
                     unlink($file);
@@ -229,7 +229,7 @@ foreach ($idArray as $id) {
         header('Pragma: public');
         header('Content-Length: ' . filesize($fileName));
         flush();
-        readfile($fileName);
+//        readfile($fileName);
         unlink($fileName);
         ob_end_flush();
         exit;
