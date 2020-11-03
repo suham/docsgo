@@ -1,7 +1,6 @@
 <?php
 
-ob_start();
-require_once '../../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 require_once 'Parsedown.php';
 require_once 'ParsedownExtra.php';
 
@@ -13,10 +12,10 @@ $main_id = filter_input(INPUT_GET, 'id');
 $type = filter_input(INPUT_GET, 'type');
 $time = time();
 
-if ($type == "project") {
-    $URL = 'https://info.viosrdtest.in/documents/getJson?type=project&id=' . $main_id;
-} else if ($type == "document") {
-    $URL = 'https://info.viosrdtest.in/documents/getJson?type=document&id=' . $main_id;
+if($type == "project"){
+    $URL = 'https://info.viosrdtest.in/documents/getJson?type=project&id='.$main_id;
+} else if($type == "document"){
+    $URL = 'https://info.viosrdtest.in/documents/getJson?type=document&id='.$main_id;
 } else {
     exit;
 }
@@ -25,20 +24,8 @@ $str = file_get_contents($URL);
 $lastIndex = strrpos($str, '}');
 $str = substr($str, 0, $lastIndex + 1);
 
-$jsonGetId = json_decode($str, true);
-
-if ($jsonGetId == null) {
-    $response = array();
-    $response["success"] = "False";
-    echo json_encode($response);
-    exit;
-}
-
-$idArray = array_keys($jsonGetId);
-$count = 0;
-
-function sectionNumber($sectionString) {
-    return (int) filter_var($sectionString, FILTER_SANITIZE_NUMBER_INT);
+function sectionNumber($str) {
+    return (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
 }
 
 function addTableStylesToContent($rawContent) {
@@ -51,14 +38,23 @@ function addTableStylesToContent($rawContent) {
     return $replaceContent;
 }
 
+$jsonGetId = json_decode($str, true);
+if($jsonGetId == null){
+    $response = array();
+    $response["success"] = "False";
+    echo json_encode($response);
+    exit;
+}
+$idArray = array_keys($jsonGetId);
+$count = 0;
 foreach ($idArray as $id) {
     $jsonMain = json_decode($str, true);
-    $fileNameLev1 = str_replace(",", "_", $jsonMain[$id]['file-name'] . ".docx");
-    $fileName = str_replace(" ", "_", $fileNameLev1);
+    $fileName = str_replace(",","_",$jsonMain[$id]['file-name'] . ".docx");
     $jsonObj = json_decode($jsonMain[$id]['json-object'], true);
     $documentType = array_keys($jsonObj);
     $json = $jsonObj[$documentType[0]];
 
+    // Creating the new document...
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
     $phpWord->getSettings()->setUpdateFields(true);
 
@@ -84,6 +80,7 @@ foreach ($idArray as $id) {
             )
     );
 
+//Header for all pages
     $subsequent = $section->addHeader();
     if (trim($json['cp-icon']) != "") {
         $subsequent->addImage($json['cp-icon'], array('width' => 110, 'height' => 50));
@@ -91,9 +88,11 @@ foreach ($idArray as $id) {
         $subsequent->addImage('https://info.viosrdtest.in/assets/images/muRata.png', array('width' => 110, 'height' => 50));
     }
 
+//Footer for all pages
     $footer = $section->addFooter();
     $footer->addPreserveText('Murata Vios CONFIDENTIAL                              Page {PAGE} of {NUMPAGES}                             ' . $json['cp-line4'] . ' ' . $json['cp-line5'], null, array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::LEFT));
 
+// Inline font style
     $fontStyle['name'] = $json['section-font'];
     $fontStyle['size'] = 14;
     $fontStyle['bold'] = TRUE;
@@ -144,36 +143,40 @@ foreach ($idArray as $id) {
     $phpWord->addTitleStyle(2, array('size' => $json['section-font'], 'color' => '666666'));
     $phpWord->addTitleStyle(3, array('size' => $json['section-font'], 'italic' => true));
     $phpWord->addTitleStyle(4, array('size' => $json['section-font']));
-
+// Add text elements
     $section->addTitle('Table of contents', 0);
     $section->addTextBreak(2);
 
+// Add TOC #1
     $toc = $section->addTOC($fontStyle12);
     $section->addTextBreak(2);
+
 
     $section = $phpWord->addSection();
 
     for ($i = 0; $i < count($json['sections']); $i++) {
         $section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
         $contentSection = $Extra->text(htmlspecialchars($json['sections'][$i]['content']));
-        if (strpos($contentSection, '<table>') !== false) {
+        if(strpos($contentSection, '<table>') !== false){
             $tableContentFormatted = addTableStylesToContent($contentSection);
             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
         } else {
             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
         }
+        
+//        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $Extra->text($json['sections'][$i]['content']));
         $section->addTextBreak();
     }
     // Saving the document as OOXML file...
     \PhpOffice\PhpWord\Settings::setCompatibility(false);
     $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
     ob_clean();
-    flush();
+//    flush();
     $objWriter->save($fileName);
     $count++;
-
+    
     if ($type == "project") {
-        $directoryName = "Documents_" . $main_id;
+        $directoryName = "Documents_".$main_id;
 
         if (!is_dir($directoryName)) {
             mkdir($directoryName, 0777);
@@ -200,7 +203,7 @@ foreach ($idArray as $id) {
             $zip->close();
 
             header('Content-Description: File Transfer');
-            header('Content-Type: application/force-download');
+            header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename=' . basename($zip_file));
             header('Content-Transfer-Encoding: binary');
             header('Expires: 0');
@@ -216,12 +219,11 @@ foreach ($idArray as $id) {
                 rmdir($directoryName);
                 unlink($zip_file);
             }
-            ob_end_flush();
             exit;
         }
     } else {
         header('Content-Description: File Transfer');
-        header('Content-Type: application/force-download');
+        header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . $fileName);
         header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
@@ -231,8 +233,6 @@ foreach ($idArray as $id) {
         flush();
 //        readfile($fileName);
         unlink($fileName);
-        ob_end_flush();
         exit;
     }
 }
-?>
