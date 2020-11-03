@@ -57,7 +57,7 @@ class Requirements extends BaseController
 			$rules = [
 				'type' => 'required',
 				'requirement' => 'required|min_length[3]|max_length[100]',
-				'description' => 'required|min_length[3]|max_length[500]',
+				'description' => 'required|min_length[3]|max_length[2100]',
 			];
 
 		}else{
@@ -67,7 +67,7 @@ class Requirements extends BaseController
 			$rules = [
 				'type' => 'required',
 				'requirement' => 'required|min_length[3]|max_length[100]',
-				'description' => 'required|min_length[3]|max_length[500]',
+				'description' => 'required|min_length[3]|max_length[2100]',
 			];	
 
 			$data['member'] = $model->where('id',$id)->first();		
