@@ -309,6 +309,7 @@ class Documents extends BaseController
 			$data['type'] = $this->request->getVar('type');
 			$title =  $this->request->getVar('cp-line3');
 			$title =  str_replace(' ', '', $title);
+			$title =  str_replace(',', '_', $title);
 			$currentTime = gmdate("Y-m-d H:i:s");
 
 			$jsonObject = $this->request->getVar('json-object');
