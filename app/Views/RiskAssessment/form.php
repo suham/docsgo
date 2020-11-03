@@ -74,9 +74,9 @@
 
             <div class="col-12">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="mitigation" >Mitigation</label>
-                <textarea class="form-control" name="mitigation" id="mitigation" ><?=
-                isset($member['mitigation']) ? trim($member['mitigation']) : ''
+              <label class = "font-weight-bold text-muted" for="hazard-analysis" >Hazard Analysis</label>
+                <textarea class="form-control" name="hazard-analysis" id="hazard-analysis" ><?=
+                isset($member['hazard-analysis']) ? trim($member['hazard-analysis']) : ''
                 ?></textarea>
               </div>
             </div>
@@ -86,7 +86,7 @@
                 <div >
                   <?php if (($value['id']) < 4 ): ?>
                     <div class="form-group">
-                      <label class = "font-weight-bold text-muted" for="mitigation"><?php echo $value['category'];?></label>
+                      <label class = "font-weight-bold text-muted" ><?php echo $value['category'];?></label>
                       <br/>
                       <div class="btn-group btn-group-toggle btn-security-toggle" id="listblock<?php echo $key;?>" >
                         <?php foreach ($value['options'] as $key1=>$value1): ?>
@@ -121,7 +121,7 @@
                     <?php if($key !='Score'): ?>
                       <div class="row">
                         <div class="col-12">
-                          <label class = "font-weight-bold text-muted" for="mitigation"><h4><?php echo $key; ?></h4></label>
+                          <label class = "font-weight-bold text-muted" ><h4><?php echo $key; ?></h4></label>
                         </div>
                       </div>
                         <?php foreach ($value as $key1=>$value1): ?>
@@ -129,7 +129,7 @@
                               <div class="form-group">
                                 <div class="row">
                                  <div class="col-12">
-                                    <label class = "font-weight-bold text-muted" for="mitigation"><?php echo $value1['category']; ?></label>
+                                    <label class = "font-weight-bold text-muted" ><?php echo $value1['category']; ?></label>
                                   </div>
                                 </div>
                           

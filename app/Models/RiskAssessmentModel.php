@@ -4,7 +4,7 @@ use CodeIgniter\Model;
 
 class RiskAssessmentModel extends Model{
     protected $table = 'docsgo-risks';
-    protected $allowedFields = ['project_id', 'risk_type', 'risk', 'description', 'component', 'mitigation', 'baseScore_severity','status', 'assessment', 'update_date'];
+    protected $allowedFields = ['project_id', 'risk_type', 'risk', 'description', 'component', 'hazard-analysis', 'baseScore_severity','status', 'assessment', 'update_date'];
 
 
     function getRisks($status = '', $type = '') {
@@ -64,7 +64,7 @@ class RiskAssessmentModel extends Model{
             $temp['component'] = $row['component'];
             $temp['description'] = $row['description'];
             $temp['id'] = $row['id'];
-            $temp['mitigation'] = $row['mitigation'];
+            $temp['hazard-analysis'] = $row['hazard-analysis'];
             $temp['project_id'] = $row['project_id'];
             $temp['risk'] = $row['risk'];
             $temp['risk_type'] = $row['risk_type'];

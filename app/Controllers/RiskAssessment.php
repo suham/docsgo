@@ -197,7 +197,7 @@ class RiskAssessment extends BaseController
 				'risk_type' => $this->request->getVar('risk_type'),
 				'risk' => $this->request->getVar('risk'),
 				'description' => $this->request->getVar('description'),
-				'mitigation' => $this->request->getVar('mitigation'),
+				'hazard-analysis' => $this->request->getVar('hazard-analysis'),
 				'status' => $this->request->getVar('status')
 			];
 			$riskType = $this->request->getVar('risk_type');
