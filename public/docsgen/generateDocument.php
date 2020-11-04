@@ -10,12 +10,11 @@ $Extra->setMarkupEscaped(true);
 
 $main_id = filter_input(INPUT_GET, 'id');
 $type = filter_input(INPUT_GET, 'type');
-$time = time();
 
-if($type == "project"){
-    $URL = 'https://info.viosrdtest.in/documents/getJson?type=project&id='.$main_id;
-} else if($type == "document"){
-    $URL = 'https://info.viosrdtest.in/documents/getJson?type=document&id='.$main_id;
+if ($type == "project") {
+    $URL = 'https://info.viosrdtest.in/documents/getJson?type=project&id=' . $main_id;
+} else if ($type == "document") {
+    $URL = 'https://info.viosrdtest.in/documents/getJson?type=document&id=' . $main_id;
 } else {
     exit;
 }
@@ -24,11 +23,11 @@ $str = file_get_contents($URL);
 $lastIndex = strrpos($str, '}');
 $str = substr($str, 0, $lastIndex + 1);
 
-function sectionNumber($str) {
-    return (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
+function sectionNumber($sectionStr) {
+    return (int) filter_var($sectionStr, FILTER_SANITIZE_NUMBER_INT);
 }
 
-function addTableStylesToContent($rawContent){
+function addTableStylesToContent($rawContent) {
     $fontFamily = 'Arial, sans-serif';
     $fontSize = '11';
     $replaceContent = str_replace("<table>", '<table style="border-spacing:0 10px; font-family:' . $fontFamily . '; font-size: ' . $fontSize . ';width: 100%; padding: 10px; border: 1px #000000 solid; border-collapse: collapse;" border="1" cellpadding="5">', $rawContent);
@@ -39,7 +38,7 @@ function addTableStylesToContent($rawContent){
 }
 
 $jsonGetId = json_decode($str, true);
-if($jsonGetId == null){
+if ($jsonGetId == null) {
     $response = array();
     $response["success"] = "False";
     echo json_encode($response);
@@ -47,6 +46,7 @@ if($jsonGetId == null){
 }
 $idArray = array_keys($jsonGetId);
 $count = 0;
+
 foreach ($idArray as $id) {
     $jsonMain = json_decode($str, true);
     $fileNameLev1 = str_replace(",", "_", $jsonMain[$id]['file-name'] . ".docx");
@@ -158,14 +158,13 @@ foreach ($idArray as $id) {
     for ($i = 0; $i < count($json['sections']); $i++) {
         $section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
         $contentSection = $Extra->text(htmlspecialchars($json['sections'][$i]['content']));
-        if(strpos($contentSection, '<table>') !== false){
+        if (strpos($contentSection, '<table>') !== false) {
             $tableContentFormatted = addTableStylesToContent($contentSection);
             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
         } else {
             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
         }
-        
-//        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $Extra->text($json['sections'][$i]['content']));
+
         $section->addTextBreak();
     }
     // Saving the document as OOXML file...
@@ -175,16 +174,16 @@ foreach ($idArray as $id) {
 //    flush();
     $objWriter->save($fileName);
     $count++;
-    
+
     if ($type == "project") {
-        $directoryName = "Documents_" . $main_id;
+        $directoryName = "Project_Documents";
 
         if (!is_dir($directoryName)) {
             mkdir($directoryName, 0777);
         }
         rename($fileName, $directoryName . '/' . $fileName);
         if (count($idArray) == $count) {
-            $zip_file = $directoryName . '.zip';
+            $zip_file = $directoryName .'_'. time().'.zip';
             $rootPath = realpath($directoryName);
             $zip = new ZipArchive();
             $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -204,13 +203,16 @@ foreach ($idArray as $id) {
             $zip->close();
 
             header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . basename($zip_file));
+            header('Content-Type: '.mime_content_type($zip_file).'');
+            header("Content-Disposition: attachment; filename=\"".basename($zip_file)."\";");
+            header('X-Sendfile: '.$zip_file);
             header('Content-Transfer-Encoding: binary');
             header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+             header("Cache-Control: private",false);
             header('Pragma: public');
             header('Content-Length: ' . filesize($zip_file));
+            set_time_limit(0);
+            ob_clean();
             flush();
             readfile($zip_file);
             if (is_dir($directoryName)) {
