@@ -1,5 +1,6 @@
+
   <div class="row p-0 p-md-4 justify-content-center">
-    <div class="col-12 col-md-6 bg-white p-4 from-wrapper">
+    <div class="col-11 col-sm-10 col-lg-5 mt-1 pt-3 pb-3 form-color">
       <div class="container">
         <h3><?= $user['name'] ?></h3>
         <hr>

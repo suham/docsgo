@@ -203,6 +203,12 @@ class Documents extends BaseController
 	}
 	
 	public function add(){
+		//Temporary fix to ensure security
+		//Need to clean up this code ASAP
+		if(session()->get('id') == ""){
+			return redirect()->to('/'); 
+		}
+
 		$model = new DocumentModel();
 		$params = $this->returnParams();
 		$type = $params[0];
@@ -229,8 +235,17 @@ class Documents extends BaseController
 		$templateModel = new DocumentTemplateModel();
 		$existingTypes = $templateModel->getTypes();
 		$data['documentType'] = $existingTypes;
-		$data['reviewCategoryList'] = ["User Needs", "Plan", "Requirements", "Design",
-		 "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
+		// $data['reviewCategoryList'] = ["User Needs", "Plan", "Requirements", "Design",
+		//  "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
+
+		 
+		 $reviewCategory = $settingsModel->where("identifier","reviewCategory")->first();
+		 if($reviewCategory["options"] != null){
+			 $reviewCategoryOptions = json_decode( $reviewCategory["options"], true );
+			 $data["reviewCategory"] = $reviewCategoryOptions;
+		 }else{
+		 	$data["reviewCategory"] = [];
+		 }
 
 		if($type != ""){
 			$templates = $this->getTemplates($type);
@@ -295,14 +310,17 @@ class Documents extends BaseController
 				'type' => 'required',
 				'project-id' => 'required',
 				'cp-line3' => 'required|max_length[60]',
-				'author-id' =>'required',
-                'status' => 'required',
+				'status' => 'required',
+				'reviewer-id' => 'required'
 			];	
 
 			$errors = [
 				'cp-line3' => [
 					'required' => 'Title is required.',
 					'max_length' => 'Title should not be more than 60 characters',
+				],
+				'reviewer-id' => [
+					'required' => 'Reviewer is required.'
 				]
 			];
 
@@ -331,7 +349,8 @@ class Documents extends BaseController
 			$newData = [
 				'project-id' => $this->request->getVar('project-id'),
 				'type' => $this->request->getVar('type'),
-				'author-id' => $this->request->getVar('author-id'),
+				'author-id' => session()->get('id'),
+				'reviewer-id' => $this->request->getVar('reviewer-id'),
                 'file-name' => $title,
 				'status' => $this->request->getVar('status'),
 				'update-date' => $currentTime,

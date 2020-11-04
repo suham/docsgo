@@ -33,13 +33,13 @@ body{
               </div>
             </div>
           <?php endif; ?>
-          <div class="row">
-            <div class="col-12 col-sm-4">
+          <div class="row justify-content-center">
+            <div class="col-12">
               <button type="submit" class="btn btn-primary">Login</button>
             </div>
-            <div class="col-12 col-sm-8 text-right">
+            <!-- <div class="col-12 col-sm-8 text-right">
               <a href="/register">Don't have an account yet?</a>
-            </div>
+            </div> -->
           </div>
         </form>
       </div>

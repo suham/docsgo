@@ -108,6 +108,7 @@ class Reviews extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			$response = array();
 			$currentTime = gmdate("Y-m-d H:i:s");
+			$status = $this->request->getVar('status');
 			$data = [
 				"project-id" => $this->request->getVar('projectId'),
 				"review-name" =>$this->request->getVar('reviewName'),
@@ -118,32 +119,34 @@ class Reviews extends BaseController
 				"assigned-to" => $this->request->getVar('assignedTo'),
 				"review-ref" => $this->request->getVar('reviewRef'),
 				'updated-at' => $currentTime,
-				"status" => $this->request->getVar('status'),
+				"status" => $status,
 			];
 
 			
-			$id = $this->request->getVar('id');
+			$reviewId = $this->request->getVar('id');
 			$docId = $this->request->getVar('docId');
 			$model = new ReviewModel();
 
-			if($id != ""){
-				$model->update($id, $data);
-				$response['reviewId'] = $id;
+			//Updating Review
+			if($reviewId != ""){
+				$model->update($reviewId, $data);
 			}else{
 				$reviewId = $model->insert($data);
-
-				$docData = [
-					"review-id" => $reviewId 
-				];
-				$documentModel = new DocumentModel();
-				$documentModel->update($docId,$docData);
-				$response['reviewId'] = $reviewId;
 			}
 
-			
-			$response["success"] = "True";
-			$response['data'] = $data;
+			//Updating document
+			$docData = [
+				"review-id" => $reviewId,
+				"status" => $status,
+				'update-date' => $currentTime,
+			];
+			$documentModel = new DocumentModel();
+			$documentModel->update($docId,$docData);
 
+			$response["success"] = "True";
+			$response['reviewId'] = $reviewId;
+			$response['status'] = $status;
+			
 			echo json_encode($response);
 		}
 	}

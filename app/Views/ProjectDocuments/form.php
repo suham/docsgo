@@ -7,7 +7,7 @@
 </style>
 
   <div class="row pl-0 justify-content-center pt-0">
-    <div class="col-12 col-md-9 ml-0 pb-3 mt-3 " style="min-height:400px;">
+    <div class="col-12 col-md-8 ml-4 pb-3 mt-3 " style="min-height:400px;">
       <div class="container pl-0 pr-0">
 
         <?php if (session()->get('success') && (!isset($validation))): ?>
@@ -114,12 +114,12 @@
                   </div>
                   <div class="col-4">
                     <div class="form-group">
-                      <label class = "font-weight-bold text-muted" for="author-id">Author</label>
+                      <label class = "font-weight-bold text-muted" for="reviewer-id">Reviewer</label>
                       <select class="form-control selectpicker" data-live-search="true" data-size="8"
-                          id="author-id" name="author-id">
-                          <option disabled selected value> -- select an author -- </option>
+                          id="reviewer-id" name="reviewer-id">
+                          <option disabled selected value> -- select a reviewer -- </option>
                           <?php foreach ($teams as $key=>$value): ?>
-                          <option <?= isset($projectDocument['author-id']) ? (($projectDocument['author-id'] == $value['id']) ? 'selected': '') : '' ?>
+                          <option <?= isset($projectDocument['reviewer-id']) ? (($projectDocument['reviewer-id'] == $value['id']) ? 'selected': '') : '' ?>
                           value='<?=  $value['id'] ?>' >
                             <?=  $value['name'] ?></option>
                           <?php endforeach; ?>
@@ -174,14 +174,16 @@
                             <div class="row">
                               <div class="col">
                                 <div class="input-group">
-                                  <?php if (isset($projectDocument['project-id'])): ?>
-                                  <div>
-                                    <div class="pr-3 pt-1">
-                                      <a href="#" class="btn btn-sm btn-outline-warning " onclick="addComment('<?=$section['title']?>')" title="Add review comment">
-                                        <i class="fas fa-list "></i>
-                                      </a>
-                                    </div>
-                                  </div>
+                                  <?php if (isset($projectDocument['id'])): ?>
+                                    <?php if (session()->get('id') == $projectDocument['reviewer-id']): ?>
+                                      <div>
+                                        <div class="pr-3 pt-1">
+                                          <a href="#" class="btn btn-sm btn-outline-warning " onclick="addComment('<?=$section['title']?>')" title="Add review comment">
+                                            <i class="fas fa-list "></i>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    <?php endif; ?>
                                   <?php endif; ?>
                                   <p class="lead mb-0 pt-1 "><?=  $section["title"] ?></p> 
                                 </div>
@@ -241,12 +243,25 @@
                 <?php endforeach; ?>
               </div>
             </div>
+            <?php 
 
+              $showSubmit = True;
+              if(isset($projectDocument["id"])){
+                if(session()->get('id') == $projectDocument['author-id'] ){
+                  $showSubmit = True;
+                }else{
+                  $showSubmit = False;
+                }
+              }
+              
+              ?>
+            
+            <?php if($showSubmit): ?>
             <div class="row">
               <div class="col-12 col-sm-3"></div>
               <div class="col-12 col-sm-4">
                 <div class="form-group">
-                  <!-- <label class="font-weight-bold text-muted" for="status">Status</label> -->
+                  
                   <select class="form-control" name="status" id="status">
                     <option value="" disabled >
                       Select Status
@@ -260,10 +275,14 @@
                   </select>
                 </div>
               </div>
+             
               <div class="col-12 col-sm-4 " >
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
+            
+            
             </div>
+            <?php endif; ?>
           </div>
           <?php endif; ?>
 
@@ -273,21 +292,20 @@
       </form>
     </div>
     <?php if (isset($projectDocument['project-id'])): ?>
-    <div class="col reviewDiv d-none"> 
-        <div class="from-wrapper p-3 pb-3 bg-white rounded">
-          <div class="row">
-            <div class="col">
+    <div class="col reviewDiv ml-2 mr-4 d-none"> 
+        <div class="pt-3 mt-3">
+          <div class="row card-header  form-color">
+            <div class="col-10">
               <h3>Review Comments</h3>
             </div>
-            <div class="col text-center">
-              <a onclick="saveReview()" class="btn btn-primary mt-2 text-light">
+            <div class="col-2 text-center">
+              <a onclick="saveReview()" class="btn btn-success text-light">
                 <i class="fas fa-save "></i>
-                Save
               </a>
             </div>
           </div>
-          <hr>
-          <div class="row justify-content-center">
+         
+          <div class="row justify-content-center mt-2">
             <div class="col-11 table-warning text-muted rounded">
               <p class="reviewCommentsPara font-weight-bold p-1 pt-3 ">
               </p>
@@ -329,20 +347,37 @@
   }
 
   var documentReview = new Review();
-  var reviewCategory;
+  var reviewCategory = [];
+  var documentStatus = [];
+
+
 
   $(document).ready(function () {
     <?php if (isset($type)): ?>
       type = '<?= $type ?>'; 
     <?php endif; ?>
 
+    <?php foreach ($documentStatus as $docStatus): ?>
+      documentStatus.push("<?= $docStatus["value"] ?>");
+    <?php endforeach; ?>
+
+    <?php foreach ($reviewCategory as $revCat): ?>
+      reviewCategory.push("<?= $revCat["value"] ?>");
+    <?php endforeach; ?>
+
     <?php if (isset($jsonTemplate)): ?>
       entireTemplate = <?= json_encode($jsonTemplate) ?>;
       entireTemplate = JSON.parse(entireTemplate);
     <?php endif; ?>
     fileName = "<?= isset($projectDocument['file-name']) ? $projectDocument['file-name']: '' ?>";
-    reviewCategory = <?= isset($reviewCategoryList)? json_encode($reviewCategoryList): '' ?>;
-    documentReview.docId = "<?= isset($projectDocument['id']) ? $projectDocument['id']: '' ?>";
+    
+
+    <?php if(isset($projectDocument["id"])): ?>      
+      documentReview.docId = "<?= $projectDocument['id'] ?>";
+      documentReview.assignedTo = "<?= $projectDocument['author-id'] ?>";      
+      documentReview.reviewBy = "<?= session()->get('id') ?>";    
+    <?php endif; ?>
+
     <?php if (isset($documentReview)): ?>
       var savedReview = <?= json_encode($documentReview) ?> ;
       documentReview.id = savedReview["id"];
@@ -428,10 +463,10 @@
   function saveReview(){
     if(reviewComments == "") return;
     
-    var teamOptions = "", categoryOptions = "";
-    var teamsTable = lookUpTables['teams'];
-    teamsTable.forEach((data)=>{
-      teamOptions += `<option value="${data.id}">${data.name}</option>`;
+    var categoryOptions = "", statusOptions = "";
+
+    documentStatus.forEach((value)=>{
+      statusOptions += `<option value="${value}">${value}</option>`;
     });
 
     reviewCategory.forEach((value)=>{
@@ -440,17 +475,7 @@
 
     var dialog = bootbox.dialog({
       title: 'Add review comments',
-      message: `<div class="row justify-content-center saveModal">
-                <div class="col-12 col-md-6">
-                  <select class="form-control reviewedBy selectpicker" data-live-search="true" data-size="8" name="type" id="type">
-                    <option value="" disabled selected>
-                      Select Reviewer Name
-                    </option>
-                    ${teamOptions}
-                  </select>
-                </div>
-              </div>
-              <div class="row mt-3">
+      message: `<div class="row mt-3">
                 <div class="col-12 col-md-6">
                   <select class="form-control reviewCategory selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                     <option value="" disabled selected>
@@ -464,9 +489,7 @@
                     <option value="" disabled selected>
                       Select Status
                     </option>
-                    <option value="Request Change">Request Change</option>
-                    <option value="Ready For Review">Ready For Review</option>
-                    <option value="Accepted">Accepted</option>
+                    ${statusOptions}
                   </select>
                 </div>
               </div>
@@ -484,12 +507,12 @@
             label: "OK",
             className: 'btn-primary',
             callback: function(){
-                var reviewedBy = $("select.reviewedBy").val();
+                
                 var reviewCategory = $("select.reviewCategory").val();
                 var reviewStatus = $("select.reviewStatus").val();
                 var reviewRef =  $(".reviewRef").val();
                 
-                if(reviewedBy ==  null || reviewCategory == null || reviewStatus == null){
+                if(reviewCategory == null || reviewStatus == null){
                   showPopUp('Error', "Reviewer name, review category and status are required.");
                   
                 }else{
@@ -499,8 +522,9 @@
                   documentReview.category = reviewCategory;
                   documentReview.context = fileName;
                   documentReview.description = reviewComments.trim();
-                  documentReview.reviewBy = reviewedBy;
-                  documentReview.assignedTo = $("#author-id").val();
+                  // documentReview.reviewBy = reviewedBy;
+                  
+                  // documentReview.assignedTo = $("#author-id").val();
                   documentReview.reviewRef = reviewRef;
                   documentReview.status = reviewStatus;
 
@@ -538,6 +562,10 @@
         response = JSON.parse(response);
         if (response.success == "True") {
           documentReview["id"] = response.reviewId;
+          var statusDD = $("#status").val();
+          if(statusDD != undefined){
+            $("#status").val(documentReview["status"]);
+          }
           showPopUp("Success", successMessage);
         } else {
           showPopUp("Failure", "Failed to add a new template!.");
@@ -795,7 +823,7 @@
     if (value != "") {
       var jsonValue = existingDocs[value];
 
-      $("#cp-line3").val(jsonValue['cp-line3']);
+      // $("#cp-line3").val(jsonValue['cp-line3']);
       $("#cp-line4").val(jsonValue['cp-line4']);
       $("#cp-line5").val(jsonValue['cp-line5']);
       $("#cp-approval-matrix").val(jsonValue['cp-approval-matrix']);

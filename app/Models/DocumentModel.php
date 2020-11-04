@@ -4,7 +4,7 @@ use CodeIgniter\Model;
 
 class DocumentModel extends Model{
     protected $table = 'docsgo-documents';
-    protected $allowedFields = ["project-id","review-id","type","category","author-id", "update-date","json-object","file-name","status"];
+    protected $allowedFields = ["project-id","review-id","type","category","author-id","reviewer-id", "update-date","json-object","file-name","status"];
     
     public function getProjects($type = "", $status = "", $project_id = ""){
         $db      = \Config\Database::connect();
@@ -18,9 +18,10 @@ class DocumentModel extends Model{
             $whereCondition = "WHERE docs.`status` = '".$status."' and docs.`project-id` = ".$project_id." ";
         }
 
-        $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, team.`name` as `author`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`
+        $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, author.`name` as `author`, reviewer.`name` as `reviewer`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`
         FROM `docsgo-documents` AS docs
-        INNER JOIN `docsgo-team-master` AS team ON docs.`author-id` = team.`id` 
+        INNER JOIN `docsgo-team-master` AS author ON docs.`author-id` = author.`id` 
+        INNER JOIN `docsgo-team-master` AS reviewer ON docs.`reviewer-id` = reviewer.`id` 
         ".$whereCondition."
         ORDER BY docs.`update-date` DESC;";
 

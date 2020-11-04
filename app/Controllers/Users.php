@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
-use App\Models\UserModel;
-
+// use App\Models\UserModel;
+use App\Models\TeamModel;
 
 class Users extends BaseController
 {
@@ -27,7 +27,7 @@ class Users extends BaseController
 			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
 			}else{
-				$model = new UserModel();
+				$model = new TeamModel();
 
 				$user = $model->where('email', $this->request->getVar('email'))
 											->first();
@@ -49,6 +49,7 @@ class Users extends BaseController
 			'name' => $user['name'],
 			'email' => $user['email'],
 			'is-admin' => $user['is-admin'],
+			'is-manager' => $user['is-manager'],
 			'isLoggedIn' => true,
 		];
 
@@ -56,49 +57,49 @@ class Users extends BaseController
 		return true;
 	}
 
-	public function register(){
-		$data = [];
-		helper(['form']);
+	// public function register(){
+	// 	$data = [];
+	// 	helper(['form']);
 
-		if ($this->request->getMethod() == 'post') {
-			//let's do the validation here
-			$rules = [
-				'name' => 'required|min_length[3]|max_length[50]',
-				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-users.email]',
-				'password' => 'required|min_length[8]|max_length[255]',
-				'password_confirm' => 'matches[password]',
-				'pass_code' => 'required|max_length[255]|validatePassCode[pass_code]',
-			];
+	// 	if ($this->request->getMethod() == 'post') {
+	// 		//let's do the validation here
+	// 		$rules = [
+	// 			'name' => 'required|min_length[3]|max_length[50]',
+	// 			'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-users.email]',
+	// 			'password' => 'required|min_length[8]|max_length[255]',
+	// 			'password_confirm' => 'matches[password]',
+	// 			'pass_code' => 'required|max_length[255]|validatePassCode[pass_code]',
+	// 		];
 
-			$errors = [
-				'pass_code' => [
-					'validatePassCode' => 'Pass Code incorrect. Contact admin for a pass code.'
-				]
-			];
+	// 		$errors = [
+	// 			'pass_code' => [
+	// 				'validatePassCode' => 'Pass Code incorrect. Contact admin for a pass code.'
+	// 			]
+	// 		];
 
-			if (! $this->validate($rules, $errors)) {
-				$data['validation'] = $this->validator;
-			}else{
-				$model = new UserModel();
+	// 		if (! $this->validate($rules, $errors)) {
+	// 			$data['validation'] = $this->validator;
+	// 		}else{
+	// 			$model = new UserModel();
 
-				$newData = [
-					'name' => $this->request->getVar('name'),
-					'email' => $this->request->getVar('email'),
-					'password' => $this->request->getVar('password'),
-				];
-				$model->save($newData);
-				$session = session();
-				$session->setFlashdata('success', 'Successful Registration');
-				return redirect()->to('/');
+	// 			$newData = [
+	// 				'name' => $this->request->getVar('name'),
+	// 				'email' => $this->request->getVar('email'),
+	// 				'password' => $this->request->getVar('password'),
+	// 			];
+	// 			$model->save($newData);
+	// 			$session = session();
+	// 			$session->setFlashdata('success', 'Successful Registration');
+	// 			return redirect()->to('/');
 
-			}
-		}
+	// 		}
+	// 	}
 
 
-		echo view('templates/header', $data);
-		echo view('register');
-		echo view('templates/footer');
-	}
+	// 	echo view('templates/header', $data);
+	// 	echo view('register');
+	// 	echo view('templates/footer');
+	// }
 
 	public function profile(){
 		
@@ -107,7 +108,7 @@ class Users extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/";
 		helper(['form']);
-		$model = new UserModel();
+		$model = new TeamModel();
 
 		if ($this->request->getMethod() == 'post') {
 			//let's do the validation here
@@ -147,37 +148,37 @@ class Users extends BaseController
 		echo view('templates/footer');
 	}
 
-	public function viewUsers(){
-		$data = [];
-		$data['addBtn'] = False;
-		$data['backUrl'] = "/";
-		if (session()->get('is-admin')){
+	// public function viewUsers(){
+	// 	$data = [];
+	// 	$data['addBtn'] = False;
+	// 	$data['backUrl'] = "/";
+	// 	if (session()->get('is-admin')){
 			
-			$data['pageTitle'] = 'Users';
+	// 		$data['pageTitle'] = 'Users';
 	
-			$model = new UserModel();
-			$users = $model->getUsers();
+	// 		$model = new UserModel();
+	// 		$users = $model->getUsers();
 			
-			$data['data'] = $users;
-			echo view('templates/header', $data);
-			echo view('templates/pageTitle', $data);
-			echo view('Admin/Users/list', $data);
-			echo view('templates/footer');
-		}else{
+	// 		$data['data'] = $users;
+	// 		echo view('templates/header', $data);
+	// 		echo view('templates/pageTitle', $data);
+	// 		echo view('Admin/Users/list', $data);
+	// 		echo view('templates/footer');
+	// 	}else{
 			
-			$data['pageTitle'] = 'You are not authorized to view this page.';
-			echo view('templates/header', $data);
-			echo view('templates/pageTitle', $data);
-			echo view('templates/footer');
-		}
+	// 		$data['pageTitle'] = 'You are not authorized to view this page.';
+	// 		echo view('templates/header', $data);
+	// 		echo view('templates/pageTitle', $data);
+	// 		echo view('templates/footer');
+	// 	}
 		
-	}
+	// }
 
 	public function updateAdminStatus(){
 		$response = array();
 		if ($this->request->getMethod() == 'post') {
 			$id = $this->request->getPost('id');
-			$model = new UserModel();
+			$model = new TeamModel();
 			$user = $model->find($id);
 			// $user['is-admin'] = !$user['is-admin'];
 			$model->updateAdminStatus($id, !$user['is-admin']);

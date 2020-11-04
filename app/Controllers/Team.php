@@ -32,82 +32,102 @@ class Team extends BaseController
 	}
 
 	public function add(){
-
-		$id = $this->returnParams();
-
-		helper(['form']);
-		$model = new TeamModel();
 		$data = [];
 		$data['pageTitle'] = 'Team';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/team";
 
-		$settingsModel = new SettingsModel();
-		$userRole = $settingsModel->where("identifier","userRole")->first();
-		if($userRole["options"] != null){
-			$data["userRole"] = json_decode( $userRole["options"], true );
-		}else{
-			$data["userRole"] = [];
-		}
+		if (session()->get('is-admin')){
+			$id = $this->returnParams();
 
-		if($id == ""){
-			$data['action'] = "add";
-			$data['formTitle'] = "Add Member";
+			helper(['form']);
+			$model = new TeamModel();
 
-			$rules = [
-				'name' => 'required|min_length[3]|max_length[64]',
-				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-team-master.email]',
-			];
-
-		}else{
-			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Member";
-
-			$rules = [
-				'name' => 'required|min_length[3]|max_length[64]',
-			];	
-
-			$data['member'] = $model->where('id',$id)->first();		
-		}
-		
-
-		if ($this->request->getMethod() == 'post') {
-			$is_manager_text = $this->request->getVar('is-manager');
-			$is_manager = 0;
-			if($is_manager_text == 'on'){
-				$is_manager = 1;
-			}
-			$newData = [
-				'name' => $this->request->getVar('name'),
-				'email' => $this->request->getVar('email'),
-				'role' => $this->request->getVar('role'),
-				'responsibility' => $this->request->getVar('responsibility'),
-				'is-manager' => $is_manager,
-			];
-
-			$data['member'] = $newData;
-
-			if (! $this->validate($rules)) {
-				$data['validation'] = $this->validator;
+			$settingsModel = new SettingsModel();
+			$userRole = $settingsModel->where("identifier","userRole")->first();
+			if($userRole["options"] != null){
+				$data["userRole"] = json_decode( $userRole["options"], true );
 			}else{
+				$data["userRole"] = [];
+			}
 
-				if($id > 0){
-					$newData['id'] = $id;
-					$message = 'Team member successfully updated.';
-				}else{
-					$message = 'Team member successfully added.';
+			if($id == ""){
+				$data['action'] = "add";
+				$data['formTitle'] = "Add Member";
+
+				$rules = [
+					'name' => 'required|min_length[3]|max_length[64]',
+					'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[docsgo-team-master.email]',
+				];
+
+			}else{
+				$data['action'] = "add/".$id;
+				
+
+				$rules = [
+					'name' => 'required|min_length[3]|max_length[64]',
+				];	
+
+				$data['member'] = $model->where('id',$id)->first();		
+				$data['formTitle'] = $data['member']["name"];
+			}
+			
+
+			if ($this->request->getMethod() == 'post') {
+				$is_manager_text = $this->request->getVar('is-manager');
+				$is_manager = 0;
+				if($is_manager_text == 'on'){
+					$is_manager = 1;
 				}
 
-				$model->save($newData);
-				$session = session();
-				$session->setFlashdata('success', $message);
+				$is_admin_text = $this->request->getVar('is-admin');
+				$is_admin = 0;
+				if($is_admin_text == 'on'){
+					$is_admin = 1;
+				}
+
+				$defaultPassword = getenv('PASS_CODE');
+
+				$newData = [
+					'name' => $this->request->getVar('name'),
+					'email' => $this->request->getVar('email'),
+					'role' => $this->request->getVar('role'),
+					'responsibility' => $this->request->getVar('responsibility'),
+					'is-manager' => $is_manager,
+					'is-admin' => $is_admin,
+					'password' => $defaultPassword,
+				];
+
+				$data['member'] = $newData;
+
+				if (! $this->validate($rules)) {
+					$data['validation'] = $this->validator;
+				}else{
+
+					if($id > 0){
+						$newData['id'] = $id;
+						$message = 'Team member successfully updated.';
+					}else{
+						$message = 'Team member successfully added.';
+					}
+
+					$model->save($newData);
+					$session = session();
+					$session->setFlashdata('success', $message);
+				}
 			}
+			echo view('templates/header');
+			echo view('templates/pageTitle', $data);
+			echo view('Team/form', $data);
+			echo view('templates/footer');
+		}else{
+			$data['pageTitle'] = 'You are not authorized to perform this task.';
+			echo view('templates/header');
+			echo view('templates/pageTitle', $data);
+			echo view('templates/footer');
 		}
 		
-		echo view('templates/header');
-		echo view('templates/pageTitle', $data);
-		echo view('Team/form', $data);
-		echo view('templates/footer');
+	
 	}
 
 	public function delete(){

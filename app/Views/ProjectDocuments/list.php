@@ -52,6 +52,7 @@
             <th scope="col">#</th>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
+            <th scope="col">Reviewer</th>
             <th scope="col" style="min-width: 125px;">Update Date</th>
             <th scope="col" style="min-width: 175px;">Actions</th>
           </tr>
@@ -62,10 +63,22 @@
                   <td><?php echo $key+1; ?></td>
                   <td><?php  echo $row['json-object'][$row['type']]['cp-line3'];?></td>
                   <td><?php echo $row['author'];?></td>
+                  <td><?php echo $row['reviewer'];?></td>
                   <td><?php $timestamp = strtotime($row['update-date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
                   <td>
-                      <a title="Edit" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn btn-warning">
-                          <i class="fa fa-edit"></i>
+                    <?php 
+                      if($row['author'] == (session()->get('name')) ){
+                        $editTitle = "Edit";
+                        $editClass = "fa-edit";
+                        $editButton = "btn-warning";
+                      }else{
+                        $editTitle = "View";
+                        $editClass = "fa-eye";
+                        $editButton = "btn-info";
+                      } 
+                    ?>
+                      <a title="<?= $editTitle ?>" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn <?= $editButton ?>">
+                          <i class="fa <?= $editClass ?>"></i>
                       </a>
                       <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>" 
                       class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">

@@ -1,12 +1,12 @@
 <?php
 namespace App\Validation;
-use App\Models\UserModel;
+use App\Models\TeamModel;
 
 class UserRules
 {
 
   public function validateUser(string $str, string $fields, array $data){
-    $model = new UserModel();
+    $model = new TeamModel();
     $user = $model->where('email', $data['email'])
                   ->first();
 
@@ -16,13 +16,13 @@ class UserRules
     return password_verify($data['password'], $user['password']);
   }
 
-  public function validatePassCode(string $str){
-    $pass_code = getenv('PASS_CODE');
-    if($str == $pass_code){
-      return true;
-    }else{
-      return false;
-    }
-  }
+  // public function validatePassCode(string $str){
+  //   $pass_code = getenv('PASS_CODE');
+  //   if($str == $pass_code){
+  //     return true;
+  //   }else{
+  //     return false;
+  //   }
+  // }
 
 }

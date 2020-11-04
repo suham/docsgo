@@ -19,7 +19,9 @@
             <th scope="col">Email id</th>
             <th scope="col">Role</th>
             <th scope="col">Responsibility</th>
+            <?php if (session()->get('is-admin')): ?>
             <th scope="col" style="width:125px">Actions</th>
+            <?php endif; ?>
           </tr>
         </thead>
         <tbody class="bg-white ">
@@ -30,16 +32,18 @@
                   <td><?php echo $row['email'];?></td>
                   <td><?php echo $row['role'];?></td>
                   <td><?php echo $row['responsibility'];?></td>
+                  <?php if (session()->get('is-admin')): ?>
                   <td>
                       <a href="/team/add/<?php echo $row['id'];?>" class="btn btn-warning">
                           <i class="fa fa-edit"></i>
                       </a>
-                      <?php if (session()->get('is-admin')): ?>
+                      
                       <a onclick="deleteMember(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
                           <i class="fa fa-trash text-light"></i>
                       </a>
-                      <?php endif; ?>
+                      
                   </td>
+                  <?php endif; ?>
               </tr>
           <?php endforeach; ?>
         </tbody>

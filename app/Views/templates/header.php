@@ -167,16 +167,11 @@
             </a>
             <div class="sidebar-footer  d-none" id="footer-icons" >
             <div class="row justify-content-center" >
-              <?php $col="col-6"; if (session()->get('is-admin')): $col="col-3";?>
+                  <?php $col="col-6"; if (session()->get('is-admin')): $col="col-4";?>
                   <div class="<?= $col ?>">
                     <a href="/admin/settings"  title="Settings"> 
                       <ion-icon name="settings-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
                       
-                    </a>
-                  </div>
-                  <div class="<?= $col ?>">
-                    <a href="/admin/users"  title="Registered Users">
-                      <ion-icon name="people-circle-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
                     </a>
                   </div>
                   <?php endif; ?>
