@@ -293,7 +293,7 @@
     </div>
     <?php if (isset($projectDocument['project-id'])): ?>
     <div class="col reviewDiv ml-2 mr-4 d-none"> 
-        <div class="pt-3 mt-3">
+        <div class="pt-3 mt-3  position-fixed">
           <div class="row card-header  form-color">
             <div class="col-10">
               <h3>Review Comments</h3>
@@ -476,6 +476,7 @@
     });
 
     var dialog = bootbox.dialog({
+      centerVertical: true,
       title: 'Add review comments',
       message: `<div class="row mt-3">
                 <div class="col-12 col-md-6">
@@ -629,6 +630,7 @@
     bootbox.prompt({
       title: "Review Comments",
       className: 'reviewComments',
+      centerVertical: true,
       inputType: 'textarea',
         callback: function (result) {
           if(result != null){
