@@ -298,11 +298,13 @@
             <div class="col-10">
               <h3>Review Comments</h3>
             </div>
+            <?php if (session()->get('id') == $projectDocument['reviewer-id']): ?>
             <div class="col-2 text-center">
               <a onclick="saveReview()" class="btn btn-success text-light">
                 <i class="fas fa-save "></i>
               </a>
             </div>
+            <?php endif; ?>
           </div>
          
           <div class="row justify-content-center mt-2">
