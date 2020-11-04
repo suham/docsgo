@@ -59,7 +59,7 @@ class TeamModel extends Model{
 
     public function updateAdminStatus($id, $status){
         $db      = \Config\Database::connect();
-        $builder = $db->table('docsgo-team-maste');
+        $builder = $db->table('docsgo-team-master');
         $builder->set('is-admin', $status);
         $builder->where('id', $id);
         $builder->update();    
