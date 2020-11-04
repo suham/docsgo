@@ -26,7 +26,19 @@
         </thead>
         <tbody class="bg-white ">
           <?php foreach ($data as $key=>$row): ?>
-              <tr scope="row" id="<?php echo $row['id'];?>">
+              <?php 
+                if($row['is-admin']){
+                  $rowClass = "table-primary";
+                  $rowTitle = "Admin";
+                }else if($row['is-manager']){
+                    $rowClass = "table-success";
+                    $rowTitle = "Manager";
+                }else{
+                  $rowClass = "";
+                  $rowTitle = "User";
+                }
+              ?>
+              <tr title="<?= $rowTitle ?>""  class="<?= $rowClass ?>" scope="row" id="<?php echo $row['id'];?>">
                   <td><?php echo $key+1; ?></td>
                   <td><?php echo $row['name'];?></td>
                   <td><?php echo $row['email'];?></td>
