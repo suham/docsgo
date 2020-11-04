@@ -32,7 +32,11 @@ class Reviews extends BaseController
 			//Initial Case
 			$projectModel = new ProjectModel();
 			$activeProject = $projectModel->where("status","Active")->first();	
+			if($activeProject == ""){
+				$activeProject = $projectModel->first();	
+			}
 			$selectedProject = $activeProject['project-id'];
+			
 			$data['selectedProject'] = $selectedProject;
 
 			$reviewStatusOptions = json_decode( $reviewStatus["options"], true );

@@ -26,7 +26,7 @@ class Documents extends BaseController
 			$documentStatusOptions = json_decode( $documentStatus["options"], true );
 			$data["documentStatus"] = $documentStatusOptions;
 		}else{
-		$data["documentStatus"] = [];
+			$data["documentStatus"] = [];
 		}
 
 		$view = $this->request->getVar('view');
@@ -36,6 +36,9 @@ class Documents extends BaseController
 			//Initial Case
 			$projectModel = new ProjectModel();
 			$activeProject = $projectModel->where("status","Active")->first();	
+			if($activeProject == ""){
+				$activeProject = $projectModel->first();	
+			}
 			$selectedProject = $activeProject['project-id'];
 			$data['selectedProject'] = $selectedProject;
 
