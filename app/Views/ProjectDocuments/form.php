@@ -18,11 +18,11 @@
         <form id="documentForm" action="/documents/<?= $action ?>" method="post">
 
           <div class="row card-header pt-3 mt-3 form-color" >
-            <div class="col-8 ">
-              <h3><?= $formTitle ?></h3>
+            <div class="col-12 col-sm-8 ">
+              <h3 title="<?= $formTitle ?>" style="overflow: hidden;text-overflow: ellipsis;"><?= $formTitle ?></h3>
             </div>
 
-            <div class="col-4" >
+            <div class="col-12 col-sm-4" >
               <div class="form-group mb-0">
                 
                 <select class="form-control selectpicker" data-style="btn-primary" data-live-search="true" data-size="8" name="type" id="type">
