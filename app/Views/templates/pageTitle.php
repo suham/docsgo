@@ -15,7 +15,7 @@
         </div>
         <?php else: ?>
         <div class="col-sm-2 col-2 ">
-            <a class="btn btn-secondary text-light" href="javascript:history.back()">
+            <a class="btn btn-secondary text-light" href="<?= $backUrl ?>">
                 <i class="fa fa-chevron-left"></i> Back
             </a>
         </div>
