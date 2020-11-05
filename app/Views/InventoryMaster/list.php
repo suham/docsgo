@@ -45,12 +45,12 @@
             <th scope="col">Make</th>
             <th scope="col">Model</th>
             <th scope="col">Serial</th>
-            <th scope="col">Entry Date</th>
+            <!-- <th scope="col">Entry Date</th> -->
             <th scope="col">Retired Date</th>
-            <th scope="col">Cal Date</th>
+            <!-- <th scope="col">Cal Date</th> -->
             <th scope="col">Cal Due</th>
-            <th scope="col">Invoice Date</th>
-            <th scope="col">Vendor</th>
+            <!-- <th scope="col">Invoice Date</th> -->
+            <!-- <th scope="col">Vendor</th> -->
             <th scope="col">Status</th>
             <th scope="col" style="width:125px">Action</th>
           </tr>
@@ -65,13 +65,13 @@
                   <td><?php echo $row['model'];?></td>
                   <td><?php echo $row['serial'];?></td>
 
-                  <td><?php echo (!(int)$row['entry_date']) ? '' : date("Y-m-d", strtotime($row['entry_date']) + (330*60)); ?></td>
+                  <!-- <td><?php //echo (!(int)$row['entry_date']) ? '' : date("Y-m-d", strtotime($row['entry_date']) + (330*60)); ?></td> -->
                   <td><?php echo (!(int)$row['retired_date']) ? '' : date("Y-m-d", strtotime($row['retired_date']) + (330*60)); ?></td>
                   <td><?php echo (!(int)$row['cal_date']) ? '' : date("Y-m-d", strtotime($row['cal_date']) + (330*60)); ?></td>
-                  <td><?php echo (!(int)$row['cal_due']) ? '' : date("Y-m-d", strtotime($row['cal_due']) + (330*60)); ?></td>
-                  <td><?php echo (!(int)$row['invoice_date']) ? '' : date("Y-m-d", strtotime($row['invoice_date']) + (330*60)); ?></td>
+                  <!-- <td><?php //echo (!(int)$row['cal_due']) ? '' : date("Y-m-d", strtotime($row['cal_due']) + (330*60)); ?></td> -->
+                  <!-- <td><?php //echo (!(int)$row['invoice_date']) ? '' : date("Y-m-d", strtotime($row['invoice_date']) + (330*60)); ?></td> -->
 
-                  <td><?php echo $row['vendor'];?></td>
+                  <!-- <td><?php //echo $row['vendor'];?></td> -->
                   <td>
                     <?php
                     if(!(int)$row['cal_date']){ echo $row['status'];  }else{
@@ -105,7 +105,6 @@
     var table = $('#inventory-list').DataTable({
       "responsive": true,
       "autoWidth": false,
-      "fixedHeader": true,
     });
   });
 
