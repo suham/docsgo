@@ -37,7 +37,7 @@
                       <a href="/projects/add/<?php echo $row['project-id'];?>" class="btn btn-warning">
                           <i class="fa fa-edit"></i>
                       </a>
-                      <a title="Download" href="docsgen/generateDocument.php?type=project&id=<?php echo $row['project-id'];?>" 
+                      <a title="Download" href="#" onClick="generateDocuments(<?php echo $row['project-id'];?>)" 
                         class="btn btn-primary ml-2">
                           <i class="fa fa-download"></i>
                       </a>
@@ -116,6 +116,29 @@
     });
 
   }
+
+  function generateDocuments(id){
+    $.ajax({
+        url: '/generate-documents/downloadDocuments/2/'+id,
+        type: 'GET',
+        beforeSend: function() {
+          console.log("before disable the download button");
+        },
+        success: function(response){
+          response = JSON.parse(response);
+          console.log("res:", response);
+          if(response.success == "True"){
+              bootbox.alert(response.description);
+          }else{
+              bootbox.alert(response.description);
+          }
+        },
+        ajaxError: function (error) {
+          console.log("Something worng:", error);
+        }
+      });
+  }
+
 
 function showPopUp(title, message){
   bootbox.alert({

@@ -32,4 +32,19 @@ class DocumentModel extends Model{
         return $data;
     }
 
+    public function getDocumentsData($type = '', $id = '') {
+        $db = \config\Database::connect();
+
+        $whereCondition = "";
+        if($type == 'project'){
+            $sql = "SELECT * FROM `docsgo-documents` WHERE `project-id` = '".$id."' AND `status` = 'Approved' ";
+        }else{
+            $whereCondition = "WHERE `id` = '".$id."' ";
+            $sql = "SELECT * FROM `docsgo-documents` ". $whereCondition;
+        }
+        $query = $db->query($sql);
+        $data = $query->getResult('array');
+        return $data;
+    }
+
 }
