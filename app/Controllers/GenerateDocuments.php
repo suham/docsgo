@@ -211,6 +211,14 @@ class GenerateDocuments extends BaseController
 							}
 						}
 						$zip->close();
+						//removing the document files
+						if (is_dir($directoryName)) {
+							foreach ($filesToDelete as $file) {
+								unlink($file);
+							}
+							rmdir($directoryName);
+						}
+
 						$response = array('success' => "True", "description"=>"Project files are downloaded", "serverPath"=>$_SERVER['DOCUMENT_ROOT'], "folderName"=>$zip_file);
 						echo json_encode( $response );	
 					}else{
@@ -225,7 +233,7 @@ class GenerateDocuments extends BaseController
 					mkdir($directoryName, 0777);
 				}
 				$objWriter->save($directoryName.'/'.$fileName);
-				$response = array('success' => "True", "description"=>"File downloaded successfully", "serverPath"=>$_SERVER['DOCUMENT_ROOT'].$directoryName, "filePath"=>$fileName);
+				$response = array('success' => "True", "description"=>"File downloaded successfully", "serverPath"=>$_SERVER['DOCUMENT_ROOT'].'/'.$directoryName, "filePath"=>$fileName);
 				echo json_encode( $response );	
 			}
 			
