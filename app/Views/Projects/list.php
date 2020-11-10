@@ -37,7 +37,7 @@
                       <a href="/projects/add/<?php echo $row['project-id'];?>" class="btn btn-warning">
                           <i class="fa fa-edit"></i>
                       </a>
-                      <a title="Download" href="#" onClick="generateDocuments(<?php echo $row['project-id'];?>)" 
+                      <a title="Download" href="docsgen/generateDocument.php?type=project&id=<?php echo $row['project-id'];?>" 
                         class="btn btn-primary ml-2">
                           <i class="fa fa-download"></i>
                       </a>

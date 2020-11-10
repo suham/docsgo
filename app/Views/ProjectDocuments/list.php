@@ -80,7 +80,7 @@
                       <a title="<?= $editTitle ?>" href="/documents/add/<?php echo $row['type']."/".$row['id'];?>" class="btn <?= $editButton ?>">
                           <i class="fa <?= $editClass ?>"></i>
                       </a>
-                      <a title="Download" href="#" onClick="generateDocuments(<?php echo $row['id'];?>)" 
+                      <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>"  
                       class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
                           <i class="fa fa-download"></i>
                       </a>
