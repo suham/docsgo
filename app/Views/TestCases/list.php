@@ -66,7 +66,6 @@
            url: '/test-cases/delete/'+id,
            type: 'GET',
            success: function(response){
-              console.log(response);
               console.log('/test-cases/delete/'+id);
               response = JSON.parse(response);
               if(response.success == "True"){

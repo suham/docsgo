@@ -56,6 +56,36 @@ class Settings extends BaseController
         }
     
     }
+    
+    public function updateRequirementValues(){
+        if (session()->get('is-admin')) {
+            if ($this->request->getMethod() == 'post') {
+                $keyId = $this->request->getVar('key');
+                $keyValue = $this->request->getVar('value');
+                $keyisRoot = ($this->request->getVar('isRoot') == 'false') ? false : true;
+                
+                $model = new SettingsModel();
+                $data = $model->where('identifier', 'requirementsCategory')->findAll();	
+                $dataList = $data; 	
+                $data = json_decode($dataList[0]['options'], true);
+                foreach($data as $key=>$val){
+                    if($val['key'] == $keyId && $val['value'] == $keyValue) {
+                        $data[$key]['isRoot'] = $keyisRoot;
+                    }
+                }
+                $updateOptions = json_encode($data);
+                $newData = ["id" => $dataList[0]['id'], "identifier" => $dataList[0]['identifier'], "options" => $updateOptions];
+                $model->save($newData);
+                $response = array('success' => "True");
+                echo json_encode($response);
+            }
+        } else {
+            $response = array('success' => "False");
+            $response["error"] = "You are not authorized to perform this task.";
+            echo json_encode($response);
+        }
+
+    }
 
     
 

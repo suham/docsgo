@@ -2,19 +2,31 @@
   $uri = service('uri');
 ?>
   <div class="row p-0 p-md-4">
-    <div class="col-12">
+    <div class="col-1">
       <div class="btn-group btn-group-toggle">
         <a href="/traceability-matrix" 
-            class="btn <?= ((!strpos($uri,'?')) ? " btn-primary" : "btn-secondary") ?>">
+          class="btn <?= ( ( (!strpos($uri,'?')) || (strpos($uri,'/traceability-matrix?type=User')) || (strpos($uri,'/traceability-matrix?type=Standards')) || (strpos($uri,'/traceability-matrix?type=Guidance')) ) ? " btn-primary" : "btn-secondary") ?>">
            List
         </a>
         <a href="/traceability-matrix?view=gap"
-            class="btn <?= ((strpos($uri,'/traceability-matrix?view=gap'))  ? " btn-primary" : "btn-secondary") ?>">
+          class="btn <?= ( (strpos($uri,'/traceability-matrix?view=gap'))  ? " btn-primary" : "btn-secondary") ?>">
            Gap
         </a>
       </div>
-      
     </div>
+    <div class="col-2">
+      <select class="form-control selectpicker" onchange="getSelectedStatusData()" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
+        <option value="Select Type"  <?= (isset($selectedCategory) && ($selectedCategory != '')) ? '' : 'selected' ?>>
+            Select Type
+        </option>
+        <?php foreach ($requirementCategory as $reqCat): ?>
+            <option 
+              <?= isset($selectedCategory) ? (($selectedCategory == $reqCat["value"]) ? 'selected': '') : '' ?>
+              value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    
   </div>
 
   <div class="row p-0 p-md-4">
@@ -32,12 +44,12 @@
               <thead >
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">User Needs</th>
+                  <th class="<?php echo (($activeTableFirstHeader == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
+                  <th class="<?php echo (($activeTableFirstHeader == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
+                  <th class="<?php echo (($activeTableFirstHeader == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
                   <th scope="col">System</th>
                   <th scope="col">Subsystem</th>
                   <th scope="col">Test</th>
-                  <!-- <th scope="col">Design</th>
-                  <th scope="col">Code</th> -->
                   <th scope="col" style="width:125px">Action</th>
                 </tr>
               </thead>
@@ -45,7 +57,9 @@
                 <?php $count=1; foreach ($data as $key=>$row): ?>
                     <tr scope="row" id="<?php echo $row['id'];?>">
                         <td><?php echo $count++; ?></td>
-                        <td><?php echo $row['cncr'];?></td>
+                        <td class="<?php echo (($activeTableFirstHeader == 1) ? '': 'd-none') ;?>"><?php echo ($activeTableFirstHeader == 1) ? $row['cncr'] : '' ;?></td>
+                        <td class="<?php echo (($activeTableFirstHeader == 2) ? '': 'd-none') ;?>"><?php if(isset($row['standards'])) { echo $row['standards']; }?></td>
+                        <td class="<?php echo (($activeTableFirstHeader == 3) ? '': 'd-none') ;?>"><?php if(isset($row['guidance'])) { echo $row['guidance']; }?></td>
                         <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
                         <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
                         <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
@@ -124,8 +138,6 @@ $(document).ready( function () {
            url: '/traceability-matrix/delete/'+id,
            type: 'GET',
            success: function(response){
-              console.log(response);
-              console.log('/traceability-matrix/delete/'+id);
               response = JSON.parse(response);
               if(response.success == "True"){
                   $("#"+id).fadeOut(800)
@@ -141,5 +153,13 @@ $(document).ready( function () {
     });
 
  }
+
+ function getSelectedStatusData() {
+  var categoryType,url;
+  categoryType = $("#requirementType").val();
+  url = `traceability-matrix?type=${categoryType}`
+  window.location = url;
+}
+
 
 </script>

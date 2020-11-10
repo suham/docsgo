@@ -17,6 +17,7 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Reference</th>
             <th scope="col">Category</th>
             <th scope="col">Version</th>
             <th scope="col">Status</th>
@@ -28,6 +29,7 @@
               <tr scope="row" id="<?php echo $row['id'];?>">
                   <td><?php echo $key+1; ?></td>
                   <td><?php echo $row['name'];?></td>
+                  <td><?php echo $row['ref'];?></td>
                   <td><?php echo $row['category'];?></td>
                   <td><?php echo $row['version'];?></td>
                   <td><?php echo $row['status'];?></td>

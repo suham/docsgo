@@ -5,10 +5,10 @@
             <option value=""  <?= (isset($requirementSelected) && ($requirementSelected != '')) ? '' : 'selected' ?>>
                 Select Type
             </option>
-            <?php foreach ($requirementStatus as $key=>$value): ?>
+            <?php foreach ($requirementCategory as $reqCat): ?>
               <option 
-                <?= isset($requirementSelected) ? (($requirementSelected == $key) ? 'selected': '') : '' ?>
-                value="<?=  $key ?>" ><?=  $value ?></option>
+                <?= isset($requirementSelected) ? (($requirementSelected == $reqCat["value"]) ? 'selected': '') : '' ?>
+                value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
             <?php endforeach; ?>
         </select>
       </div>

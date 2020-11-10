@@ -3,13 +3,15 @@
 use App\Models\InventoryMasterModel;
 use CodeIgniter\I18n\Time;
 use App\Models\TeamModel;
+use App\Models\SettingsModel;
+
 class InventoryMaster extends BaseController
 {
 	public function index()
     {
 		$data = [];
 
-		$data['pageTitle'] = 'Inventory Master';
+		$data['pageTitle'] = 'Assets';
 		$data['addBtn'] = true;
 		$data['addUrl'] = "/inventory-master/add";
 		$data['backUrl'] = '/inventory-master';
@@ -24,7 +26,6 @@ class InventoryMaster extends BaseController
 		$data['statusList'] = ['active', 'in-active', 'not-found', 'cal-overdue'];
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
-
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('InventoryMaster/list',$data);
@@ -40,6 +41,21 @@ class InventoryMaster extends BaseController
 		return $id;
 	}
 
+	private function getAssetsCategoryEnums() {
+		$settingsModel = new SettingsModel;
+		$assetsCategory = $settingsModel->where("identifier","assetsCategory")->first();
+		if($assetsCategory["options"] != null){
+			$dataList = json_decode( $assetsCategory["options"], true );
+			$assetsCategory = [];
+			foreach($dataList as $key=>$list){
+				$assetsCategory[] = $dataList[$key];
+			}
+		}else{
+			$assetsCategory = [];
+		}
+		return $assetsCategory;
+	}
+
 	public function add(){
 		$backUrl = '/inventory-master';
 		if(isset($_SERVER['HTTP_REFERER'])){
@@ -53,7 +69,7 @@ class InventoryMaster extends BaseController
 		helper(['form']);
 		$model = new InventoryMasterModel();
 		$data = [];
-		$data['pageTitle'] = 'Inventory Master';
+		$data['pageTitle'] = 'Assets';
 		$data['addBtn'] = False;
 		$data['backUrl'] = $backUrl;
 		$dataList = [];
@@ -61,6 +77,7 @@ class InventoryMaster extends BaseController
 		$date['today_date'] = gmdate("Y-m-d H:i:s");
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
+		$data['assetsCategory'] = $this->getAssetsCategoryEnums();
 
 		$rules = [
 			'type' => 'required|max_length[25]',
@@ -72,10 +89,10 @@ class InventoryMaster extends BaseController
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Inventory Master";
+			$data['formTitle'] = "Add Assets";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Inventory Master";
+			$data['formTitle'] = "Update Assets";
 			$data['member'] = $model->where('id',$id)->first();	
 		}
 
@@ -120,9 +137,9 @@ class InventoryMaster extends BaseController
 				if($id > 0){
 					$newData['id'] = $id;
 					$newData['update_date'] = gmdate("Y-m-d H:i:s");
-					$message = 'Inventory Master successfully updated.';
+					$message = 'Assets successfully updated.';
 				}else{
-					$message = 'Inventory Master successfully added.';
+					$message = 'Assets successfully added.';
 				}
 				$model->save($newData);
 				$session = session();

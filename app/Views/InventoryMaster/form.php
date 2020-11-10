@@ -28,11 +28,19 @@
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 col-sm-4">
               <div class="form-group">
-              <label class = "font-weight-bold text-muted" for="type">Type</label>
-              <input type="text" class="form-control" name="type" id="type"
-              value="<?= isset($member['type']) ? $member['type'] : '' ?>" >
+               <label class = "font-weight-bold text-muted" for="used_by">Type</label>
+               <select class="form-control selectpicker" data-live-search="true" data-size="8" name="type" id="type">
+                <option value="Select Type"  <?= (isset($member['type']) && ($member['type'] != '')) ? '' : 'selected' ?>>
+                    Select Type
+                </option>
+                <?php foreach ($assetsCategory as $assetsCat): ?>
+                    <option 
+                      <?= isset($member['type']) ? (($member['type'] == $assetsCat["value"]) ? 'selected': '') : '' ?>
+                      value="<?=  $assetsCat["value"] ?>" ><?=  $assetsCat["value"] ?></option>
+                <?php endforeach; ?>
+              </select>
               </div>
             </div>
 

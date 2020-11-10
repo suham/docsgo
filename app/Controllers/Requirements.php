@@ -2,6 +2,7 @@
 
 use App\Models\ProjectModel;
 use App\Models\RequirementsModel;
+use App\Models\SettingsModel;
 class Requirements extends BaseController
 {
 	public function index()
@@ -13,7 +14,7 @@ class Requirements extends BaseController
 
 		// helper(['form']); 
 		$data['projects'] = $this->getProjects();
-		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");		
+		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
 		$status = $this->request->getVar('status');
 		$data['requirementSelected'] = $status;
 		if($status == 'All' || $status == ''){
@@ -27,6 +28,17 @@ class Requirements extends BaseController
 		echo view('templates/pageTitle', $data);
 		echo view('Requirements/list',$data);
 		echo view('templates/footer');
+	}
+
+	private function getRequirementCategoryEnums() {
+		$settingsModel = new SettingsModel;
+		$requirementCategory = $settingsModel->where("identifier","requirementsCategory")->first();
+		if($requirementCategory["options"] != null){
+			$requirementCategory = json_decode( $requirementCategory["options"], true );
+		}else{
+			$requirementCategory = [];
+		}
+		return $requirementCategory;
 	}
 
 	private function returnParams(){
@@ -48,7 +60,7 @@ class Requirements extends BaseController
 		$data['pageTitle'] = 'Requirements';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/requirements";
-		$requirementStatus = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");
+		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
 
 		if($id == ""){
 			$data['action'] = "add";
@@ -100,7 +112,6 @@ class Requirements extends BaseController
 				$session->setFlashdata('success', $message);
 			}
 		}
-		$data['requirementStatus'] = array('System' => "System", 'Subsystem' => "Subsystem", 'User Needs' => "User Needs");
 		$data['projects'] = $this->getProjects();
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);

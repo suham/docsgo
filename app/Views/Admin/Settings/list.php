@@ -58,6 +58,10 @@
                                     data-toggle="list" href="#requirementCategoryList" role="tab"
                                     aria-controls="profile">Requirement Category</a>
                                 
+                                    <a class="list-group-item list-group-item-action" id="assets-category-list"
+                                    data-toggle="list" href="#assetsCategoryList" role="tab"
+                                    aria-controls="profile">Assets Category</a>
+
                                 <a class="list-group-item list-group-item-action" id="risk-category-list"
                                     data-toggle="list" href="#riskCategoryList" role="tab"
                                     aria-controls="profile">Risk Category</a>
@@ -126,6 +130,20 @@
                                         <div class="col-3">
                                             <button class="btn btn-primary"
                                                 onclick="addValue('Requirement Category', 'requirementsCategory')">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="assetsCategoryList" role="tabpanel"
+                                    aria-labelledby="assets-category-list">
+                                    
+                                    <div class="row ">
+                                        <div class="col-9">
+                                            <ul class="list-group assetsCategory"></ul>
+                                        </div>
+                                        <div class="col-3">
+                                            <button class="btn btn-primary"
+                                                onclick="addValue('Assets Category', 'assetsCategory')">Add</button>
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +233,11 @@
                 showAlert("alert-warning", "No records found.", "enumAlert");
             } else {
                 for (var j = 0; j < options.length; j++) {
-                    addItemToList(options[j].value, identifier);
+                    if(identifier == 'requirementsCategory'){
+                        addItemToList(options[j], identifier);
+                    }else{
+                        addItemToList(options[j].value, identifier);
+                    }
                 }
             }
         }
@@ -232,9 +254,38 @@
 
     });
 
+    function addRootRequirement(id, val) {
+        var domId, isChecked,object;
+        domId = '#isRoot'+id;
+        isChecked = $(domId).prop('checked');
+        object = {'key': id, 'value': val, 'isRoot': isChecked};
+        $.ajax({
+            type: 'POST',
+            url: '/admin/settings/updateRequirementValues',
+            data: object,
+            dataType: 'json',
+            success: function (response) {
+                if (response.success == "True") {
+                    cosnole.log("added root requirement");
+                } else {
+                    showAlert("alert-danger", "Failed to add a new item.", "enumAlert");
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
     function addItemToList(value, listClass) {
-        var listCss = "list-group-item list-group-item-action";
-        var newItem = '<li class="' + listCss + '">' + value + '</li>';
+        var listCss = "list-group-item list-group-item-action", checked,val,newItem;
+        if(listClass == 'requirementsCategory'){
+            checked = (value.isRoot == true) ? "checked = true" : "";
+            val = value.value.replace( /^\s+|\s+$/g, '' );
+            newItem = '<li class="' + listCss + '">' + val + ' &nbsp;&nbsp;<input id="isRoot'+value.key+'" type="checkbox" '+ checked +' title="Add to root traceability" onclick="addRootRequirement('+value.key+",'"+val+"'"+')"/></li>';
+        }else{
+            newItem = '<li class="' + listCss + '">' + value + '</li>';
+        }
         $("." + listClass).append(newItem);
     }
 
@@ -255,6 +306,9 @@
                         key: newKey,
                         value: result
                     };
+                    if(listClass == 'requirementsCategory'){
+                        newItem['isRoot'] =  false;
+                    }
 
                     if (existingOptions == null) existingOptions = [];
                     existingOptions.push(newItem);
@@ -285,7 +339,12 @@
                 console.log(response);
                 if (response.success == "True") {
                     dropdownData[dataIndex]["options"] = updatedOptions;
-                    addItemToList(newItem, listClass);
+                    if(listClass == 'requirementsCategory'){
+                        var newData = JSON.parse(updatedOptions);
+                        addItemToList(newData[newData.length-1], listClass);                        
+                    }else{
+                        addItemToList(newItem, listClass);
+                    }
                     showAlert("alert-success", successMsg, "enumAlert");
                 } else {
                     showAlert("alert-danger", "Failed to add a new item.", "enumAlert");

@@ -39,6 +39,7 @@ $routes->match(['get','post'],'admin/users', 'Users::viewUsers',['filter' => 'au
 $routes->post('admin/users/updateStatus', 'Users::updateAdminStatus',['filter' => 'auth']);
 $routes->match(['get','post'],'admin/settings', 'Settings::index',['filter' => 'auth']);
 $routes->post('admin/settings/addEnums', 'Settings::addEnums',['filter' => 'auth']);
+$routes->post('admin/settings/updateRequirementValues', 'Settings::updateRequirementValues',['filter' => 'auth']);
 
 $routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
 

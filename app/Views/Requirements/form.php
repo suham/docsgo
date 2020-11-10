@@ -25,12 +25,12 @@
               <label class = "font-weight-bold text-muted" for="type">Type</label>
                <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                 <option value="" disabled <?= isset($member['type']) ? '' : 'selected' ?>>
-                    Select
+                    Select Type
                 </option>
-                <?php foreach ($requirementStatus as $key=>$value): ?>
+                <?php foreach ($requirementCategory as $reqCat): ?>
                   <option 
-                    <?= isset($member['type']) ? (($member['type'] == $key) ? 'selected': '') : '' ?>
-                    value="<?=  $key ?>" ><?=  $value ?></option>
+                  <?= isset($member['type']) ? (($member['type'] == $reqCat["value"]) ? 'selected': '') : '' ?>
+                      value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
                 <?php endforeach; ?>
               </select>
               </div>
