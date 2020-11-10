@@ -146,10 +146,10 @@
                             <li style="padding:6px;"><a style="padding:6px" href="/test-cases" class="collapse__sublink">Test</a></li>
                         </ul>
                     </div>
-                    <a href="/inventory-master" title="Inventory"
+                    <a href="/inventory-master" title="Assets"
                       class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'inventory-master'   ? 'active-nav-link' : '') ?>">
                         <ion-icon name="cart-outline" class="nav__icon"></ion-icon>
-                        <span class="nav__name">Inventory</span>
+                        <span class="nav__name">Assets</span>
                     </a>
 
                     <a target="_blank" href="/storage/repo" title="Storage"
