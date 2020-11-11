@@ -168,7 +168,7 @@ class TraceabilityMatrix extends BaseController
 					$lastid = $model->insertID();
 				}
 
-				//After saving/updating the traceability matrix, we need to store/update the selected all requirements(User Needs/System/Subsystem)
+				//After saving/updating the traceability matrix, we need to store/update the selected all requirements(User Needs/System/Subsystem)				
 				$model = new TraceabilityOptionsModel();
 				if(($userNeedsList)){
 					$model->where('traceability_id', $lastid)->where('type', 'User Needs')->delete();
@@ -179,63 +179,10 @@ class TraceabilityMatrix extends BaseController
 					];	
 					$model->save($newData1);
 				}
-				$model->where('traceability_id', $lastid)->where('type', 'System')->delete();
-				if(!empty($sysreqList) && count($sysreqList) > 0){
-					foreach($sysreqList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'System',
-							'requirement_id' => $list
-						];	
-						$model->save($newData1);
-					}
+				$optionsList = array('System'=>$sysreqList, 'Subsystem'=>$subsysreqList, 'Standards'=>$standardsList, 'Guidance'=>$guidanceList,'testcase'=>$testcaseList);
+				foreach($optionsList as $key=>$val){
+					$this->handleNewExistingOptions($val, $lastid, $key);
 				}
-				$model->where('traceability_id', $lastid)->where('type', 'Subsystem')->delete();
-				if(!empty($subsysreqList) && count($subsysreqList) > 0){
-						foreach($subsysreqList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'Subsystem',
-							'requirement_id' => $list
-						];	
-						$model->save($newData1);
-					}
-				}
-				$model->where('traceability_id', $lastid)->where('type', 'Standards')->delete();
-				if(!empty($standardsList) && count($standardsList) > 0){   
-						foreach($standardsList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'Standards',
-							'requirement_id' => $list
-						];	
-						$model->save($newData1);
-					}
-				}
-				$model->where('traceability_id', $lastid)->where('type', 'Guidance')->delete();
-				if(!empty($guidanceList) && count($guidanceList) > 0){
-						foreach($guidanceList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'Guidance',
-							'requirement_id' => $list
-						];	
-						$model->save($newData1);
-					}
-				}
-
-				$model->where('traceability_id', $lastid)->where('type', 'testcase')->delete();
-				if(!empty($testcaseList) && count($testcaseList) > 0){	
-						foreach($testcaseList as $key=>$list){
-						$newData1 = [
-							'traceability_id' => $lastid,
-							'type' => 'testcase',
-							'requirement_id' => $list
-						];	
-						$model->save($newData1);
-					}
-				}		
-
 				$session = session();
 				$session->setFlashdata('success', $message);
 			}
@@ -251,54 +198,42 @@ class TraceabilityMatrix extends BaseController
 		$data['guidanceList'] = $this->requirementsTypeData($data1,'Guidance', 0);
 		$data['testCases'] = $this->getTestCases(0);
 
-		$model = new TraceabilityOptionsModel();
-		$dt= array(); $check = array('traceability_id' => $id, 'type' => 'User Needs');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);	
-		}
-		$data['userNeedsListKeys'] = $dt;
-
-		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'System');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);
-		}
-		$data['systemKeys'] = $dt;
-
-		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'Subsystem');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);
-		}
-		$data['subsystemKeys'] = $dt;
-
-		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'Standards');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);
-		}
-		$data['standardsKeys'] = $dt;
-
-		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'Guidance');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);
-		}
-		$data['guidanceKeys'] = $dt;
-
-		$dt=[]; $check = array('traceability_id' => $id, 'type' => 'testcase');
-		$keyData = $model->select('requirement_id')->where($check)->findAll();
-		foreach($keyData as $key=>$list){
-			array_push($dt,$list['requirement_id']);
-		}
-		$data['testcaseKeys'] = $dt;
-
+		$data['userNeedsListKeys'] = $this->extraceOptionListKeys($id, 'User Needs');
+		$data['systemKeys'] = $this->extraceOptionListKeys($id, 'System');
+		$data['subsystemKeys'] = $this->extraceOptionListKeys($id, 'Subsystem');
+		$data['standardsKeys'] = $this->extraceOptionListKeys($id, 'Standards');
+		$data['guidanceKeys'] = $this->extraceOptionListKeys($id, 'Guidance');
+		$data['testcaseKeys'] = $this->extraceOptionListKeys($id, 'testcase');
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('TraceabilityMatrix/form', $data);
 		echo view('templates/footer');
+	}
+
+	function extraceOptionListKeys($id, $type) {
+		$dt=[]; $check = array('traceability_id' => $id, 'type' => $type);
+		$model = new TraceabilityOptionsModel();
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
+		foreach($keyData as $key=>$list){
+			array_push($dt,$list['requirement_id']);
+		}
+		return $dt;
+	}
+
+	function handleNewExistingOptions($dataList, $lastid, $type){
+		$model = new TraceabilityOptionsModel();
+		$model->where('traceability_id', $lastid)->where('type', $type)->delete();
+		if(!empty($dataList) && count($dataList) > 0){
+			foreach($dataList as $key=>$list){
+				$newData = [
+					'traceability_id' => $lastid,
+					'type' => $type,
+					'requirement_id' => $list
+				];	
+				$model->save($newData);
+			}
+		}
 	}
 
 	private function getTestCases($id){
