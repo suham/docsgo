@@ -69,7 +69,7 @@ $routes->match(['get','post'],'risk-assessment/delete', 'RiskAssessment::delete'
 $routes->get('requirements', 'Requirements::index',['filter' => 'auth']);
 $routes->match(['get','post'],'requirements/add', 'Requirements::add',['filter' => 'auth']);
 $routes->match(['get','post'],'requirements/add/(:num)', 'Requirements::add',['filter' => 'auth']);
-$routes->match(['get','post'],'requirements/delete/(:num)', 'Requirements::delete',['filter' => 'auth']);
+$routes->match(['get','post'],'requirements/delete', 'Requirements::delete',['filter' => 'auth']);
 
 $routes->get('test-cases', 'TestCases::index',['filter' => 'auth']);
 $routes->match(['get','post'],'test-cases/add', 'TestCases::add',['filter' => 'auth']);

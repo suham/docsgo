@@ -3,6 +3,9 @@
 use App\Models\ProjectModel;
 use App\Models\RequirementsModel;
 use App\Models\SettingsModel;
+use App\Models\TraceabilityMatrixModel;
+use App\Models\TraceabilityOptionsModel;
+
 class Requirements extends BaseController
 {
 	public function index()
@@ -132,13 +135,37 @@ class Requirements extends BaseController
 
 	public function delete(){
 		if (session()->get('is-admin')){
-			$id = $this->returnParams();
-			$model = new RequirementsModel();
-			$model->delete($id);
-			$response = array('success' => "True");
-			echo json_encode( $response );
-		}
-		else{
+			if ($this->request->getMethod() == 'post') {
+                $id = $this->request->getVar('id');
+                $type = $this->request->getVar('type');
+
+				//If type is 'User Needs | Standards | Guidance delete all options and traceability two tables data
+				if(($type == 'User Needs') || ($type == 'Standards') || ($type == 'Guidance')){
+					// Track the traceability_id from options where type=$type&&requirement_id=$id
+					$check1 = array('requirement_id'=> $id, 'type'=> $type);
+					$model2 = new TraceabilityOptionsModel;
+					$data = $model2->select('traceability_id')->where($check1)->findAll();
+					if(isset($data) && count($data) > 0){
+						foreach($data as $val){
+							$traceabilityId = $val['traceability_id'];
+							$model3 = new TraceabilityMatrixModel;
+							$model3->delete($traceabilityId);
+							$model2->where('traceability_id', $traceabilityId)->delete();
+						}
+					}
+				}else{
+					//Delete all options wrt of id and type
+					$model2 = new TraceabilityOptionsModel;
+					$check2 = array('requirement_id'=> $id, 'type'=> $type);
+					$model2->where($check2)->delete();
+				}
+				$model1 = new RequirementsModel();
+				$model1->delete($id);
+
+				$response = array('success' => "True");
+				echo json_encode( $response );
+			}
+		}else{
 			$response = array('success' => "False");
 			echo json_encode( $response );
 		}

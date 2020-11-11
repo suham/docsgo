@@ -15,36 +15,36 @@ class TraceabilityMatrix extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/traceability-matrix/add";
 
-		$view = $this->request->getVar('view');
 		$model = new TraceabilityMatrixModel();
-		$data['selectedCategory'] = "User Needs";
-		if($view == 'gap'){
+		//status->[List/GAP] type->[User Needs/Standards/Guidance]
+		$status = $this->request->getVar('status');
+		$type = $this->request->getVar('type');
+		if($type == '')
+			$data['selectedCategory'] = "User Needs";
+		else
+			$data['selectedCategory'] = $type;
+
+		if($status == 'Gap'){
 			$data['data'] = $model->getunmapedList();
 			$data['listViewDisplay'] = false;
 		}else{
 			$data['listViewDisplay'] = true;
-			$type = $this->request->getVar('type');
-			if($type == ''){
-				$type = $data['selectedCategory'];
-			}else{
-				$data['selectedCategory'] = $type;
-			}
-			$data['data'] = $model->getTraceabilityDataList($type);
+			$data['data'] = $model->getTraceabilityDataList($data['selectedCategory']);
 		}
-		//Display selected category, show/hide the remains columns
-		$activeTableFirstHeader = 1;
+		//Display selected category as root-traceability, show/hide the columns [User Needs/Standards/Guidance]
+		$rootTraceabilityColumn = 1;
 		switch($data['selectedCategory']){
 			case 'User Needs':
-				$activeTableFirstHeader = 1;
+				$rootTraceabilityColumn = 1;
 			break;
 			case 'Standards':
-				$activeTableFirstHeader = 2;
+				$rootTraceabilityColumn = 2;
 			break;
 			case 'Guidance':
-				$activeTableFirstHeader = 3;
+				$rootTraceabilityColumn = 3;
 			break;
 		}
-		$data['activeTableFirstHeader'] = $activeTableFirstHeader;
+		$data['rootTraceabilityColumn'] = $rootTraceabilityColumn;
 		$data['isEditForm'] = false;
 		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
 		

@@ -35,7 +35,6 @@
       
         <div class="col-4">
           <div class="btn-group btn-group-toggle" >
-          <!-- -->
           <div id="data-open-issue-soup-matrix">
                 <div  class="col-12">
                     <div class="form-group">

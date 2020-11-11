@@ -266,7 +266,7 @@
             dataType: 'json',
             success: function (response) {
                 if (response.success == "True") {
-                    cosnole.log("added root requirement");
+                    console.log("added root requirement");
                 } else {
                     showAlert("alert-danger", "Failed to add a new item.", "enumAlert");
                 }

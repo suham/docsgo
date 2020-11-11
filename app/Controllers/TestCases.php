@@ -1,6 +1,8 @@
 <?php namespace App\Controllers;
 
 use App\Models\TestCasesModel;
+use App\Models\TraceabilityOptionsModel;
+
 class TestCases extends BaseController
 {
 	public function index()
@@ -100,9 +102,14 @@ class TestCases extends BaseController
 
 	public function delete(){
 		if (session()->get('is-admin')){
+			//Delete all options wrt of id and type
 			$id = $this->returnParams();
-			$model = new TestCasesModel();
-			$model->delete($id);
+			$model = new TraceabilityOptionsModel;
+			$check = array('requirement_id'=> $id, 'type'=> 'testcase');
+			$model->where($check)->delete();
+
+			$model1 = new TestCasesModel();
+			$model1->delete($id);
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}

@@ -3,19 +3,26 @@
 ?>
   <div class="row p-0 p-md-4">
     <div class="col-1">
-      <div class="btn-group btn-group-toggle">
-        <a href="/traceability-matrix" 
-          class="btn <?= ( ( (!strpos($uri,'?')) || (strpos($uri,'/traceability-matrix?type=User')) || (strpos($uri,'/traceability-matrix?type=Standards')) || (strpos($uri,'/traceability-matrix?type=Guidance')) ) ? " btn-primary" : "btn-secondary") ?>">
-           List
-        </a>
-        <a href="/traceability-matrix?view=gap"
-          class="btn <?= ( (strpos($uri,'/traceability-matrix?view=gap'))  ? " btn-primary" : "btn-secondary") ?>">
-           Gap
-        </a>
+    <div class="btn-group btn-group-toggle" >
+        <div id="data-open-issue-soup-matrix">
+            <div  class="col-1">
+                <div class="form-group">
+                  <div class="btn-group btn-group-toggle btn-security-toggle" id="listblock" >
+                  <div class="btn <?= ( (!strpos($uri,'?') || (strpos($uri, 'status=List'))) ? "btn-primary" : "btn-secondary") ?>" id="1" onclick="getSelectedStatusData(1)">
+                        <input type="radio" name="status-type" value="All" id="status-type1" /> List
+                      </div>
+                      <div class="btn <?= (strpos($uri, 'status=Gap') ? "btn-primary" : "btn-secondary") ?>" id="2" onclick="getSelectedStatusData(2)">
+                        <input type="radio" name="status-type" value="Open"  id="status-type2"/> Gap
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
+
     <div class="col-2">
-      <select class="form-control selectpicker" onchange="getSelectedStatusData()" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
+      <select class="form-control selectpicker" onchange="getSelectedStatusData(3)" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
         <option value="Select Type"  <?= (isset($selectedCategory) && ($selectedCategory != '')) ? '' : 'selected' ?>>
             Select Type
         </option>
@@ -44,9 +51,9 @@
               <thead >
                 <tr>
                   <th scope="col">#</th>
-                  <th class="<?php echo (($activeTableFirstHeader == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
-                  <th class="<?php echo (($activeTableFirstHeader == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
-                  <th class="<?php echo (($activeTableFirstHeader == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
                   <th scope="col">System</th>
                   <th scope="col">Subsystem</th>
                   <th scope="col">Test</th>
@@ -57,9 +64,9 @@
                 <?php $count=1; foreach ($data as $key=>$row): ?>
                     <tr scope="row" id="<?php echo $row['id'];?>">
                         <td><?php echo $count++; ?></td>
-                        <td class="<?php echo (($activeTableFirstHeader == 1) ? '': 'd-none') ;?>"><?php echo ($activeTableFirstHeader == 1) ? $row['cncr'] : '' ;?></td>
-                        <td class="<?php echo (($activeTableFirstHeader == 2) ? '': 'd-none') ;?>"><?php if(isset($row['standards'])) { echo $row['standards']; }?></td>
-                        <td class="<?php echo (($activeTableFirstHeader == 3) ? '': 'd-none') ;?>"><?php if(isset($row['guidance'])) { echo $row['guidance']; }?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>"><?php if(isset($row['cncr'])) { echo $row['cncr']; }?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>"><?php if(isset($row['standards'])) { echo $row['standards']; }?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>"><?php if(isset($row['guidance'])) { echo $row['guidance']; }?></td>
                         <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
                         <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
                         <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
@@ -94,7 +101,10 @@
             <table class="table  table-hover" id="traceability-gaps" >
               <thead >
                 <tr>
-                  <th scope="col">User Needs</th>
+                <th class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
+
                   <th scope="col">System</th>
                   <th scope="col">Subsystem</th>
                   <th scope="col">Test</th>
@@ -102,7 +112,10 @@
               </thead>
               <tbody  class="bg-white">
                     <tr scope="row">
-                    <td><?php if(isset($data['User Needs'])) { echo $data['User Needs']; } ?></td>
+                    <td class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>"><?php if(isset($data['User Needs'])) { echo $data['User Needs']; }?></td>
+                    <td class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>"><?php if(isset($data['Standards'])) { echo $data['Standards']; }?></td>
+                    <td class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>"><?php if(isset($data['Guidance'])) { echo $data['Guidance']; }?></td>
+                    
                     <td><?php if(isset($data['System'])) { echo $data['System']; }?></td>
                     <td><?php if(isset($data['Subsystem'])) { echo $data['Subsystem']; }?></td>
                     <td><?php if(isset($data['testcase'])) { echo $data['testcase']; }?></td>
@@ -154,10 +167,22 @@ $(document).ready( function () {
 
  }
 
- function getSelectedStatusData() {
-  var categoryType,url;
+function getSelectedStatusData(id) {
+  var idVal,obj,status,riskType,url;
   categoryType = $("#requirementType").val();
-  url = `traceability-matrix?type=${categoryType}`
+  if(id == 3){
+    id = $('#listblock .btn-primary').attr('id');
+  }
+  if(id != '' && categoryType != ''){
+    $('#listblock  div').removeClass('btn-primary').addClass('btn-secondary');
+    idVal = "#status-type"+id;
+    $(idVal).parent().removeClass("btn-secondary").addClass('btn-primary');
+    obj = {1:"List", 2:"Gap"};
+    status = obj[id];
+    url = `traceability-matrix?status=${status}&type=${categoryType}`;
+  }else{
+    url = `traceability-matrix?status=List&type=User Needs`;
+  }
   window.location = url;
 }
 

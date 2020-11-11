@@ -75,31 +75,33 @@
     });
   });
 
- function deleteRequirements(id){
+  function deleteRequirements(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {
       if(result){
+        object = {'id': id, 'type': $("#requirementType").val() };
         $.ajax({
-           url: '/requirements/delete/'+id,
-           type: 'GET',
-           success: function(response){
-              console.log(response);
-              console.log('/requirements/delete/'+id);
-              response = JSON.parse(response);
-              if(response.success == "True"){
-                  $("#"+id).fadeOut(800)
-              }else{
-                 bootbox.alert('Record not deleted.');
-              }
+            type: 'POST',
+            url: '/requirements/delete',
+            data: object,
+            dataType: 'json',
+            success: function (response) {
+              console.log("response:", response);
+                if (response.success == "True") {
+                    $("#"+id).fadeOut(800)
+                } else {
+                  bootbox.alert('Record not deleted.');
+                }
+            },
+            error: function (err) {
+              bootbox.alert(err);
             }
-         });
+        });
       }else{
-        console.log('Delete Cancelled');
+          console.log('Delete Cancelled');
       }
-
     });
-
- }
+}
 
  function getSelectedStatusData(id) {
   var url, requirementType;
