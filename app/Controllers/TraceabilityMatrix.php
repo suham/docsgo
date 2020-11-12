@@ -47,7 +47,8 @@ class TraceabilityMatrix extends BaseController
 		$data['rootTraceabilityColumn'] = $rootTraceabilityColumn;
 		$data['isEditForm'] = false;
 		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
-		
+		session()->set('prevUrl', '');
+
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('TraceabilityMatrix/list',$data);
@@ -89,9 +90,24 @@ class TraceabilityMatrix extends BaseController
 		$data = [];
 		$data['pageTitle'] = 'Traceability Matrix';
 		$data['addBtn'] = False;
-		$data['backUrl'] = "/traceability-matrix";
 		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
-
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'status')) {
+				$urlAr = explode("status", $urlStr);
+				$backUrl = '/traceability-matrix?status'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/traceability-matrix');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/traceability-matrix');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+		
 		$rules = [
 			'Traceability-to' => 'required'
 		];

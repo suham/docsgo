@@ -54,7 +54,7 @@ class Documents extends BaseController
 			$data['selectedProject'] = $project_id;
 			$data['selectedStatus'] = $view;
 		}
-		
+		session()->set('prevUrl', '');
 		$data['projects'] = $this->getProjects();
 
 		echo view('templates/header');
@@ -222,7 +222,24 @@ class Documents extends BaseController
 		$data = [];
 		$data['pageTitle'] = 'Documents';
 		$data['addBtn'] = False;
-		$data['backUrl'] = "/documents";
+		// $data['backUrl'] = "/documents";
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, '?view')) {
+				$urlAr = explode("?view", $urlStr);
+				$backUrl = '/documents?view'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/documents');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/documents');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+		
 		$settingsModel = new SettingsModel();
 		$documentStatus = $settingsModel->where("identifier","documentStatus")->first();
 		if($documentStatus["options"] != null){

@@ -26,6 +26,7 @@ class Requirements extends BaseController
 		}
 		$model = new RequirementsModel();
 		$data["data"] = $model->getRequirements($status);
+		session()->set('prevUrl', '');
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -62,9 +63,25 @@ class Requirements extends BaseController
 		$data = [];
 		$data['pageTitle'] = 'Requirements';
 		$data['addBtn'] = False;
-		$data['backUrl'] = "/requirements";
 		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
-
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'status')) {
+				$urlAr = explode("status", $urlStr);
+				$backUrl = '/requirements?status'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/requirements');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/requirements');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+		
+		
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Requirements";

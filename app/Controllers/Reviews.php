@@ -58,6 +58,7 @@ class Reviews extends BaseController
 		$data['projects'] = $this->getProjects();
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
+		session()->set('prevUrl', '');
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -165,6 +166,23 @@ class Reviews extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/reviews";
 		$data['projects'] = $this->getProjects();
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, '?view')) {
+				$urlAr = explode("?view", $urlStr);
+				$backUrl = '/reviews?view'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/reviews');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/reviews');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
 		// $data['reviewStatus'] = ['Request Change', 'Ready For Review', 'Accepted'];

@@ -512,3 +512,10 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+ALTER TABLE `docsgo-traceability` ADD `description` LONGTEXT AFTER `code`;
+ALTER TABLE `docsgo-traceability` ADD `root_requirement` varchar(100) AFTER `id`;
+UPDATE `docsgo-traceability` SET root_requirement = 'User Needs';
+
+ALTER TABLE `docsgo-requirements` MODIFY type varchar (100);

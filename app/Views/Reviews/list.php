@@ -48,8 +48,8 @@
             <th scope="col" >#</th>
             <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
             <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
-            <th scope="col" style="min-width:120px;">Assigned To</th>
-            <th scope="col" style="min-width:120px;">Reviewed By</th>
+            <th scope="col" style="min-width:120px;">Author</th>
+            <th scope="col" style="min-width:120px;">Reviewer</th>
             <th scope="col" style="min-width: 125px;">Update Date</th>
             <th scope="col" style="min-width: 100px;">Actions</th>
           </tr>
