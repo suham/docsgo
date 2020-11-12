@@ -113,14 +113,15 @@ $(document).ready(function(){
   var table = $('#risk-assessment-list').DataTable({
       "responsive": true,
       "autoWidth": false,
-      "fixedHeader": true,
     });
-    $('.get-risks-sync').click(function(){
-      var selectedProjectId = $("#projects").val();
-      var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
-      console.log("url:", url);
-      window.location = url;
-    });
+
+  $('.get-risks-sync').click(function(){
+    var selectedProjectId = $("#projects").val();
+    var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
+    console.log("url:", url);
+    window.location = url;
+  });
+
 });
 
 

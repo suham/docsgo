@@ -73,7 +73,7 @@
             </div>
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label class = "font-weight-bold text-muted" for="assigned-to">Assigned To</label>
+               <label class = "font-weight-bold text-muted" for="assigned-to">Author</label>
                
                <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="assigned-to" id="assigned-to">
                 <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
@@ -133,7 +133,7 @@
             <div class="row justify-content-md-center" >
               <div class="col-12 col-sm-4" >
                 <div class="form-group">
-                <label class = "font-weight-bold text-muted" for="review-by">Reviewed by</label>
+                <label class = "font-weight-bold text-muted" for="review-by">Reviewer</label>
                 
                 <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="review-by" id="review-by">
                   <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>

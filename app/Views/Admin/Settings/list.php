@@ -202,6 +202,13 @@
                         </div>
                         <input type="text" class="form-control" id="sonar" >                        
                     </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Test url</span>
+                        </div>
+                        <input type="text" class="form-control" id="test" >                        
+                    </div>
+
                     <div class="row">
                         <div class="col text-center">
                             <button class="btn btn-primary" onclick="saveConfig()">Save</button>
@@ -245,12 +252,12 @@
         for (var i = 0; i < configData.length; i++) {
             const identifier = configData[i].identifier;
             const options = JSON.parse(configData[i].options);
-            for (var j = 0; j < options.length; j++) {
-                if (options != null) {
-                    $("#"+options[j].key).val(options[j].value);
+                for (var j = 0; j < options.length; j++) {
+                    if (options != null) {
+                        $("#"+options[j].key).val(options[j].value);
+                    }
                 }
             }
-        }
 
     });
 
@@ -360,14 +367,17 @@
     function saveConfig(){
         var identifier = "third-party";
         var sonarUrl = $("#sonar").val();
-        if(sonarUrl  != ""){
-            console.log(sonarUrl);
+        var testUrl = $("#test").val();
+        if(sonarUrl  != "" || testUrl != ""){
             var configIndex = configData.findIndex(x => x.identifier === identifier);
             var existingOptions = JSON.parse(configData[configIndex]["options"]);
 
             for(var z = 0 ; z< existingOptions.length ; z++){
                 if(existingOptions[z]["key"] == "sonar"){
                     existingOptions[z]["value"] = sonarUrl;
+                }
+                if(existingOptions[z]["key"] == "test"){
+                    existingOptions[z]["value"] = testUrl;
                 }
             }
             

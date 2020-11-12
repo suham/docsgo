@@ -38,7 +38,7 @@ class RiskAssessment extends BaseController
 				$data['riskCategorySelected'] = $type;
 			}	
 		}
-
+		session()->set('prevUrl', '');
 		$data['projects'] = $this->getProjects();
 		$projectModel = new ProjectModel();
 		$activeProject = $projectModel->where("status","Active")->first();	
@@ -153,18 +153,32 @@ class RiskAssessment extends BaseController
 
 	function add(){
 		$id = $this->request->getVar('id');
-		//handling the backUrl view, Which is selected previously 
-		$backUrl = '/risk-assessment';
 		helper(['form']);
 		$model = new RiskAssessmentModel();
 		$data = [];
 		$data['pageTitle'] = 'Risk Assessment';
 		$data['addBtn'] = False;
-		$data['backUrl'] = $backUrl;
 		$dataList = [];
 		$data['riskCategory'] = $this->getRiskTypecategories();
 		$data['riskStatus'] = ['Open', 'Close'];
 		$data['projects'] = $this->getProjects();
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'status')) {
+				$urlAr = explode("status", $urlStr);
+				$backUrl = '/risk-assessment?status'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/risk-assessment');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/risk-assessment');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+		
 
 		$rules = [
 			'project'=> 'required',

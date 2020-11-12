@@ -26,6 +26,8 @@ class InventoryMaster extends BaseController
 		$data['statusList'] = ['active', 'in-active', 'not-found', 'cal-overdue'];
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
+		session()->set('prevUrl', '');
+
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('InventoryMaster/list',$data);
@@ -57,27 +59,34 @@ class InventoryMaster extends BaseController
 	}
 
 	public function add(){
-		$backUrl = '/inventory-master';
-		if(isset($_SERVER['HTTP_REFERER'])){
-			$urlStr = $_SERVER['HTTP_REFERER'];
-			if (strpos($urlStr, 'view')) {
-				$urlAr = explode("=", $urlStr);
-				$backUrl = '/inventory-master?view='.$urlAr[count($urlAr)-1];
-			}
-		}
 		$id = $this->returnParams();
 		helper(['form']);
 		$model = new InventoryMasterModel();
 		$data = [];
 		$data['pageTitle'] = 'Assets';
 		$data['addBtn'] = False;
-		$data['backUrl'] = $backUrl;
 		$dataList = [];
 		$data['statusList'] = ['active', 'in-active', 'not-found', 'cal-overdue'];
 		$date['today_date'] = gmdate("Y-m-d H:i:s");
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
 		$data['assetsCategory'] = $this->getAssetsCategoryEnums();
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'view')) {
+				$urlAr = explode("view", $urlStr);
+				$backUrl = '/inventory-master?view'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/inventory-master');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/inventory-master');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
 
 		$rules = [
 			'type' => 'required|max_length[25]',
