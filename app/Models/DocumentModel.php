@@ -4,7 +4,8 @@ use CodeIgniter\Model;
 
 class DocumentModel extends Model{
     protected $table = 'docsgo-documents';
-    protected $allowedFields = ["project-id","review-id","type","category","author-id","reviewer-id", "update-date","json-object","file-name","status"];
+    protected $allowedFields = ["project-id", "review-id", "type", "category", "author-id", "reviewer-id", 
+                                "update-date", "json-object", "file-name", "status", "revision-history"];
     
     public function getProjects($type = "", $status = "", $project_id = ""){
         $db      = \Config\Database::connect();
@@ -45,6 +46,29 @@ class DocumentModel extends Model{
         $query = $db->query($sql);
         $data = $query->getResult('array');
         return $data;
+    }
+
+    public function getDocuments($whereCondition = "", $limit = ""){
+        $db      = \Config\Database::connect();
+        
+        $sql = "SELECT docs.`id`,docs.`project-id`,docs.`review-id`,docs.`type`,docs.`author-id`, author.`name` as `author`, reviewer.`name` as `reviewer`, docs.`update-date`,docs.`json-object`,docs.`file-name`,docs.`status`
+        FROM `docsgo-documents` AS docs
+        INNER JOIN `docsgo-team-master` AS author ON docs.`author-id` = author.`id` 
+        INNER JOIN `docsgo-team-master` AS reviewer ON docs.`reviewer-id` = reviewer.`id` 
+        ".$whereCondition."
+        ORDER BY docs.`update-date` DESC ".$limit." ;";
+
+        $query = $db->query($sql);
+
+        $data = $query->getResult('array');
+
+        for($i=0; $i<count($data);$i++){
+			$decodedJson = json_decode($data[$i]['json-object'], true);
+			$data[$i]['title'] = $decodedJson[$data[$i]['type']]['cp-line3'];
+		}
+        
+        return $data;
+
     }
 
 }

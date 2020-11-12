@@ -519,3 +519,7 @@ ALTER TABLE `docsgo-traceability` ADD `root_requirement` varchar(100) AFTER `id`
 UPDATE `docsgo-traceability` SET root_requirement = 'User Needs';
 
 ALTER TABLE `docsgo-requirements` MODIFY type varchar (100);
+
+ALTER TABLE `docsgo-documents` ADD `revision-history` JSON NULL AFTER `status`;
+
+ALTER TABLE `docsgo-documents` CHANGE `file-name` `file-name` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;

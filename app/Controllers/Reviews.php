@@ -139,17 +139,38 @@ class Reviews extends BaseController
 				$reviewId = $model->insert($data);
 			}
 
-			//Updating document
+			$documentModel = new DocumentModel();
+
+			// Updating Document Revision
+			$doc = $documentModel->where('id',$docId)->first();
+			$revision["dateTime"] = $currentTime;
+			$revision["who"] = session()->get("name");
+			$revision["type"] = "Reviewed";
+			$revision["log"] = "Review comments added.";
+			if($doc['status'] != $status){
+				$revision["log"] .= " Document status updated to ".$status;
+			}
+			$revisionHistory = $doc["revision-history"];
+			if($revisionHistory != null){
+				$revisionHistory = json_decode($revisionHistory, true);
+			}else{
+				$revisionHistory["revision-history"] = array();
+			}
+			array_push($revisionHistory["revision-history"], $revision);
+
+			//Adding review id to the document
 			$docData = [
 				"review-id" => $reviewId,
 				"status" => $status,
 				'update-date' => $currentTime,
+				'revision-history' => json_encode($revisionHistory)
 			];
-			$documentModel = new DocumentModel();
+			
 			$documentModel->update($docId,$docData);
 
 			$response["success"] = "True";
 			$response['reviewId'] = $reviewId;
+			$response["revisionHistory"] = json_encode($revisionHistory);
 			$response['status'] = $status;
 			
 			echo json_encode($response);

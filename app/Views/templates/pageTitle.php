@@ -13,6 +13,15 @@
                 </a>
             <?php endif; ?>
         </div>
+        <?php elseif(isset($titleDD)): ?>
+        <div class="col-sm-2 col-2">
+            <select class="form-control selectpicker text-light" id="newDoc"  data-style="btn-primary" data-live-search="true" data-size="8" >
+                <option value="" selected disabled >New Document</option>
+                <?php foreach ($documentType as $key=>$value): ?>
+                    <option  value="<?=  $key ?>"><?=  $value ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <?php else: ?>
         <div class="col-sm-2 col-2 ">
             <a class="btn btn-secondary text-light" href="<?= $backUrl ?>">

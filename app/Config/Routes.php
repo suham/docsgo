@@ -91,11 +91,15 @@ $routes->match(['get','post'],'reviews/add/(:num)', 'Reviews::add',['filter' => 
 $routes->match(['get','post'],'reviews/delete/(:num)', 'Reviews::delete',['filter' => 'auth']);
 $routes->post('reviews/addDocReview', 'Reviews::addDocReview',['filter' => 'auth']);
 
+
 $routes->get('documents', 'Documents::index',['filter' => 'auth']);
-$routes->get('documents/project/(:num)', 'Documents::projectDocument',['filter' => 'auth']);
-$routes->match(['get','post'],'documents/add', 'Documents::add',['filter' => 'auth']);
-$routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
+$routes->get('documents/add', 'Documents::add',['filter' => 'auth']);
+$routes->post('documents/save', 'Documents::save',['filter' => 'auth']);
 $routes->match(['get','post'],'documents/delete/(:num)', 'Documents::delete',['filter' => 'auth']);
+
+//This should be removed
+$routes->match(['get','post'],'documents/add/(:num)', 'Documents::add',['filter' => 'auth']);
+
 
 $routes->get('documents-templates', 'DocumentTemplate::index',['filter' => 'auth']);
 $routes->post('documents-templates/addTemplate', 'DocumentTemplate::addTemplate',['filter' => 'auth']);

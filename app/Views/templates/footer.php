@@ -20,6 +20,12 @@
             showIcons: ["code", "table"],
          });
          simplemde.codemirror.refresh();
+
+         simplemde.codemirror.on("update", function(el) {
+            const updatedValue = el.getValue()
+            var textarea = el.getTextArea();
+            textarea.innerHTML = updatedValue;
+         });
       });
 
    });
