@@ -32,9 +32,9 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Requirement</th>
-            <th scope="col">Description</th>
-            <th scope="col" style="width:125px">Update Date</th>
-            <th scope="col" style="width:125px">Action</th>
+            <th scope="col" style="width:55%">Description</th>
+            <th scope="col">Update Date</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody  class="bg-white">
@@ -71,7 +71,7 @@
     $('#requirements-list').DataTable({
       "responsive": true,
       "scrollX": true,
-      "fixedHeader": true,
+      // "fixedHeader": true,
     });
   });
 

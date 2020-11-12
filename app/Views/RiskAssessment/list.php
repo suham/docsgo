@@ -71,7 +71,7 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Risk</th>
-                <th scope="col">Hazard Analysis</th>
+                <th scope="col" style="width:45%">Hazard Analysis</th>
                 <th scope="col"> <?= (($riskCategorySelected == 'Vulnerability') ? "CVSS 3.1 Base Score" : "RPN") ?> </th>
                 <th scope="col">Status</th>
                 <th scope="col" style="width:125px">Action</th>
@@ -113,7 +113,7 @@ $(document).ready(function(){
   var table = $('#risk-assessment-list').DataTable({
       "responsive": true,
       "autoWidth": false,
-      "fixedHeader": true,
+      // "fixedHeader": true,
     });
     $('.get-risks-sync').click(function(){
       var selectedProjectId = $("#projects").val();
