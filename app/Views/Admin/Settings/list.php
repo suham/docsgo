@@ -200,13 +200,23 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Sonar url</span>
                         </div>
-                        <input type="text" class="form-control" id="sonar" >                        
+                        <input type="text" class="form-control" id="sonar" >&nbsp;
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Key</span>
+                        </div>
+                        <input type="text" class="form-control" id="apiKey-sonar" >                                              
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Test url</span>
                         </div>
-                        <input type="text" class="form-control" id="test" >                        
+                        <input type="text" class="form-control" id="test" >&nbsp;
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Key</span>
+                        </div>
+                        <input type="text" class="form-control" id="apiKey-test" >                                             
                     </div>
 
                     <div class="row">
@@ -254,7 +264,9 @@
             const options = JSON.parse(configData[i].options);
                 for (var j = 0; j < options.length; j++) {
                     if (options != null) {
-                        $("#"+options[j].key).val(options[j].value);
+                        $("#"+options[j].key).val(options[j].url);
+                        $("#apiKey-"+options[j].key).val(options[j].apiKey);
+
                     }
                 }
             }
@@ -368,16 +380,20 @@
         var identifier = "third-party";
         var sonarUrl = $("#sonar").val();
         var testUrl = $("#test").val();
+        var sonarUrlKey = $("#apiKey-sonar").val();
+        var testUrlKey = $("#apiKey-test").val();
         if(sonarUrl  != "" || testUrl != ""){
             var configIndex = configData.findIndex(x => x.identifier === identifier);
             var existingOptions = JSON.parse(configData[configIndex]["options"]);
 
             for(var z = 0 ; z< existingOptions.length ; z++){
                 if(existingOptions[z]["key"] == "sonar"){
-                    existingOptions[z]["value"] = sonarUrl;
+                    existingOptions[z]["url"] = sonarUrl;
+                    existingOptions[z]["apiKey"] = sonarUrlKey;
                 }
                 if(existingOptions[z]["key"] == "test"){
-                    existingOptions[z]["value"] = testUrl;
+                    existingOptions[z]["url"] = testUrl;
+                    existingOptions[z]["apiKey"] = testUrlKey;
                 }
             }
             
