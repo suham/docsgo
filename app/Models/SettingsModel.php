@@ -23,4 +23,26 @@ class SettingsModel extends Model{
         return $data;
     }
 
+    public function getConfig($identifier){
+        $db      = \Config\Database::connect();
+        $builder = $db->table('docsgo-settings');
+        $builder->select('options');
+        $builder->where('identifier', $identifier);
+        $query = $builder->get();
+        $result = $query->getResult('array');
+        $options = $result[0]["options"];
+
+        $data = [];
+        if( $options != null){
+            $options = json_decode( $options, true );
+            foreach($options as $option){
+                $data[$option['key']] = $option['value'];
+            }
+		}else{
+			$data = [];
+        }
+        
+        return $data;
+    }
+
 }

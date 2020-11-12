@@ -47,9 +47,9 @@ class RiskAssessmentModel extends Model{
         return $data; 
     }
 
-    function getRisksForDocuments(){
+    function getRisksForDocuments($condition = ""){
         $db      = \Config\Database::connect();
-        $sql = "SELECT * from `docsgo-risks` ORDER BY update_date desc;";
+        $sql = "SELECT * from `docsgo-risks` ".$condition." ORDER BY update_date desc;";
         $query = $db->query($sql);
         $result = $query->getResult('array');
         $data = array();
