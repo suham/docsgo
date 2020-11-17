@@ -21,28 +21,28 @@
             <?php endif; ?>
             
             <div class="col-12">
-            <div class="form-group col-6">
-                <label class = "font-weight-bold text-muted" for="Traceability-to" >Traceability To</label>
-                <select class="form-control selectpicker" onChange="toggleRootMappingData()" data-live-search="true" data-size="8" name="Traceability-to" id="Traceability-to" >
-                  <option value=""  <?= (isset($member['root_requirement']) && ($member['root_requirement'] != '')) ? '' : 'selected' ?>>
-                      Select Traceability To
-                  </option>
-                  <?php foreach ($requirementCategory as $reqCat): ?>
-                      <option 
-                        <?= isset($member['root_requirement']) ? (($member['root_requirement'] == $reqCat["value"]) ? 'selected': '') : '' ?>
-                        value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
+              <div class="form-group">
+                  <label class = "col-3" for="Traceability-to">Traceability To</label>
+                  <select class="selectpicker col-8" onChange="toggleRootMappingData()" data-live-search="true" data-size="8" name="Traceability-to" id="Traceability-to" >
+                    <option value=""  <?= (isset($member['root_requirement']) && ($member['root_requirement'] != '')) ? '' : 'selected' ?>>
+                        Select Traceability To
+                    </option>
+                    <?php foreach ($requirementCategory as $reqCat): ?>
+                        <option 
+                          <?= isset($member['root_requirement']) ? (($member['root_requirement'] == $reqCat["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
             </div>
 
             <div class="col-12 col-sm-6" id="rootMapping1">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="userNeeds" >User Needs</label>
                 <select  class="form-control  selectpicker" data-live-search="true" data-size="8" name="userNeeds[]" id="userNeeds" onchange="getIDDescription('#userNeeds', 1)">
-              <option value="" disabled <?= isset($member['userNeeds']) ? '' : 'selected' ?>>
-                    Select User Needs
-                </option>
+                  <option value="" disabled <?= isset($member['userNeeds']) ? '' : 'selected' ?>>
+                        Select User Needs
+                    </option>
                   <?php foreach ($userNeedsList as $key=>$value): ?>
                   <option 
                     <?= isset($userNeedsListKeys) ? ((in_array($key, $userNeedsListKeys)) ? 'selected': '') : '' ?>
@@ -84,10 +84,7 @@
               </div>
             </div>
 
-            <div class="col-12  col-sm-6">
-              <div class="form-group">
-                <div id="userNeeds_description"></div>
-              </div>
+            <div class="col-12  col-sm-6" id="userNeeds_description">
             </div>  
 
             <div class="col-12 col-sm-6">
@@ -182,20 +179,24 @@
 
 <script>
   $(document).ready(function(){
-    getIDDescription('#userNeeds', 1);
-    
+
     $('[data-toggle="popover"]').popover();
     $('#rootMapping1, #rootMapping2, #rootMapping3').css('display', 'none');
     var isEditForm = "<?php echo $isEditForm;?>";
     if(isEditForm){
       toggleRootMappingData();
+    }else{
+      $('#userNeeds_description').css('display', 'none');
     }
   });
 
   function toggleRootMappingData() {
     var categoryType = $("#Traceability-to").val();
     $('#rootMapping1, #rootMapping2, #rootMapping3').css('display', 'none');
-    $('#userNeeds_description').html('').css('border', 'none');
+    $('#userNeeds_description').css('display', 'none');
+    if(categoryType){
+      $('#userNeeds_description').css('display', 'block');
+    }
 
     switch(categoryType){
       case 'User Needs':

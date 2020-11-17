@@ -16,7 +16,7 @@
             <th scope="col">#</th>
             <th scope="col">Project Name</th>
             <th scope="col">Project Version</th>
-            <th scope="col">Description</th>
+            <th scope="col" style="width:40%">Description</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Status</th>

@@ -13,7 +13,7 @@ class Projects extends BaseController
 		$data['addUrl'] = "/projects/add";
 
 		$model = new ProjectModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $model->orderBy('status', 'Active')->findAll();	
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getManagers();	
 		

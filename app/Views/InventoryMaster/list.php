@@ -48,7 +48,6 @@
             <th scope="col">Serial</th>
             <th scope="col">Cal Due</th>
             <th scope="col">Used By</th>
-            <th scope="col">Status</th>
             <th scope="col" style="width:125px">Action</th>
           </tr>
         </thead>
@@ -65,14 +64,14 @@
 
                   <td><?php echo (!(int)$row['cal_date']) ? '' : date("Y-m-d", strtotime($row['cal_date']) + (330*60)); ?></td>
                   <td><?php echo isset($row['used_by']) ? $teamMembers[$row['used_by']] : '';?></td>
-                  <td>
-                    <?php
+                  <?php 
+                    /* //Status column is removed now, based on the cal_date, we need to change the status options, kept it as futher useage
                     if(!(int)$row['cal_date']){ echo $row['status'];  }else{
                       $cal_date = strtotime($row['cal_date']) + (330*60);  $today_Date = strtotime($today_date) + (330*60);
                       if($cal_date < $today_Date){ echo "Cal-Overdue";  }else{ echo $row['status']; }
                     }
-                    ?>
-                    </td>
+                    */ 
+                  ?>
                   <td>
                       <a title="Edit" href="/inventory-master/add/<?php echo $row['id'];?>" class="btn btn-warning">
                           <i class="fa fa-edit"></i>
