@@ -2,7 +2,7 @@
     <div class="col-3">
       <div class="form-group mb-0">
         <select class="form-control selectpicker" onchange="getSelectedStatusData()" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
-            <option value=""  <?= (isset($requirementSelected) && ($requirementSelected != '')) ? '' : 'selected' ?>>
+            <option value="" disabled <?= (isset($requirementSelected) && ($requirementSelected != '')) ? '' : 'selected' ?>>
                 Select Type
             </option>
             <?php foreach ($requirementCategory as $reqCat): ?>
