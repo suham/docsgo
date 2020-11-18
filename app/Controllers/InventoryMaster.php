@@ -98,10 +98,10 @@ class InventoryMaster extends BaseController
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Assets";
+			$data['formTitle'] = "Add Asset";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Assets";
+			$data['formTitle'] = "Update Asset";
 			$data['member'] = $model->where('id',$id)->first();	
 		}
 

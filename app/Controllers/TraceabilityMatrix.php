@@ -114,12 +114,12 @@ class TraceabilityMatrix extends BaseController
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Traceability Matrix";
+			$data['formTitle'] = "Add Traceability";
 			$data['isEditForm'] = false;
 		}else{
 			$data['action'] = "add/".$id;
 			$data['isEditForm'] = true;
-			$data['formTitle'] = "Update Traceability Matrix";
+			$data['formTitle'] = "Update Traceability";
 			$data['member'] = $model->where('id',$id)->first();	
 			
 		}

@@ -226,7 +226,7 @@ class Reviews extends BaseController
 		//  "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 
 		if($id == ""){
-			$data['formTitle'] = "Add";
+			$data['formTitle'] = "Add Review";
 			//Add new form, auto fill the project,Name,Author fields
 			$project_id =  $this->request->getVar('project_id');
 			$data['project_id'] = $project_id;
