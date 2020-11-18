@@ -461,7 +461,6 @@
             documentReview.assignedTo = "<?= $projectDocument['author-id'] ?>";      
             documentReview.reviewBy = "<?= session()->get('id') ?>";    
             documentReview.projectId = $("#project-id").val();
-            documentReview.reviewName = "<?= $projectDocument['file-name'] ?>";
             documentReview.context = "<?= $projectDocument['file-name'] ?>";
         <?php endif; ?>
 
@@ -831,7 +830,7 @@
                             documentReview.description = reviewComments.trim();
                             documentReview.reviewRef = reviewRef;
                             documentReview.status = reviewStatus;
-
+                            documentReview.reviewName = reviewCategory+" Review";
                             // console.log(documentReview);
                             submitReviewComment(documentReview);
                         
