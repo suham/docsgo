@@ -13,7 +13,7 @@ class Reviews extends BaseController
         $data = [];
 		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = True;
-		$data['addUrl'] = "/reviews/add";
+		$data['addUrl'] = "";
 
 		$settingsModel = new SettingsModel();
 		$reviewStatus = $settingsModel->where("identifier","documentStatus")->first();
@@ -226,13 +226,24 @@ class Reviews extends BaseController
 		//  "Code", "Verification", "Validation", "Release", "Risk Management", "Traceability"];
 
 		if($id == ""){
-			$data['action'] = "add";
 			$data['formTitle'] = "Add";
+			//Add new form, auto fill the project,Name,Author fields
+			$project_id =  $this->request->getVar('project_id');
+			$data['project_id'] = $project_id;
+			$data['project_name'] = $data['projects'][$project_id];
+			$data['action'] = "add?project_id=${project_id}";
+			$TeamModel = new TeamModel();
+			$data['user'] = $TeamModel->where('id', session()->get('id'))->first();
+			$data['review']['assigned-to'] = $data['user']['id'];			
 		}else{
 			$data['action'] = "add/".$id;
 			
 			$data['review'] = $model->where('id',$id)->first();		
 			$data['formTitle'] = $data['review']['review-name'];
+			//Update form, auto fill the project field
+			$project_id = $data['review']['project-id'];
+			$data['project_id'] = $project_id;
+			$data['project_name'] = $data['projects'][$project_id];			
 		}
 		$currentTime = gmdate("Y-m-d H:i:s");
 		if ($this->request->getMethod() == 'post') {

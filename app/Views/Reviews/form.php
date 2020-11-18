@@ -23,18 +23,9 @@
 
             <div class="col-12 col-sm-4">
               <div class="form-group">
-               <label class = "font-weight-bold text-muted" for="project-id">Project</label>
-               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="project-id" id="project-id">
-                <option value="" disabled <?= isset($review['project-id']) ? '' : 'selected' ?>>
-                    Select
-                </option>
-                <?php foreach ($projects as $key=>$value): ?>
-                  <option 
-                    <?= isset($review['project-id']) ? (($review['project-id'] == $key) ? 'selected': '') : '' ?>
-                    value="<?=  $key ?>" ><?=  $value ?></option>
-                <?php endforeach; ?>
-                
-              </select>
+              <label class="font-weight-bold text-muted" for="project-name">Project</label> <br>
+                <button type="button" id="project-name" class="btn btn-info"><?= $project_name ?></button>
+                <input type="hidden" id="project-id" name="project-id" value="<?= $project_id ?>" />
               </div>
             </div>
 
@@ -183,7 +174,7 @@
 </div>
 
 <script>
-var review;
+var review, initialCategory, initialName;
   $(document).ready(function () {
     <?php if (isset($review)): ?>
       review = <?= json_encode($review) ?>;
@@ -200,8 +191,8 @@ var review;
         // $codemirror.refresh();
       }
     <?php endif; ?>
-
-
+    initialCategory = $('#category').val();
+    initialName = $('#review-name').val();
   });
 
   function evaluteDiff(sectionId, visibility){
@@ -243,7 +234,11 @@ var review;
   $("#category").change(function(){
     var selectedText = $(this).find("option:selected").text();
     var selectedValue = $(this).val();
-    console.log(selectedValue)
+    if(initialCategory == selectedValue){
+      $('#review-name').val(initialName);
+    }else{
+      $('#review-name').val(selectedValue+" Review");
+    }
     if(selectedValue == "Code"){
       $(".differential").removeClass('d-none');
     }else{

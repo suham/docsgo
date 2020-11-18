@@ -115,6 +115,9 @@
         "responsive": true,
         "autoWidth": false
       });
+      $('#addButton').click(function(){
+        navigateAddPage();
+      });
     });
 
   function getData(){
@@ -124,6 +127,13 @@
     window.location = url;
   }
 
+  function navigateAddPage() {
+    console.log("navigateAddPage:", $('#projects').val());
+    const project_id = $("#projects").val();
+    const url = `/reviews/add?project_id=${project_id}`;
+    location.href = url;
+
+  }
 
 </script>
 

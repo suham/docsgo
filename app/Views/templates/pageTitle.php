@@ -4,7 +4,7 @@
         </div>
         <?php if ($addBtn): ?>
         <div class="col-sm-2 col-2">
-            <a href="<?= $addUrl ?>" class="btn btn-primary">
+            <a href="<?= ($addUrl)? $addUrl: '#' ?>" id="addButton" class="btn btn-primary">
                 <i class="fa fa-plus"></i> Add
             </a>
             <?php if (isset($AddMoreBtn)): ?>
