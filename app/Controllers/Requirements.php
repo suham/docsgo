@@ -25,7 +25,7 @@ class Requirements extends BaseController
 		$type = $this->request->getVar('type');
 		$data['requirementSelected'] = $status;
 		if($status == 'All' || $status == ''){
-			$status ='';
+			$status ='User Needs';
 			$data['requirementSelected'] = 'User Needs';
 		}
 		$model = new RequirementsModel();
