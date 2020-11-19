@@ -804,7 +804,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">
-                        <textarea class="form-control reviewRef" maxlength="250"  placeholder="Reference" ></textarea>
+                            <textarea class="form-control reviewRef" maxlength="250"  placeholder="Author's Note" ></textarea>
                         </div>
                     </div>`,
             buttons: {
@@ -840,10 +840,13 @@
             }
         });
 
-        if(documentReview.reviewBy != ""){            
+        
+        if(documentReview.id != ""){            
             $("select.reviewCategory").val(documentReview.category);
             $("select.reviewStatus").val(documentReview.status);
             $(".reviewRef").text(documentReview.reviewRef);
+        }else{
+            $("select.reviewStatus").val("Request Change");
         }
 
         $('.selectpicker').selectpicker('refresh');
