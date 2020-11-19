@@ -11,7 +11,7 @@
 
   <?php else: ?>
     <div class="col-12">
-      <table class="table  table-hover table-responsive1"  id="test-cases-list">
+      <table class="table  table-hover table-responsive" id="test-cases-list">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -49,16 +49,21 @@
 </div>
 
 <script>
-  
+
   $(document).ready( function () {
     var table = $('#test-cases-list').DataTable({
       "responsive": true,
-      "scrollX": true,
+      // "scrollX": true,
+      "autoWidth": false,
       "stateSave": true,
       // "fixedHeader": true,
     });
     $('.l-navbar .nav__link, #footer-icons').on('click', function () {
       table.state.clear();
+    });
+    $('.get-risks-sync').click(function(){
+      var url = `test-cases?status=sync`
+      window.location = url;
     });
   });
 

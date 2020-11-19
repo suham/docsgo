@@ -1,6 +1,7 @@
 <?php  namespace App\Models;
 
 use CodeIgniter\Model;
+use TP\Tools\SonarQube;
 
 class RiskAssessmentModel extends Model{
     protected $table = 'docsgo-risks';
@@ -124,51 +125,29 @@ class RiskAssessmentModel extends Model{
 
     function getSonarRecords(){
         $settingsModel = new SettingsModel();
+        $sonarQubeObj = new SonarQube();
 
         $serverConfig = $settingsModel->getSettings("third-party");
         
         $serverDetails = json_decode($serverConfig[0]['options']);
-        $BASE_URL = "";
+        $BaseURL = "";
         foreach( $serverDetails as $server ){
             if($server->key == "sonar"){
-                $BASE_URL= $server->value;
+                $BaseURL= $server->url;
             }
         }
         
         $vulnerabilities = [];
-        if( $BASE_URL){
+        if( $BaseURL){
             try {
-                $ch = curl_init();  
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-                curl_setopt($ch, CURLOPT_URL, "$BASE_URL/api/issues/search?types=VULNERABILITY&statuses=OPEN"); 
-                $result = curl_exec($ch); 
-                curl_close($ch);
-    
-                $data = json_decode($result);
-                // print_r($data);
-                if( $data->total ){
-                    $count = $data->total;  
-                    $pageCount = floor($count/100);
-                    if( $pageCount == 0 ){
-                        $pageCount = 1;
-                    }        
-                    if( $count != 0 && $pageCount > 0 ){
-                        for( $i = 1; $i <= $pageCount; $i++ ){
-                            $pageIndex = $i;
-                            $curlReq = curl_init();  
-                            curl_setopt($curlReq, CURLOPT_RETURNTRANSFER, 1); 
-                            curl_setopt($curlReq, CURLOPT_URL, "$BASE_URL/api/issues/search?types=VULNERABILITY&statuses=OPEN&pageIndex=$pageIndex"); 
-                            $res = curl_exec($curlReq); 
-                            $tmp = json_decode($res);
-                            $vulnerabilities = array_merge( $vulnerabilities, $tmp->issues);
-                        }
-                    }
-                }
+                $vulnerabilitiesAPIURL = "$BaseURL/api/issues/search?types=VULNERABILITY&statuses=OPEN";
+                
+                $vulnerabilities = $sonarQubeObj->getVulnerabilities($vulnerabilitiesAPIURL);
+                return $vulnerabilities;
             } catch(Exception $e){
                 error_log($e);
                 return false;
             }
-            return $vulnerabilities;
         } else {
             return false;
         }        

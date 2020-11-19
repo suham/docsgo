@@ -209,7 +209,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" >Test url</span>
+                            <span class="input-group-text" >TestLink url</span>
                         </div>
                         <input type="text" class="form-control" id="test" >&nbsp;
 

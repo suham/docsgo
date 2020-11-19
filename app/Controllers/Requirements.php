@@ -5,6 +5,7 @@ use App\Models\RequirementsModel;
 use App\Models\SettingsModel;
 use App\Models\TraceabilityMatrixModel;
 use App\Models\TraceabilityOptionsModel;
+use PhpOffice\PhpWord\Exception\Exception;
 
 class Requirements extends BaseController
 {
@@ -14,17 +15,23 @@ class Requirements extends BaseController
 		$data['pageTitle'] = 'Requirements';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/requirements/add";
+		$data['AddMoreBtn'] = true;
+		$data['AddMoreBtnText'] = "Sync";
 
 		// helper(['form']); 
 		$data['projects'] = $this->getProjects();
 		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
 		$status = $this->request->getVar('status');
+		$type = $this->request->getVar('type');
 		$data['requirementSelected'] = $status;
 		if($status == 'All' || $status == ''){
 			$status ='';
 			$data['requirementSelected'] = 'User Needs';
 		}
 		$model = new RequirementsModel();
+		if($type == 'sync'){
+			$this->syncRequirements();
+		}
 		$data["data"] = $model->getRequirements($status);
 		session()->set('prevUrl', '');
 
@@ -54,6 +61,69 @@ class Requirements extends BaseController
 		return $id;
 	}
 
+	public function syncRequirements(){
+		$model = new RequirementsModel();
+
+		$requirements = $model->fetchTestLinkRequirements();
+
+		//add requiremts suties here to exclude
+		$excludeRequirements = array("vms-tool-validation-requirements", "non-functional-requirements");
+
+		if( $requirements ){
+			try {
+				foreach ($requirements->children() as $row) {
+					$title = $row['title'];
+					if ( in_array($title, $excludeRequirements) ){
+						//exclude unwanted requirements
+						$skip = 1;
+					} 
+					else {
+						$type = "";
+						if (strpos($title, "subsystem")) {
+							$type = "Subsystem";
+						} else {
+							$type = "System";
+						}
+						foreach ($row->requirement as $requirement) {
+							$description = "[$requirement->docid:$requirement->title] $requirement->description";
+							$whereCondition =  " WHERE type = '". addslashes($type) ."' AND requirement = '". addslashes($requirement->title) ."'";
+							$result = $model->getRequirementRecord($whereCondition);
+
+							if( $result ){
+								// check whether the description is same or not, if not then update the description
+								if( $description != $result[0]['description']){
+									// update the requirement description
+									$updateData = [
+										'id' => $result[0]['id'],
+										'description' => $description,
+										'update_date' => gmdate("Y-m-d H:i:s")
+									];
+									$model->save($updateData);
+								} 
+							} else {
+								// insert a new record
+								$newData = [
+									'type' => $type,
+									'requirement' => $requirement->title,
+									'description' => $description,
+									'update_date' => gmdate("Y-m-d H:i:s"),
+								];
+								$model->save($newData);
+							}
+						}
+					}
+				}
+			} catch(Exception $e){
+				error_log($e);
+				return;
+			}
+			
+		} else {
+			error_log("[DocsGo][REQUIREMENTS][Requirements.syncRequirements][INFO] requirements list is empty.");
+			return;
+		}
+	}
+	
 	public function add(){
 
 		$id = $this->returnParams();
@@ -78,6 +148,11 @@ class Requirements extends BaseController
 			}
 		}else{
 			session()->set('prevUrl', '/requirements');
+		}
+		if(strpos(session()->get('prevUrl'), '&type=sync')){
+			$cur = session()->get('prevUrl');
+			$urlparam = str_replace("&type=sync", "", $cur);
+			session()->set('prevUrl', $urlparam);
 		}
 		$data['backUrl'] =  session()->get('prevUrl');
 		

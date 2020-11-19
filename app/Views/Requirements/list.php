@@ -70,13 +70,16 @@
   $(document).ready( function () {
     var table = $('#requirements-list').DataTable({
       "responsive": true,
-      // "scrollX": true,
-      "stateSave": true,
-      // "fixedHeader": true,
+      "autoWidth": false,
+      "stateSave": true
     });
     $('.l-navbar .nav__link, #footer-icons').on('click', function () {
       table.state.clear();
     });
+    $('.get-risks-sync').click(function(){
+      getSelectedStatusData('sync');
+    });
+
   });
 
   function deleteRequirements(id){
@@ -115,6 +118,9 @@
     requirementType = 'All';
   }
   url = `requirements?status=${requirementType}`;
+  if(id == 'sync'){
+    url = `requirements?status=${requirementType}&type=sync`;
+  }
   window.location = url;
 }
 

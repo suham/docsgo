@@ -523,3 +523,7 @@ ALTER TABLE `docsgo-requirements` MODIFY type varchar (100);
 ALTER TABLE `docsgo-documents` ADD `revision-history` JSON NULL AFTER `status`;
 
 ALTER TABLE `docsgo-documents` CHANGE `file-name` `file-name` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `docsgo-requirements` MODIFY description longtext;
+
+ALTER TABLE `docsgo-test-cases` MODIFY description longtext;

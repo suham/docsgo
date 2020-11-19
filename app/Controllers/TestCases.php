@@ -11,9 +11,15 @@ class TestCases extends BaseController
 		$data['pageTitle'] = 'Test';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/test-cases/add";
+		$data['AddMoreBtn'] = true;
+		$data['AddMoreBtnText'] = "Sync";
 
-		// helper(['form']);
 		$model = new TestCasesModel();
+		
+		$status = $this->request->getVar('status');
+		if($status == 'sync'){
+			$this->syncTestCases();
+		}
 		$data['data'] = $model->orderBy('testcase', 'asc')->findAll();	
 		
 
@@ -32,6 +38,45 @@ class TestCases extends BaseController
 		return $id;
 	}
 
+	public function syncTestCases(){
+		$model = new TestCasesModel();
+
+		$testCases = $model->fetchTestLinkTestCases();
+
+		if( $testCases ){
+			$testCaseIdPrefix = $testCases->testCasePrefix; 
+			foreach( $testCases->testCasesList as $testCase ){
+				$description = "[$testCaseIdPrefix-$testCase->tc_external_id:$testCase->name] $testCase->summary";
+				$whereCondition =  " WHERE testcase = '" . addslashes($testCase->name) . "'";
+				$result = $model->getTestCaseRecord($whereCondition);
+				if ($result) {
+					// check whether the description is same or not, if not then update the description
+					if ( $description != $result[0]['description'] ) {
+						// update the test case description
+						$updateData = [
+							'id' => $result[0]['id'],
+							'description' => $description,
+							'update_date' => gmdate("Y-m-d H:i:s")
+						];
+						$model->save($updateData);
+					}
+				} else {
+					// insert a new record
+					$newData = [
+						'testcase' => $testCase->name,
+						'description' => $description,
+						'update_date' => gmdate("Y-m-d H:i:s"),
+					];
+					$model->save($newData);
+				}
+			}
+		} else {
+			error_log("[DocsGo][TestCases.syncTestCases][INFO] test cases list is empty.");
+			return;
+		}
+		
+	}
+	
 	public function add(){
 
 		$id = $this->returnParams();
