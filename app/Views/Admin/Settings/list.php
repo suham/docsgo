@@ -211,12 +211,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" >TestLink url</span>
                         </div>
-                        <input type="text" class="form-control" id="test" >&nbsp;
+                        <input type="text" class="form-control" id="testLink" >&nbsp;
 
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Key</span>
                         </div>
-                        <input type="text" class="form-control" id="apiKey-test" >                                             
+                        <input type="text" class="form-control" id="apiKey-testLink" >                                             
                     </div>
 
                     <div class="row">
@@ -379,9 +379,9 @@
     function saveConfig(){
         var identifier = "third-party";
         var sonarUrl = $("#sonar").val();
-        var testUrl = $("#test").val();
+        var testUrl = $("#testLink").val();
         var sonarUrlKey = $("#apiKey-sonar").val();
-        var testUrlKey = $("#apiKey-test").val();
+        var testUrlKey = $("#apiKey-testLink").val();
         if(sonarUrl  != "" || testUrl != ""){
             var configIndex = configData.findIndex(x => x.identifier === identifier);
             var existingOptions = JSON.parse(configData[configIndex]["options"]);
@@ -391,7 +391,7 @@
                     existingOptions[z]["url"] = sonarUrl;
                     existingOptions[z]["apiKey"] = sonarUrlKey;
                 }
-                if(existingOptions[z]["key"] == "test"){
+                if(existingOptions[z]["key"] == "testLink"){
                     existingOptions[z]["url"] = testUrl;
                     existingOptions[z]["apiKey"] = testUrlKey;
                 }
