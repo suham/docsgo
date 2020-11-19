@@ -131,16 +131,23 @@
 <script>
 
 $(document).ready( function () {
-    $('#traceability-list').DataTable({
+    var table1 = $('#traceability-list').DataTable({
       "responsive": true,
       "autoWidth": false,
+      "stateSave": true,
       "fixedHeader": true,
     });
-    $('#traceability-gaps').DataTable({
+    var table2 = $('#traceability-gaps').DataTable({
       "responsive": true,
       "autoWidth": false,
+      "stateSave": true,
       "fixedHeader": true,
     });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table1.state.clear();
+      table2.state.clear();
+    });
+
 });
 
  function deleteTraceabilityMatrix(id){

@@ -32,7 +32,7 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Requirement</th>
-            <th scope="col" style="width:55%">Description</th>
+            <th scope="col" style="width:50%">Description</th>
             <th scope="col">Update Date</th>
             <th scope="col">Action</th>
           </tr>
@@ -68,10 +68,14 @@
 
 <script>
   $(document).ready( function () {
-    $('#requirements-list').DataTable({
+    var table = $('#requirements-list').DataTable({
       "responsive": true,
-      "scrollX": true,
+      // "scrollX": true,
+      "stateSave": true,
       // "fixedHeader": true,
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

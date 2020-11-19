@@ -62,7 +62,11 @@
   $(document).ready( function () {
     var table = $('#project-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

@@ -68,9 +68,13 @@
 
 <script>
   $(document).ready( function () {
-      $('#teams-list').DataTable({
+    var table =  $('#teams-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
  function deleteMember(id){

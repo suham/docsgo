@@ -96,8 +96,13 @@
   $(document).ready( function () {
     var table = $('#inventory-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false,
+    });      
+    $('.l-navbar .nav__list .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
+
   });
 
  function deleteItem(id){

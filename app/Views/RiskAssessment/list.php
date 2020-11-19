@@ -112,8 +112,12 @@
 $(document).ready(function(){
   var table = $('#risk-assessment-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false,
-    });
+  });
+  $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
+  });
 
   $('.get-risks-sync').click(function(){
     var selectedProjectId = $("#projects").val();

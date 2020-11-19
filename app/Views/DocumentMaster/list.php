@@ -55,9 +55,13 @@
 
 <script>
   $(document).ready( function () {
-    $('#document-master-list').DataTable({
+    var table = $('#document-master-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

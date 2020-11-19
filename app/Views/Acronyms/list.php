@@ -53,6 +53,10 @@
     var table = $('#acronyms-list').DataTable({
       "responsive": true,
       "autoWidth": false,
+      "stateSave": true
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

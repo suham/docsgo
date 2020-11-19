@@ -56,7 +56,7 @@ class DocumentsMaster extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			
 			$rules = [
-				'name' => 'required|min_length[3]|max_length[50]',
+				'name' => 'required|min_length[3]|max_length[60]',
 				'category' => 'required',
 				'version' => 'required',
 				'description' => 'max_length[100]',

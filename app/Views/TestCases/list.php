@@ -51,10 +51,14 @@
 <script>
   
   $(document).ready( function () {
-    $('#test-cases-list').DataTable({
+    var table = $('#test-cases-list').DataTable({
       "responsive": true,
       "scrollX": true,
+      "stateSave": true,
       // "fixedHeader": true,
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

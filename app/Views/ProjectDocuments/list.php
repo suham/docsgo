@@ -115,7 +115,11 @@
   $(document).ready( function () {
     var table = $('#documents-list').DataTable({
       "responsive": true,
+      "stateSave": true,
       "autoWidth": false
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
     });
   });
 

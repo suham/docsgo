@@ -111,10 +111,15 @@
  }
 
     $(document).ready( function () {
-      $('#reviews-list').DataTable({
+      var table = $('#reviews-list').DataTable({
         "responsive": true,
+        "stateSave": true,
         "autoWidth": false
       });
+      $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+        table.state.clear();
+      });
+
       $('#addButton').click(function(){
         navigateAddPage();
       });
