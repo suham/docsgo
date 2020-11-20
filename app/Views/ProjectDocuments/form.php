@@ -523,7 +523,7 @@
 
         if(dataFormat == "table"){
         columnValues = columnValues.toUpperCase();
-        var thead = "| " + columnValues.replace(/,/g," | ");+ " |\n";
+        var thead = "| " + columnValues.replace(/,/g," | ") + " |\n";
         
         indexes.forEach((index, i) => {
             thead += "|-------";
