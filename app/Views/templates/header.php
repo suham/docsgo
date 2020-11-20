@@ -32,7 +32,10 @@
     <script type="text/javascript" src="/assets/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="/assets/js/diff2html-ui.min.js"></script>
     <script type="text/javascript" src="/assets/js/datatables.min.js"></script>
-
+    <!-- <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script> -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <title>DocsGo</title>
     <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
