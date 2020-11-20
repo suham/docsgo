@@ -26,6 +26,9 @@
           <?php foreach ($documentStatus as $docStatus): ?>
             <label onclick="getData()" class="btn <?= (($selectedStatus == $docStatus) ? " btn-primary" : "btn-secondary") ?>">
               <input type="radio" name="view" value="<?=  $docStatus ?>" autocomplete="off" <?= (($selectedStatus == $docStatus) ? "checked" : "") ?>>  <?=  $docStatus ?>
+              <?php if(isset($documentsCount[$docStatus])): ?>
+                <span class="badge badge-light ml-1"><?= $documentsCount[$docStatus] ?></span>
+              <?php endif ?>  
             </label>
           <?php endforeach; ?>
         </div>

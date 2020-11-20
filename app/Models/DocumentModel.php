@@ -71,4 +71,20 @@ class DocumentModel extends Model{
 
     }
 
+    public function getDocumentsCount($project_id){
+        $db      = \Config\Database::connect();
+        
+        $sql = "select count(*) as count ,status from `docsgo-documents` where `project-id` = ".$project_id." group by status";
+
+        $query = $db->query($sql);
+
+        $result = $query->getResult('array');
+
+        for($i=0; $i<count($result);$i++){
+			$data[$result[$i]['status']] = $result[$i]['count'];
+		}
+        
+        return $data;
+    }
+
 }

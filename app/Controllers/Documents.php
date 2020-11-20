@@ -65,7 +65,7 @@ class Documents extends BaseController
 		$whereCondition = "WHERE docs.`status` = '".$selectedStatus."' and docs.`project-id` = ".$selectedProject;
 		$documentModel = new DocumentModel();
 		$data['data']  = $documentModel->getDocuments($whereCondition);	
-		
+		$data['documentsCount'] = $documentModel->getDocumentsCount($selectedProject);
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('ProjectDocuments/list',$data);
