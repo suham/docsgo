@@ -522,8 +522,8 @@
         var content = "";
 
         if(dataFormat == "table"){
-
-        var thead = "| " + columnValues.toUpperCase().replaceAll(',', " | ") + " |\n";
+        columnValues = columnValues.toUpperCase();
+        var thead = "| " + columnValues.replace(/,/g," | ");+ " |\n";
         
         indexes.forEach((index, i) => {
             thead += "|-------";
