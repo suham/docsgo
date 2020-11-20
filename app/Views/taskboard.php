@@ -54,6 +54,30 @@
         opacity: 0.75;
     }
 
+
+
+    .counter.counter-lg {        
+        font-size: 10px;
+        color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 1px;
+    }
+
+    .sec {
+        position: absolute;
+        top: 1px;
+        right: 42px;
+    }
+
+    .dot {
+        height: 16px;
+        width: 15px;
+        background-color: #cc650f;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
     
     .breadcrumb-item {
         font-size: 24px;
@@ -311,11 +335,11 @@
         <?php if(isset($tasksArr)): ?>
             tasksArr = <?= json_encode($tasksArr) ?>;
             tasksArr.forEach((task,i)=>{
-                addTaskToDocument(task);
+                
                 if(task.comments != null){
                     tasksArr[i].comments = JSON.parse(task.comments);
                 }
-                
+                addTaskToDocument(task);
             });
         <?php endif ?>
 
@@ -628,6 +652,13 @@
             categoryColor = "bg-pink"
         }
 
+        var commentsCount = "";
+        var commentCountClass = "d-none";
+        if(newTask.comments != null){
+            commentsCount = newTask.comments.length;
+            commentCountClass = "";
+        }
+
         var assignee = (newTask.task_column == "Under QA" ? newTask.qa : newTask.assignee);
         if(assignee != "" && assignee != null){
             assignee = teamMembers[assignee];
@@ -644,6 +675,7 @@
                                 <button data-toggle="popover" data-placement="bottom" data-content="Add Comment" type="button" class="btn btn-sm btn-sm-orange box-shadow-right" onclick="addComment(${newTask.id})">
                                     <i class="fas fa-comment"></i>
                                 </button>
+                                <span id="commentCount_${newTask.id}" class="dot sec counter counter-lg ${commentCountClass}">${commentsCount}</span>
                                 <button data-toggle="popover" data-placement="bottom" data-content="Edit Task" type="button" class="ml-1 btn btn-sm box-shadow-right btn-sm-primary btn-primary" onclick="addTask('', '', ${newTask.id})">
                                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                                 </button>
@@ -718,7 +750,8 @@
                     
                         tasksArr[existingTaskLoc] = taskObject;
                         $(`#${taskObject.id}`).html(getTaskHtml(taskObject));
-                        
+                        $('[data-toggle="popover"]').popover({trigger: "hover" });
+
                         if(existingTask.task_column != taskObject.task_column){
                             var div_column = taskObject.task_column.replace(" ", "");
                             $(`#${taskObject.id}`).appendTo($("#column_"+div_column));
@@ -733,9 +766,13 @@
 
                         if(existingTask.comments == null){ 
                             existingTask.comments = []; 
+                           
                         }
                         existingTask.comments.push(JSON.parse(data.jsonComment));
                         tasksArr[existingTaskLoc] = existingTask;
+
+                        $(`#commentCount_${taskObject.id}`).removeClass('d-none');
+                        $(`#commentCount_${taskObject.id}`).text(existingTask.comments.length);
                         
                         showAlert(`Comment added to T${taskObject.id} successfully!`);
                     }else if(type == "delete"){
@@ -752,6 +789,7 @@
                         existingTask.task_column = taskObject.task_column;
                         tasksArr[existingTaskLoc] = existingTask;
                         $(`#${taskObject.id}`).html(getTaskHtml(existingTask));
+                        $('[data-toggle="popover"]').popover({trigger: "hover" });
                     }
                 }else{
                     showPopUp('Error', data.errorMsg);
