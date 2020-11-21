@@ -102,9 +102,17 @@
         overflow-y: auto;
         padding: 0.3rem;
         min-height: 30vh;
-        z-index: 1;
+        /* z-index: 1; */
+        background-color: lightgray;
+        border-color: 1px solid darkgray;
     }
 
+    .top {z-index: 200 !important; position: relative}
+    .bottom {z-index: 1 !important; position: relative}
+
+    .newTask{
+       
+    }
     .newTask:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.10);
     }
@@ -201,7 +209,7 @@
                         <input type="text" class="form-control" name="column_Todo_title" id="column_Todo_title" 
                             placeholder="Quick Add - Title Only" />
                         <div class="ml-2">
-                            <button class="btn btn-outline-dark"  data-toggle="popover" data-placement="bottom" data-content="Add Task" 
+                            <button class="btn btn-outline-dark" data-toggle="popover" data-placement="bottom" data-content="Add Task" 
                             onclick="addTask('Todo', document.getElementById('column_Todo_title').value)">
                                 <i class="fas fa-plus "></i>
                             </button>
@@ -237,15 +245,15 @@
 
             <div class="card">
                 <div class="card-header bg-purple">
-                    Under QA
+                    Under Verification
                 </div>
-                <div class="card-body  task-parent scroll scroll-purple " id="column_UnderQA">
+                <div class="card-body  task-parent scroll scroll-purple " id="column_UnderVerification">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="column_UnderQA_title" id="column_UnderQA_title" 
+                        <input type="text" class="form-control" name="column_UnderVerification_title" id="column_UnderVerification_title" 
                             placeholder="Quick Add - Title Only" />
                         <div class="ml-2">
                             <button class="btn btn-outline-purple"  data-toggle="popover" data-placement="bottom" data-content="Add Task"
-                            onclick="addTask('Under QA', document.getElementById('column_UnderQA_title').value)">
+                            onclick="addTask('Under Verification', document.getElementById('column_UnderVerification_title').value)">
                                 <i class="fas fa-plus "></i>
                             </button>
                         </div>
@@ -305,7 +313,7 @@
 
 <script>
     var teamMembers, teamMemberOptions = "", tasksArr = [];
-    
+    var defaultZIndex =3;
     class Task {
         constructor() {
             this.project_id = '<?= $project_id ?>';
@@ -313,7 +321,7 @@
             this.title = '';
             this.description = '';
             this.assignee = '';
-            this.qa = '';
+            this.verifier = '';
             this.task_category = '';
             this.task_column = '';
             this.comments = null; // [{'comment':'', timestamp: '', by:''}]
@@ -325,6 +333,7 @@
         $(".fluid-container").parents().css("overflow", "visible")
         $("body").css("overflow-x", "hidden");
 
+       
         teamMembers = <?= json_encode($teamMembers) ?>;
         <?php foreach($teamMembers as $key => $name) : ?>
             teamMemberOptions += `<option value="<?= $key ?>"><?= $name ?></option>`; 
@@ -347,7 +356,7 @@
     });
 
     function makeColumnsDroppable(){
-        const columns = [ "Todo", "In Progress", "Under QA", "On Hold", "Complete"];
+        const columns = [ "Todo", "In Progress", "Under Verification", "On Hold", "Complete"];
         columns.forEach((columnName)=>{
             const columnId = "#column_"+columnName.replace(" ", "");
             var $column = $(columnId);
@@ -392,7 +401,7 @@
                                     <label class = "font-weight-bold text-muted" for="newTask_assignee">Assigned To</label>
                                     <select class="form-control selectpicker" data-live-search="true" data-size="8" name="newTask_assignee" id="newTask_assignee">
                                         <option value="" disabled selected>
-                                            Select Assingee
+                                            Select
                                         </option>
                                         ${teamMemberOptions}
                                     </select>
@@ -400,10 +409,10 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
-                                    <label class = "font-weight-bold text-muted" for="newTask_qa">QA</label>
-                                    <select class="form-control selectpicker" data-live-search="true" data-size="8" name="newTask_qa" id="newTask_qa">
+                                    <label class = "font-weight-bold text-muted" for="newTask_verifier">Verfied By</label>
+                                    <select class="form-control selectpicker" data-live-search="true" data-size="8" name="newTask_verifier" id="newTask_verifier">
                                         <option value="" disabled selected>
-                                            Select Assingee
+                                            Select
                                         </option>
                                         ${teamMemberOptions}
                                     </select>
@@ -438,8 +447,8 @@
                                         <option value="In Progress" >
                                             In Progress
                                         </option>
-                                        <option value="Under QA" >
-                                            Under QA
+                                        <option value="Under Verification" >
+                                            Under Verification
                                         </option>
                                         <option value="On Hold" >
                                             On Hold
@@ -497,7 +506,7 @@
                             if(taskObject.title != ""){
                                 taskObject.description = $('#newTask_description').val();
                                 taskObject.assignee = $('#newTask_assignee').val();
-                                taskObject.qa = $('#newTask_qa').val();
+                                taskObject.verifier = $('#newTask_verifier').val();
                                 taskObject.task_category = $('#newTask_category').val();
                                 taskObject.task_column = $('#newTask_column').val();
 
@@ -533,7 +542,7 @@
                 $('#newTask_title').val(task.title);
                 $('#newTask_description').val(task.description);
                 $('#newTask_assignee').val(task.assignee);
-                $('#newTask_qa').val(task.qa);
+                $('#newTask_verifier').val(task.verifier);
                 $('#newTask_category').val(task.task_category);
                 $('#newTask_column').val(task.task_column);
             }else{
@@ -659,7 +668,7 @@
             commentCountClass = "";
         }
 
-        var assignee = (newTask.task_column == "Under QA" ? newTask.qa : newTask.assignee);
+        var assignee = (newTask.task_column == "Under Verification" ? newTask.verifier : newTask.assignee);
         if(assignee != "" && assignee != null){
             assignee = teamMembers[assignee];
         }else{
@@ -709,6 +718,7 @@
         var $column = $("#column_"+column);
         $(html).appendTo($column).fadeIn('slow');
         $('[data-toggle="popover"]').popover({trigger: "hover" });
+        
         // $column.append(html);
         $( ".card", $column ).draggable({
             cancel: "button", 
@@ -718,6 +728,13 @@
             cursor: "move",
             start  : function(event, ui){
                 $(ui.helper).addClass("ui-helper");
+                $( ".ui-draggable" ).not( ui.helper.css( "z-index", "1" ) )
+                            .css( "z-index", "0" );
+                // $('.task-parent .card').addClass('bottom').removeClass('top');
+                // $(this).addClass('top').removeClass('bottom');
+                
+                console.log(this);
+        
             }
         });
     }
