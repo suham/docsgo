@@ -409,7 +409,7 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
-                                    <label class = "font-weight-bold text-muted" for="newTask_verifier">Verfied By</label>
+                                    <label class = "font-weight-bold text-muted" for="newTask_verifier">Verified By</label>
                                     <select class="form-control selectpicker" data-live-search="true" data-size="8" name="newTask_verifier" id="newTask_verifier">
                                         <option value="" disabled selected>
                                             Select
