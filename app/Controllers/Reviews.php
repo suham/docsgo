@@ -14,14 +14,19 @@ class Reviews extends BaseController
 		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "";
+		session()->set('prevUrl', '');
 
-		$settingsModel = new SettingsModel();
-		$reviewStatus = $settingsModel->where("identifier","documentStatus")->first();
-		if($reviewStatus["options"] != null){
-			$data["reviewStatus"] = json_decode( $reviewStatus["options"], true );
-		}else{
-			$data["reviewStatus"] = [];
-		}
+		//Projects Dropdown
+		$projectModel = new ProjectModel();
+		$data['projects'] = $projectModel->getProjects();
+		
+		//Status Radio Buttons
+		$settingsModel = new SettingsModel();		
+		$documentStatusOptions =  $settingsModel->getConfig("documentStatus");
+		$data["reviewStatus"] = $documentStatusOptions;
+
+		$teamModel = new TeamModel();
+		$data['teamMembers'] = $teamModel->getMembers();
 
 		$view = $this->request->getVar('view');
 		$project_id = $this->request->getVar('project_id');
@@ -30,35 +35,28 @@ class Reviews extends BaseController
 
 		if($view == '' || $project_id == ''){
 			//Initial Case
-			$projectModel = new ProjectModel();
 			$activeProject = $projectModel->where("status","Active")->first();	
 			if($activeProject == ""){
 				$activeProject = $projectModel->first();	
 			}
 			$selectedProject = $activeProject['project-id'];
 			
-			$data['selectedProject'] = $selectedProject;
-
-			$reviewStatusOptions = json_decode( $reviewStatus["options"], true );
-			if($reviewStatusOptions != null){
-				$selectedStatus = $reviewStatusOptions[0]["value"];
-				$data['data'] = $model->where("status",$selectedStatus)
-									  ->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();			
-				$data['selectedStatus'] = $selectedStatus;
+			if($documentStatusOptions != null){
+				$selectedStatus = $documentStatusOptions[0];
 			}
 
-		}else{
-			$data['data'] = $model->where("status",$view)
-								  ->where("project-id",$project_id)->orderBy('updated-at', 'desc')->findAll();	
-			$data['selectedProject'] = $project_id;
-			$data['selectedStatus'] = $view;
+		}else{				  
+			$selectedProject = $project_id;
+			$selectedStatus = $view;
 		}
-		
 
-		$data['projects'] = $this->getProjects();
-		$teamModel = new TeamModel();
-		$data['teamMembers'] = $teamModel->getMembers();
-		session()->set('prevUrl', '');
+		$data['data'] = $model->where("status",$selectedStatus)
+								  ->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();	
+		
+		$data['selectedProject'] = $selectedProject;
+		$data['selectedStatus'] = $selectedStatus;						  
+		
+		$data['reviewsCount'] = $model->getReviewsCount($data['selectedProject'] );
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);

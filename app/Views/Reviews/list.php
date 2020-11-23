@@ -21,8 +21,11 @@
     <div class="col-12 col-md-9 pt-3 pb-3 pt-md-0 pb-md-0">
       <div class="btn-group btn-group-toggle ">
         <?php foreach ($reviewStatus as $revStatus): ?>
-          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus["value"]) ? " btn-primary" : "btn-secondary") ?>">
-            <input type="radio" name="view" value="<?=  $revStatus["value"] ?>" autocomplete="off" <?= (($selectedStatus == $revStatus["value"]) ? "checked" : "") ?>>  <?=  $revStatus["value"] ?>
+          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus) ? " btn-primary" : "btn-secondary") ?>">
+            <input type="radio" name="view" value="<?=  $revStatus ?>" autocomplete="off" <?= (($selectedStatus == $revStatus) ? "checked" : "") ?>>  <?=  $revStatus ?>
+              <?php if(isset($reviewsCount[$revStatus])): ?>
+                <span class="badge badge-light ml-1"><?= $reviewsCount[$revStatus] ?></span>
+              <?php endif ?>  
           </label>
         <?php endforeach; ?>
       </div>

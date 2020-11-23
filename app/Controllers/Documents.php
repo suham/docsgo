@@ -46,7 +46,6 @@ class Documents extends BaseController
 				$activeProject = $projectModel->first();	
 			}
 			$selectedProject = $activeProject['project-id'];
-			$data['selectedProject'] = $selectedProject;
 
 			if($documentStatusOptions != null){
 				$selectedStatus = $documentStatusOptions[0];
