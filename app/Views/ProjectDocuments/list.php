@@ -178,15 +178,17 @@
         console.log("completion of the ajax");
       },
       success: function(response){
-        if(response != undefined) {
-          response = JSON.parse(response);
-          console.log("res:", response);
-          if(response.success == "True"){
-              bootbox.alert(response.description);
-          }else{
-              bootbox.alert(response.description);
-          }
-        }
+        console.log(response);
+        window.location = response;
+        // if(response != undefined) {
+        //   response = JSON.parse(response);
+        //   console.log("res:", response);
+        //   if(response.success == "True"){
+        //       bootbox.alert(response.description);
+        //   }else{
+        //       bootbox.alert(response.description);
+        //   }
+        // }
       },
       ajaxError: function (error) {
         console.log("Something worng:", error);

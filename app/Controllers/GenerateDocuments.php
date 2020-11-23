@@ -233,8 +233,14 @@ class GenerateDocuments extends BaseController
 					mkdir($directoryName, 0777);
 				}
 				$objWriter->save($directoryName.'/'.$fileName);
-				$response = array('success' => "True", "description"=>"File downloaded successfully", "serverPath"=>$_SERVER['DOCUMENT_ROOT'].'/'.$directoryName, "filePath"=>$fileName);
-				echo json_encode( $response );	
+				header("Cache-Control: no-cache");
+				header("Content-Description: File Transfer");
+				header("Content-Disposition: attachment; filename='".$fileName."'");
+				header("Content-Transfer-Encoding: binary");  
+				readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
+				unlink($directoryName.'/'.$fileName);
+				// $response = array('success' => "True", "description"=>"File downloaded successfully", "serverPath"=>$_SERVER['DOCUMENT_ROOT'].'/'.$directoryName, "filePath"=>$fileName);
+				// echo json_encode( $response );	
 			}
 			
 		}
