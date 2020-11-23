@@ -97,7 +97,7 @@
     <div class="row" style="padding-left:1rem;padding-right:1rem; ">
         <div class="col-12 col-md-2 tasks-column" >
 
-            <div class="card" style="padding-left:5px;">
+            <div class="card">
                 <div class="card-header bg-dark text-light">
                     Todo
                 </div>
