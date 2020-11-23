@@ -1,84 +1,6 @@
 <style>
-    .bg-purple {
-        background-color: #6f42c1;
-        color: #fff;   
-    }
-
-    .btn-outline-purple {
-        color: #6f42c1;
-        background-color: transparent;
-        background-image: none;
-        border-color: #6f42c1;
-    }
-    .btn-outline-purple:hover {
-        background-color: #6f42c1;
-        color: #fff;
-    }
-
-    .bg-orange {
-        background-color: #fd7e14;
-        color: #fff;   
-    }
-
-    .bg-teal{
-        background-color: #20c997;
-        color: #fff; 
-    }
-
-    .bg-pink{
-        background-color: #e83e8c;
-        color: #fff; 
-    }
-
-    .btn-sm-orange {
-        background-color: #fd7e14;
-        color: #fff;
-    }
-
-    .btn-sm-orange:hover {
-        background-color: #dee2e6;
-        color: #e8700c;
-    }
-
-    .btn-sm-primary:hover {
-        background-color: #dee2e6;
-        color: #007bff;
-        border-color: #dee2e6;
-    }
-
-    .success-alert{
-        position: fixed;
-        right: 10px;
-        bottom: 20%;
-        z-index: 10;
-        opacity: 0.75;
-    }
 
 
-
-    .counter.counter-lg {        
-        font-size: 10px;
-        color: #f8f9fa;
-        font-weight: bold;
-        text-align: center;
-        padding-top: 1px;
-    }
-
-    .sec {
-        position: absolute;
-        top: 1px;
-        right: 42px;
-    }
-
-    .dot {
-        height: 16px;
-        width: 15px;
-        background-color: #cc650f;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    
     .breadcrumb-item {
         font-size: 24px;
     }
@@ -107,12 +29,7 @@
         border-color: 1px solid darkgray;
     }
 
-    .top {z-index: 200 !important; position: relative}
-    .bottom {z-index: 1 !important; position: relative}
-
-    .newTask{
-       
-    }
+    /* task styles */
     .newTask:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.10);
     }
@@ -124,7 +41,7 @@
         text-overflow: ellipsis;
     }
 
-    /* New task styles */
+   
     .newTask_textarea {
         height: 110px;
     }
@@ -134,50 +51,31 @@
         width: 100% !important;
     }
 
-    .scroll {
-        overflow: scroll;
-        overflow-x: hidden;
+ 
+    /* Comment Styles */
+    .counter.counter-lg {        
+        font-size: 10px;
+        color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 1px;
     }
 
-    .scroll::-webkit-scrollbar {
-        width: 0.25rem;
+    .sec {
+        position: absolute;
+        top: 1px;
+        right: 42px;
     }
 
-    .scroll::-webkit-scrollbar-track {
-        width: #007bff;
+    .dot {
+        height: 16px;
+        width: 15px;
+        background-color: #cc650f;
+        border-radius: 50%;
+        display: inline-block;
     }
 
-    .scroll-dark::-webkit-scrollbar-thumb {
-        background: #343a40;
-    }
 
-    .scroll-info::-webkit-scrollbar-thumb {
-        background: #17a2b8;
-    }
-
-    .scroll-warning::-webkit-scrollbar-thumb {
-        background: #ffc107;
-    }
-
-    .scroll-success::-webkit-scrollbar-thumb {
-        background: #28a745;
-    }
-
-    .scroll-orange::-webkit-scrollbar-thumb {
-        background: #fd7e14;
-    }
-
-    .scroll-purple::-webkit-scrollbar-thumb {
-        background: #6f42c1;
-    }
-
-    .box-shadow-left{
-        box-shadow: -4px 4px 4px 0px rgba(0,0,0,0.32);
-    }
-
-    .box-shadow-right{
-        box-shadow: 4px 4px 4px 0px rgba(0,0,0,0.32);
-    }
     
 </style>
 
@@ -307,9 +205,7 @@
     </div>
 </div>
 
-<div class="alert bg-success text-light box-shadow-left success-alert d-none" role="alert">
-    
-</div>
+<div class="alert bg-success text-light box-shadow-left success-alert d-none" role="alert"></div>
 
 <script>
     var teamMembers, teamMemberOptions = "", tasksArr = [];
@@ -730,11 +626,6 @@
                 $(ui.helper).addClass("ui-helper");
                 $( ".ui-draggable" ).not( ui.helper.css( "z-index", "1" ) )
                             .css( "z-index", "0" );
-                // $('.task-parent .card').addClass('bottom').removeClass('top');
-                // $(this).addClass('top').removeClass('bottom');
-                
-                console.log(this);
-        
             }
         });
     }
@@ -793,7 +684,7 @@
                         
                         showAlert(`Comment added to T${taskObject.id} successfully!`);
                     }else if(type == "delete"){
-                        console.log('Delete button clicked '+taskObject.id);
+                        
                         $("#"+taskObject.id).fadeOut(800, function() { $(this).remove(); });
                         const temp = getTaskFromArray(taskObject.id);
                         const existingTaskLoc = temp[0];
