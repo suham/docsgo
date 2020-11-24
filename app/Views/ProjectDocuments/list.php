@@ -94,7 +94,7 @@
                       <a title="<?= $editTitle ?>" href="/documents/add/?id=<?= $row['id'] ?>" class="btn <?= $editButton ?>">
                           <i class="fa <?= $editClass ?>"></i>
                       </a>
-                      <a title="Download" href="docsgen/generateDocument.php?type=document&id=<?php echo $row['id'];?>" 
+                      <a title="Download" href="#" onclick="generateDocuments(this, <?php echo $row['id'];?>)" 
                       class="btn btn-primary ml-2 <?= $row['status']!= 'Approved' ? 'disabled': '';?>">
                           <i class="fa fa-download"></i>
                       </a>
@@ -166,35 +166,57 @@
     location.href = url;
   })
 
-  function generateDocuments(id){
+  function generateDocuments(e, id){
     var url =  '/generate-documents/downloadDocuments/1/'+id;
+    var anchor = $(e);
+    var iTag  = anchor.find('i');
 
     $.ajax({
       url: url,
       beforeSend: function() {
-        console.log("before senddddd");
+        // console.log("beforeSend generateDocuments");
+        $(anchor).addClass('disabled');
+        $(iTag).removeClass('fa-download')
+        $(iTag).addClass('fa-spinner fa-spin')
       },
       complete: function(){
-        console.log("completion of the ajax");
+        // console.log("completion generateDocuments");
+        $(anchor).removeClass('disabled');
+        $(iTag).removeClass('fa-spinner fa-spin');
+        $(iTag).addClass('fa-download');
       },
       success: function(response){
-        console.log(response);
-        window.location = response;
-        // if(response != undefined) {
-        //   response = JSON.parse(response);
-        //   console.log("res:", response);
-        //   if(response.success == "True"){
-        //       bootbox.alert(response.description);
-        //   }else{
-        //       bootbox.alert(response.description);
-        //   }
-        // }
+        // console.log("response response", response);
+        if(response == "no data"){
+          showPopUp("Project Documents", "No file is available to download");
+        }else{
+          var a = document.createElement('a');
+          var binaryData = [];
+          binaryData.push(response);
+          window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+          a.href = url;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          showPopUp("Project Documents", "File downloaded successfully");
+        }
       },
       ajaxError: function (error) {
         console.log("Something worng:", error);
+        showPopUp("Project Document", "Unable to download the file");
       }
     });
 
+  }
+
+  function showPopUp(title, message){
+    bootbox.alert({
+        title: title, 
+        message: message,
+        centerVertical: true,
+        backdrop: true
+    });
   }
 
 </script>

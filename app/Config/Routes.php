@@ -83,6 +83,8 @@ $routes->match(['get','post'],'traceability-matrix/delete/(:num)', 'Traceability
 $routes->match(['get','post'],'traceability-matrix/getIDDescription/(:num)/(:num)', 'TraceabilityMatrix::getIDDescription',['filter' => 'auth']);
 
 $routes->match(['get','post'],'generate-documents/downloadDocuments/(:num)/(:num)', 'GenerateDocuments::downloadDocuments',['filter' => 'auth']);
+$routes->match(['get','post'],'generate-documents/checkGenerateDocuments/(:num)', 'GenerateDocuments::checkGenerateDocuments',['filter' => 'auth']);
+$routes->match(['get','post'],'generate-documents/updateGenerateDocumentPath/(:num)', 'GenerateDocuments::updateGenerateDocumentPath',['filter' => 'auth']);
 
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
 $routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);

@@ -15,6 +15,7 @@ class Settings extends BaseController
         $model = new SettingsModel();
         $data['dropdownData'] = $model->where('type', 'dropdown')->findAll();		
         $data['configData'] = $model->where('type', 'url')->findAll();	
+        $data['propertiesData'] = $model->where('type', 'properties')->findAll();
 
         echo view('templates/header');
         echo view('templates/pageTitle', $data);

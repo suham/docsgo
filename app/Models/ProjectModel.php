@@ -21,4 +21,23 @@ class ProjectModel extends Model{
         return $data;
     }
     
+    public function getDownloadedProjectStatus($projectId, $updateDate) {
+        $db = \Config\Database::connect();
+        $sql = "SELECT count(*) as count from `docsgo-documents` where `project-id` = ".$projectId." AND `update-date` > '".$updateDate."'";
+        $query = $db->query($sql);
+
+        $result = $query->getResult('array');
+        return $result;
+    }
+
+    public function updateGenerateDocumentPath($projectId, $link) {
+        $db = \Config\Database::connect();
+        $whereCondition = " WHERE `project-id` = ".$projectId." "; 
+        $sql = "UPDATE `docsgo-projects` SET `download-path` = '".$link."' WHERE `project-id` = '".$projectId."'";
+
+        $query = $db->query($sql);
+        $data = $query->getResult('array');
+        return $data;
+    }    
+
 }

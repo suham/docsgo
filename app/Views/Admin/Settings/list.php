@@ -33,6 +33,10 @@
                     <a class="nav-link lead" id="config-tab" data-toggle="tab" href="#config" role="tab"
                         aria-controls="config" aria-selected="false">Config</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link lead" id="document-tab" data-toggle="tab" href="#document" role="tab"
+                        aria-controls="document" aria-selected="false">Document Properties</a>
+                </li>
             </ul>
             <div class="tab-content  p-md-4 p-2" id="myTabContent">
                 <div class="tab-pane fade  show active " id="enum" role="tabpanel" aria-labelledby="enum-tab">
@@ -226,9 +230,39 @@
                     </div>
                    
                 </div>
+                <div class="tab-pane fade" id="document" role="tabpanel" aria-labelledby="document-tab">
+                    <div class="alertDiv"></div>
+                    <div class="input-group-text" style="display:flow-root">Header Sectiom</div>&nbsp;
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Title</span>
+                        </div>
+                        <input type="text" class="form-control" id="docTitle" >
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Icon</span>
+                        </div>
+                        <input type="text" class="form-control" id="docIcon" >
+                    </div>
+
+                    <div class="input-group-text" style="display:flow-root">Footer Section</div>&nbsp;
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" >Confidential Text</span>
+                        </div>
+                        <input type="text" class="form-control" id="docConfidential" >                                             
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col text-center">
+                            <button class="btn btn-primary" onclick="saveDocx()">Save</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
 
     </div>
 </div>
@@ -236,11 +270,12 @@
 
 <script>
     // Global Variables
-    var dropdownData, configData;
+    var dropdownData, configData, propertiesData;
     
     $(document).ready(function () {
         dropdownData = <?= json_encode($dropdownData) ?> ;
         configData = <?= json_encode($configData)?>;
+        propertiesData = <?= json_encode($propertiesData)?>;
         
         for (var i = 0; i < dropdownData.length; i++) {
             const identifier = dropdownData[i].identifier;
@@ -270,6 +305,16 @@
                     }
                 }
             }
+
+        for (var i = 0; i < propertiesData.length; i++) {
+            const identifier = propertiesData[i].identifier;
+            const options = JSON.parse(propertiesData[i].options);
+            for (var j = 0; j < options.length; j++) {
+                if (options != null) {
+                    $("#"+options[j].key).val(options[j].value);
+                }
+            }
+        }
 
     });
 
@@ -429,6 +474,55 @@
         
     }
 
+    function saveDocx(){
+        var identifier, docTitle, docIcon, docConfidential, propertiesIndex, existingOptions;
+        identifier = "documentProperties";
+        docTitle = $("#docTitle").val();
+        docIcon = $("#docIcon").val();
+        docConfidential = $("#docConfidential").val();
+        propertiesIndex = propertiesData.findIndex(x => x.identifier === identifier);
+        existingOptions = JSON.parse(propertiesData[propertiesIndex]["options"]);
+
+        for(var z = 0 ; z< existingOptions.length ; z++){
+            if(existingOptions[z]["key"] == "docTitle"){
+                existingOptions[z]["value"] = docTitle;
+            }
+            if(existingOptions[z]["key"] == "docIcon"){
+                existingOptions[z]["value"] = docIcon;
+            }
+            if(existingOptions[z]["key"] == "docConfidential"){
+                existingOptions[z]["value"] = docConfidential;
+            }
+        }
+        
+        var updatedOptions = JSON.stringify(existingOptions);
+        propertiesData[propertiesIndex]["options"] = updatedOptions;
+        
+        var object = {
+            id: propertiesData[propertiesIndex].id,
+            identifier: identifier,
+            options: updatedOptions
+        };
+        
+        $.ajax({
+            type: 'POST',
+            url: '/admin/settings/addEnums',
+            data: object,
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                if (response.success == "True") {
+                    showAlert("alert-success", "Properties saved successfully.", 'document');
+                } else {
+                    showAlert("alert-danger", "Failed to save Properties.", 'document');
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+    
     function showAlert(type, message, parentId) {
         // alert-warning or alert-success or alert-danger
         const html = `<div class="alert ${type} alert-dismissible fade show" role="alert">

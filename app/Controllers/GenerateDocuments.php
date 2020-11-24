@@ -2,8 +2,9 @@
 
 use App\Models\SettingsModel;
 use CodeIgniter\I18n\Time;
-use TP\Tools\Parsedown;
-use TP\Tools\ParsedownExtra;
+use TP\Tools\Pandoc;
+use TP\Tools\PandocExtra;
+use App\Models\ProjectModel;
 use App\Models\DocumentModel;
 use PhpOffice\PhpWord\Shared\ZipArchive;
 use RecursiveDirectoryIterator;
@@ -18,9 +19,7 @@ class GenerateDocuments extends BaseController
 	}
 
 	public function downloadDocuments()  {
-		$Extra = new ParsedownExtra();
-		$Extra->setSafeMode(true);
-		$Extra->setMarkupEscaped(true);
+		$pandoc = new Pandoc();
 
 		$params = $this->returnParams();
 		if($params[0] == 1){
@@ -33,10 +32,26 @@ class GenerateDocuments extends BaseController
 		$model = new DocumentModel();
 		$str = $model->getDocumentsData($type, $main_id); 
 		if(isset($str) && count($str) == 0) {
-			$response = array('success' => "False", "description"=>"There is no documents to download", "serverPath"=>$_SERVER['DOCUMENT_ROOT'], "folderName"=>'');
-			echo json_encode( $response );	
+			echo "no data";
 			return false;
 		}
+		//Fetching the doc-properties from Model
+		$settingsModel = new SettingsModel();
+		$documentProperties = $settingsModel->getSettings("documentProperties");
+		$documentProperties = json_decode($documentProperties[0]['options'], true);
+		$documentTitle = ''; $documentIcon = ''; $documentFooterMsg='';
+		foreach($documentProperties as $key => $val){
+			if($val['key'] == "docTitle"){
+				$documentTitle = $val["value"];
+			}
+			if($val["key"] == "docIcon"){
+				$documentIcon = $val["value"];
+			}
+			if($val["key"] == "docConfidential"){
+				$documentFooterMsg = $val["value"];
+			}
+		}
+
 		function sectionNumber($sectionStr) {
 			return (int) filter_var($sectionStr, FILTER_SANITIZE_NUMBER_INT);
 		}
@@ -92,21 +107,31 @@ class GenerateDocuments extends BaseController
 		
 			//Header for all pages
 			$subsequent = $section->addHeader();
-			if (trim($json['cp-icon']) != "") {
-				$subsequent->addImage($json['cp-icon'], array('width' => 110, 'height' => 50));
-			} else {
-				$subsequent->addImage('https://info.viosrdtest.in/assets/images/muRata.png', array('width' => 110, 'height' => 50));
+			$documentIconImage = $documentIcon; 
+			if($documentIconImage == ''){
+				if (trim($json['cp-icon']) != "") {
+					$documentIconImage = $json['cp-icon'];
+				}else{
+					$documentIconImage = 'https://info.viosrdtest.in/assets/images/muRata.png';
+				}
 			}
+			if($documentTitle == '' || $documentTitle == null){
+				$documentTitle = $json['cp-line1'];
+			}
+			if($documentFooterMsg == ''){
+				$documentFooterMsg = 'Murata Vios CONFIDENTIAL';
+			}
+			$subsequent->addImage($documentIconImage, array('width' => 110, 'height' => 50));
 		
 			//Footer for all pages
 			$footer = $section->addFooter();
-			$footer->addPreserveText('Murata Vios CONFIDENTIAL                              Page {PAGE} of {NUMPAGES}                             ' . $json['cp-line4'] . ' ' . $json['cp-line5'], null, array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::LEFT));
+			$footer->addPreserveText($documentFooterMsg.'                              Page {PAGE} of {NUMPAGES}                             ' . $json['cp-line4'] . ' ' . $json['cp-line5'], null, array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::LEFT));
 
 			// Inline font style
 			$fontStyle['name'] = $json['section-font'];
 			$fontStyle['size'] = 14;
 			$fontStyle['bold'] = TRUE;
-			$section->addText($json['cp-line1'], $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
+			$section->addText($documentTitle, $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
 			$section->addText($json['cp-line2'], $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
 			$section->addTextBreak();
 			$section->addTextBreak();
@@ -139,7 +164,7 @@ class GenerateDocuments extends BaseController
 			$fontStyle['size'] = $json['section-font-size'];
 			$fontStyle['bold'] = FALSE;
 
-			$tableContent = $Extra->text($json['cp-change-history']);
+			$tableContent = $pandoc->convert($json['cp-change-history'], "gfm", "html5");
 			$tableContent = addTableStylesToContent($tableContent);
 			\PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContent, FALSE, FALSE);
 
@@ -168,10 +193,13 @@ class GenerateDocuments extends BaseController
 				$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
 				$contentSection = '<b>sample data</b>';
 				if($json['sections'][$i]['content'] != ''){
-					$contentSection = $Extra->text(htmlspecialchars($json['sections'][$i]['content']));
+					$org = htmlspecialchars($json['sections'][$i]['content']);
+					$contentSection = $pandoc->convert($org, "gfm", "html5");			
 				}
 				if (strpos($contentSection, '<table>') !== false) {
 					$tableContentFormatted = addTableStylesToContent($contentSection);
+					//setOutputEscapingEnabled is added for gfm markdown
+					\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
 					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
 				} else {
 					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
@@ -211,6 +239,13 @@ class GenerateDocuments extends BaseController
 							}
 						}
 						$zip->close();
+						header('Content-Description: File Transfer');
+						header('Content-Type: '.mime_content_type($zip_file).'');
+						header("Content-Disposition: attachment; filename=\"".basename($zip_file)."\";");
+						header('X-Sendfile: '.$zip_file);
+						header('Content-Transfer-Encoding: binary');
+						header("Cache-Control: no-cache");
+						header('Content-Length: ' . filesize($zip_file));
 						//removing the document files
 						if (is_dir($directoryName)) {
 							foreach ($filesToDelete as $file) {
@@ -218,12 +253,9 @@ class GenerateDocuments extends BaseController
 							}
 							rmdir($directoryName);
 						}
-
-						$response = array('success' => "True", "description"=>"Project files are downloaded", "serverPath"=>$_SERVER['DOCUMENT_ROOT'], "folderName"=>$zip_file);
-						echo json_encode( $response );	
+						readfile($zip_file);
 					}else{
-						$response = array('success' => "False", ""=>"Unable to download the project files", "serverPath"=>$_SERVER['DOCUMENT_ROOT'], "folderName"=>$zip_file);
-						echo json_encode( $response );	
+						echo "unable to create zip file";
 					}
 				}
 			}else{
@@ -235,12 +267,10 @@ class GenerateDocuments extends BaseController
 				$objWriter->save($directoryName.'/'.$fileName);
 				header("Cache-Control: no-cache");
 				header("Content-Description: File Transfer");
-				header("Content-Disposition: attachment; filename='".$fileName."'");
+				header("Content-Disposition: attachment; filename=".$fileName);
 				header("Content-Transfer-Encoding: binary");  
 				readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
 				unlink($directoryName.'/'.$fileName);
-				// $response = array('success' => "True", "description"=>"File downloaded successfully", "serverPath"=>$_SERVER['DOCUMENT_ROOT'].'/'.$directoryName, "filePath"=>$fileName);
-				// echo json_encode( $response );	
 			}
 			
 		}
@@ -253,4 +283,63 @@ class GenerateDocuments extends BaseController
 		return [$id, $type];
 	}
 
+	public function checkGenerateDocuments(){
+		$projectId = $this->returnProjectID();
+		$model = new ProjectModel();
+		$pathList = $model->select('download-path')->where('project-id', $projectId)->first();
+		$pathList = json_decode($pathList['download-path'], true);
+
+		if($pathList == "" || $pathList == null || $pathList == 'null'){
+			//JSON not available, Goto fresh download
+			$response = array('success' => "False", "description"=>'No downloads available');
+			echo json_encode( $response );	
+		}else{
+			//JSON is available, check all document's update-date is lowerthan the zipfile timestamp
+			$current_date =  gmdate("Y-m-d H:i:s");
+			$json_time = $pathList['timeStamp'];
+			$data = $model->getDownloadedProjectStatus($projectId, $json_time);
+			$zip_file = "Project_Documents_".$projectId.".zip";
+			if($data[0]['count'] > 0){
+				//JSON aviable, but its old one, so delete and goto fresh download
+				if(is_file($zip_file))
+					unlink($zip_file);
+				$res = $model->updateGenerateDocumentPath($projectId, NULL);
+				$response = array('success' => "False", "description"=>"Download is deprecated");
+				echo json_encode( $response );	
+			}else{
+				//JSON avilable, no need to download new, use existing one
+				header('Content-Description: File Transfer');
+				header('Content-Type: '.mime_content_type($zip_file).'');
+				header("Content-Disposition: attachment; filename=\"".basename($zip_file)."\";");
+				header('X-Sendfile: '.$zip_file);
+				header('Content-Transfer-Encoding: binary');
+				header("Cache-Control: no-cache");
+				header('Content-Length: ' . filesize($zip_file));
+				readfile($zip_file);
+			}
+		}
+	}
+
+	public function updateGenerateDocumentPath() {
+		$projectId = $this->returnProjectID();
+		$current_date =  gmdate("Y-m-d H:i:s");
+		$downloadZipFileName = "Project_Documents_".$projectId.".zip";
+		// $json_data = "{timeStamp:".$current_date.",filePath: ".$downloadZipFileName."}";
+
+		$json_data = array("timeStamp"=>$current_date, "filePath"=>$downloadZipFileName);
+
+
+		$model = new ProjectModel();
+		$res = $model->updateGenerateDocumentPath($projectId, json_encode($json_data));
+		$response = array('success' => "True", "description"=>"Link Updated");
+		echo json_encode( $response );	
+	}
+
+	
+	public function returnProjectID(){
+		$uri = $this->request->uri;
+		$id = $uri->getSegment(3);
+		return $id;
+	}
+	
 }

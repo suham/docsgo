@@ -45,7 +45,7 @@
                     <a href="/projects/add/<?php echo $row['project-id'];?>" class="btn btn-warning ml-2">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <a title="Download" href="docsgen/generateDocument.php?type=project&id=<?php echo $row['project-id'];?>" 
+                    <a title="Download" href="#" onclick="checkGenerateDocuments(this, <?php echo $row['project-id'];?>)" 
                       class="btn btn-primary ml-2">
                         <i class="fa fa-download"></i>
                     </a>
@@ -104,55 +104,119 @@ function deleteProject(id){
 
 }
 
-function downloadZip(e,url){
+function checkGenerateDocuments(e, id){
   var anchor = $(e);
-  var iTag  = anchor.find('i')
-
+  var iTag  = anchor.find('i');
+  url = '/generate-documents/checkGenerateDocuments/'+id;
   $.ajax({
     url: url,
+    type: 'GET',
     beforeSend: function() {
       $(anchor).addClass('disabled');
       $(iTag).removeClass('fa-download')
       $(iTag).addClass('fa-spinner fa-spin')
+      console.log("before checkGenerateDocuments");
     },
     complete: function(){
-      $(anchor).removeClass('disabled');
-      $(iTag).removeClass('fa-spinner fa-spin');
-      $(iTag).addClass('fa-download');
+      console.log("complete checkGenerateDocuments");
     },
-    success: function(response){
-        if(response != undefined) {
-          if(response.includes('False')){
-            showPopUp("Error", "No approved documents found for this project.")
-          }
+    success: function(response, textStatus, jqXHR){
+      if((jqXHR.responseText).indexOf('success') >= 0){
+        console.log("JSON DATA");
+        response = JSON.parse(response);
+        if(response.success == 'False' && (response.description == 'No downloads available') || (response.description == 'Download is deprecated')){
+          generateDocuments(e,id);
         }
-      }
-  });
+      } else{
+        console.log("BLOD DATA");
+        var a = document.createElement('a');
+        var binaryData = [];
+        binaryData.push(response);
+        window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+        a.href = url;
+        document.body.append(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        showPopUp("Project Documents", "File downloaded successfully");  
 
+        $(anchor).removeClass('disabled');
+        $(iTag).removeClass('fa-spinner fa-spin');
+        $(iTag).addClass('fa-download');
+      }
+    },
+    ajaxError: function (error) {
+      showPopUp("Error", error);  
+    }
+  });
 }
 
-function generateDocuments(id){
+function generateDocuments(e, id){
+  var anchor = $(e);
+  var iTag  = anchor.find('i');
+  url = '/generate-documents/downloadDocuments/2/'+id;
   $.ajax({
-      url: '/generate-documents/downloadDocuments/2/'+id,
+      url: url,
       type: 'GET',
       beforeSend: function() {
-        console.log("before disable the download button");
+        $(anchor).addClass('disabled');
+        $(iTag).removeClass('fa-download')
+        $(iTag).addClass('fa-spinner fa-spin')
+        console.log("before generateDocuments");
+      },
+      complete: function(){
+        $(anchor).removeClass('disabled');
+        $(iTag).removeClass('fa-spinner fa-spin');
+        $(iTag).addClass('fa-download');
+        console.log("complete generateDocuments");
       },
       success: function(response){
-        response = JSON.parse(response);
-        console.log("res:", response);
-        if(response.success == "True"){
-            bootbox.alert(response.description);
+        if(response == 'no data'){
+          showPopUp("Projects", "There are no documents to download");
+        }else if(response == 'unable to create zip file'){
+          showPopUp("Projects", "Unable to create a zip folder");
         }else{
-            bootbox.alert(response.description);
+          var a = document.createElement('a');
+          var binaryData = [];
+          binaryData.push(response);
+          window.URL.createObjectURL(new Blob(binaryData, {type: "application/zip"}))
+          a.href = url;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          setTimeout(() => {
+            showPopUp("Project Documents", "File downloaded successfully"); 
+          }, 1000);
+          //insert the new record for the json 
+          updateGenerateDocumentPath(id);
         }
       },
       ajaxError: function (error) {
-        console.log("Something worng:", error);
+        showPopUp("Error", error);
       }
     });
 }
 
+function updateGenerateDocumentPath(id){
+  url = '/generate-documents/updateGenerateDocumentPath/'+id;
+  $.ajax({
+    url: url,
+    type: 'GET',
+    beforeSend: function() {
+      console.log("before updateGenerateDocumentPath");
+    },
+    complete: function(){
+      console.log("complete updateGenerateDocumentPath");
+    },
+    success: function(response){
+      console.log("updated updateGenerateDocumentPath");  
+    },
+    ajaxError: function (error) {
+      showPopUp("Error", error);
+    }
+  });
+}
 
 function showPopUp(title, message){
 bootbox.alert({
