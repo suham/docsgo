@@ -531,3 +531,10 @@ ALTER TABLE `docsgo-test-cases` MODIFY description longtext;
 CREATE TABLE `docsgo`.`docsgo-taskboard` ( `id` INT NOT NULL AUTO_INCREMENT , `task_column` VARCHAR(20) NOT NULL , `task_category` VARCHAR(20) NOT NULL , `description` TEXT NULL , `title` VARCHAR(200) NOT NULL , `project_id` INT NOT NULL , `assignee` INT NULL , `qa` INT NULL , `comments` JSON NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 ALTER TABLE `docsgo-taskboard` CHANGE `qa` `verifier` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `docsgo-projects` ADD COLUMN `download-path` varchar(100) AFTER name;
+
+ALTER TABLE `docsgo-settings` MODIFY COLUMN `type` enum('dropdown','url','properties') NOT NULL
+
+INSERT INTO `docsgo-settings` (type, identifier, options) VALUES ('properties','documentProperties','[{"key":"docTitle","value":""},{"key":"docIcon","value":""},{"key":"docConfidential","value":""}]');
+
