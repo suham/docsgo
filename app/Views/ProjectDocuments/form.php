@@ -618,22 +618,6 @@
         });
     }
 
-    function formatDate(utcDate) {
-        let utc = new Date(utcDate)
-        var ist = new Date(utc.getTime() + ( 5.5 * 60 * 60 * 1000 ));
-        var date = ist;
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        var strTime = hours + ':' + minutes + ' ' + ampm;
-        return year+"-"+month+"-"+day+" "+strTime;
-    }
 
     // For Reloading Sections in section tab
     $("#section-tab").click(function(){
@@ -910,15 +894,6 @@
       $(".alert-success").slideUp(500);
     });
 
-    
-    function showPopUp(title, message){
-        bootbox.alert({
-                title: title, 
-                message: message,
-                centerVertical: true,
-                backdrop: true
-            });
-    }
 
 
 </script>

@@ -49,7 +49,7 @@ class Taskboard extends BaseController
             "assignee" => $this->request->getVar('assignee'),
             "description" => $this->request->getVar('description'),
             "project_id" => $this->request->getVar('project_id'),
-            "qa" => $this->request->getVar('qa') ,
+            "verifier" => $this->request->getVar('verifier') ,
             "task_category" => $this->request->getVar('task_category'),
             "task_column" => $this->request->getVar('task_column'),
             "title" => $this->request->getVar('title'),

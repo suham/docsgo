@@ -182,14 +182,24 @@ table tr:last-child td:last-child {
   color: #fff; 
 }
 
-.btn-sm-orange {
+.btn-orange {
   background-color: #fd7e14;
   color: #fff;
 }
 
-.btn-sm-orange:hover {
+.btn-orange:hover {
   background-color: #dee2e6;
   color: #e8700c;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.btn-purple:hover {
+  background-color: #dee2e6;
+  color: #6f42c1;
 }
 
 .btn-sm-primary:hover {

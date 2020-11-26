@@ -24,18 +24,21 @@
     <script nomodule="" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
    
     <script type="text/javascript" src="/assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/utilites.js"></script>
     <script type="text/javascript" src="/assets/js/popper.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+ 
     <script type="text/javascript" src="/assets/js/bootbox.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap4-toggle.min.js"></script>
     <script type="text/javascript" src="/assets/js/simplemde.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="/assets/js/diff2html-ui.min.js"></script>
     <script type="text/javascript" src="/assets/js/datatables.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({startOnLoad:true});</script> -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- For drawing diagrams feature -->
+    <script src="/assets/js/mermaid.min.js"></script>
+    <!-- For taskboard drag and drop feature -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui_1.12.1.css">
+    <script src="/assets/js/jquery-ui.min_1.12.1.js"></script>
 
     <title>DocsGo</title>
     <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
@@ -84,13 +87,47 @@
         color:white;
       }
 
+      #loading-overlay {
+        position: fixed;
+        width: 100%;
+        height:100%;
+        left: 0;
+        top: 0;
+        display: none;
+        align-items: center;
+        background-color: #000;
+        z-index: 999;
+        opacity: 0.5;
+    }
+
+    .loading-icon{ 
+        position:absolute;
+        margin:0 auto;
+        position:absolute;
+        left:50%;
+        margin-left:-20px;
+        top:50%;
+        margin-top:-20px;
+        z-index:4;
+    }
+    
+
     </style>
+
+    <script>
+      $(document).ready(function() {
+          $.getScript("/assets/js/header.js");
+
+      });
+     
+    </script>
   </head>
   <body id="body-pd">
-    <?php $uri = service('uri'); ?>
+    <?php $uri = service('uri'); $currentUrl = $_SERVER['REQUEST_URI'];?>
 
     <?php if (session()->get('isLoggedIn')): ?>
       <body id="body-pd">
+
 
 
       <div class="l-navbar" id="navbar">
@@ -130,6 +167,11 @@
                           <li style="padding:6px;"><a style="padding:6px" href="/documents-acronyms" class="collapse__sublink ">Acronyms</a></li>
                         </ul>
                     </div>
+
+                    <a href="/diagramsList" title="Draw Diagram" class="nav__link my_nav_link <?= (strpos($currentUrl , 'diagrams')   ? 'active-nav-link' : '') ?>">
+                        <ion-icon name="color-palette-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Draw Diagram</span>
+                    </a>
 
                     <a href="/risk-assessment" title="Risk Assessment" 
                       class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'risk-assessment'   ? 'active-nav-link' : '') ?>">
@@ -198,6 +240,10 @@
 
       
       <main class="page-content">
+        <div id="loading-overlay">
+          <div class="loading-icon"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></div>
+        </div>  
+        <div class="floating-alert alert text-light box-shadow-left success-alert" style="display: none;z-index:9999" role="alert"></div>
     <?php endif; ?>
     
       

@@ -3,4 +3,5 @@
 .env
 getAllCommits.js
 public/taskboard/
+public/diagrams/
 .gitignore

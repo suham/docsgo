@@ -35,7 +35,7 @@
    }
 
 </script>
-<script type="text/javascript" src="/assets/js/header.js"></script>
+
 </body>
 
 </html>

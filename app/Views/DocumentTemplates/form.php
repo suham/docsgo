@@ -600,15 +600,6 @@ function returnAlert(message){
   return '<div class="alert alert-danger" role="alert">'+message+'</div>';
 }
 
-function showPopUp(title, message){
-  bootbox.alert({
-        title: title, 
-        message: message,
-        centerVertical: true,
-        backdrop: true
-    });
-}
-
 function addTemplate (name, type, json) {
   var successMessage = "Template added successfully!."
   if(templateId != ""){

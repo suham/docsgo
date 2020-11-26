@@ -20,7 +20,7 @@ const showMenu = (toggleId, navbarId, bodyId)=>{
       })
     }
   }
-  showMenu('nav-toggle','navbar','body-pd')
+  showMenu('nav-toggle','navbar','body-pd');
   
   /*===== LINK ACTIVE  =====*/ 
   const linkColor = document.querySelectorAll('.nav__link')

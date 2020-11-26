@@ -205,24 +205,11 @@
     </div>
 </div>
 
-<div class="alert bg-success text-light box-shadow-left success-alert d-none" role="alert"></div>
 
 <script>
-    var teamMembers, teamMemberOptions = "", tasksArr = [];
+    var teamMembers, project_id, teamMemberOptions = "", tasksArr = [];
     var defaultZIndex =3;
-    class Task {
-        constructor() {
-            this.project_id = '<?= $project_id ?>';
-            this.id = '';
-            this.title = '';
-            this.description = '';
-            this.assignee = '';
-            this.verifier = '';
-            this.task_category = '';
-            this.task_column = '';
-            this.comments = null; // [{'comment':'', timestamp: '', by:''}]
-        }
-    }
+   
 
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover({trigger: "hover" });
@@ -234,6 +221,8 @@
         <?php foreach($teamMembers as $key => $name) : ?>
             teamMemberOptions += `<option value="<?= $key ?>"><?= $name ?></option>`; 
         <?php endforeach; ?>
+
+        project_id = '<?= $project_id ?>';
 
         makeColumnsDroppable();
 
@@ -397,6 +386,7 @@
                         callback: function () {
 
                             var taskObject = new Task();
+                            taskObject.project_id = project_id;
 
                             taskObject.title = $('#newTask_title').val();
                             if(taskObject.title != ""){
@@ -450,6 +440,7 @@
             
         }else{
             var newTask = new Task();
+            newTask.project_id = project_id;
             newTask.title = title;
             newTask.task_category = "Task";
             newTask.task_column = column;
@@ -577,7 +568,7 @@
                                 
                             </div>
                             <div class="float-right pt-2 pr-2">
-                                <button data-toggle="popover" data-placement="bottom" data-content="Add Comment" type="button" class="btn btn-sm btn-sm-orange box-shadow-right" onclick="addComment(${newTask.id})">
+                                <button data-toggle="popover" data-placement="bottom" data-content="Add Comment" type="button" class="btn btn-sm btn-orange box-shadow-right" onclick="addComment(${newTask.id})">
                                     <i class="fas fa-comment"></i>
                                 </button>
                                 <span id="commentCount_${newTask.id}" class="dot sec counter counter-lg ${commentCountClass}">${commentsCount}</span>
@@ -631,14 +622,8 @@
     }
 
     function updateTaskInDB(url, type, taskObject){
-        makeRequest(url, taskObject)
+        makePOSTRequest(url, taskObject)
             .then((data) => {
-                try{
-                    data = JSON.parse(data);
-                }catch(e){
-                    showPopUp('Error', 'Session timed out! Login Again.');
-                    return false;
-                }
                 
                 if(data.success == "True"){
                     if(type == "add"){
@@ -648,7 +633,7 @@
                         
                         
                         addTaskToDocument(taskObject);
-                        showAlert(`T${taskObject.id} task added successfully!`);
+                        showFloatingAlert(`T${taskObject.id} task added successfully!`);
 
                     }else if(type == "update"){
 
@@ -664,7 +649,7 @@
                             var div_column = taskObject.task_column.replace(" ", "");
                             $(`#${taskObject.id}`).appendTo($("#column_"+div_column));
                         }
-                        showAlert(`T${taskObject.id} task updated successfully!`);
+                        showFloatingAlert(`T${taskObject.id} task updated successfully!`);
 
                     }else if(type == "addComment"){
 
@@ -682,7 +667,7 @@
                         $(`#commentCount_${taskObject.id}`).removeClass('d-none');
                         $(`#commentCount_${taskObject.id}`).text(existingTask.comments.length);
                         
-                        showAlert(`Comment added to T${taskObject.id} successfully!`);
+                        showFloatingAlert(`Comment added to T${taskObject.id} successfully!`);
                     }else if(type == "delete"){
                         
                         $("#"+taskObject.id).fadeOut(800, function() { $(this).remove(); });
@@ -708,62 +693,8 @@
             })
             .catch((err) => {
                 console.log(err);
-                
                 showPopUp('Error', "An unexpected error occured on server.");
             })
     }
 
-    function makeRequest(url, formData){
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: formData,
-                success: function (response) {       
-                    resolve(response);
-                },
-                error: function (err) {
-                    reject(err);
-                }
-            });
-        })
-        
-    }
-
-    function showPopUp(title, message){
-        bootbox.alert({
-                title: title, 
-                message: message,
-                centerVertical: true,
-                backdrop: true
-            });
-    }
-
-    function formatDate(utcDate) {
-        let utc = new Date(utcDate)
-        var ist = new Date(utc.getTime() + ( 5.5 * 60 * 60 * 1000 ));
-        var date = ist;
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
-        var strTime = hours + ':' + minutes + ' ' + ampm;
-        return year+"-"+month+"-"+day+" "+strTime;
-    }
-
-    function showAlert(message){
-        $(".success-alert").text(message);
-        $(".success-alert").removeClass("d-none");
-        $('.alert').show('slide', {direction: 'right'}, 1000);
-
-        window.setTimeout(function() {
-            $('.alert').hide('slide', {direction: 'right'}, 1000);
-        
-        }, 2000);
-    }
 </script>
