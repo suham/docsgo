@@ -114,6 +114,10 @@ table tr:last-child td:last-child {
   width: #007bff;
 }
 
+.scroll-primary::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+
 .scroll-dark::-webkit-scrollbar-thumb {
   background: #343a40;
 }

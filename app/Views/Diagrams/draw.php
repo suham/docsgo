@@ -2,7 +2,7 @@
     <div class="col-12 col-lg-4">
 
         <div class="card">
-            <div class="card-header bg-primary text-light">
+            <div class="card-header bg-purple text-light">
 
                 <div class="float-left mt-1">
                     <h4>Code</h4>
@@ -31,7 +31,7 @@
                         <input type="text" class="form-control" name="diagram_name" id="diagram_name" required>
                     </div>
 
-                    <textarea id="mermaidSyntax" name="markdown" class="form-control mt-2" style="height:370px;"></textarea>
+                    <textarea id="mermaidSyntax" name="markdown" class="form-control scroll scroll-primary mt-2" style="height:370px;"></textarea>
                     <?php 
                         if(isset($diagram)){
                             if($diagram['author_id'] == session()->get('id')){
@@ -70,7 +70,7 @@
 
     <div class="col-12 col-lg-8 text-center">
         <div class="card">
-            <div class="card-header bg-primary text-light ">
+            <div class="card-header bg-purple text-light ">
                 <h4 class=" mt-1">Preview</h4>
             </div>
             <div class="card-body">
