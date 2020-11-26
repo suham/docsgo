@@ -31,7 +31,7 @@
                         <input type="text" class="form-control" name="diagram_name" id="diagram_name" required>
                     </div>
 
-                    <textarea id="mermaidSyntax" name="markdown" class="form-control scroll scroll-primary mt-2" style="height:370px;"></textarea>
+                    <textarea id="mermaidSyntax" name="markdown" class="form-control scroll scroll-purple mt-2" style="height:370px;"></textarea>
                     <?php 
                         if(isset($diagram)){
                             if($diagram['author_id'] == session()->get('id')){
