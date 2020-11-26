@@ -16,6 +16,7 @@
                         <option value="GANTT_CHART">Gantt Chart</option>
                         <option value="PIE_CHART">Pie Chart</option>
                         <option value="ER_DIAGRAM">ER Diagram</option>
+                        <option value="JOURNEY_DIAGRAM">Journey Diagram</option>
                     </select>
                 </div>
 
@@ -30,8 +31,9 @@
 
                         <input type="text" class="form-control" name="diagram_name" id="diagram_name" required>
                     </div>
-
+                    
                     <textarea id="mermaidSyntax" name="markdown" class="form-control scroll scroll-purple mt-2" style="height:370px;"></textarea>
+                    
                     <?php 
                         if(isset($diagram)){
                             if($diagram['author_id'] == session()->get('id')){
@@ -49,6 +51,7 @@
                             <button class="btn btn-primary ">Save</button>
                         </div>
                     <?php endif ?>
+                   
                 </form>
 
             </div>
@@ -65,7 +68,9 @@
                 </a>
             </div>
         </div>
-
+        <div class="p-1" style="width:100%;right:26px;text-align: right;">
+            <a href="https://mermaid-js.github.io/mermaid/" target="_blank" class="">Learn diagram syntax</a>
+        </div>
     </div>
 
     <div class="col-12 col-lg-8 text-center">
@@ -195,79 +200,86 @@
     let DIAGRAMS = {};
 
     DIAGRAMS['SEQUENCE_DIAGRAM'] = `sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>John: Hello John, how are you?
-    loop Healthcheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail...
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!`;
+        participant Alice
+        participant Bob
+        Alice->>John: Hello John, how are you?
+        loop Healthcheck
+            John->>John: Fight against hypochondria
+        end
+        Note right of John: Rational thoughts <br/>prevail...
+        John-->>Alice: Great!
+        John->>Bob: How about you?
+        Bob-->>John: Jolly good!`;
 
     DIAGRAMS['FLOW_CHART'] = `graph TD
-    A[Christmas] -->|Get money| B(Go shopping)
-    B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
-    C -->|Three| F[Car]`;
+        A[Christmas] -->|Get money| B(Go shopping)
+        B --> C{Let me think}
+        C -->|One| D[Laptop]
+        C -->|Two| E[iPhone]
+        C -->|Three| F[Car]`;
 
     DIAGRAMS['CLASS_DIAGRAM'] = `classDiagram
-    Animal <|-- Duck
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : +int age
-    Animal : +String gender
-    Animal: +isMammal()
-    Animal: +mate()
-    class Duck{
-      +String beakColor
-      +swim()
-      +quack()
-    }
-    class Fish{
-      -int sizeInFeet
-      -canEat()
-    }
-    class Zebra{
-      +bool is_wild
-      +run()
-    }
-            `;
+        Animal <|-- Duck
+        Animal <|-- Fish
+        Animal <|-- Zebra
+        Animal : +int age
+        Animal : +String gender
+        Animal: +isMammal()
+        Animal: +mate()
+        class Duck{
+        +String beakColor
+        +swim()
+        +quack()
+        }
+        class Fish{
+        -int sizeInFeet
+        -canEat()
+        }
+        class Zebra{
+        +bool is_wild
+        +run()
+        }`;
 
     DIAGRAMS['STATE_DIAGRAM'] = `stateDiagram-v2
-    [*] --> Still
-    Still --> [*]
-    Still --> Moving
-    Moving --> Still
-    Moving --> Crash
-    Crash --> [*]
-            `;
+        [*] --> Still
+        Still --> [*]
+        Still --> Moving
+        Moving --> Still
+        Moving --> Crash
+        Crash --> [*]`;
 
     DIAGRAMS['GANTT_CHART'] = `gantt
-    title A Gantt Diagram
-    dateFormat  YYYY-MM-DD
-    section Section
-    A task           :a1, 2020-11-23, 3d
-    B task     :after a1  , 2d
-    section Another
-    C task     :2020-11-24  , 3d
-    D task      : 2d`;
+        title A Gantt Diagram
+        dateFormat  YYYY-MM-DD
+        section Section
+        A task           :a1, 2020-11-23, 3d
+        B task     :after a1  , 2d
+        section Another
+        C task     :2020-11-24  , 3d
+        D task      : 2d`;
 
     DIAGRAMS['PIE_CHART'] = `pie title Pets adopted by volunteers
-    "Dogs" : 386
-    "Cats" : 85
-    "Rats" : 15`;
+        "Dogs" : 386
+        "Cats" : 85
+        "Rats" : 15`;
 
     DIAGRAMS['ER_DIAGRAM'] = `erDiagram
-          CUSTOMER }|..|{ DELIVERY-ADDRESS : has
-          CUSTOMER ||--o{ ORDER : places
-          CUSTOMER ||--o{ INVOICE : "liable for"
-          DELIVERY-ADDRESS ||--o{ ORDER : receives
-          INVOICE ||--|{ ORDER : covers
-          ORDER ||--|{ ORDER-ITEM : includes
-          PRODUCT-CATEGORY ||--|{ PRODUCT : contains
-          PRODUCT ||--o{ ORDER-ITEM : "ordered in"
-            `;
+        CUSTOMER }|..|{ DELIVERY-ADDRESS : has
+        CUSTOMER ||--o{ ORDER : places
+        CUSTOMER ||--o{ INVOICE : "liable for"
+        DELIVERY-ADDRESS ||--o{ ORDER : receives
+        INVOICE ||--|{ ORDER : covers
+        ORDER ||--|{ ORDER-ITEM : includes
+        PRODUCT-CATEGORY ||--|{ PRODUCT : contains
+        PRODUCT ||--o{ ORDER-ITEM : "ordered in"`;
+
+    DIAGRAMS['JOURNEY_DIAGRAM'] = `journey
+        title My working day
+        section Go to work
+        Make tea: 5: Me
+        Go upstairs: 3: Me
+        Do work: 1: Me, Cat
+        section Go home
+        Go downstairs: 5: Me
+        Sit down: 5: Me`;
 </script>

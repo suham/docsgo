@@ -1,4 +1,4 @@
-<div class="row p-4 form-color">
+<div class="row p-3 form-color">
         <div class="col-sm-10 col-10">
             <h3 class="display-9 text-muted" style='font-size:2.2rem'><?php echo $pageTitle; ?></h1>
         </div>
