@@ -218,13 +218,6 @@ function updateGenerateDocumentPath(id){
   });
 }
 
-function showPopUp(title, message){
-bootbox.alert({
-      title: title, 
-      message: message,
-      centerVertical: true,
-      backdrop: true
-  });
-}
+
 </script>
 

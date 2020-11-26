@@ -538,3 +538,6 @@ ALTER TABLE `docsgo-settings` MODIFY COLUMN `type` enum('dropdown','url','proper
 
 INSERT INTO `docsgo-settings` (type, identifier, options) VALUES ('properties','documentProperties','[{"key":"docTitle","value":""},{"key":"docIcon","value":""},{"key":"docConfidential","value":""}]');
 
+CREATE TABLE `docsgo`.`docsgo-diagrams` ( `id` INT NOT NULL AUTO_INCREMENT , `diagram_name` VARCHAR(100) NOT NULL , `markdown` LONGTEXT NOT NULL , `author_id` INT NOT NULL , `link` VARCHAR(255) NOT NULL , `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `docsgo-diagrams` CHANGE `author` `author_id` INT(11) NOT NULL;

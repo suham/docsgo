@@ -121,6 +121,12 @@ $routes->post('taskboard/addTask', 'Taskboard::addTask',['filter' => 'auth']);
 $routes->post('taskboard/addComment', 'Taskboard::addComment',['filter' => 'auth']);
 $routes->post('taskboard/deleteTask', 'Taskboard::deleteTask',['filter' => 'auth']);
 $routes->post('taskboard/updateTaskColumn', 'Taskboard::updateTaskColumn',['filter' => 'auth']);
+
+$routes->get('diagramsList', 'Diagram::index',['filter' => 'auth']);
+$routes->get('diagrams/getDiagrams', 'Diagram::getDiagrams',['filter' => 'auth']);
+$routes->get('diagrams/draw', 'Diagram::draw',['filter' => 'auth']);
+$routes->post('diagrams/save', 'Diagram::save',['filter' => 'auth']);
+$routes->post('diagrams/delete', 'Diagram::delete',['filter' => 'auth']);
 /**
  * --------------------------------------------------------------------
  * Additional Routing
