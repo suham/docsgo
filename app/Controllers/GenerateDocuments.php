@@ -191,7 +191,7 @@ class GenerateDocuments extends BaseController
 
 			for ($i = 0; $i < count($json['sections']); $i++) {
 				$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
-				$contentSection = '<b>sample data</b>';
+				$contentSection = '<b></b>';
 				if($json['sections'][$i]['content'] != ''){
 					$org = htmlspecialchars($json['sections'][$i]['content']);
 					$contentSection = $pandoc->convert($org, "gfm", "html5");			
