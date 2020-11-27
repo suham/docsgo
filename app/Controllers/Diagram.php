@@ -11,7 +11,6 @@ class Diagram extends BaseController
 		$data['addBtn'] = true;
 		$data['addUrl'] = '/diagrams/draw';
 
-
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('Diagrams/list',$data);
@@ -47,15 +46,12 @@ class Diagram extends BaseController
 		$data['pageTitle'] = 'Diagrams';
 		$data['addBtn'] = false;
         $data['backUrl'] = '/diagramsList';
-
-        
         
         $id = $this->request->getVar('id');
         if($id != ""){
             $diagramModel = new DiagramModel();
             $data['diagram'] = $diagramModel->find($id);
         }
-
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -65,7 +61,6 @@ class Diagram extends BaseController
 
     public function save()
     { 
-        
         $id = $this->request->getVar('id');
         $name = $this->request->getVar('diagram_name');
         $markdown = $this->request->getVar('markdown');
@@ -88,13 +83,7 @@ class Diagram extends BaseController
            if($previousEntry["markdown"] != $markdown){
                 $updateImage = true;
                 $this->deleteSVGimage($previousEntry["link"]);
-                // $existingFile = ltrim($previousEntry["link"], '/'); 
-                
-                // if(file_exists($existingFile)){
-                //     unlink($existingFile);
-                // }
-               
-           }
+            }
         }
         
         if($id == "" || $updateImage){

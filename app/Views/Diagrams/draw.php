@@ -96,7 +96,7 @@
         $('[data-toggle="popover"]').popover({trigger: "hover" });
 
         <?php if (session()->get('success')): ?>
-            showFloatingAlert("Success: Diagram created successfully!" , bgClass = "bg-success");
+            showFloatingAlert("Success: Diagram created successfully!" ,"bg-success");
         <?php endif; ?>
         
         <?php if(isset($diagram)): ?>
@@ -160,7 +160,7 @@
         e.preventDefault();
 
         if(svgImage == null){
-            showFloatingAlert("Error: Cannot save due to invalid syntax or image!" , bgClass = "bg-danger");
+            showFloatingAlert("Error: Cannot save due to invalid syntax or image!" , "bg-danger");
             return false;
         }
        
@@ -182,11 +182,11 @@
                     }else{
                         $('.image-links').removeClass('d-none');
                         $('.download-link').attr('href',diagram.link);
-                        showFloatingAlert("Success: Diagram updated!" , bgClass = "bg-success");
+                        showFloatingAlert("Success: Diagram updated!" , "bg-success");
                     }
                         
                 }else{
-                    showFloatingAlert("Error: Something went wrong!" , bgClass = "bg-danger");
+                    showFloatingAlert("Error: Something went wrong!" , "bg-danger");
                 }
             })
             .catch((err) => {

@@ -27,17 +27,12 @@
             <tbody class="bg-white " id ="tbody"></tbody>
         </table>
     </div>
-
-
   
 </div>
 
-<!-- <div class="alert bg-success text-light box-shadow-left success-alert d-none"  style="z-index:9999" role="alert"></div> -->
-
 <script>
-    var prevUrlType = "";
-    var diagramsList;   
-    var userId;
+
+    var prevUrlType = "", userId;
 
     $(document).ready( function () {
         userId = <?= session()->get('id') ?>;
@@ -79,7 +74,7 @@
 
         makeRequest(url)
             .then((response) => {
-                diagramsList = response.diagrams;
+                var diagramsList = response.diagrams;
                 populateTable(diagramsList);
             })
             .catch((err) => {
@@ -123,7 +118,6 @@
 
         $('#tbody').html("");
         $('#tbody').append(getHTMLtable(diagramsList, dataInfo));
-
     }
 
     function edit(id){
@@ -146,8 +140,6 @@
         });
         
     }
-
-  
 
 </script>
 
