@@ -148,6 +148,65 @@ function previewImage(name, link){
                                         class="download-link btn btn-purple ml-2" >
                                         <i class="fa fa-download"></i>
                                     </a>
-                                </div>`)
+                                </div>`);
     $('[data-toggle="popover"]').popover({trigger: "hover" });
+}
+
+function getHTMLtable(data, dataInfo){
+    let tbody = "";
+
+    if(data.length){
+        data.forEach((record, index)=> {
+
+            let columns = "";
+            dataInfo.requiredFields.forEach(value => {
+                let storedVal = record[value];
+                if(dataInfo.dateFields.includes(value)){
+                    storedVal = formatDate(record[value]);
+                }
+
+                columns += `<td>${storedVal}</td>`;
+            });
+
+            let actionButtons = "";
+            dataInfo.action.forEach(actionObject => {
+                
+                let clickParams = "";
+                actionObject.clickParams.forEach( (param, i) => {
+                    clickParams += `'${record[param]}'`;
+                    if(i < (actionObject.clickParams.length-1)){
+                        clickParams += ",";
+                    }
+                });
+
+                let includeButton = true;
+                if ('condition' in actionObject){
+                    if(actionObject.condition.with != record[actionObject.condition.on]){
+                        includeButton = false;
+                    }
+                }
+
+                if(includeButton){
+                    const button = `<button title="${actionObject.title}" class="ml-2 ${actionObject.buttonClass}" onclick="${actionObject.clickTrigger}(${clickParams})" >
+                                    <i class="${actionObject.iconClass}"></i>
+                                </button>`;
+                    actionButtons += button;
+                }
+                
+                
+            });
+
+            columns += `<td class="text-center">${actionButtons}</td>`;
+
+            let row = `<tr id="${record[dataInfo.rowId]}"><td>${++index}</td>${columns}</tr>`;
+            tbody += row;
+        });
+
+    }else{
+        let row = `<tr><td valign="top" colspan="${(dataInfo.requiredFields.length+2)}" class="dataTables_empty">No data available</td></tr>`;
+        tbody += row;
+        showFloatingAlert("No data available." , "bg-warning");
+    }    
+
+    return tbody;
 }

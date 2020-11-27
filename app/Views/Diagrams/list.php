@@ -89,50 +89,45 @@
     }
 
     function populateTable(diagramsList){
-        $('#tbody').html("");
-        if(diagramsList.length){
-            $("#diagrams-list").show();
-            diagramsList.forEach((diagram, index)=> {
-                let deleteButton = "";
-                if(diagram.author_id == userId){
-                    deleteButton = `
-                        <a title="Delete" onclick="deleteDiagram(${diagram.id})" class="btn btn-danger ml-2">
-                            <i class="fa fa-trash text-light"></i>
-                        </a>`;
+        dataInfo = {
+            "rowId": 'id',
+            "requiredFields": ['diagram_name', 'author', 'updated_at'],
+            "dateFields": ["updated_at"],
+            "action": [{
+                    title: "Preview",
+                    buttonClass: "btn btn-info",
+                    iconClass: "fa fa-eye",
+                    clickTrigger: "previewImage",
+                    clickParams: ['diagram_name', 'link']
+                },
+                {
+                    title: "Edit",
+                    buttonClass: "btn btn-warning",
+                    iconClass: "fa fa-edit",
+                    clickTrigger: "edit",
+                    clickParams: ['id']
+                },
+                {
+                    title: "Delete",
+                    buttonClass: "btn btn-danger",
+                    iconClass: "fa fa-trash",
+                    clickTrigger: "deleteDiagram",
+                    clickParams: ['id'],
+                    condition: {
+                        on: 'author_id',
+                        with: userId
+                    }
                 }
+            ]
+        };
 
-                $('#tbody').append(
-                    `<tr id="${diagram.id}"> 
-                        <td>${++index}</td> 
-                        <td>${diagram.diagram_name}</td> 
-                        <td>${diagram.author}</td> 
-                        <td>${formatDate(diagram.updated_at)}</td>
-                        <td class="text-center">
-                            <button title="Preview" class="btn btn-info" onclick="previewImage('${diagram.diagram_name}', '${diagram.link}')" >
-                                <i class="fa fa-eye"></i>
-                            </button>
-                        
-                            <a title="Edit" href="/diagrams/draw?id=${diagram.id}" class="btn btn-warning ml-2">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            
-                            ${deleteButton}
-                            
-                        </td>
-                    </tr>`
-                );
+        $('#tbody').html("");
+        $('#tbody').append(getHTMLtable(diagramsList, dataInfo));
 
-            
-            });
+    }
 
-        }
-        else{
-            $('#tbody').append(
-            `<td valign="top" colspan="5" class="dataTables_empty">No data available</td>`
-            );
-        }
-
-
+    function edit(id){
+        location.href = `/diagrams/draw?id=${id}`;
     }
 
     function deleteDiagram(id){
