@@ -78,14 +78,15 @@ class RiskAssessmentModel extends Model{
                 if($assessment["risk-assessment"]["cvss"][0]["Score"][0]["value"] == ""){
                     //FMEA
                     $fmea = $assessment["risk-assessment"]["fmea"];
-                    $content = "";
+                    $content = "<ol>";
                     foreach($fmea as $section){
-                        $content .= "<span>&#8226;&nbsp;</span>".($section["category"])." => ";
+                        $content .= "<li>".($section["category"])." => ";
                         if($section["value"] == ""){
                             $section["value"] = "--";
                         }
-                        $content .= " ".$section["value"]."<br/>";
+                        $content .= " ".$section["value"]."</li>";
                     }
+                    $content .= "</ol>";
                     $temp['assessment'] = $content;
                 }else{
                     //CVSS
@@ -96,14 +97,15 @@ class RiskAssessmentModel extends Model{
                             $key = "CVSS 3.1 ". $key;
                         }
                         $content = "**".strtoupper($key)."** <br/>";
+                        $content .= "<ol>";
                         foreach($metric as $section){
-                            $content .= "<span>&#8226;&nbsp;</span>".$section["category"] . " => ";
+                            $content .= "<li>".$section["category"] . " => ";
                             if($section["value"] == ""){
                                 $section["value"] = "--";
                             }
-                            $content .= " ".$section["value"]."<br/>";
+                            $content .= " ".$section["value"]."</li>";
                         }
-                        
+                        $content .= "</ol>";
                         $temp['assessment'] .= $content .  "<br/>" ;
                     }
                     

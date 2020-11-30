@@ -704,6 +704,18 @@
             formData[sectionId] = sectionValue;
 
         }
+        //Restricting the use to enter the any html tags in RISK section, otherthan imported
+        var validateTypeStr = $("#type").val(); 
+        if( validateTypeStr.indexOf('riskmanagement-report') > -1 || validateTypeStr.indexOf('riskmanagement-plan') > -1 ){ //riskmanagement-report //riskmanagement-plan
+            var validateData =  (formData['section7']).replace(/<li>/g, '').replace(/<\/li>/g, '').replace(/<ol>/g, '').replace(/<\/ol>/g, '').replace(/=>/g, '');
+            if((validateData.indexOf('<>') > -1)){
+                showPopUp("Validation Error", "Remove empty <> braces in Risk Assessment");
+                return false;
+            }else if((validateData.indexOf('<') > -1) || (validateData.indexOf('>') > -1)){
+                showPopUp("Validation Error", "Remove newly added html tags in Risk Assessment");
+                return false;
+            }
+        }
 
         var successMessage = "Document created successfully.";
         if(docId != ""){

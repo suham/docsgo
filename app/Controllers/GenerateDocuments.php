@@ -193,8 +193,12 @@ class GenerateDocuments extends BaseController
 				$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
 				$contentSection = '<b></b>';
 				if($json['sections'][$i]['content'] != ''){
-					$org = htmlspecialchars($json['sections'][$i]['content']);
-					$contentSection = $pandoc->convert($org, "gfm", "html5");			
+					if ((strpos($json['sections'][$i]['title'], 'Risk Assessment') !== false) || (strpos($json['sections'][$i]['title'], 'Risk Management') !== false)){
+						$contentSection = $pandoc->convert($json['sections'][$i]['content'], "gfm", "html5");
+					}else{
+						$org = htmlspecialchars($json['sections'][$i]['content']);
+						$contentSection = $pandoc->convert($org, "gfm", "html5");	
+					}
 				}
 				if (strpos($contentSection, '<table>') !== false) {
 					$tableContentFormatted = addTableStylesToContent($contentSection);
