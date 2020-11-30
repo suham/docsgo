@@ -194,7 +194,10 @@ class GenerateDocuments extends BaseController
 				$contentSection = '<b></b>';
 				if($json['sections'][$i]['content'] != ''){
 					if ((strpos($json['sections'][$i]['title'], 'Risk Assessment') !== false) || (strpos($json['sections'][$i]['title'], 'Risk Management') !== false)){
-						$contentSection = $pandoc->convert($json['sections'][$i]['content'], "gfm", "html5");
+						$org = $json['sections'][$i]['content'];
+						$org = str_replace("<br>", "", $org);
+						$org = str_replace("<br/>", "", $org);
+						$contentSection = $pandoc->convert($org, "gfm", "html5");
 					}else{
 						$org = htmlspecialchars($json['sections'][$i]['content']);
 						$contentSection = $pandoc->convert($org, "gfm", "html5");	
