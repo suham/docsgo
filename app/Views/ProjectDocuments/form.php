@@ -720,7 +720,7 @@
             if((validateData.indexOf('<>') > -1)){
                 showPopUp("Validation Error", "Remove empty <> braces in Risk Assessment");
                 return false;
-            }else if((validateData.indexOf('<') > -1) || (validateData.indexOf('>') > -1)){
+            }else if((validateData.indexOf('<') > -1)){
                 showPopUp("Validation Error", "Remove newly added html tags in Risk Assessment");
                 return false;
             }
