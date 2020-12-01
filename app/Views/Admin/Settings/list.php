@@ -232,7 +232,7 @@
                 </div>
                 <div class="tab-pane fade" id="document" role="tabpanel" aria-labelledby="document-tab">
                     <div class="alertDiv"></div>
-                    <div class="input-group-text" style="display:flow-root">Header Sectiom</div>&nbsp;
+                    <div class="input-group-text" style="display:flow-root">Header Section</div>&nbsp;
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" >Title</span>
@@ -249,7 +249,7 @@
                     <div class="input-group-text" style="display:flow-root">Footer Section</div>&nbsp;
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" >Confidential Text</span>
+                            <span class="input-group-text" >Text</span>
                         </div>
                         <input type="text" class="form-control" id="docConfidential" >                                             
                     </div>

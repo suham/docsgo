@@ -63,6 +63,7 @@ class GenerateDocuments extends BaseController
 			$replaceContent = str_replace("<th>", "<th style='padding-top: 8px;font-weight: bold; height: 50px;text-align: left; background-color:#cbebf2;'>", $replaceContent);
 			$replaceContent = str_replace("<td>", "<td style='padding-top: 8px;text-align: left;'>", $replaceContent);
 			$replaceContent = str_replace("<br/>", " <br/> ", $replaceContent);
+			$replaceContent = str_replace("</table>", " </table><br/> ", $replaceContent);
 			return $replaceContent;
 		}
 
@@ -115,9 +116,6 @@ class GenerateDocuments extends BaseController
 					$documentIconImage = 'https://info.viosrdtest.in/assets/images/muRata.png';
 				}
 			}
-			if($documentTitle == '' || $documentTitle == null){
-				$documentTitle = $json['cp-line1'];
-			}
 			if($documentFooterMsg == ''){
 				$documentFooterMsg = 'Murata Vios CONFIDENTIAL';
 			}
@@ -131,8 +129,13 @@ class GenerateDocuments extends BaseController
 			$fontStyle['name'] = $json['section-font'];
 			$fontStyle['size'] = 14;
 			$fontStyle['bold'] = TRUE;
-			$section->addText($documentTitle, $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
-			$section->addText($json['cp-line2'], $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
+			//Handling the header section form config | JSON data
+			if($documentTitle == '' || $documentTitle == null){
+				$section->addText($json['cp-line1'], $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
+				$section->addText($json['cp-line2'], $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);	
+			}else{
+				$section->addText($documentTitle, $fontStyle, ['align' => \PhpOffice\PhpWord\Style\Cell::VALIGN_CENTER]);
+			}
 			$section->addTextBreak();
 			$section->addTextBreak();
 			$cp_line3 = $json['cp-line3'];
