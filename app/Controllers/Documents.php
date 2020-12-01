@@ -118,7 +118,7 @@ class Documents extends BaseController
 			return $data;
 		}else if($tableName == 'documentMaster'){
 			$references = new DocumentsMasterModel();
-			$data = $references->findAll();	
+			$data = $references->getRefrences();	
 			return $data;
 		}else if($tableName == 'requirements'){
 			$requirements = new RequirementsModel();

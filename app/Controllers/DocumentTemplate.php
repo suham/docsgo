@@ -112,7 +112,7 @@ class DocumentTemplate extends BaseController
 		$tables['Documents']['name'] = "documents";
 		$tables['Documents']['columns'] = "file-name,author";
 		$tables['References']['name'] = "documentMaster";
-		$tables['References']['columns'] = "name,category,description,location,ref,status,version";
+		$tables['References']['columns'] = "reference,name,category,description,location,status,version";
 		$tables['Requirements']['name'] = "requirements";
 		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
 		$tables['Reviews']['name'] = "reviews";
