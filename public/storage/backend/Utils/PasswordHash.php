@@ -17,7 +17,7 @@ trait PasswordHash
 {
     public static function hashPassword($value)
     {
-        $hash = password_hash($value, PASSWORD_BCRYPT);
+        $hash = password_hash($value, PASSWORD_DEFAULT);
 
         if ($hash === false) {
             throw new \Exception('Bcrypt hashing not supported.');

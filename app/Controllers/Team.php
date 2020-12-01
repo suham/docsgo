@@ -22,6 +22,8 @@ class Team extends BaseController
 		echo view('templates/footer');
 	}
 
+
+
 	private function returnParams(){
 		$uri = $this->request->uri;
 		$id = $uri->getSegment(3);
@@ -74,6 +76,7 @@ class Team extends BaseController
 			
 
 			if ($this->request->getMethod() == 'post') {
+				
 				$is_manager_text = $this->request->getVar('is-manager');
 				$is_manager = 0;
 				if($is_manager_text == 'on'){
@@ -109,6 +112,7 @@ class Team extends BaseController
 						$message = 'Team member successfully updated.';
 					}else{
 						$message = 'Team member successfully added.';
+						$this->addStorageUser($newData);
 					}
 
 					$model->save($newData);
@@ -130,6 +134,24 @@ class Team extends BaseController
 	
 	}
 
+	private function addStorageUser($docsgoUser){
+		$jsonFile = file_get_contents('storage/private/users.json');
+		$storageUsers = json_decode($jsonFile, true);
+
+		$storageUser = array();
+		$storageUser["username"] = $docsgoUser["email"];
+        $storageUser["name"] = $docsgoUser["name"];
+        $storageUser["role"] = "user";
+        $storageUser["homedir"] = "/";
+        $storageUser["permissions"] = "read|write|upload|download|batchdownload|zip";
+		$storageUser["password"] = password_hash($docsgoUser['password'], PASSWORD_DEFAULT);
+
+		array_push($storageUsers, $storageUser);
+		
+		$storageUsers = json_encode($storageUsers);
+		file_put_contents('storage/private/users.json', $storageUsers);
+	}
+
 	public function delete(){
 		if (session()->get('is-admin')){
 			$id = $this->returnParams();
@@ -142,6 +164,33 @@ class Team extends BaseController
 			$response = array('success' => "False");
 			echo json_encode( $response );
 		}
+	}
+
+	private function moveUsersToStorage($data){
+		$storageUsers = array();
+		$count = 1;
+		foreach($data as $users){
+			$storageUser = array();
+			$storageUser["username"] = $users["email"];
+			$storageUser["name"] = $users["name"];
+			$storageUser["role"] = "user";
+			$storageUser["homedir"] = "/";
+			$storageUser["permissions"] = "read|write|upload|download|batchdownload|zip";
+			$storageUser["password"] = $users['password'];
+			$storageUsers[$count] = $storageUser;
+			$count++;
+		}
+
+		$storageUser = array();
+		$storageUser["username"] = 'guest';
+		$storageUser["name"] = 'Guest';
+		$storageUser["role"] = "guest";
+		$storageUser["homedir"] = "/";
+		$storageUser["permissions"] = "";
+		$storageUser["password"] = "";
+		$storageUsers[$count] = $storageUser;
+		
+		file_put_contents('storage/private/users.json', json_encode($storageUsers));
 	}
 
 }
