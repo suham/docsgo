@@ -509,6 +509,10 @@
     });
 
  
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return ''
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
 
     function insertTable(sectionId, tableName, columnValues) {    
         var selectedIds = $("#select_" + sectionId).val();
@@ -522,8 +526,13 @@
         var content = "";
 
         if(dataFormat == "table"){
-        columnValues = columnValues.toUpperCase();
-        var thead = "| " + columnValues.replace(/,/g," | ") + " |\n";
+        // columnValues = columnValues.toUpperCase();
+        columnValues = columnValues.split(',');
+        columnValues.forEach((column, i) => {
+            columnValues[i] = capitalize(column);
+        });
+        columnValues = columnValues.join('|');
+        var thead = "| " + columnValues + " |\n";
         
         indexes.forEach((index, i) => {
             thead += "|-------";
@@ -559,14 +568,14 @@
         selectedIds.forEach((id) => {
             var record = table.find(x => x.id === id);
             indexes.forEach((index, i) => {
-            var value = record[index];
-            content += "|"+index.toUpperCase()+"|"+value.replace(/(\r\n|\n|\r)/gm, "") + "|\r\n";
-            if(i == 0){
-                content += "|---------|---------|\r\n";
-            }
-            if(i == (indexes.length-1)){
-                content += "\n";
-            }
+                var value = record[index];
+                content += "|"+capitalize(index)+"|"+value.replace(/(\r\n|\n|\r)/gm, "") + "|\r\n";
+                if(i == 0){
+                    content += "|---------|---------|\r\n";
+                }
+                if(i == (indexes.length-1)){
+                    content += "\n";
+                }
             
             });
             
