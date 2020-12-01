@@ -67,6 +67,13 @@ class GenerateDocuments extends BaseController
 			return $replaceContent;
 		}
 
+		function handleCodeblocks($content) {
+			$content = str_replace("```", "", $content);
+			$content = str_replace("````", "", $content);
+			$content = str_replace("``", "", $content);
+			return $content;
+		}
+
 		$jsonGetId = $str;
 		
 		$idArray = array_keys($jsonGetId);
@@ -200,9 +207,16 @@ class GenerateDocuments extends BaseController
 						$org = $json['sections'][$i]['content'];
 						$org = str_replace("<br>", "", $org);
 						$org = str_replace("<br/>", "", $org);
+						if( (strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
+							$org = handleCodeblocks($org);
+						}
 						$contentSection = $pandoc->convert($org, "gfm", "html5");
 					}else{
-						$org = htmlspecialchars($json['sections'][$i]['content']);
+						$org = $json['sections'][$i]['content'];
+						if((strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
+							$org = handleCodeblocks($org);
+						}
+						$org = htmlspecialchars($org);
 						$contentSection = $pandoc->convert($org, "gfm", "html5");	
 					}
 				}
