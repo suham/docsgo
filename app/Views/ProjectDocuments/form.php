@@ -954,11 +954,11 @@
             // console.log("Something worng3:", error.responseJSON['message']);
             // console.log("Something worng4:", error.responseText);
             if(error.responseJSON && error.responseJSON != ''){
-               showPreview("Download Error", "Please remove custom tags if any exists. <br/> "+error.responseJSON['message'], 'lg');
+               showPreview("Preview Error", "Please remove custom tags if any exists. <br/> "+error.responseJSON['message'], 'lg');
             }else if(error.responseText && error.responseText != '' ){
-                showPreview("Download Error", "Please remove custom tags if any exists. <br/>"+error.responseText, 'lg');
+                showPreview("Preview Error", "Please remove custom tags if any exists. <br/>"+error.responseText, 'lg');
             }else{
-                showPreview("Download Error", "Unable to download the file");
+                showPreview("Preview Error", "Unable to view the file");
             }
         }
         });
