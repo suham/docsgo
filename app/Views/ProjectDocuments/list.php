@@ -202,22 +202,35 @@
           showPopUp("Project Documents", "File downloaded successfully");
         }
       },
-      ajaxError: function (error) {
-        console.log("Something worng:", error);
-        showPopUp("Project Document", "Unable to download the file");
+      error: function (error) {
+        // console.log("Something worng3:", error.responseJSON['message']);
+        // console.log("Something worng4:", error.responseText);
+        if(error.responseJSON['message']){
+          showErrorPopup("Download Error", "Please remove custom tags if any exists. <br/> "+error.responseJSON['message'], 'lg');
+        }else if(error.responseText){
+          showErrorPopup("Download Error", "Please remove custom tags if any exists. <br/>"+error.responseText, 'lg');
+        }else{
+          showErrorPopup("Download Error", "Unable to download the file", 'lg');
+        }
       }
     });
 
   }
 
-  function showPopUp(title, message){
-    bootbox.alert({
-        title: title, 
-        message: message,
-        centerVertical: true,
-        backdrop: true
-    });
-  }
+  function showErrorPopup(title, message, width){
+        bootbox.alert({
+            title: title, 
+            message: message,
+            centerVertical: true,
+            backdrop: 'static',
+            size: width,
+            buttons: {
+                ok: {
+                    label: 'Close'
+                }
+            }
+        });
+    }
 
 </script>
 

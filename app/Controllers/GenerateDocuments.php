@@ -102,6 +102,8 @@ class GenerateDocuments extends BaseController
 			$jsonMain = $str;
 			$fileNameLev1 = str_replace(",", "_", $jsonMain[$id]['file-name'] . ".docx");
 			$fileName = str_replace(" ", "_", $fileNameLev1);
+			$fileName = str_replace("&", "_", $fileName);
+			$fileName = str_replace("/", "_", $fileName);
 			$jsonObj = json_decode($jsonMain[$id]['json-object'], true);
 			$documentType = array_keys($jsonObj);
 			$json = $jsonObj[$documentType[0]];
@@ -221,6 +223,10 @@ class GenerateDocuments extends BaseController
 			for ($i = 0; $i < count($json['sections']); $i++) {
 				$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
 				$contentSection = '<b></b>';
+				$org = $json['sections'][$i]['content'];
+				$contentSection = $pandoc->convert($org, "gfm", "html5");
+				//DONT DELETE THE BELOW CODE< HANDLING MULTIPLE SECNARIOS FOR DOC RENDER VIEWS
+				/*
 				if($json['sections'][$i]['content'] != ''){
 					if ((strpos($json['sections'][$i]['title'], 'Risk Assessment') !== false) || (strpos($json['sections'][$i]['title'], 'Risk Management') !== false)){
 						$org = $json['sections'][$i]['content'];
@@ -239,12 +245,14 @@ class GenerateDocuments extends BaseController
 						$contentSection = $pandoc->convert($org, "gfm", "html5");	
 					}
 				}
+				*/
 				if (strpos($contentSection, '<table>') !== false) {
 					$tableContentFormatted = addTableStylesToContent($contentSection);
 					//setOutputEscapingEnabled is added for gfm markdown
 					\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
 					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
 				} else {
+					\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
 					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
 				}
 				

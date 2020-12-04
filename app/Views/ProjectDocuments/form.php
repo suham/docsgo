@@ -720,7 +720,7 @@
         //Restricting the use to enter the any html tags in RISK section, otherthan imported
         var validateTypeStr = $("#type").val(); 
         if( validateTypeStr.indexOf('riskmanagement-report') > -1 || validateTypeStr.indexOf('riskmanagement-plan') > -1 ){ //riskmanagement-report //riskmanagement-plan
-            var validateData =  (formData['section7']).replace(/<li>/g, '').replace(/<\/li>/g, '').replace(/<ol>/g, '').replace(/<\/ol>/g, '').replace(/=>/g, '');
+            var validateData =  (formData['section7']).replace(/<li>/g, '').replace(/<\/li>/g, '').replace(/<ol>/g, '').replace(/<\/ol>/g, '').replace(/=>/g, '').replace(/<br\/>/g, '').replace(/<br>/g, '');
             if((validateData.indexOf('<>') > -1)){
                 showPopUp("Validation Error", "Remove empty <> braces in Risk Assessment");
                 return false;
@@ -950,8 +950,16 @@
                 }, 500);
             }
         },
-        ajaxError: function (error) {
-            showPopUp("Project Document", "Unable to download the file");
+        error: function (error) {
+            // console.log("Something worng3:", error.responseJSON['message']);
+            // console.log("Something worng4:", error.responseText);
+            if(error.responseJSON['message']){
+               showPreview("Download Error", "Please remove custom tags if any exists. <br/> "+error.responseJSON['message'], 'lg');
+            }else if(error.responseText){
+                showPreview("Download Error", "Please remove custom tags if any exists. <br/>"+error.responseText, 'lg');
+            }else{
+                showPreview("Download Error", "Unable to download the file");
+            }
         }
         });
     }
