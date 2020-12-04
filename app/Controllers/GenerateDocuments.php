@@ -20,6 +20,8 @@ class GenerateDocuments extends BaseController
 
 	public function downloadDocuments()  {
 		$pandoc = new Pandoc();
+		ini_set("display_errors", "1");
+		error_reporting(E_ALL);
 
 		$params = $this->returnParams();
 		$typeNumber = $params[0];
