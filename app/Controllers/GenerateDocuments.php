@@ -82,6 +82,7 @@ class GenerateDocuments extends BaseController
 			}else{
 				$content = str_replace('<header id="title-block-header">', '<header id="title-block-header" style="display: none">', $content);
 			}
+			$content = str_replace('<h1 id=', '<h1 style="font-size: x-large;font-weight: bold;" id=', $content);
 			return $content;
 		}
 
