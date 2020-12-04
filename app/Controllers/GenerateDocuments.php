@@ -22,10 +22,17 @@ class GenerateDocuments extends BaseController
 		$pandoc = new Pandoc();
 
 		$params = $this->returnParams();
-		if($params[0] == 1){
-			$type = "document";
-		}else{
-			$type = "project";
+		$typeNumber = $params[0];
+		switch($typeNumber) {
+			case 1:
+				$type = 'document';
+				break;
+			case 2:
+				$type = 'project';
+				break;
+			case 3:
+				$type = 'document';
+				break;
 		}
 		$main_id = $params[1];
 
@@ -59,12 +66,23 @@ class GenerateDocuments extends BaseController
 		function addTableStylesToContent($rawContent) {
 			$fontFamily = 'Arial, sans-serif';
 			$fontSize = '11';
-			$replaceContent = str_replace("<table>", '<table style="border-spacing:0 10px; font-family:' . $fontFamily . '; font-size: ' . $fontSize . ';width: 100%; padding: 10px; border: 1px #000000 solid; border-collapse: collapse;" border="1" cellpadding="5">', $rawContent);
+			$replaceContent = str_replace("<table>", '<table class="pandoc-mark-css" style="border-spacing:0 10px; font-family:' . $fontFamily . '; font-size: ' . $fontSize . ';width: 100%; padding: 10px; border: 1px #000000 solid; border-collapse: collapse;" border="1" cellpadding="5">', $rawContent);
 			$replaceContent = str_replace("<th>", "<th style='padding-top: 8px;font-weight: bold; height: 50px;text-align: left; background-color:#cbebf2;'>", $replaceContent);
 			$replaceContent = str_replace("<td>", "<td style='padding-top: 8px;text-align: left;'>", $replaceContent);
 			$replaceContent = str_replace("<br/>", " <br/> ", $replaceContent);
 			$replaceContent = str_replace("</table>", " </table><br/> ", $replaceContent);
 			return $replaceContent;
+		}
+
+		function addImagePaths($content, $title) {
+			$url = base_url().'/media/media';
+			$content = str_replace("./media/media", $url, $content);
+			if($title !='' && $title != null){
+				$content = str_replace('<header id="title-block-header">', '<header id="title-block-header-display" style="display: none">', $content);
+			}else{
+				$content = str_replace('<header id="title-block-header">', '<header id="title-block-header" style="display: none">', $content);
+			}
+			return $content;
 		}
 
 		function handleCodeblocks($content) {
@@ -289,12 +307,27 @@ class GenerateDocuments extends BaseController
 					mkdir($directoryName, 0777);
 				}
 				$objWriter->save($directoryName.'/'.$fileName);
-				header("Cache-Control: no-cache");
-				header("Content-Description: File Transfer");
-				header("Content-Disposition: attachment; filename=".$fileName);
-				header("Content-Transfer-Encoding: binary");  
-				readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
-				unlink($directoryName.'/'.$fileName);
+				if($typeNumber == 1){
+					header("Cache-Control: no-cache");
+					header("Content-Description: File Transfer");
+					header("Content-Disposition: attachment; filename=".$fileName);
+					header("Content-Transfer-Encoding: binary");  
+					readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
+					unlink($directoryName.'/'.$fileName);
+				}else{
+					$outputFileName = str_replace("docx", "html", $fileName);
+					$cmd = "pandoc --extract-media ./media '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
+					// $cmd = "pandoc --extract-media $imgPath '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
+					// $cmd = "pandoc '".$directoryName."/".$fileName."' --keep-parstyle='Snap' --keep-parstyle='Crackle' --metadata title='vios' -s -o ".$outputFileName;
+					$html = shell_exec($cmd);
+					$html = file_get_contents($outputFileName);
+					$html = addTableStylesToContent($html);
+					$html = addImagePaths($html, $documentTitle);
+					echo $html;
+					unlink($directoryName.'/'.$fileName);
+					unlink($outputFileName);
+					return false;
+				}
 			}
 			
 		}

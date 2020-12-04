@@ -92,6 +92,10 @@
                         </div>
                         <?php if (isset($projectDocument)): ?>   
                             <div class="ml-auto mr-3" >
+                                <a title="Preview" onclick="generatePreview(this, <?php echo $docId;?>)" 
+                                    class="btn btn-primary ml-2 btn btn-info">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
                                 <button type="button" id ="project-name" 
                                         class="btn btn-info"><?= $project_name ?>
                                 </button>
@@ -916,5 +920,78 @@
     });
 
 
+    function generatePreview(e, id){
+        var url =  '/generate-documents/downloadDocuments/3/'+id;
+        var anchor = $(e);
+        var iTag  = anchor.find('i');
+        $.ajax({
+        url: url,
+        beforeSend: function() {
+            $(anchor).addClass('disabled');
+            $(iTag).addClass('fa-spinner fa-spin');
+        },
+        complete: function(){
+            $(anchor).removeClass('disabled');
+            $(iTag).removeClass('fa-spinner fa-spin');
+        },
+        success: function(response){
+            if(response == "no data"){
+                showPopUp("Project Documents", "No file is available to download");
+            }else{
+                var listTags = 5;
+                if(response.indexOf('title-block-header-display') > 0){
+                    listTags = 4;
+                }
+                var el = '.bootbox-body p:lt('+listTags+')'; 
+                showPreview("PREVIEW", response, 'lg');
+                $(el).css('text-align', 'center');
+                setTimeout(() => {
+                    $('.bootbox-alert').scrollTop(0);
+                }, 500);
+            }
+        },
+        ajaxError: function (error) {
+            showPopUp("Project Document", "Unable to download the file");
+        }
+        });
+    }
+
+    function showPreview(title, message, width){
+        bootbox.alert({
+            title: title, 
+            message: message,
+            centerVertical: true,
+            backdrop: 'static',
+            size: width,
+            buttons: {
+                ok: {
+                    label: 'Close'
+                }
+            }
+        });
+    }
 
 </script>
+
+<style>
+    .modal-content {
+        width: 200% !important;
+    }
+    .pandoc-mark-css {
+        font-family: 'Arial, sans-serif';
+        border-spacing:0 10px;
+        font-family: 'Arial, sans-serif';
+        font-size: 11;
+        width: 100%; 
+        padding: 10px; 
+        border: 1px  #bbb solid !important; 
+        border-collapse: collapse;" 
+    }
+    .pandoc-mark-css tbody tr:first-child td { 
+        padding-top: 8px;
+        font-weight: bold; 
+        height: 50px;
+        text-align: left; 
+        background-color:#cbebf2;
+    }
+</style>
