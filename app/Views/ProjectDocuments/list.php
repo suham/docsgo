@@ -205,9 +205,9 @@
       error: function (error) {
         // console.log("Something worng3:", error.responseJSON['message']);
         // console.log("Something worng4:", error.responseText);
-        if(error.responseJSON['message']){
+        if(error.responseJSON && error.responseJSON['message'] != ''){
           showErrorPopup("Download Error", "Please remove custom tags if any exists. <br/> "+error.responseJSON['message'], 'lg');
-        }else if(error.responseText){
+        }else if(error.responseText && error.responseText != ''){
           showErrorPopup("Download Error", "Please remove custom tags if any exists. <br/>"+error.responseText, 'lg');
         }else{
           showErrorPopup("Download Error", "Unable to download the file", 'lg');
