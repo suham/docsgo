@@ -76,6 +76,10 @@
         margin-left: -15px;
     }
 
+    .modal-lg{
+        max-width:80vw;
+    }
+
 
     
 </style>
@@ -644,18 +648,18 @@
             carouselIndicators += `<li data-target="#carouselExampleIndicators" data-slide-to="${index}" class="${activeClass}"></li>`;
             if(attachment.type.includes('image')){
                 carouselItems += `<div class="carousel-item ${activeClass} ">
-                                    <img class="d-block img-fluid rounded mx-auto d-block" style="max-height: 70vh;" src="${attachment.link}" >
+                                    <img class="d-block img-fluid rounded mx-auto d-block" style="max-height: 80vh;" src="${attachment.link}" >
                                 </div>`;
                 
             }else if(attachment.type.includes('video')){
                 carouselItems += `<div class="carousel-item ${activeClass}">
-                                    <video class="video-fluid d-block w-100" style="max-height: 70vh;" autoplay controls >
+                                    <video class="video-fluid d-block w-100" style="max-height: 80vh;" autoplay controls >
                                         <source src="${attachment.link}" type="${attachment.type}" />
                                     </video>
                                 </div>`;
             }else if(attachment.type.includes('pdf')){
                 carouselItems += `<div class="carousel-item ${activeClass}">
-                                    <embed src="${attachment.link}" type="application/pdf" width="100%" style="min-height:70vh" />
+                                    <embed src="${attachment.link}" type="application/pdf" width="100%" style="min-height:80vh" />
                                 </div>`;
             }
             else{
