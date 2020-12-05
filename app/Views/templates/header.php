@@ -132,7 +132,8 @@
     }
 
     .carousel-control-next, .carousel-control-prev {
-        bottom: 76px;
+      top: 50px;  
+      bottom: 76px;
     }
 
     </style>
