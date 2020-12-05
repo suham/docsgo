@@ -643,8 +643,8 @@
             const activeClass = (index == 0) ? 'active' : '';
             carouselIndicators += `<li data-target="#carouselExampleIndicators" data-slide-to="${index}" class="${activeClass}"></li>`;
             if(attachment.type.includes('image')){
-                carouselItems += `<div class="carousel-item ${activeClass}">
-                                    <img class="d-block w-100" style="max-height: 70vh;" src="${attachment.link}" >
+                carouselItems += `<div class="carousel-item ${activeClass} ">
+                                    <img class="d-block img-fluid rounded mx-auto d-block" style="max-height: 70vh;" src="${attachment.link}" >
                                 </div>`;
                 
             }else if(attachment.type.includes('video')){
