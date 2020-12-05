@@ -249,12 +249,6 @@ function attachmentSlider(title, carouselHtml){
         </div>
         `,
         size: 'large',
-        buttons: {
-            ok: {
-                label: "OK",
-                className: 'btn-primary'
-            }
-        }
         
     });
    
