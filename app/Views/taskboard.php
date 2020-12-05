@@ -62,9 +62,9 @@
     }
 
     .sec {
-        position: absolute;
-        top: 1px;
-        right: 42px;
+        position: relative;
+        top: -14px;
+        right: -4px;
     }
 
     .dot {
@@ -73,6 +73,7 @@
         background-color: #cc650f;
         border-radius: 50%;
         display: inline-block;
+        margin-left: -15px;
     }
 
 
@@ -216,7 +217,6 @@
         $(".fluid-container").parents().css("overflow", "visible")
         $("body").css("overflow-x", "hidden");
 
-       
         teamMembers = <?= json_encode($teamMembers) ?>;
         <?php foreach($teamMembers as $key => $name) : ?>
             teamMemberOptions += `<option value="<?= $key ?>"><?= $name ?></option>`; 
@@ -238,6 +238,15 @@
         <?php endif ?>
 
         
+    });
+
+    $(document).on({
+        ajaxStart: function(){
+            $("#loading-overlay").show();
+        },
+        ajaxStop: function(){ 
+            $("#loading-overlay").hide();
+        }    
     });
 
     function makeColumnsDroppable(){
@@ -264,11 +273,15 @@
             
             if(taskId != ""){
                 formTitle = "Edit Task", buttonText = "Update";
+                
             }
 
             var dialog = bootbox.dialog({
                 title: formTitle,
-                message: `<div class="row">
+                message: `<form id="taskForm">
+                        <input type="hidden" name="id" value='${taskId}' />
+                        <input type="hidden" name="project_id" value='${project_id}' />
+                        <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label class = "font-weight-bold text-muted" for="newTask_title">Title</label>
@@ -345,7 +358,23 @@
                                 </div>
                             </div>
                             
+                            <div class="col-12">
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input class="custom-file-input" type="file" id="newTask_attachments" name="attachments[]" accept="image/*,video/*" multiple>
+                                        <label class = "custom-file-label" for="newTask_attachments">Attachments</label>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            
                         </div>
+                        </form>
+                        
                         `,
                 buttons: {
                     delete: {
@@ -385,36 +414,20 @@
                         className: "btn-primary",
                         callback: function () {
 
-                            var taskObject = new Task();
-                            taskObject.project_id = project_id;
+                            const taskTitle = $('#newTask_title').val();
+                            let taskForm = new FormData(document.getElementById("taskForm"));
 
-                            taskObject.title = $('#newTask_title').val();
-                            if(taskObject.title != ""){
-                                taskObject.description = $('#newTask_description').val();
-                                taskObject.assignee = $('#newTask_assignee').val();
-                                taskObject.verifier = $('#newTask_verifier').val();
-                                taskObject.task_category = $('#newTask_category').val();
-                                taskObject.task_column = $('#newTask_column').val();
-
+                            if(taskTitle != ""){
                                 if(taskId == ""){
                                     //Add Task
-                                    updateTaskInDB('/taskboard/addTask', "add", taskObject);
-                                    
+                                    updateTaskInDB('/taskboard/addTask', "add", taskForm,true);
                                 }else{
                                     //Update Task
-                                    const temp = getTaskFromArray(taskId);
-                                    var existingTask = temp[1];
-                                    taskObject.id = existingTask.id;
-                                    taskObject.comments = existingTask.comments;
-
-                                    updateTaskInDB('/taskboard/addTask', "update", taskObject);
-
+                                    updateTaskInDB('/taskboard/addTask', "update", taskForm,true);
                                 }
                             }else{
                                 showPopUp("Validation Error", "Title of a task cannot be empty!")
                             }
-                            
-                            
                             
                         }
                     }
@@ -431,21 +444,35 @@
                 $('#newTask_verifier').val(task.verifier);
                 $('#newTask_category').val(task.task_category);
                 $('#newTask_column').val(task.task_column);
+                const formFooter = `<footer class="blockquote-footer text-right mt-3">Created by <cite>${teamMembers[task.creator]}</cite></footer>`;
+                $('.modal-body').append(formFooter);
             }else{
                 $("#newTask_column").val(column);
             }
 
-            
+
+            $(".custom-file-input").change(function(){
+                var files = $("#newTask_attachments")[0].files;
+                if(files.length < 1){
+                    $(".custom-file-label").text("Attachments")
+                }else if(files.length > 1){
+                    $(".custom-file-label").text(files.length+" Files")
+                }else{
+                    $(".custom-file-label").text(files[0].name)
+                }
+            })
+           
             $('.selectpicker').selectpicker('refresh');
             
         }else{
-            var newTask = new Task();
-            newTask.project_id = project_id;
-            newTask.title = title;
-            newTask.task_category = "Task";
-            newTask.task_column = column;
 
-            updateTaskInDB('/taskboard/addTask', "add", newTask);
+            let taskForm = new FormData();
+            taskForm.append('project_id', project_id);
+            taskForm.append('newTask_title', title);
+            taskForm.append('newTask_category', "Task");
+            taskForm.append('newTask_column', column);
+
+            updateTaskInDB('/taskboard/addTask', "add", taskForm, true);
 
             
         }
@@ -561,6 +588,16 @@
         }else{
             assignee = "Unassigned";
         }
+        var attachmentsHtml = "";
+        if(newTask.attachments != null){
+            jsonAttachments = newTask.attachments;
+            attachmentsCount = JSON.parse(newTask.attachments).length;
+            attachmentsHtml +=`<button data-toggle="popover" data-placement="bottom" data-content="View Attachments" type="button" 
+                                        class="btn btn-sm btn-purple box-shadow-right" onclick="attachmentSlider('T${newTask.id} Attachments', getCarouselHtml(${newTask.id}) )" >
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <span id="attachmentCount_${newTask.id}" class="dot sec counter counter-lg">${attachmentsCount}</span>`;
+        }
         var taskHtml = `
                         <div class=" text-muted">
                             <div class="float-left pl-2 pt-2">
@@ -568,7 +605,8 @@
                                 
                             </div>
                             <div class="float-right pt-2 pr-2">
-                                <button data-toggle="popover" data-placement="bottom" data-content="Add Comment" type="button" class="btn btn-sm btn-orange box-shadow-right" onclick="addComment(${newTask.id})">
+                                ${attachmentsHtml}
+                                <button data-toggle="popover" data-placement="bottom" data-content="Add Comment" type="button" class="ml-1 btn btn-sm btn-orange box-shadow-right" onclick="addComment(${newTask.id})">
                                     <i class="fas fa-comment"></i>
                                 </button>
                                 <span id="commentCount_${newTask.id}" class="dot sec counter counter-lg ${commentCountClass}">${commentsCount}</span>
@@ -592,6 +630,41 @@
                     `;
         
         return taskHtml;
+    }
+
+    function getCarouselHtml(taskId){
+        const temp = getTaskFromArray(taskId);
+        const existingTask = temp[1];
+        const attachments = JSON.parse(existingTask.attachments);
+        let carouselIndicators = "";
+        let carouselItems = "";
+        attachments.forEach((attachment, index) =>{
+
+            const activeClass = (index == 0) ? 'active' : '';
+            carouselIndicators += `<li data-target="#carouselExampleIndicators" data-slide-to="${index}" class="${activeClass}"></li>`;
+            if(attachment.type.includes('image')){
+                carouselItems += `<div class="carousel-item ${activeClass}">
+                                    <img class="d-block w-100" style="max-height: 70vh;" src="${attachment.link}" >
+                                </div>`;
+                
+            }else if(attachment.type.includes('video')){
+                carouselItems += `<div class="carousel-item ${activeClass}">
+                                    <video class="video-fluid d-block w-100" style="max-height: 70vh;" autoplay controls >
+                                        <source src="${attachment.link}" type="${attachment.type}" />
+                                    </video>
+                                </div>`;
+            }else if(attachment.type.includes('pdf')){
+                carouselItems += `<div class="carousel-item ${activeClass}">
+                                    <embed src="${attachment.link}" type="application/pdf" width="100%" style="min-height:70vh" />
+                                </div>`;
+            }
+            else{
+                carouselItems += `<div style="min-height: 200px;margin-top: 100px;" class="carousel-item text-center ${activeClass}">
+                                    <a  href="${attachment.link}" download >Attachment</a>
+                                </div>`;
+            }
+        });
+        return [carouselIndicators, carouselItems];
     }
 
     function addTaskToDocument(newTask) {
@@ -621,35 +694,36 @@
         });
     }
 
-    function updateTaskInDB(url, type, taskObject){
-        makePOSTRequest(url, taskObject)
-            .then((data) => {
-                
+    function updateTaskInDB(url, type, taskObject,fileData = false){
+
+        makePOSTRequest(url, taskObject, fileData)
+            .then((data) => {                
                 if(data.success == "True"){
                     if(type == "add"){
                     
-                        taskObject.id = data.id;
-                        tasksArr.push(taskObject);
+                        // taskObject.id = data.task;
+                        tasksArr.push(data.task);
                         
-                        
-                        addTaskToDocument(taskObject);
-                        showFloatingAlert(`T${taskObject.id} task added successfully!`);
+                        addTaskToDocument(data.task);
+                        showFloatingAlert(`T${data.task.id} task added successfully!`);
 
                     }else if(type == "update"){
 
-                        const temp = getTaskFromArray(taskObject.id);
+                        const temp = getTaskFromArray(data.task.id);
                         const existingTaskLoc = temp[0];
                         const existingTask = temp[1];
-                    
-                        tasksArr[existingTaskLoc] = taskObject;
-                        $(`#${taskObject.id}`).html(getTaskHtml(taskObject));
+                        var task = new Task();
+                        task = data.task;
+                        task.comments = existingTask.comments;
+                        tasksArr[existingTaskLoc] = task;
+                        $(`#${task.id}`).html(getTaskHtml(task));
                         $('[data-toggle="popover"]').popover({trigger: "hover" });
 
-                        if(existingTask.task_column != taskObject.task_column){
-                            var div_column = taskObject.task_column.replace(" ", "");
-                            $(`#${taskObject.id}`).appendTo($("#column_"+div_column));
+                        if(existingTask.task_column != task.task_column){
+                            var div_column = task.task_column.replace(" ", "");
+                            $(`#${task.id}`).appendTo($("#column_"+div_column));
                         }
-                        showFloatingAlert(`T${taskObject.id} task updated successfully!`);
+                        showFloatingAlert(`T${task.id} task updated successfully!`);
 
                     }else if(type == "addComment"){
 

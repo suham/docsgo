@@ -22,6 +22,7 @@ class Task {
         this.task_category = '';
         this.task_column = '';
         this.comments = null; // [{'comment':'', timestamp: '', by:''}]
+        this.attachments = null;
     }
 }
 
@@ -47,27 +48,96 @@ function makeRequest(url){
     
 }
 
-function makePOSTRequest(url, data){
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: function (response) {  
-                try{
-                    response = JSON.parse(response);
-                }catch(e){
-                    showPopUp('Error', 'Session timed out! Login Again.');
-                    return false;
-                }     
-                resolve(response);
-            },
-            error: function (err) {
-                reject(err);
-            }
+// function getAjaxOptions(url, type, data = null){
+//     let options = {url: url};
+    
+//     if(type == "GET"){
+//         options.type = "GET";
+//     }else if(type == "POST"){
+//         options.type = "POST";
+//         options.data = data;
+//     }else if(type == "POST_FILE_UPLOAD"){
+//         options.type = "POST";
+//         options.data = data;
+//         options.contentType = false;
+//         options.cache = false;
+//         options.processData = false;
+//     }
+//     return options;
+// }
+
+function makePOSTRequest(url, data, fileData=false){
+    if(!fileData){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (response) {  
+                    try{
+                        response = JSON.parse(response);
+                    }catch(e){
+                        showPopUp('Error', 'Session timed out! Login Again.');
+                        return false;
+                    }     
+                    resolve(response);
+                },
+                error: function (err) {
+                    reject(err);
+                }
+            });
         });
-    });
+    }else{
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function (response) {  
+                    try{
+                        response = JSON.parse(response);
+                    }catch(e){
+                        showPopUp('Error', 'Session timed out! Login Again.');
+                        return false;
+                    }     
+                    resolve(response);
+                },
+                error: function (err) {
+                    reject(err);
+                }
+            });
+        });
+    }
+
 }
+
+// function makePOSTRequest(url, data){
+//     return new Promise((resolve, reject) => {
+//         $.ajax({
+//             type: 'POST',
+//             url: url,
+//             data: data,
+//             contentType: false,
+//             cache: false,
+//             processData:false,
+//             success: function (response) {  
+//                 try{
+//                     response = JSON.parse(response);
+//                 }catch(e){
+//                     showPopUp('Error', 'Session timed out! Login Again.');
+//                     return false;
+//                 }     
+//                 resolve(response);
+//             },
+//             error: function (err) {
+//                 reject(err);
+//             }
+//         });
+//     });
+// }
 
 function showPopUp(title, message){
     bootbox.alert({
@@ -150,6 +220,44 @@ function previewImage(name, link){
                                     </a>
                                 </div>`);
     $('[data-toggle="popover"]').popover({trigger: "hover" });
+}
+
+
+function attachmentSlider(title, carouselHtml){
+    
+    let carouselIndicators = carouselHtml[0];
+    let carouselItems = carouselHtml[1];
+
+    bootbox.dialog({
+        title: `${title}`,
+        message: `
+        <div id="carouselExampleIndicators" class="carousel slide  carousel-fade" data-ride="carousel">
+            <ol class="carousel-indicators">
+                ${carouselIndicators}
+            </ol>
+            <div class="carousel-inner">
+                ${carouselItems}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        `,
+        size: 'large',
+        buttons: {
+            ok: {
+                label: "OK",
+                className: 'btn-primary'
+            }
+        }
+        
+    });
+   
 }
 
 function getHTMLtable(data, dataInfo){

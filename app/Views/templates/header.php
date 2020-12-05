@@ -111,6 +111,29 @@
         z-index:4;
     }
     
+    .carousel-control-prev-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23007bff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+    }
+
+    .carousel-control-next-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23007bff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+    }
+    
+    .carousel-indicators {
+      bottom: 30px;
+    }
+
+    .carousel-indicators li {
+        background-color: #91c6ff;
+    }
+
+    .carousel-indicators .active {
+        background-color: #007bff;
+    }
+
+    .carousel-control-next, .carousel-control-prev {
+        bottom: 76px;
+    }
 
     </style>
 
@@ -140,7 +163,7 @@
                         </a>
                     </div>
                     <div class="nav__list">
-                        <a href="/projects" title="Projects" class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'projects'   ? 'active-nav-link' : '') ?>">
+                        <a href="/projects" title="Projects" class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'projects'  || $uri->getSegment(1) == 'taskboard'  ? 'active-nav-link' : '') ?>">
                           <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
                           <span class="nav__name">Projects</span>
                         </a>
@@ -154,10 +177,10 @@
                     </a>
 
                     <div class="nav__link collapse <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'active-nav-link' : '')  ?>">
-                        <a href="/documents" title="Documents" class="collapse__sublink my_nav_link ">
+                        <a href="/documents" title="Documents" class="collapse__sublink my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">
                           <ion-icon name="documents-outline" class="nav__icon"></ion-icon>
                         </a>
-                        <a href="/documents" title="Documents"  class="my_nav_link">Documents</a>
+                        <a href="/documents" title="Documents"  class="my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">Documents</a>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
@@ -179,10 +202,10 @@
                         <span class="nav__name">Risk Assessment</span>
                     </a>
                     <div class="nav__link collapse <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active-nav-link' : '') ?>">
-                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link">
+                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">
                           <ion-icon name="apps-outline" class="nav__icon"></ion-icon>
                         </a>
-                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link">Traceability</a>
+                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">Traceability</a>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 

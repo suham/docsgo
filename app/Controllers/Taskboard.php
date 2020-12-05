@@ -30,49 +30,111 @@ class Taskboard extends BaseController
 
     }
 
-    private function isManagerCheck(){
-        if(!session()->get('is-manager')){
-            $response = array();
-            $response["success"] = "False";
-            $response["errorMsg"] = "You are not authorized to perform this task. Your changes will not be saved.";
-            echo json_encode($response);
-            exit(0);
+    private function isAuthorized($id){
+        if(session()->get('is-manager')){
+            return true;
+        }else{
+            $taskModel = new TaskboardModel();
+            $task = $taskModel->find($id);
+            if($task["creator"] == session()->get('id')){
+                return true;
+            }else{
+                $response = array();
+                $response["success"] = "False";
+                $response["errorMsg"] = "You are not the owner of this task. Your changes will not be saved.";
+                echo json_encode($response);
+                exit(0);
+            }
         }
     }
 
     public function addTask(){
         
-        $this->isManagerCheck();
-
         $id = $this->request->getVar('id');
+        if($id != ""){
+            $this->isAuthorized($id);
+        }
+        $project_id = $this->request->getVar('project_id');
         $task = [
-            "assignee" => $this->request->getVar('assignee'),
-            "description" => $this->request->getVar('description'),
+            "assignee" => $this->request->getVar('newTask_assignee'),
+            "description" => $this->request->getVar('newTask_description'),
             "project_id" => $this->request->getVar('project_id'),
-            "verifier" => $this->request->getVar('verifier') ,
-            "task_category" => $this->request->getVar('task_category'),
-            "task_column" => $this->request->getVar('task_column'),
-            "title" => $this->request->getVar('title'),
+            "verifier" => $this->request->getVar('newTask_verifier') ,
+            "task_category" => $this->request->getVar('newTask_category'),
+            "task_column" => $this->request->getVar('newTask_column'),
+            "title" => $this->request->getVar('newTask_title'),
         ];
 
+        $attachmentsDir = "uploads/taskboard/".$project_id;
+        $fileLinks = $this->uploadFiles($attachmentsDir);
+
+        if(count($fileLinks)){
+            
+            $attachments = $this->returnJsonField($id, 'attachments');
+            $attachmentsCount = count($attachments);
+            $attachmentsCount += 1;
+            
+            foreach($fileLinks as $key=>$object){
+                $attachment["id"] = $attachmentsCount;
+                $attachment["link"] = $object['link'];
+                $attachment["type"] = $object['type'];
+                array_push($attachments, $attachment);
+                $attachmentsCount++;
+            }
+            $task["attachments"] = json_encode($attachments);
+            
+        }
+        
         $model = new TaskboardModel();
         if($id != ""){
             $model->update($id, $task);
+            $task = $model->find($id);
         }else{
+            $task['creator'] = session()->get('id');
             $id = $model->insert($task);
+            $task["id"] = $id;
         }
 
         
         $response["success"] = "True";
         $response["id"] = $id;
         
+        $response["task"] = $task;
+
         echo json_encode($response);
     }
 
-    public function updateTaskColumn(){
-        $this->isManagerCheck();
+    private function uploadFiles($attachmentsDir){
+        $fileLinks = array();
+        if($files = $this->request->getFiles())
+        {
+            if (!file_exists($attachmentsDir)) {
+                mkdir($attachmentsDir, 0777, true);
+            }
 
+            foreach($files['attachments'] as $attachment)
+            {
+                if ($attachment->isValid() && ! $attachment->hasMoved())
+                {                   
+                    $newName = $attachment->getRandomName();
+                    $attachment->move($attachmentsDir, $newName);
+                    $type = $attachment->getClientMimeType();
+                    $link = "/".$attachmentsDir."/".$newName;
+
+                    $object['link'] = $link;
+                    $object['type'] = $type;
+                    array_push($fileLinks,  $object);
+                }
+            }
+        }
+        return $fileLinks;
+    }
+
+    public function updateTaskColumn(){
+        
         $id = $this->request->getVar('id');
+        $this->isAuthorized($id);
+
         $task = [
             "task_column" => $this->request->getVar('task_column')
         ];
@@ -86,8 +148,26 @@ class Taskboard extends BaseController
         echo json_encode($response);
     }
 
+    private function returnJsonField($id, $fieldName){
+        if($id == ""){
+            return array();
+        }else{
+            $model = new TaskboardModel();
+            $task = $model->find($id);
+            $existingValue = $task[$fieldName];
+    
+            if($existingValue == null){
+                $existingValue = array();
+            }else{
+                $existingValue = json_decode($existingValue, true);
+            }
+    
+            return $existingValue;
+        }
+        
+    }
+
     public function addComment(){
-        $this->isManagerCheck();
         
         $jsonComment["comment"] = $this->request->getVar('comment');
         $jsonComment["timestamp"] = gmdate("Y-m-d H:i:s");
@@ -119,16 +199,33 @@ class Taskboard extends BaseController
     }
 
     public function deleteTask(){
-        $this->isManagerCheck();
         
         $id = $this->request->getVar('id');
-
+        $this->isAuthorized($id);
         $model = new TaskboardModel();
+        $task = $model->find($id);
+
+        if($task["attachments"] != null){
+            $attachments = json_decode($task["attachments"], true);
+            foreach($attachments as $attachment){
+                $this->deleteAttachments($attachment["link"]);
+            }
+
+        }
+
         $model->delete($id);
 
         $response = array('success' => "True");
         
         echo json_encode($response);       
+    }
+
+    private function deleteAttachments($imagePath){
+        $existingFile = ltrim($imagePath, '/'); 
+                
+        if(file_exists($existingFile)){
+            unlink($existingFile);
+        }
     }
 
 
