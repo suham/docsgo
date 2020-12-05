@@ -165,27 +165,7 @@
             </div>
 
         </div>
-        <div class="col-12 col-md-2 tasks-column" >
-
-            <div class="card">
-                <div class="card-header  bg-warning text-dark">
-                    On Hold
-                </div>
-                <div class="card-body  task-parent scroll scroll-warning " id="column_OnHold">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="column_OnHold_title" id="column_OnHold_title" 
-                            placeholder="Quick Add - Title Only" />
-                        <div class="ml-2">
-                            <button class="btn btn-outline-warning"  data-toggle="popover" data-placement="bottom" data-content="Add Task"
-                            onclick="addTask('On Hold', document.getElementById('column_OnHold_title').value)">
-                                <i class="fas fa-plus "></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+       
         <div class="col-12 col-md-2 tasks-column" >
 
             <div class="card">
@@ -207,6 +187,29 @@
             </div>
 
         </div>
+
+        <div class="col-12 col-md-2 tasks-column" >
+
+            <div class="card">
+                <div class="card-header  bg-warning text-dark">
+                    Observations
+                </div>
+                <div class="card-body  task-parent scroll scroll-warning " id="column_Observations">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="column_Observations_title" id="column_Observations_title" 
+                            placeholder="Quick Add - Title Only" />
+                        <div class="ml-2">
+                            <button class="btn btn-outline-warning"  data-toggle="popover" data-placement="bottom" data-content="Add Task"
+                            onclick="addTask('Observations', document.getElementById('column_Observations_title').value)">
+                                <i class="fas fa-plus "></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
@@ -254,7 +257,7 @@
     });
 
     function makeColumnsDroppable(){
-        const columns = [ "Todo", "In Progress", "Under Verification", "On Hold", "Complete"];
+        const columns = [ "Todo", "In Progress", "Under Verification", "Observations", "Complete"];
         columns.forEach((columnName)=>{
             const columnId = "#column_"+columnName.replace(" ", "");
             var $column = $(columnId);
@@ -352,11 +355,11 @@
                                         <option value="Under Verification" >
                                             Under Verification
                                         </option>
-                                        <option value="On Hold" >
-                                            On Hold
-                                        </option>
                                         <option value="Complete" >
                                             Complete
+                                        </option>
+                                        <option value="Observations" >
+                                            Observations
                                         </option>
                                     </select>
                                 </div>
