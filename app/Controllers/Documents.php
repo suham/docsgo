@@ -38,6 +38,7 @@ class Documents extends BaseController
 		$view = $this->request->getVar('view');
 		$project_id = $this->request->getVar('project_id');
 
+		$selectedStatus = null;
 		if($view == '' || $project_id == ''){
 			//Initial Case
 			$projectModel = new ProjectModel();
@@ -56,15 +57,20 @@ class Documents extends BaseController
 			$selectedStatus = $view;
 		}
 
-		session()->set('prevUrl', '');
-		
-		$data['selectedProject'] = $selectedProject;
-		$data['selectedStatus'] = $selectedStatus;
+		if($selectedStatus != null){
+			session()->set('prevUrl', '');
+			
+			$data['selectedProject'] = $selectedProject;
+			$data['selectedStatus'] = $selectedStatus;
 
-		$whereCondition = "WHERE docs.`status` = '".$selectedStatus."' and docs.`project-id` = ".$selectedProject;
-		$documentModel = new DocumentModel();
-		$data['data']  = $documentModel->getDocuments($whereCondition);	
-		$data['documentsCount'] = $documentModel->getDocumentsCount($selectedProject);
+			$whereCondition = "WHERE docs.`status` = '".$selectedStatus."' and docs.`project-id` = ".$selectedProject;
+			$documentModel = new DocumentModel();
+			$data['data']  = $documentModel->getDocuments($whereCondition);	
+			$data['documentsCount'] = $documentModel->getDocumentsCount($selectedProject);
+		}else{
+			$data['data'] = [];
+		}
+
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('ProjectDocuments/list',$data);
@@ -226,7 +232,12 @@ class Documents extends BaseController
 				$project_id = $this->request->getVar('project_id');
 				$existing_id = $this->request->getVar('existing_id');
 
-
+				if($project_id == "null"){
+					$session = session();
+					$session->setFlashdata('alert', "danger");
+					$session->setFlashdata('message', "Create a project first!");
+					return redirect()->to('/documents');
+				}
 				// Populating Existing Docs Dropdown
 				$existingDocs = $this->request->getVar('allExistingDocs');
 				if($existingDocs == "" || $existingDocs == "no"){

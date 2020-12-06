@@ -32,7 +32,8 @@ class Reviews extends BaseController
 		$project_id = $this->request->getVar('project_id');
 
 		$model = new ReviewModel();
-
+		$selectedStatus = null;
+		
 		if($view == '' || $project_id == ''){
 			//Initial Case
 			$activeProject = $projectModel->where("status","Active")->first();	
@@ -50,13 +51,18 @@ class Reviews extends BaseController
 			$selectedStatus = $view;
 		}
 
-		$data['data'] = $model->where("status",$selectedStatus)
-								  ->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();	
+		if($selectedStatus != null){
+			$data['data'] = $model->where("status",$selectedStatus)
+			->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();	
+
+			$data['selectedProject'] = $selectedProject;
+			$data['selectedStatus'] = $selectedStatus;						  
+
+			$data['reviewsCount'] = $model->getReviewsCount($data['selectedProject'] );
+		}else{
+			$data['data'] = [];
+		}
 		
-		$data['selectedProject'] = $selectedProject;
-		$data['selectedStatus'] = $selectedStatus;						  
-		
-		$data['reviewsCount'] = $model->getReviewsCount($data['selectedProject'] );
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -227,6 +233,12 @@ class Reviews extends BaseController
 			$data['formTitle'] = "Add Review";
 			//Add new form, auto fill the project,Name,Author fields
 			$project_id =  $this->request->getVar('project_id');
+			if($project_id == "null"){
+				$session = session();
+				$session->setFlashdata('alert', "danger");
+				$session->setFlashdata('message', "Create a project first!");
+				return redirect()->to('/reviews');
+			}
 			$data['project_id'] = $project_id;
 			$data['project_name'] = $data['projects'][$project_id];
 			$data['action'] = "add?project_id=${project_id}";

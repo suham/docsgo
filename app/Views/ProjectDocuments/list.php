@@ -50,7 +50,14 @@
 <div class="row p-0 p-md-4">
 
   <?php if (count($data) == 0): ?>
-
+    <?php if (session()->get('alert')): ?>
+      <div class="col-12">
+        <div class="alert alert-<?= session()->get('alert') ?>" role="alert">
+            <?= session()->get('message') ?>
+        </div>
+      </div>
+    <?php endif; ?>
+    
     <div class="col-12">
       <div class="alert alert-warning" role="alert">
         No records found.
