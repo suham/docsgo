@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: db
--- Generation Time: Oct 24, 2020 at 12:22 PM
--- Server version: 8.0.22
--- PHP Version: 7.4.11
+-- Host: 127.0.0.1
+-- Generation Time: Dec 06, 2020 at 02:52 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.2.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -28,11 +29,26 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `docsgo-acronyms` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `acronym` varchar(100) NOT NULL,
   `description` varchar(1000) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `docsgo-diagrams`
+--
+
+CREATE TABLE `docsgo-diagrams` (
+  `id` int(11) NOT NULL,
+  `diagram_name` varchar(100) NOT NULL,
+  `markdown` longtext NOT NULL,
+  `author_id` int(11) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -41,15 +57,15 @@ CREATE TABLE `docsgo-acronyms` (
 --
 
 CREATE TABLE `docsgo-document-master` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `category` enum('Requirement','Design','Impact Analysis','Test','Standards','Other') NOT NULL,
+  `category` varchar(64) NOT NULL,
   `version` varchar(50) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `ref` varchar(100) DEFAULT NULL,
   `location` varchar(50) DEFAULT NULL,
   `status` enum('Draft','Approved','Obsolete') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -58,11 +74,11 @@ CREATE TABLE `docsgo-document-master` (
 --
 
 CREATE TABLE `docsgo-document-template` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   `type` varchar(60) NOT NULL,
   `template-json-object` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -71,17 +87,19 @@ CREATE TABLE `docsgo-document-template` (
 --
 
 CREATE TABLE `docsgo-documents` (
-  `id` int NOT NULL,
-  `project-id` int NOT NULL,
-  `review-id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `project-id` int(11) NOT NULL,
+  `review-id` int(11) DEFAULT NULL,
   `type` varchar(64) NOT NULL,
+  `category` varchar(64) NOT NULL,
   `update-date` datetime NOT NULL,
   `json-object` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `file-name` varchar(50) DEFAULT NULL,
-  `author-id` int NOT NULL,
-  `author` varchar(50) DEFAULT NULL,
-  `status` enum('Draft','Approved','Rejected') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `file-name` varchar(64) DEFAULT NULL,
+  `author-id` int(11) NOT NULL,
+  `reviewer-id` int(11) DEFAULT NULL,
+  `status` varchar(64) NOT NULL,
+  `revision-history` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`revision-history`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -90,7 +108,7 @@ CREATE TABLE `docsgo-documents` (
 --
 
 CREATE TABLE `docsgo-inventory-master` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `item` varchar(50) NOT NULL,
   `type` varchar(50) NOT NULL,
   `description` varchar(1000) NOT NULL,
@@ -106,10 +124,10 @@ CREATE TABLE `docsgo-inventory-master` (
   `invoice_date` date NOT NULL,
   `vendor` varchar(50) NOT NULL,
   `status` enum('active','in-active','not-found','cal-overdue') NOT NULL,
-  `used_by` int DEFAULT NULL,
-  `updated_by` int DEFAULT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `used_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -118,15 +136,16 @@ CREATE TABLE `docsgo-inventory-master` (
 --
 
 CREATE TABLE `docsgo-projects` (
-  `project-id` int NOT NULL,
+  `project-id` int(11) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
   `start-date` date NOT NULL,
   `end-date` date DEFAULT NULL,
   `status` enum('Active','Completed') NOT NULL,
   `manager-id` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `download-path` varchar(100) DEFAULT NULL,
   `version` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -135,12 +154,12 @@ CREATE TABLE `docsgo-projects` (
 --
 
 CREATE TABLE `docsgo-requirements` (
-  `id` int NOT NULL,
-  `type` enum('User Needs','System','Subsystem') NOT NULL,
+  `id` int(11) NOT NULL,
+  `type` varchar(100) DEFAULT NULL,
   `requirement` varchar(100) NOT NULL,
-  `description` varchar(2100) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `description` longtext DEFAULT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -149,41 +168,19 @@ CREATE TABLE `docsgo-requirements` (
 --
 
 CREATE TABLE `docsgo-reviews` (
-  `id` int NOT NULL,
-  `project-id` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `project-id` int(11) NOT NULL,
   `review-name` varchar(64) NOT NULL,
-  `review-ref` varchar(250) DEFAULT NULL,
+  `review-ref` text DEFAULT NULL,
   `review-by` varchar(50) NOT NULL,
   `context` varchar(200) DEFAULT NULL,
-  `description` varchar(400) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `code-diff` text DEFAULT NULL,
   `assigned-to` varchar(50) NOT NULL,
-  `status` enum('Request Change','Ready For Review','Accepted') NOT NULL,
+  `status` varchar(64) NOT NULL,
   `category` varchar(60) NOT NULL,
-  `updated-at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `docsgo-risk-assessment`
---
-
-CREATE TABLE `docsgo-risk-assessment` (
-  `id` int NOT NULL,
-  `risk_type` enum('open-issue','soup','cybersecurity') NOT NULL,
-  `risk_details` varchar(200) NOT NULL,
-  `failure` varchar(200) NOT NULL,
-  `harm` varchar(200) NOT NULL,
-  `mitigation` varchar(200) NOT NULL,
-  `severity` int NOT NULL,
-  `occurrence` int NOT NULL,
-  `detectability` int NOT NULL,
-  `rpn` int NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `issue_id` int DEFAULT NULL,
-  `cybersecurity_id` int DEFAULT NULL,
-  `soup_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `updated-at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -192,19 +189,47 @@ CREATE TABLE `docsgo-risk-assessment` (
 --
 
 CREATE TABLE `docsgo-risks` (
-  `id` int NOT NULL,
-  `project_id` int NOT NULL,
-  `category` enum('Issue','Observation','Security','SOUP') NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `description` varchar(1000) NOT NULL,
-  `information` varchar(100) NOT NULL,
-  `severity` int NOT NULL,
-  `occurrence` int NOT NULL,
-  `detectability` int NOT NULL,
-  `rpn` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `risk_type` enum('Open-Issue','Vulnerability','SOUP') NOT NULL,
+  `risk` varchar(255) NOT NULL,
+  `description` longtext NOT NULL,
+  `component` varchar(100) NOT NULL,
+  `hazard-analysis` text NOT NULL,
+  `assessment` longtext NOT NULL,
+  `baseScore_severity` float NOT NULL,
   `status` enum('Open','Close') NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `docsgo-settings`
+--
+
+CREATE TABLE `docsgo-settings` (
+  `id` int(11) NOT NULL,
+  `type` enum('dropdown','url','properties') NOT NULL,
+  `identifier` varchar(50) NOT NULL,
+  `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `docsgo-settings`
+--
+
+INSERT INTO `docsgo-settings` (`id`, `type`, `identifier`, `options`) VALUES
+(1, 'dropdown', 'templateCategory', NULL),
+(2, 'url', 'third-party', '[{\"key\":\"sonar\",\"url\":\"\",\"apiKey\":\"\"},{\"key\":\"testLink\",\"url\":\"\",\"apiKey\":\"\"}]'),
+(3, 'dropdown', 'documentStatus', NULL),
+(6, 'dropdown', 'reviewCategory', NULL),
+(7, 'dropdown', 'userRole', NULL),
+(8, 'dropdown', 'riskCategory', NULL),
+(9, 'dropdown', 'referenceCategory', NULL),
+(10, 'dropdown', 'requirementsCategory', NULL),
+(11, 'dropdown', 'assetsCategory', NULL),
+(12, 'properties', 'documentProperties', NULL);
 
 -- --------------------------------------------------------
 
@@ -213,22 +238,31 @@ CREATE TABLE `docsgo-risks` (
 --
 
 CREATE TABLE `docsgo-status-options` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `value` int NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `value` int(11) NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `docsgo-status-options`
+-- Table structure for table `docsgo-taskboard`
 --
 
-INSERT INTO `docsgo-status-options` (`id`, `name`, `value`, `update_date`) VALUES
-(1, 'Very High', 5, '2020-10-07 18:24:55'),
-(2, 'High', 4, '2020-10-07 18:25:08'),
-(3, 'Moderate', 3, '2020-10-07 18:25:18'),
-(4, 'Low', 2, '2020-10-07 18:25:34'),
-(5, 'Minor/Minimal', 1, '2020-10-07 18:25:42');
+CREATE TABLE `docsgo-taskboard` (
+  `id` int(11) NOT NULL,
+  `task_column` varchar(20) NOT NULL,
+  `task_category` varchar(20) NOT NULL,
+  `description` text DEFAULT NULL,
+  `title` varchar(200) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `creator` int(11) NOT NULL,
+  `assignee` int(11) DEFAULT NULL,
+  `verifier` int(11) DEFAULT NULL,
+  `comments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`comments`)),
+  `attachments` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`attachments`))
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -237,13 +271,24 @@ INSERT INTO `docsgo-status-options` (`id`, `name`, `value`, `update_date`) VALUE
 --
 
 CREATE TABLE `docsgo-team-master` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `role` varchar(50) DEFAULT NULL,
   `responsibility` varchar(100) DEFAULT NULL,
-  `is-manager` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `is-manager` tinyint(1) NOT NULL DEFAULT 0,
+  `is-admin` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `docsgo-team-master`
+--
+
+INSERT INTO `docsgo-team-master` (`id`, `name`, `email`, `password`, `role`, `responsibility`, `is-manager`, `is-admin`, `created_at`, `updated_at`) VALUES
+(37, 'user', 'user@gmail.com', '$2y$10$QFG0v/fICPHnhHcVWckVcujd0na3M2im/SW6FNhRgcJ0KA3exPD7K', NULL, 'Admin', 1, 1, '2020-12-06 07:47:14', '2020-12-06 19:17:14');
 
 -- --------------------------------------------------------
 
@@ -252,11 +297,11 @@ CREATE TABLE `docsgo-team-master` (
 --
 
 CREATE TABLE `docsgo-test-cases` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `testcase` varchar(100) NOT NULL,
-  `description` varchar(500) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `description` longtext DEFAULT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -265,11 +310,13 @@ CREATE TABLE `docsgo-test-cases` (
 --
 
 CREATE TABLE `docsgo-traceability` (
-  `id` int NOT NULL,
-  `design` varchar(100) NOT NULL,
-  `code` varchar(100) NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int(11) NOT NULL,
+  `root_requirement` varchar(100) DEFAULT NULL,
+  `design` text NOT NULL,
+  `code` text NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -278,35 +325,12 @@ CREATE TABLE `docsgo-traceability` (
 --
 
 CREATE TABLE `docsgo-traceability-options` (
-  `id` int NOT NULL,
-  `traceability_id` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `traceability_id` int(11) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `requirement_id` int NOT NULL,
-  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `docsgo-users`
---
-
-CREATE TABLE `docsgo-users` (
-  `id` int NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is-admin` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `docsgo-users`
---
-
-INSERT INTO `docsgo-users` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `is-admin`) VALUES
-(26, 'user', 'user@gmail.com', '$2y$10$WTruHEzlsPDbWSNF/8klguwcX6x2OsN6Iw5F0PLq83f8rd.mD6sSy', '2020-10-24 07:12:12', '2020-10-24 12:12:12', 1);
+  `requirement_id` int(11) NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -316,6 +340,12 @@ INSERT INTO `docsgo-users` (`id`, `name`, `email`, `password`, `created_at`, `up
 -- Indexes for table `docsgo-acronyms`
 --
 ALTER TABLE `docsgo-acronyms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `docsgo-diagrams`
+--
+ALTER TABLE `docsgo-diagrams`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -361,21 +391,27 @@ ALTER TABLE `docsgo-reviews`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `docsgo-risk-assessment`
---
-ALTER TABLE `docsgo-risk-assessment`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `docsgo-risks`
 --
 ALTER TABLE `docsgo-risks`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `docsgo-settings`
+--
+ALTER TABLE `docsgo-settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `docsgo-status-options`
 --
 ALTER TABLE `docsgo-status-options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `docsgo-taskboard`
+--
+ALTER TABLE `docsgo-taskboard`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -403,12 +439,6 @@ ALTER TABLE `docsgo-traceability-options`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `docsgo-users`
---
-ALTER TABLE `docsgo-users`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -416,132 +446,105 @@ ALTER TABLE `docsgo-users`
 -- AUTO_INCREMENT for table `docsgo-acronyms`
 --
 ALTER TABLE `docsgo-acronyms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `docsgo-diagrams`
+--
+ALTER TABLE `docsgo-diagrams`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `docsgo-document-master`
 --
 ALTER TABLE `docsgo-document-master`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `docsgo-document-template`
 --
 ALTER TABLE `docsgo-document-template`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `docsgo-documents`
 --
 ALTER TABLE `docsgo-documents`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `docsgo-inventory-master`
 --
 ALTER TABLE `docsgo-inventory-master`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=339;
 
 --
 -- AUTO_INCREMENT for table `docsgo-projects`
 --
 ALTER TABLE `docsgo-projects`
-  MODIFY `project-id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `project-id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `docsgo-requirements`
 --
 ALTER TABLE `docsgo-requirements`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=412;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=422;
 
 --
 -- AUTO_INCREMENT for table `docsgo-reviews`
 --
 ALTER TABLE `docsgo-reviews`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
-
---
--- AUTO_INCREMENT for table `docsgo-risk-assessment`
---
-ALTER TABLE `docsgo-risk-assessment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
 -- AUTO_INCREMENT for table `docsgo-risks`
 --
 ALTER TABLE `docsgo-risks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
+
+--
+-- AUTO_INCREMENT for table `docsgo-settings`
+--
+ALTER TABLE `docsgo-settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `docsgo-status-options`
 --
 ALTER TABLE `docsgo-status-options`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `docsgo-taskboard`
+--
+ALTER TABLE `docsgo-taskboard`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `docsgo-team-master`
 --
 ALTER TABLE `docsgo-team-master`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `docsgo-test-cases`
 --
 ALTER TABLE `docsgo-test-cases`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1907;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1984;
 
 --
 -- AUTO_INCREMENT for table `docsgo-traceability`
 --
 ALTER TABLE `docsgo-traceability`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `docsgo-traceability-options`
 --
 ALTER TABLE `docsgo-traceability-options`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1298;
-
---
--- AUTO_INCREMENT for table `docsgo-users`
---
-ALTER TABLE `docsgo-users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2653;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-ALTER TABLE `docsgo-traceability` ADD `description` LONGTEXT AFTER `code`;
-ALTER TABLE `docsgo-traceability` ADD `root_requirement` varchar(100) AFTER `id`;
-UPDATE `docsgo-traceability` SET root_requirement = 'User Needs';
-
-ALTER TABLE `docsgo-requirements` MODIFY type varchar (100);
-
-ALTER TABLE `docsgo-documents` ADD `revision-history` JSON NULL AFTER `status`;
-
-ALTER TABLE `docsgo-documents` CHANGE `file-name` `file-name` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
-
-ALTER TABLE `docsgo-requirements` MODIFY description longtext;
-
-ALTER TABLE `docsgo-test-cases` MODIFY description longtext;
-
-CREATE TABLE `docsgo`.`docsgo-taskboard` ( `id` INT NOT NULL AUTO_INCREMENT , `task_column` VARCHAR(20) NOT NULL , `task_category` VARCHAR(20) NOT NULL , `description` TEXT NULL , `title` VARCHAR(200) NOT NULL , `project_id` INT NOT NULL , `assignee` INT NULL , `qa` INT NULL , `comments` JSON NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-
-ALTER TABLE `docsgo-taskboard` CHANGE `qa` `verifier` INT(11) NULL DEFAULT NULL;
-
-ALTER TABLE `docsgo-projects` ADD COLUMN `download-path` varchar(100) AFTER name;
-
-ALTER TABLE `docsgo-settings` MODIFY COLUMN `type` enum('dropdown','url','properties') NOT NULL
-
-INSERT INTO `docsgo-settings` (type, identifier, options) VALUES ('properties','documentProperties','[{"key":"docTitle","value":""},{"key":"docIcon","value":""},{"key":"docConfidential","value":""}]');
-
-CREATE TABLE `docsgo`.`docsgo-diagrams` ( `id` INT NOT NULL AUTO_INCREMENT , `diagram_name` VARCHAR(100) NOT NULL , `markdown` LONGTEXT NOT NULL , `author_id` INT NOT NULL , `link` VARCHAR(255) NOT NULL , `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
-
-ALTER TABLE `docsgo-diagrams` CHANGE `author` `author_id` INT(11) NOT NULL;
-
-ALTER TABLE `docsgo-taskboard` ADD `attachments` JSON NULL AFTER `comments`;
-
-ALTER TABLE `docsgo-taskboard` ADD `creator` INT NOT NULL AFTER `project_id`;
