@@ -42,10 +42,14 @@ class RiskAssessment extends BaseController
 		$data['projects'] = $this->getProjects();
 		$projectModel = new ProjectModel();
 		$activeProject = $projectModel->where("status","Active")->first();	
-		$selectedProject = $activeProject['project-id'];
-		$data['selectedProject'] = $selectedProject;
-		$data['riskCategory'] = $this->getRiskTypecategories();
-
+		if($activeProject != ""){
+			$selectedProject = $activeProject['project-id'];
+			$data['selectedProject'] = $selectedProject;
+			$data['riskCategory'] = $this->getRiskTypecategories();
+		}else{
+			$data['riskCategory'] = [];
+		}
+		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('RiskAssessment/list',$data);

@@ -45,6 +45,14 @@ class Documents extends BaseController
 			$activeProject = $projectModel->where("status","Active")->first();	
 			if($activeProject == ""){
 				$activeProject = $projectModel->first();	
+				if($activeProject == ""){
+					$data['data'] = [];
+					echo view('templates/header');
+					echo view('templates/pageTitle', $data);
+					echo view('ProjectDocuments/list',$data);
+					echo view('templates/footer');
+					exit(0);
+				}
 			}
 			$selectedProject = $activeProject['project-id'];
 
