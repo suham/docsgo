@@ -13,9 +13,14 @@ class Projects extends BaseController
 		$data['addUrl'] = "/projects/add";
 
 		$model = new ProjectModel();
-		$data['data'] = $model->findAll();	
-		$teamModel = new TeamModel();
-		$data['teamMembers'] = $teamModel->getManagers();	
+		$view = $this->request->getVar('view');
+
+		if($view == ''){
+			$view = 'Active';			
+		}
+
+		$data['data'] = $model->where('status', $view)->orderBy('start-date')->findAll();	
+		$data['view'] = $view;
 		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -42,9 +47,10 @@ class Projects extends BaseController
 			$data['formTitle'] = "Add Project";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			
 
-			$data['project'] = $model->where('project-id',$id)->first();			
+			$data['project'] = $model->where('project-id',$id)->first();		
+			$data['formTitle'] = $data['project']["name"];	
 		}
 
 

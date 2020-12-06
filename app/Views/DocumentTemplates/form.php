@@ -3,13 +3,17 @@
     color: #f8f9fa !important;
     background-color: #6c757d !important;
   }
+
+  .CodeMirror{
+    width: 100%;
+  }
 </style>
 <div class="">
   <div class="row justify-content-center">
-    <div class="col-12 col-md-9 mt-1 pt-3 pb-3 bg-white from-wrapper">
+    <div class="col-12 col-md-9 mt-3 pt-3 pb-3 ">
       <div class="container">
         
-        <div class="row">
+        <div class="row form-color p-3">
           <div class="col-12 col-sm-6">
             <h3><?= $formTitle ?></h3>
           </div>
@@ -37,7 +41,7 @@
             <?php endif; ?>
           </div>
 
-          <div class="card">
+          <div class="card form-color">
             <ul class="nav nav-tabs nav-justified mb-3" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active lead" id="header-tab" data-toggle="tab" href="#header" role="tab"
@@ -55,7 +59,7 @@
                   <div class="col-12 col-sm-5 ">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="name">Name</label>
-                      <input type="text" class="form-control" name="name" id="name"
+                      <input type="text" class="form-control" name="name" id="name" required
                         value="<?= isset($documentTemplate['name']) ? $documentTemplate['name'] : '' ?>">
                     </div>
                   </div>
@@ -81,11 +85,28 @@
 
                   
 
-                  <div class="col-12 col-sm-12">
+                  <div class="col-12 col-sm-8">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-line3">Title</label>
                       <input type="text" class="form-control" name="cp-line3" id="cp-line3"
                         value="<?= isset($template["cp-line3"]) ? $template["cp-line3"] : '' ?>">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-4">
+                    <div class="form-group">
+                      <label class="font-weight-bold text-muted" for="template-category">Category</label>
+                      <select class="form-control selectpicker" id="template-category"  name="template-category" >
+                        <option value="" disabled <?= isset($template["template-category"]) ? '' : 'selected' ?>>
+                          Select Category
+                        </option>
+                        <?php foreach ($templateCategory as $category): ?>
+                        <option
+                          <?= isset($template["template-category"]) ? (($template["template-category"] == $category["value"]) ? 'selected': '') : '' ?>
+                          value="<?=  $category["value"] ?>"><?=  $category["value"] ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    
                     </div>
                   </div>
                   
@@ -134,7 +155,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label class="font-weight-bold text-muted" for="cp-change-history">Change History</label>
-                      <textarea data-adaptheight class="form-control" name="cp-change-history"
+                      <textarea class="form-control" name="cp-change-history"
                         id="cp-change-history"><?= isset($template["cp-change-history"]) ? $template["cp-change-history"] : '' ?></textarea>
                     </div>
                   </div>
@@ -151,7 +172,7 @@
                     </button>
                   </div>
                   <div class="col col-lg-2">
-                    <a onclick="addSection()" title="Add Section" class="btn btn-success float-right">
+                    <a onclick="addSection('NEW')" title="Add Section" class="btn btn-success float-right">
                       <i class="fa fa-plus text-light"></i>
                     </a>
                   </div>
@@ -178,9 +199,9 @@ var sectionCount = 0;
 var sectionID = 0;
 var tablesLayout;
 var existingTypes;
-var sectionStructure = {id:"", title: '', type: '', content: '', tableName:'', headerColumns:'', contentColumns:''};
 var templateId = "";
 var templateType = "";
+var sections;
 class Section {
   constructor(){
     this.id = "";
@@ -202,22 +223,24 @@ $(document).ready(function(){
     templateId = "<?= $documentTemplate['id'] ?>";
     templateType = "<?= $documentTemplate['type'] ?>";
     
-    
-    var sections = template.sections;
+    sections = template.sections;
     
     for(var i=0 ; i<sections.length; i++){
       var sectionTitle = sections[i].title;
       var sectionType = sections[i].type;
+      var sectionContent = sections[i].content;
       var sectionTableName = sections[i].tableName;
       var sectionHeaderColumns = sections[i].headerColumns;
       var sectionContentColumns = sections[i].contentColumns;
       
 
-      addSection();
+      addSection("EXISTING");
 
       $(`#title_${sectionID}`).val(sectionTitle);
       $(`#type_${sectionID}`).val(sectionType);
-      
+      $(`#content_${sectionID}`).val(sectionContent);
+
+
       if(sectionType == "database"){
         toggleSectionType(`type_${sectionID}`);
         $(`#db_${sectionID}`).find("select.section_table").selectpicker('val', sectionTableName);
@@ -257,10 +280,23 @@ $(document).ready(function(){
   
 });
 
+$("#section-tab").click(function(){
+    if(sections != undefined){
+      setTimeout(function(){ 
+        for(var z =1; z<=sections.length; z++){
+          var contentName = 'content_'+z;
+          var $cm = $('textarea[name="'+contentName+'"]').nextAll('.CodeMirror')[0].CodeMirror;
+          $cm.refresh();
+        }
+      }, 500);
+    }
+  });
+
 function submitForm(){
   var name = $("#name").val().trim();
   var name_arr = name.toLowerCase().split(',');
   var type = "";
+  var templateCategory = $("#template-category").val();
 
   if(templateType == ""){
     if(name_arr.length){
@@ -285,6 +321,8 @@ function submitForm(){
   }else if(spaceCheck(name))
   {
    $('.alert-div').html(returnAlert('Name should not contain spaces.'));
+  }else if(templateCategory == null){
+    $('.alert-div').html(returnAlert('Please assign a "Category" to the template.'));
   }else{
     var cp_icon = "";
     var cp_line1 = $("#cp-line1").val();
@@ -304,7 +342,7 @@ function submitForm(){
     if(sectionArray.length){
       var sectionsJson = sectionArray;
       
-      var template_json_object = {"cp-icon":cp_icon, "cp-line1": cp_line1, "cp-line2": cp_line2, "cp-line3": cp_line3,
+      var template_json_object = {"cp-icon":cp_icon, "template-category": templateCategory, "cp-line1": cp_line1, "cp-line2": cp_line2, "cp-line3": cp_line3,
         "cp-line4": cp_line4, "cp-line5": cp_line5, "cp-approval-matrix": cp_approval_matrix, "cp-change-history": cp_change_history,
         "section-font": section_font, "section-font-size": section_font_size, "sections": sectionsJson };
       var mainJson = {};
@@ -354,38 +392,43 @@ function createSectionBody(){
                 <label class="col-xl-3 col-form-label font-weight-bold text-muted">Title</label>
                 <input type="text" id='title_${sectionID}' class="form-control  col-xl-9 section_input  ">
               </div>
-              <div class="form-row mt-3">
-                <label class="col-xl-3 col-form-label font-weight-bold text-muted">Type</label>
-                <select id='type_${sectionID}' onchange="toggleSectionType('type_${sectionID}')" class="form-control col-xl-9 section_type" name="type" id="type">
-                  <option value="text">Text</option>
-                  <option value="database">Database</option>
-                </select>
-              </div>
-              <div class="database_fields d-none" id='db_${sectionID}'>
+              <div class="text_fields">
                 <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Table Name</label>
-                  <select class="form-control col-xl-9 section_table selectpicker"  name="table_name" onchange="tableChange('db_${sectionID}', this)">
-                    ${tableOptions}
+                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Type</label>
+                  <select id='type_${sectionID}' onchange="toggleSectionType('type_${sectionID}')" class="form-control col-xl-9 section_type" name="type" id="type">
+                    <option value="text">Text</option>
+                    <option value="database">Database</option>
                   </select>
                 </div>
-                <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Text</label>
-                  <select class="form-control col-xl-9 section_column_text selectpicker" name="table_columns_text">
-                   
+
+                <div class="database_fields d-none" id='db_${sectionID}'>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Table Name</label>
+                    <select class="form-control col-xl-9 section_table selectpicker"  name="table_name" onchange="tableChange('db_${sectionID}', this)">
+                      ${tableOptions}
                     </select>
+                  </div>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Text</label>
+                    <select class="form-control col-xl-9 section_column_text selectpicker" name="table_columns_text"></select>
+                  </div>
+                  <div class="form-row mt-3">
+                    <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Value</label>
+                    <select class="form-control col-xl-9 section_column_value selectpicker" data-actions-box="true" multiple name="table_columns_value"></select>
+                  </div>
                 </div>
+
                 <div class="form-row mt-3">
-                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Columns Value</label>
-                  <select class="form-control col-xl-9 section_column_value selectpicker" data-actions-box="true" multiple name="table_columns_value">
-                   
-                    </select>
+                  <label class="col-xl-3 col-form-label font-weight-bold text-muted">Content</label>
+                  <textarea id='content_${sectionID}' name='content_${sectionID}' class="form-control section_content"></textarea>
                 </div>
               </div>
+             
             </div>`;
   return body;
 }
 
-function addSection(){
+function addSection(flag){
  
   var header = createSectionHeader();
   var body = createSectionBody();
@@ -400,6 +443,28 @@ function addSection(){
   $(".sections-container").append(card);
   $(".section_table").selectpicker();
   $("#totalSections").text(sectionCount.toString());
+  // var $cm = $('textarea[name="content_'+sectionID+'"]').nextAll('.CodeMirror')[0];
+  // if ($cm == undefined){
+    
+  // }
+  if(flag == "NEW"){
+    var simplemde = new SimpleMDE({
+            element: $(`#content_${sectionID}`)[0],
+            status: [{
+                     className: "characters",
+                     defaultValue: function(el) {
+                        el.innerHTML = "0";
+                     },
+                     onUpdate: function(el) {
+                        el.innerHTML = simplemde.value().length;
+                     }
+                  }],
+            showIcons: ["code", "table"],
+      });
+    
+  }
+
+    
 }
 
 function deleteSection(id){
@@ -468,6 +533,7 @@ function toggleSectionType(id){
 function getSectionsData(){
   var allTitles = $(".section_input");
   var allTypes = $(".section_type");
+  var allContents = $(".section_content");
   var tables = $("select.section_table");
   var columns_text = $("select.section_column_text");
   var columns_value = $("select.section_column_value");
@@ -478,6 +544,9 @@ function getSectionsData(){
     for(var i=0; i<allTitles.length; i++){
       var title = allTitles[i].value;
       var type = allTypes[i].value;
+      // var content = allContents[i].value;
+      var $codemirror = $(allContents[i]).nextAll('.CodeMirror')[0].CodeMirror;
+      var content = $codemirror.getValue();
       var parent = allTitles[i].parentElement.parentElement;
       $(parent.getElementsByClassName('alert')).remove();
       if(title == ""){
@@ -503,6 +572,7 @@ function getSectionsData(){
         section.id = "section"+(i+1);
         section.title =  title;
         section.type =  type;
+        section.content = content;
         section.tableName = table;
         section.headerColumns = column_text;
         section.contentColumns = column_value.join();
@@ -514,6 +584,8 @@ function getSectionsData(){
         section.id = "section"+(i+1);
         section.title =  title
         section.type =  type;
+        section.content = content;
+
         sectionArray.push(section);
       }
       
@@ -526,15 +598,6 @@ function getSectionsData(){
 
 function returnAlert(message){
   return '<div class="alert alert-danger" role="alert">'+message+'</div>';
-}
-
-function showPopUp(title, message){
-  bootbox.alert({
-        title: title, 
-        message: message,
-        centerVertical: true,
-        backdrop: true
-    });
 }
 
 function addTemplate (name, type, json) {

@@ -1,17 +1,25 @@
 <?php namespace App\Controllers;
 
 use App\Models\TestCasesModel;
+use App\Models\TraceabilityOptionsModel;
+
 class TestCases extends BaseController
 {
 	public function index()
     {
 		$data = [];
-		$data['pageTitle'] = 'Test Cases';
+		$data['pageTitle'] = 'Test';
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/test-cases/add";
+		$data['AddMoreBtn'] = true;
+		$data['AddMoreBtnText'] = "Sync";
 
-		// helper(['form']);
 		$model = new TestCasesModel();
+		
+		$status = $this->request->getVar('status');
+		if($status == 'sync'){
+			$this->syncTestCases();
+		}
 		$data['data'] = $model->orderBy('testcase', 'asc')->findAll();	
 		
 
@@ -30,6 +38,45 @@ class TestCases extends BaseController
 		return $id;
 	}
 
+	public function syncTestCases(){
+		$model = new TestCasesModel();
+
+		$testCases = $model->fetchTestLinkTestCases();
+
+		if( $testCases ){
+			$testCaseIdPrefix = $testCases->testCasePrefix; 
+			foreach( $testCases->testCasesList as $testCase ){
+				$description = "[$testCaseIdPrefix-$testCase->tc_external_id:$testCase->name] $testCase->summary";
+				$whereCondition =  " WHERE testcase = '" . addslashes($testCase->name) . "'";
+				$result = $model->getTestCaseRecord($whereCondition);
+				if ($result) {
+					// check whether the description is same or not, if not then update the description
+					if ( $description != $result[0]['description'] ) {
+						// update the test case description
+						$updateData = [
+							'id' => $result[0]['id'],
+							'description' => $description,
+							'update_date' => gmdate("Y-m-d H:i:s")
+						];
+						$model->save($updateData);
+					}
+				} else {
+					// insert a new record
+					$newData = [
+						'testcase' => $testCase->name,
+						'description' => $description,
+						'update_date' => gmdate("Y-m-d H:i:s"),
+					];
+					$model->save($newData);
+				}
+			}
+		} else {
+			error_log("[DocsGo][TestCases.syncTestCases][INFO] test cases list is empty.");
+			return;
+		}
+		
+	}
+	
 	public function add(){
 
 		$id = $this->returnParams();
@@ -37,26 +84,26 @@ class TestCases extends BaseController
 		helper(['form']);
 		$model = new TestCasesModel();
 		$data = [];
-		$data['pageTitle'] = 'Test Cases';
+		$data['pageTitle'] = 'Test';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/test-cases";
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Test Cases";
+			$data['formTitle'] = "Add Test";
 
 			$rules = [
-				'testcase' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]'
+				'testcase' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]'
 			];
 
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['formTitle'] = "Update Test";
 
 			$rules = [
-				'testcase' => 'required|min_length[3]|max_length[64]',
-				'description' => 'required|min_length[3]'
+				'testcase' => 'required|min_length[3]|max_length[100]',
+				'description' => 'required|min_length[3]|max_length[500]'
 			];	
 
 			$data['member'] = $model->where('id',$id)->first();		
@@ -100,9 +147,14 @@ class TestCases extends BaseController
 
 	public function delete(){
 		if (session()->get('is-admin')){
+			//Delete all options wrt of id and type
 			$id = $this->returnParams();
-			$model = new TestCasesModel();
-			$model->delete($id);
+			$model = new TraceabilityOptionsModel;
+			$check = array('requirement_id'=> $id, 'type'=> 'testcase');
+			$model->where($check)->delete();
+
+			$model1 = new TestCasesModel();
+			$model1->delete($id);
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}

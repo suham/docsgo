@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Models\DocumentTemplateModel;
+use App\Models\SettingsModel;
 
 class DocumentTemplate extends BaseController
 {
@@ -14,7 +15,7 @@ class DocumentTemplate extends BaseController
 		
 
 		$model = new DocumentTemplateModel();
-		$data['data'] = $model->findAll();	
+		$data['data'] = $model->orderBy('name')->findAll();	
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -73,6 +74,15 @@ class DocumentTemplate extends BaseController
 		$existingTypes = $model->getTypes();
 		$data['existingTypes'] = implode(",", array_keys($existingTypes));
 
+		$settingsModel = new SettingsModel();
+		 $templateCategory = $settingsModel->where("identifier","templateCategory")->first();
+		
+		 if($templateCategory["options"] != null){
+			$data["templateCategory"] = json_decode( $templateCategory["options"], true );
+		 }else{
+			$data["templateCategory"] = [];
+		 }
+		 
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Template";
@@ -82,6 +92,7 @@ class DocumentTemplate extends BaseController
 
 			$documentTemplate = $model->where('id',$id)->first();	
 			$data['documentTemplate'] = $documentTemplate;
+			$data['formTitle'] = "Update " . $documentTemplate['name'];
 			$template = json_decode($data['documentTemplate']["template-json-object"], true);		
 			$data['template'] = $template[$documentTemplate['type']];
 		}
@@ -96,16 +107,24 @@ class DocumentTemplate extends BaseController
 	private function returnTablesLayout(){
 		$tables = array();
 		// There should be no spaces between column value names
+		$tables['Acronyms']['name'] = "acronyms";
+		$tables['Acronyms']['columns'] = "acronym,description";
+		$tables['Documents']['name'] = "documents";
+		$tables['Documents']['columns'] = "file-name,author";
 		$tables['References']['name'] = "documentMaster";
-		$tables['References']['columns'] = "name,category,description,location,ref,status,version";
-		$tables['Teams']['name'] = "teams";
-		$tables['Teams']['columns'] = "name,email,responsibility,role";
-		$tables['Reviews']['name'] = "reviews";
-		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
+		$tables['References']['columns'] = "reference,name,category,description,location,status,version";
 		$tables['Requirements']['name'] = "requirements";
 		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
+		$tables['Reviews']['name'] = "reviews";
+		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
+		$tables['RiskAssessment']['name'] = "riskAssessment";
+		$tables['RiskAssessment']['columns'] = "risk_type,risk,description,component,hazard-analysis,assessment,baseScore_severity,status";
+		$tables['Teams']['name'] = "teams";
+		$tables['Teams']['columns'] = "name,email,responsibility,role";
 		$tables['TraceabilityMatrix']['name'] = "traceabilityMatrix";
-		$tables['TraceabilityMatrix']['columns'] = "code,design,cncr,sysreq,subsysreq,testcase";
+		$tables['TraceabilityMatrix']['columns'] = "cncr,system,subsysreq,design,code,testcase";
+		
+
 		return $tables;
 	}
 	

@@ -2,4 +2,8 @@
 *.json.env
 .env
 getAllCommits.js
+public/taskboard/
+public/diagrams/
+public/storage/repository/
+public/uploads/
 .gitignore

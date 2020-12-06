@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Models\DocumentsMasterModel;
+use App\Models\SettingsModel;
 
 class DocumentsMaster extends BaseController
 {
@@ -21,18 +22,8 @@ class DocumentsMaster extends BaseController
 		echo view('templates/footer');
 	}
 
-	private function returnParams(){
-		$uri = $this->request->uri;
-		$id = $uri->getSegment(3);
-		if($id != ""){
-			$id = intval($id);
-		}
-		return $id;
-	}
-	
 	public function add(){
-		$id = $this->returnParams();
-
+		$id = $this->request->getVar('id');
 		helper(['form']);
 		$model = new DocumentsMasterModel();
 		$data = [];
@@ -40,16 +31,24 @@ class DocumentsMaster extends BaseController
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/documents-master";
 		$data['statusList'] = ['Draft', 'Approved', 'Obsolete'];
-		$data['categoryList'] = ['Requirement', 'Design', 'Impact Analysis', 'Test', 'Standards', 'Other'];
+		
+		$settingsModel = new SettingsModel();
+		$referenceCategory = $settingsModel->where("identifier","referenceCategory")->first();
+		if($referenceCategory["options"] != null){
+			$data["referenceCategory"] = json_decode( $referenceCategory["options"], true );
+		}else{
+			$data["referenceCategory"] = [];
+		}
 
 		if($id == ""){
 			$data['action'] = "add";
 			$data['formTitle'] = "Add Reference";
 		}else{
-			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
-
+			$data['action'] = "add?id=".$id;
 			$data['document'] = $model->where('id',$id)->first();		
+			
+			$data['formTitle'] = $data['document']["name"];
+
 			
 		}
 
@@ -57,7 +56,7 @@ class DocumentsMaster extends BaseController
 		if ($this->request->getMethod() == 'post') {
 			
 			$rules = [
-				'name' => 'required|min_length[3]|max_length[50]',
+				'name' => 'required|min_length[3]|max_length[60]',
 				'category' => 'required',
 				'version' => 'required',
 				'description' => 'max_length[100]',
@@ -89,25 +88,27 @@ class DocumentsMaster extends BaseController
 				}
 				$model->save($newData);
 				$session = session();
-				$session->setFlashdata('success', 'Document successfully added.');
+				$session->setFlashdata('success',$message);
 				
 			}
 		}
 		
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
-		
-		
 		echo view('DocumentMaster/form', $data);
 		echo view('templates/footer');
 	}
 
 	
 	public function delete(){
-		$id = $this->returnParams();
-		$model = new DocumentsMasterModel();
-		$model->delete($id);
-		$response = array('success' => "True");
+		$id = $this->request->getVar('id');
+		if($id != ""){
+			$model = new DocumentsMasterModel();
+			$model->delete($id);
+			$response = array('success' => "True");
+		}else{
+			$response = array('success' => "False");
+		}
 		echo json_encode( $response );
 	}
 

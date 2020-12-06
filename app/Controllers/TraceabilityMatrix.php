@@ -3,6 +3,8 @@
 use App\Models\TraceabilityMatrixModel;
 use App\Models\RequirementsModel;
 use App\Models\TestCasesModel;
+use App\Models\SettingsModel;
+use App\Models\TraceabilityOptionsModel;
 
 class TraceabilityMatrix extends BaseController
 {
@@ -13,15 +15,39 @@ class TraceabilityMatrix extends BaseController
 		$data['addBtn'] = True;
 		$data['addUrl'] = "/traceability-matrix/add";
 
-		$data1 = [];
-		$model = new RequirementsModel();
-		$data1 = $model->orderBy('type', 'asc')->findAll();	
-		$data['CNCRList'] = $this->requirementsTypeData($data1,'CNCR', 0);
-		$data['systemList'] = $this->requirementsTypeData($data1,'System', 0);
-		$data['subSystemList'] = $this->requirementsTypeData($data1,'Subsystem', 0);
-		$data['testCases'] = $this->getTestCases(0);
 		$model = new TraceabilityMatrixModel();
-		$data['data'] = $model->orderBy('id', 'asc')->findAll();	
+		//status->[List/GAP] type->[User Needs/Standards/Guidance]
+		$status = $this->request->getVar('status');
+		$type = $this->request->getVar('type');
+		if($type == '')
+			$data['selectedCategory'] = "User Needs";
+		else
+			$data['selectedCategory'] = $type;
+
+		if($status == 'Gap'){
+			$data['data'] = $model->getunmapedList();
+			$data['listViewDisplay'] = false;
+		}else{
+			$data['listViewDisplay'] = true;
+			$data['data'] = $model->getTraceabilityDataList($data['selectedCategory']);
+		}
+		//Display selected category as root-traceability, show/hide the columns [User Needs/Standards/Guidance]
+		$rootTraceabilityColumn = 1;
+		switch($data['selectedCategory']){
+			case 'User Needs':
+				$rootTraceabilityColumn = 1;
+			break;
+			case 'Standards':
+				$rootTraceabilityColumn = 2;
+			break;
+			case 'Guidance':
+				$rootTraceabilityColumn = 3;
+			break;
+		}
+		$data['rootTraceabilityColumn'] = $rootTraceabilityColumn;
+		$data['isEditForm'] = false;
+		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
+		session()->set('prevUrl', '');
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
@@ -29,6 +55,23 @@ class TraceabilityMatrix extends BaseController
 		echo view('templates/footer');
 	}
 
+	private function getRequirementCategoryEnums() {
+		$settingsModel = new SettingsModel;
+		$requirementCategory = $settingsModel->where("identifier","requirementsCategory")->first();
+		if($requirementCategory["options"] != null){
+			$dataList = json_decode( $requirementCategory["options"], true );
+			$requirementCategory = [];
+			foreach($dataList as $key=>$list){
+				if($list['isRoot']){
+					$requirementCategory[] = $dataList[$key];
+				}
+			}
+		}else{
+			$requirementCategory = [];
+		}
+		return $requirementCategory;
+	}
+	
 	private function returnParams(){
 		$uri = $this->request->uri;
 		$id = $uri->getSegment(3);
@@ -37,7 +80,6 @@ class TraceabilityMatrix extends BaseController
 		}
 		return $id;
 	}
-
 
 	public function add(){
 
@@ -48,67 +90,115 @@ class TraceabilityMatrix extends BaseController
 		$data = [];
 		$data['pageTitle'] = 'Traceability Matrix';
 		$data['addBtn'] = False;
-		$data['backUrl'] = "/traceability-matrix";
-
+		$data['requirementCategory'] = $this->getRequirementCategoryEnums();
+		//Handling the back page navigation url
+		if(isset($_SERVER['HTTP_REFERER'])){
+			$urlStr = $_SERVER['HTTP_REFERER'];
+			if (strpos($urlStr, 'status')) {
+				$urlAr = explode("status", $urlStr);
+				$backUrl = '/traceability-matrix?status'.$urlAr[count($urlAr)-1];
+				session()->set('prevUrl', $backUrl);
+			}else{
+				if(session()->get('prevUrl') == ''){
+					session()->set('prevUrl', '/traceability-matrix');
+				}
+			}
+		}else{
+			session()->set('prevUrl', '/traceability-matrix');
+		}
+		$data['backUrl'] =  session()->get('prevUrl');
+		
 		$rules = [
-			'cncr' => 'required',
-			'sysreq' => 'required',
-			'subsysreq' => 'required',
-			'design' => 'required|min_length[3]|max_length[64]',
-			'code' => 'required|min_length[3]|max_length[64]',
-			'testcase' => 'required'
+			'Traceability-to' => 'required'
 		];
 
 		if($id == ""){
 			$data['action'] = "add";
-			$data['formTitle'] = "Add Traceability Matrix";
+			$data['formTitle'] = "Add Traceability";
+			$data['isEditForm'] = false;
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update";
+			$data['isEditForm'] = true;
+			$data['formTitle'] = "Update Traceability";
 			$data['member'] = $model->where('id',$id)->first();	
 			
-			// if($data['member']['cncr']) {
-			// 	$model = new RequirementsModel();
-			// 	$data1 = $model->where('id', $data['member']['cncr'])->where('type', 'CNCR')->first();
-			// 	// print_r ($data1);
-			// 	if($data1 && count($data1) >= 0){
-			// 	} else {
-			// 		// print_r ("eleleleelle");
-			// 		$data['member']['cncr'] = '';
-			// 	}
-			// }	
-			// $data['member']['cncr'] = $model->where('id',$id)->first();	
-			// $data['member']['sysreq'] = $model->where('id',$id)->first();	
-			// $data['member']['subsysreq'] = $model->where('id',$id)->first();		
 		}
 		
 		if ($this->request->getMethod() == 'post') {
 			$currentTime = gmdate("Y-m-d H:i:s");
 			$newData = [
-				'cncr' => $this->request->getVar('cncr'),
-				'sysreq' => $this->request->getVar('sysreq'),
-				'subsysreq' => $this->request->getVar('subsysreq'),
 				'design' => $this->request->getVar('design'),
 				'code' => $this->request->getVar('code'),
-				'testcase' => $this->request->getVar('testcase'),
+				'description' => $this->request->getVar('description'),
+				'root_requirement' => $this->request->getVar('Traceability-to'),
 				'update_date' => $currentTime,
 			];
+			//Get all selected User Needs/System/Subsystem value's ids
+			$userNeedsList = []; $sysreqList = [];  $subsysreqList = []; $testcaseList = []; $standardsList = []; $guidanceList = [];
 
+			$rootRequirement = $this->request->getVar('Traceability-to');
+			switch($rootRequirement) {
+				case 'User Needs':
+					$userNeedsList = $this->request->getVar('userNeeds');
+					$rules = [
+						'Traceability-to' => 'required',
+						'userNeeds' => 'required',
+					];
+					break;
+				case 'Standards':
+					$standardsList = $this->request->getVar('standards');
+					$rules = [
+						'Traceability-to' => 'required',
+						'standards' => 'required',
+					];
+				break;
+				case 'Guidance':
+					$guidanceList = $this->request->getVar('guidance');
+					$rules = [
+						'Traceability-to' => 'required',
+						'guidance' => 'required',
+					];
+				break;
+			}
+			$sysreqList = $this->request->getVar('sysreq');
+			$subsysreqList = $this->request->getVar('subsysreq');
+			$testcaseList = $this->request->getVar('testcase');
+			
 			$data['member'] = $newData;
 			if (! $this->validate($rules)) {
 				$data['validation'] = $this->validator;
+				$session = session();
+				$session->setFlashdata('success'. '');
 			}else{
 				if($id > 0){
 					$newData['id'] = $id;
-					// date_default_timezone_set('Asia/Kolkata');
-					// $timestamp = date("Y-m-d H:i:s");
-					// $newData['update_date'] = $timestamp;
 					$message = 'Traceability Matrix successfully updated.';
 				}else{
 					$message = 'Traceability Matrix successfully added.';
 				}
-
 				$model->save($newData);
+
+				if($id > 0){
+					$lastid = $id;
+				} else {
+					$lastid = $model->insertID();
+				}
+
+				//After saving/updating the traceability matrix, we need to store/update the selected all requirements(User Needs/System/Subsystem)				
+				$model = new TraceabilityOptionsModel();
+				if(($userNeedsList)){
+					$model->where('traceability_id', $lastid)->where('type', 'User Needs')->delete();
+					$newData1 = [
+						'traceability_id' => $lastid,
+						'type' => 'User Needs',
+						'requirement_id' => $this->request->getVar('userNeeds')
+					];	
+					$model->save($newData1);
+				}
+				$optionsList = array('System'=>$sysreqList, 'Subsystem'=>$subsysreqList, 'Standards'=>$standardsList, 'Guidance'=>$guidanceList,'testcase'=>$testcaseList);
+				foreach($optionsList as $key=>$val){
+					$this->handleNewExistingOptions($val, $lastid, $key);
+				}
 				$session = session();
 				$session->setFlashdata('success', $message);
 			}
@@ -117,15 +207,49 @@ class TraceabilityMatrix extends BaseController
 		$data1 = [];
 		$model = new RequirementsModel();
 		$data1 = $model->orderBy('type', 'asc')->findAll();	
-		$data['CNCRList'] = $this->requirementsTypeData($data1,'CNCR', 0);
+		$data['userNeedsList'] = $this->requirementsTypeData($data1,'User Needs', 0);
 		$data['systemList'] = $this->requirementsTypeData($data1,'System', 0);
 		$data['subSystemList'] = $this->requirementsTypeData($data1,'Subsystem', 0);
+		$data['standardsList'] = $this->requirementsTypeData($data1,'Standards', 0);
+		$data['guidanceList'] = $this->requirementsTypeData($data1,'Guidance', 0);
 		$data['testCases'] = $this->getTestCases(0);
+
+		$data['userNeedsListKeys'] = $this->extraceOptionListKeys($id, 'User Needs');
+		$data['systemKeys'] = $this->extraceOptionListKeys($id, 'System');
+		$data['subsystemKeys'] = $this->extraceOptionListKeys($id, 'Subsystem');
+		$data['standardsKeys'] = $this->extraceOptionListKeys($id, 'Standards');
+		$data['guidanceKeys'] = $this->extraceOptionListKeys($id, 'Guidance');
+		$data['testcaseKeys'] = $this->extraceOptionListKeys($id, 'testcase');
 
 		echo view('templates/header');
 		echo view('templates/pageTitle', $data);
 		echo view('TraceabilityMatrix/form', $data);
 		echo view('templates/footer');
+	}
+
+	function extraceOptionListKeys($id, $type) {
+		$dt=[]; $check = array('traceability_id' => $id, 'type' => $type);
+		$model = new TraceabilityOptionsModel();
+		$keyData = $model->select('requirement_id')->where($check)->findAll();
+		foreach($keyData as $key=>$list){
+			array_push($dt,$list['requirement_id']);
+		}
+		return $dt;
+	}
+
+	function handleNewExistingOptions($dataList, $lastid, $type){
+		$model = new TraceabilityOptionsModel();
+		$model->where('traceability_id', $lastid)->where('type', $type)->delete();
+		if(!empty($dataList) && count($dataList) > 0){
+			foreach($dataList as $key=>$list){
+				$newData = [
+					'traceability_id' => $lastid,
+					'type' => $type,
+					'requirement_id' => $list
+				];	
+				$model->save($newData);
+			}
+		}
 	}
 
 	private function getTestCases($id){
@@ -165,11 +289,14 @@ class TraceabilityMatrix extends BaseController
 		}
 	}
 
+
 	public function delete(){
 		if (session()->get('is-admin')){
 			$id = $this->returnParams();
 			$model = new TraceabilityMatrixModel();
 			$model->delete($id);
+			$model = new TraceabilityOptionsModel();
+			$model->where('traceability_id', $id)->delete();
 			$response = array('success' => "True");
 			echo json_encode( $response );
 		}
@@ -188,46 +315,26 @@ class TraceabilityMatrix extends BaseController
 
 
 	public function getIDDescription(){
-		if (session()->get('is-admin')){	
 			$params = $this->returnParamsAjax();
 			$id = $params[0];
 			$typeNO = $params[1];
 			switch($typeNO) {
 				case 1 :
-					$type='CNCR';
+					$type='User Needs';
 					break;
 				case 2 :
-					$type='System';
+					$type='Standards';
 					break;
 				case 3 :
-					$type='Subsystem';
+					$type='Guidance';
 					break;
 			}
 			$data1 = [];
 			$model = new RequirementsModel();
-			$data1 = $model->orderBy('type', 'asc')->findAll();	
-			$dataDescription = $this->requirementsTypeData($data1, $type, $id);
-	
-			$response = array('success' => "True", 'description'=>$dataDescription);
+			$check = array('type' => $type, 'id' => $id);
+			$data = $model->select('description')->where($check)->findAll();
+			$response = array('success' => "True", 'description'=> $data);
 			echo json_encode( $response );
-		}
-		else{
-			$response = array('success' => "False");
-			echo json_encode( $response );
-		}
 	}
 	
-	public function getTestCaseDescription(){
-		if (session()->get('is-admin')){	
-			$id = $this->returnParams();
-			$dataDescription = $this->getTestCases($id);
-	
-			$response = array('success' => "True", 'description'=>$dataDescription);
-			echo json_encode( $response );
-		}
-		else{
-			$response = array('success' => "False");
-			echo json_encode( $response );
-		}
-	}
 }

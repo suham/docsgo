@@ -1,8 +1,22 @@
 body{
-  background-color: #e1e1e1;
+  background-color: #fff;
 }
-.form-wrapper{
-  border-radius: 7px;
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  width: #1e1e24;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+
+.form-color{
+  background-color:#e9ecef !important; 
+  border-radius: 7px !important;
 }
 .form-wrapper label{
   font-weight: bold;
@@ -34,6 +48,11 @@ table {
   border-collapse: separate;
   border-spacing: 0;
   min-width: 350px;
+}
+
+table tr th{
+  background-color: #545b62 !important;
+  color: whitesmoke;
 }
 table tr th,
 table tr td {
@@ -79,3 +98,126 @@ table tr:last-child td:last-child {
 }
 
 /* Table border styles end*/
+
+
+/* custom scroll styles */
+.scroll {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.scroll::-webkit-scrollbar-track {
+  width: #007bff;
+}
+
+.scroll-primary::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+
+.scroll-dark::-webkit-scrollbar-thumb {
+  background: #343a40;
+}
+
+.scroll-info::-webkit-scrollbar-thumb {
+  background: #17a2b8;
+}
+
+.scroll-warning::-webkit-scrollbar-thumb {
+  background: #ffc107;
+}
+
+.scroll-success::-webkit-scrollbar-thumb {
+  background: #28a745;
+}
+
+.scroll-orange::-webkit-scrollbar-thumb {
+  background: #fd7e14;
+}
+
+.scroll-purple::-webkit-scrollbar-thumb {
+  background: #6f42c1;
+}
+
+
+/* Shadow */
+
+.box-shadow-left{
+  box-shadow: -4px 4px 4px 0px rgba(0,0,0,0.32);
+}
+
+.box-shadow-right{
+  box-shadow: 4px 4px 4px 0px rgba(0,0,0,0.32);
+}
+
+/* Custom buttons */
+
+.bg-purple {
+  background-color: #6f42c1;
+  color: #fff;   
+}
+
+.btn-outline-purple {
+  color: #6f42c1;
+  background-color: transparent;
+  background-image: none;
+  border-color: #6f42c1;
+}
+.btn-outline-purple:hover {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.bg-orange {
+  background-color: #fd7e14;
+  color: #fff;   
+}
+
+.bg-teal{
+  background-color: #20c997;
+  color: #fff; 
+}
+
+.bg-pink{
+  background-color: #e83e8c;
+  color: #fff; 
+}
+
+.btn-orange {
+  background-color: #fd7e14;
+  color: #fff;
+}
+
+.btn-orange:hover {
+  background-color: #dee2e6;
+  color: #e8700c;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.btn-purple:hover {
+  background-color: #dee2e6;
+  color: #6f42c1;
+}
+
+.btn-sm-primary:hover {
+  background-color: #dee2e6;
+  color: #007bff;
+  border-color: #dee2e6;
+}
+
+/* Custom Alert */
+
+.success-alert{
+  position: fixed;
+  right: 10px;
+  bottom: 20%;
+  z-index: 10;
+  opacity: 0.75;
+}

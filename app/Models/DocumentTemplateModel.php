@@ -9,7 +9,7 @@ class DocumentTemplateModel extends Model{
     public function getTypes(){
         $db      = \Config\Database::connect();
         $builder = $db->table('docsgo-document-template');
-        $builder->select('name, type');
+        $builder->select('name, type')->orderBy('name');
         $query = $builder->get();
         $data = $query->getResult('array');
         $types = [];

@@ -1,74 +1,155 @@
+<?php
+  $uri = service('uri');
+?>
+  <div class="row p-0 p-md-4">
+    <div class="col-1">
+    <div class="btn-group btn-group-toggle" >
+        <div id="data-open-issue-soup-matrix">
+            <div  class="col-1">
+                <div class="form-group">
+                  <div class="btn-group btn-group-toggle btn-security-toggle" id="listblock" >
+                  <div class="btn <?= ( (!strpos($uri,'?') || (strpos($uri, 'status=List'))) ? "btn-primary" : "btn-secondary") ?>" id="1" onclick="getSelectedStatusData(1)">
+                        <input type="radio" name="status-type" value="All" id="status-type1" /> List
+                      </div>
+                      <div class="btn <?= (strpos($uri, 'status=Gap') ? "btn-primary" : "btn-secondary") ?>" id="2" onclick="getSelectedStatusData(2)">
+                        <input type="radio" name="status-type" value="Open"  id="status-type2"/> Gap
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
 
-<div class="container1">
-<?php if (count($data) == 0): ?>
-
-  <div class="alert alert-warning" role="alert">
-    No records found.
+    <div class="col-2">
+      <select class="form-control selectpicker" onchange="getSelectedStatusData(3)" data-live-search="true" data-size="8" name="requirementType" id="requirementType" data-style="btn-secondary">
+        <option value="" disabled  <?= (isset($selectedCategory) && ($selectedCategory != '')) ? '' : 'selected' ?>>
+            Select Type
+        </option>
+        <?php foreach ($requirementCategory as $reqCat): ?>
+            <option 
+              <?= isset($selectedCategory) ? (($selectedCategory == $reqCat["value"]) ? 'selected': '') : '' ?>
+              value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    
   </div>
 
-  <?php else: ?>
+  <div class="row p-0 p-md-4">
+    <?php if ((count($data) == 0) && ($listViewDisplay == true)): ?>
+      <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+          No records found.
+        </div>
+      </div>
+      <?php else: ?>
+        <?php if (($listViewDisplay == true)): ?>
+          <div class="col-12">
+          
+            <table class="table  table-hover" id="traceability-list" >
+              <thead >
+                <tr>
+                  <th scope="col">#</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
+                  <th scope="col">System</th>
+                  <th scope="col">Subsystem</th>
+                  <th scope="col">Test</th>
+                  <th scope="col" style="width:125px">Action</th>
+                </tr>
+              </thead>
+              <tbody  class="bg-white">
+                <?php $count=1; foreach ($data as $key=>$row): ?>
+                    <tr scope="row" id="<?php echo $row['id'];?>">
+                        <td><?php echo $count++; ?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>"><?php if(isset($row['cncr'])) { echo $row['cncr']; }?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>"><?php if(isset($row['standards'])) { echo $row['standards']; }?></td>
+                        <td class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>"><?php if(isset($row['guidance'])) { echo $row['guidance']; }?></td>
+                        <td><?php if(isset($row['system'])) { echo $row['system']; } ?></td>
+                        <td><?php if(isset($row['subsysreq'])) { echo $row['subsysreq']; }?></td>
+                        <td><?php if(isset($row['testcase'])) { echo $row['testcase']; }?></td>
+                      
+                        <td style="width:125px">
+                            <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <?php if (session()->get('is-admin')): ?>
+                            <a onclick="deleteTraceabilityMatrix(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                                <i class="fa fa-trash text-light"></i>
+                            </a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+        </div>
+        <?php endif; ?>  
+    <?php endif; ?>
 
-    <table class="table table-striped table-hover table-responsive" style="display: inline-table;">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">CNCR</th>
-          <th scope="col">System Req</th>
-          <th scope="col">Subsystem Req</th>
-          <th scope="col">Design</th>
-          <th scope="col">Code</th>
-          <th scope="col">Testcase</th>
-          <th scope="col" style="width:125px">Update Date</th>
-          <th scope="col" style="width:125px">Action</th>
-        </tr>
-      </thead>
-      <tbody  class="bg-white">
-        <?php foreach ($data as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td><?php echo $key+1; ?></td>
-                <?php if (isset($CNCRList[$row['cncr']])): ?>
-                  <td><?php echo $CNCRList[$row['cncr']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($systemList[$row['sysreq']])): ?>
-                <td><?php echo $systemList[$row['sysreq']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($subSystemList[$row['subsysreq']])): ?>
-                  <td><?php echo $subSystemList[$row['subsysreq']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['design']; ?></td>
-                <td><?php echo $row['code'];?></td>
-                <?php if (isset($testCases[$row['testcase']])): ?>
-                  <td><?php echo $testCases[$row['testcase']];?></td>
-                  <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
-                <td>
-                    <a href="/traceability-matrix/add/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                    <?php if (session()->get('is-admin')): ?>
-                    <a onclick="deleteTraceabilityMatrix(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                        <i class="fa fa-trash text-light"></i>
-                    </a>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+    <?php if ($listViewDisplay == false): ?>
+      <?php if (!count($data)): ?>
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            No records found.
+          </div>
+        </div>
+      <?php else: ?>  
+        <div class="col-12">
+            <table class="table  table-hover" id="traceability-gaps" >
+              <thead >
+                <tr>
+                <th class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>" scope="col" id="headerLabel1">User Needs</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>" scope="col" id="headerLabel2">Standards</th>
+                  <th class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>" scope="col" id="headerLabel3">Guidance</th>
 
-<?php endif; ?>
-  
-</div>
+                  <th scope="col">System</th>
+                  <th scope="col">Subsystem</th>
+                  <th scope="col">Test</th>
+                </tr>
+              </thead>
+              <tbody  class="bg-white">
+                    <tr scope="row">
+                    <td class="<?php echo (($rootTraceabilityColumn == 1) ? '': 'd-none') ;?>"><?php if(isset($data['User Needs'])) { echo $data['User Needs']; }?></td>
+                    <td class="<?php echo (($rootTraceabilityColumn == 2) ? '': 'd-none') ;?>"><?php if(isset($data['Standards'])) { echo $data['Standards']; }?></td>
+                    <td class="<?php echo (($rootTraceabilityColumn == 3) ? '': 'd-none') ;?>"><?php if(isset($data['Guidance'])) { echo $data['Guidance']; }?></td>
+                    
+                    <td><?php if(isset($data['System'])) { echo $data['System']; }?></td>
+                    <td><?php if(isset($data['Subsystem'])) { echo $data['Subsystem']; }?></td>
+                    <td><?php if(isset($data['testcase'])) { echo $data['testcase']; }?></td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>
+      <?php endif; ?>
+      <?php endif; ?>
+
+  </div>
 
 <script>
+
+$(document).ready( function () {
+    var table1 = $('#traceability-list').DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      "stateSave": true,
+      "fixedHeader": true,
+    });
+    var table2 = $('#traceability-gaps').DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      "stateSave": true,
+      "fixedHeader": true,
+    });
+    $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table1.state.clear();
+      table2.state.clear();
+    });
+
+});
+
  function deleteTraceabilityMatrix(id){
 
     bootbox.confirm("Do you really want to delete record?", function(result) {
@@ -77,8 +158,6 @@
            url: '/traceability-matrix/delete/'+id,
            type: 'GET',
            success: function(response){
-              console.log(response);
-              console.log('/traceability-matrix/delete/'+id);
               response = JSON.parse(response);
               if(response.success == "True"){
                   $("#"+id).fadeOut(800)
@@ -95,5 +174,24 @@
 
  }
 
-</script>
+function getSelectedStatusData(id) {
+  var idVal,obj,status,riskType,url;
+  categoryType = $("#requirementType").val();
+  if(id == 3){
+    id = $('#listblock .btn-primary').attr('id');
+  }
+  if(id != '' && categoryType != ''){
+    $('#listblock  div').removeClass('btn-primary').addClass('btn-secondary');
+    idVal = "#status-type"+id;
+    $(idVal).parent().removeClass("btn-secondary").addClass('btn-primary');
+    obj = {1:"List", 2:"Gap"};
+    status = obj[id];
+    url = `traceability-matrix?status=${status}&type=${categoryType}`;
+  }else{
+    url = `traceability-matrix?status=List&type=User Needs`;
+  }
+  window.location = url;
+}
 
+
+</script>

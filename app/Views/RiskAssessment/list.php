@@ -1,136 +1,178 @@
+<?php
+  $uri = service('uri');
+  ?>
 
-<div class="container-old">
-<div class="row">
-      <div class="col-12">
-          <div class="form-group" readonly="readonly">
-
-              <!-- <input type="radio" name="issues-status-type" id="RDanchor1" onclick="javascript:window.location.href='/risk-assessment/view/1/1';" checked="<?php //echo $checkedVals['RDanchor1']; ?>"/> All 
-              <input type="radio" name="issues-status-type" id="RDanchor2" onclick="javascript:window.location.href='/risk-assessment/view/1/2';" checked="<?php //echo $checkedVals['RDanchor2']; ?>"/> Open
-              <input type="radio" name="issues-status-type" id="RDanchor3" onclick="javascript:window.location.href='/risk-assessment/view/1/3';" checked="<?php //echo $checkedVals['RDanchor3']; ?>"/> Close -->
-
-              <input type="radio" name="issues-status-type" id="RDanchor1" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/1';" <?php echo ($checkedVals['RDanchor1']) == 1 ? "checked" : ""; ?> /> All 
-              <input type="radio" name="issues-status-type" id="RDanchor2" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/2';"  <?php echo ($checkedVals['RDanchor2']) == 1 ? "checked" : ""; ?> /> Open
-              <input type="radio" name="issues-status-type" id="RDanchor3" 
-              onclick="javascript:window.location.href='/risk-assessment/view/1/3';" <?php echo ($checkedVals['RDanchor3']) == 1 ? "checked" : ""; ?> /> Close
-
-          </div>
+  <div class="row p-2 p-md-4 mb-3">
+      <div class="col-3">
+        <div class="form-group mb-0">
+          <select class="form-control selectpicker" id="projects" name="projects" data-style="btn-secondary" data-live-search="true" data-size="8" >
+            <option value="" disabled >
+              Select Project
+            </option>
+            <?php foreach ($projects as $key=>$value): ?>
+              <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
       </div>
-    </div>
-<?php if (count($issues) == 0 && count($soup) == 0 && count($cybersecurity) == 0): ?>
 
-  <div class="alert alert-warning" role="alert">
-    No records found.
+      <div class="col-3">
+        <div class="form-group mb-0">
+        <select class="form-control selectpicker" onchange="getSelectedStatusData(0)" data-live-search="true" data-size="8" name="riskTypes" id="riskTypes" data-style="btn-secondary" data-live-search="true" data-size="8" >
+              <option value="" disabled <?= isset($riskCategorySelected) ? '' : 'selected' ?>>
+                      Select Risk
+                  </option>
+                  <?php foreach ($riskCategory as $list): ?>
+                    <option 
+                      <?= isset($riskCategorySelected) ? (($riskCategorySelected == $list["value"]) ? 'selected': '') : '' ?>
+                      value="<?=  $list["value"] ?>" ><?=  $list["value"] ?></option>
+                  <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+
+   
+      
+        <div class="col-4">
+          <div class="btn-group btn-group-toggle" >
+          <div id="data-open-issue-soup-matrix">
+                <div  class="col-12">
+                    <div class="form-group">
+                      <div class="btn-group btn-group-toggle btn-security-toggle" id="listblock" >
+                      <div class="btn <?= ( (!strpos($uri,'?') || (strpos($uri, 'status=All')) || (strpos($uri, 'status=sync'))) ? "btn-primary" : "btn-secondary") ?> id="RDanchor" title="" onclick="getSelectedStatusData(1)">
+                            <input type="radio" name="status-type" value="All" id="status-type1" /> All
+                          </div>
+                          <div class="btn <?= (strpos($uri, 'status=Open') ? "btn-primary" : "btn-secondary") ?>" id="RDanchor" title="" onclick="getSelectedStatusData(2)">
+                            <input type="radio" name="status-type" value="Open"  id="status-type2"/> Open
+                          </div>
+                          <div class="btn <?= (strpos($uri, 'status=Close') ? "btn-primary" : "btn-secondary") ?>" id="RDanchor" title="" onclick="getSelectedStatusData(3)">
+                            <input type="radio" name="status-type" value="Close"  id="status-type3"/> Close
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
   </div>
 
-  <?php else: ?>
+  <div class="row p-0 p-md-4">
+    <?php if (count($data) == 0): ?>
+      <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+          No records found.
+        </div>
+      </div>
 
-    <table class="table table-striped table-hover risk-assessment">
-      <thead class="thead-dark" >
-        <tr>
-          <th scope="col">Category</th>
-          <th scope="col">Risk</th>
-          <th scope="col">Description</th>
-          <th scope="col">Severity</th>
-          <th scope="col">Occurrence</th>
-          <th scope="col">Detectability</th>
-          <th scope="col">RPN</th>
-          <th scope="col" style="width:125px">Update Date</th>
-          <th scope="col" style="width:125px">Action</th>
-        </tr>
-      </thead>
-      <tbody  class="bg-white">
-        <?php foreach ($issues as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> open-issue</td>
-                <td><?php echo $row['issue'];?></td>
-                <td><?php echo $row['issue_description'];?></td>
-                <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['rpn'];?></td>
-                <td><?php $timestamp = strtotime($row['update_date']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
-                <td>
-                    <a href="/risk-assessment/add/1/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <?php foreach ($cybersecurity as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> Cybersecurity</td>
-                <td><?php echo $row['reference']; ?></td>
-                <td><?php echo $row['description'];?></td>
-                <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['rpn'];?></td>
-                <td><?php echo $row['update_date'];?></td>
-                <td>
-                    <a href="/risk-assessment/add/2/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <?php foreach ($soup as $key=>$row): ?>
-            <tr scope="row" id="<?php echo $row['id'];?>">
-                <td> Soup</td>
-                <td><?php echo $row['soup'];?></td>
-                <td><?php echo $row['purpose'];?></td>
-                <?php if (isset($row['severity'])): ?>
-                  <td><?php echo $statusOptions[$row['severity']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['occurrence'])): ?>
-                  <td><?php echo $statusOptions[$row['occurrence']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <?php if (isset($row['detectability'])): ?>
-                  <td><?php echo $statusOptions[$row['detectability']];?></td>
-                <?php else: ?>
-                  <td></td>
-                <?php endif; ?>
-                <td><?php echo $row['rpn'];?></td>
-                <td><?php echo $row['update_date'];?></td>
-                <td>
-                    <a href="/risk-assessment/add/3/<?php echo $row['id'];?>" class="btn btn-warning">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+      <?php else: ?>
+        <div class="col-12">
+          <table class="table table-hover risk-assessment" id="risk-assessment-list">
+            <thead >
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Risk</th>
+                <th scope="col" style="width:45%">Hazard Analysis</th>
+                <th scope="col"> <?= (($riskCategorySelected == 'Vulnerability') ? "CVSS 3.1 Base Score" : "RPN") ?> </th>
+                <th scope="col">Status</th>
+                <th scope="col" style="width:125px">Action</th>
+              </tr>
+            </thead>
+            <tbody  class="bg-white">
+              <?php foreach ($data as $key=>$row): ?>
+                  <tr scope="row" id="<?php echo $row['id'];?>">
+                      <td><?php echo $key+1; ?></td>
+                      <td><?php echo $row['risk'];?></td>
+                      <td><?php echo $row['hazard-analysis'];?></td>
+                      <?php if (isset($row['baseScore_severity']) && $row['baseScore_severity'] !=0): ?>
+                  <td><?php echo $row['baseScore_severity'];?></td>
+                <?php else: ?><td> -- </td><?php endif; ?>
+                      <td><?php echo $row['status'];?></td>
+                      <td>
+                          <a href="/risk-assessment/add?id=<?php echo $row['id'];?>" class="btn btn-warning">
+                              <i class="fa fa-edit"></i>
+                          </a>
+                          <?php if (session()->get('is-admin')): ?>
+                          <a onclick="deleteItem(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
+                              <i class="fa fa-trash text-light"></i>
+                          </a>
+                          <?php endif; ?>
+                      </td>
+                  </tr>
+              <?php endforeach; ?>
 
-<?php endif; ?>
-</div>
+            </tbody>
+          </table>
+        </div>
+
+    <?php endif; ?>
+  </div>
+
+
+<script>
+$(document).ready(function(){
+  var table = $('#risk-assessment-list').DataTable({
+      "responsive": true,
+      "stateSave": true,
+      "autoWidth": false,
+  });
+  $('.l-navbar .nav__link, #footer-icons').on('click', function () {
+      table.state.clear();
+  });
+
+  $('.get-risks-sync').click(function(){
+    var selectedProjectId = $("#projects").val();
+    var url = `risk-assessment?status=sync&project_id=${selectedProjectId}`
+    console.log("url:", url);
+    window.location = url;
+  });
+
+});
+
+
+function getSelectedRiskTypeData() {
+  var selectedRisk = $("#riskTypes").val();
+  var url = `risk-assessment?type=${selectedRisk}`
+  console.log("url:", url);
+  window.location = url;
+}
+
+function getSelectedStatusData(id) {
+  var idVal,obj,status,riskType,url;
+  riskType = $("#riskTypes").val();
+  if(id != 0){
+    $('#listblock  div').removeClass('btn-primary').addClass('btn-secondary');
+    idVal = "#status-type"+id;
+    $(idVal).parent().removeClass("btn-secondary").addClass('btn-primary');
+    obj = {1:"All", 2:"Open", 3:"Close"};
+    status = obj[id];
+    url = `risk-assessment?status=${status}&type=${riskType}`
+  }else{
+    url = `risk-assessment?status=All&type=${riskType}`
+  }
+  console.log("url:", url);
+  window.location = url;
+}
+
+ function deleteItem(id){
+    bootbox.confirm("Do you really want to delete record?", function(result) {
+      if(result){
+        $.ajax({
+           url: '/risk-assessment/delete?id='+id,
+           type: 'GET',
+           success: function(response){
+              response = JSON.parse(response);
+              if(response.success == "True"){
+                  $("#"+id).fadeOut(800)
+              }else{
+                 bootbox.alert('Record not deleted.');
+              }
+            }
+         });
+      }else{
+        console.log('Delete Cancelled');
+      }
+    });
+ }
+
+</script>
 

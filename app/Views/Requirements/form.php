@@ -1,6 +1,6 @@
 
-  <div class="row">
-    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-1 pt-3 pb-3 bg-white from-wrapper">
+  <div class="row p-0 p-md-4">
+    <div class="col-12 col-sm8- offset-sm-2 col-md-6 offset-md-3 mt-1 pt-3 pb-3 form-color">
 
       <div class="container">
         <h3><?= $formTitle ?></h3>
@@ -23,14 +23,14 @@
             <div class="col-12">
               <div class="form-group">
               <label class = "font-weight-bold text-muted" for="type">Type</label>
-               <select class="form-control fstdropdown-select" name="type" id="type">
+               <select class="form-control  selectpicker" data-live-search="true" data-size="8" name="type" id="type">
                 <option value="" disabled <?= isset($member['type']) ? '' : 'selected' ?>>
-                    Select
+                    Select Type
                 </option>
-                <?php foreach ($requirementStatus as $key=>$value): ?>
+                <?php foreach ($requirementCategory as $reqCat): ?>
                   <option 
-                    <?= isset($member['type']) ? (($member['type'] == $key) ? 'selected': '') : '' ?>
-                    value="<?=  $key ?>" ><?=  $value ?></option>
+                  <?= isset($member['type']) ? (($member['type'] == $reqCat["value"]) ? 'selected': '') : '' ?>
+                      value="<?=  $reqCat["value"] ?>" ><?=  $reqCat["value"] ?></option>
                 <?php endforeach; ?>
               </select>
               </div>
@@ -47,7 +47,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class = "font-weight-bold text-muted" for="description">Description</label>
-                <textarea class="form-control" name="description" id="description" maxlength=500><?=
+                <textarea class="form-control" name="description" id="description" ><?=
                   isset($member['description']) ? trim($member['description']) : ''
                   ?></textarea>
               </div>

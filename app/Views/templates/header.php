@@ -3,27 +3,45 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/css/header.css">
-    <link href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/fstdropdown.css">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"></link>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <link rel="stylesheet" href="/assets/css/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="/assets/css/simplemde_v1.11.1.min.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-select_v1.13.14.min.css" />
+
+    <link rel="stylesheet" href="/assets/css/headerStyle.css">
+    
+    <!-- For Showing Code Diff  -->
+    <link rel="stylesheet" href="/assets/css/github_diff.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/diff2html.min.css" />
+
+    <!-- For Datatables -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/datatables.min.css"/>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
    
-    <script src="/assets/js/jquery-3.2.1.min.js"></script>
-    <script src="/assets/js/popper.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/bootbox.min.js"></script>
-    <script src="/assets/js/fstdropdown.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/utilites.js"></script>
+    <script type="text/javascript" src="/assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+ 
+    <script type="text/javascript" src="/assets/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap4-toggle.min.js"></script>
+    <script type="text/javascript" src="/assets/js/simplemde.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/assets/js/diff2html-ui.min.js"></script>
+    <script type="text/javascript" src="/assets/js/datatables.min.js"></script>
+    <!-- For drawing diagrams feature -->
+    <script src="/assets/js/mermaid.min.js"></script>
+    <!-- For taskboard drag and drop feature -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui_1.12.1.css">
+    <script src="/assets/js/jquery-ui.min_1.12.1.js"></script>
+
     <title>DocsGo</title>
     <link rel="icon" href="<?=base_url()?>/Docsgo-Logo.png" type="image/gif">
-    <!-- <link rel="icon" href="<?=base_url()?>/favicon.ico" type="image/gif"> -->
     <style>
       .CodeMirror, .CodeMirror-scroll {
           height: auto;
@@ -32,198 +50,224 @@
       body{
         font-family: "Open Sans";
       }
+
+
+      .page-content {
+        overflow-x: hidden;
+      }
+
+      .my_nav_link{
+        color:#12192C;
+      }
+
+      .my_nav_link:hover{
+        color:white;
+        text-decoration:none;
+      }
+
+      .sidebar-footer{
+        position: fixed;
+        bottom: 0px;
+        padding: 8px;
+        width: 210px;
+      }
+
+      .sidebar-footer a:hover{
+        color:black;
+      }
+
+      .collapse__menu li:hover a{
+        background-color: white;
+        color: black !important;
+        border-radius: 10px;
+        text-decoration:none;
+      }
+
+      .collapse:hover a{
+        color:white;
+      }
+
+      #loading-overlay {
+        position: fixed;
+        width: 100%;
+        height:100%;
+        left: 0;
+        top: 0;
+        display: none;
+        align-items: center;
+        background-color: #000;
+        z-index: 999;
+        opacity: 0.5;
+    }
+
+    .loading-icon{ 
+        position:absolute;
+        margin:0 auto;
+        position:absolute;
+        left:50%;
+        margin-left:-20px;
+        top:50%;
+        margin-top:-20px;
+        z-index:4;
+    }
+    
+    .carousel-control-prev-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23007bff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+    }
+
+    .carousel-control-next-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23007bff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+    }
+    
+    .carousel-indicators {
+      bottom: 30px;
+    }
+
+    .carousel-indicators li {
+        background-color: #91c6ff;
+    }
+
+    .carousel-indicators .active {
+        background-color: #007bff;
+    }
+
+    .carousel-control-next, .carousel-control-prev {
+      top: 50px;  
+      bottom: 76px;
+    }
+
     </style>
-  </head>
-  <body>
-    <?php
-      $uri = service('uri');
-     ?>
 
-    <div class="page-wrapper chiller-theme toggled">
-    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
-      <i class="fas fa-bars"></i>
-    </a>
-    <?php if (session()->get('isLoggedIn')): ?>
-    <nav id="sidebar" class="sidebar-wrapper">
-      <div class="sidebar-content">
-        <div class="sidebar-brand text-center  bg-white">
-          <a href="/projects" title="Project Data Reporting Tool" title="DocsGo">
-            <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
-          </a>
-          <div id="close-sidebar" class=" text-dark">
-            <i class="fas fa-times" ></i>
-          </div>
-        </div>
+    <script>
+      $(document).ready(function() {
+          $.getScript("/assets/js/header.js");
 
-        <div class="sidebar-header text-center">
-        <span class="user-name text-white">
-              <strong><?= session()->get('name') ?></strong>
-            </span>
-       </div>
-        
-        <div class="sidebar-menu">
-          <ul>
-            
-            <li>
-              <a href="/projects">
-                <i class="fa fa-briefcase" style = "<?= ($uri->getSegment(1) == 'projects'   ? 'color:#16c7ff;' : null) ?>"></i>
-                <span>Projects</span>
-              </a>
-            </li>
-
-            <li>
-              <a href="/team">
-                <i class="fa fa-users" style = "<?= ($uri->getSegment(1) == 'team'   ? 'color:#16c7ff;' : null) ?>"></i>
-                <span>Team</span>
-              </a>
-            </li>
-            
-            <li>
-              <a href="/reviews">
-                <i class="fa fa-list" style = "<?= ($uri->getSegment(1) == 'reviews'   ? 'color:#16c7ff;' : null) ?>"></i>
-                <span>Review Comments</span>
-              </a>
-            </li>
-
-            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'active' : null) ?>">
-              <a href="#">
-                <i class="fa fa-briefcase"></i>
-                <span>Documents</span>
-              </a>
-              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master') ? 'display:block;' : '') ?>">
-                <ul>
-                  <li>
-                    <a href="/documents">Documents</a>
-                  </li>        
-                  <li>
-                    <a href="/documents-templates">Templates</a>
-                  </li>  
-                  <li>
-                    <a href="/documents-master">References</a>
-                  </li>            
-                </ul>
-              </div>
-            </li>
-
+      });
      
+    </script>
+  </head>
+  <body id="body-pd">
+    <?php $uri = service('uri'); $currentUrl = $_SERVER['REQUEST_URI'];?>
+
+    <?php if (session()->get('isLoggedIn')): ?>
+      <body id="body-pd">
 
 
 
-            <li class="sidebar-dropdown <?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'active' : null) ?>">
-              <a href="#">
-                <i class="fa fa-lock"></i>
-                <span>Risk Assessment</span>
-              </a>
-              <div class="sidebar-submenu" style="<?= (($uri->getSegment(1) == 'risk-assessment' || $uri->getSegment(1) == 'issues' || $uri->getSegment(1) == 'cybersecurity' || $uri->getSegment(1) == 'soup') ? 'display:block;' : '') ?>">
-                <ul>
-                  <li>
-                    <a href="/risk-assessment">Risk Assessment</a>
-                  </li>   
-                  <li>
-                    <a href="/issues">Issues/Observations</a>
-                  </li>        
-                  <li>
-                    <a href="/cybersecurity">Cybersecurity</a>
-                  </li>  
-                  <li>
-                    <a href="/soup">SOUP</a>
-                  </li>            
-                </ul>
-              </div>
-            </li>
+      <div class="l-navbar" id="navbar">
+            <nav class="my_nav">
+                <div>
+                    <div class="nav__brand">
+                        <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                        <a href="/projects" class="nav__logo" title="Project Data Reporting Tool" title="DocsGo">
+                          <img src="/Docsgo-Logo.png" height="80px" alt="DocsGo">
+                        </a>
+                    </div>
+                    <div class="nav__list">
+                        <a href="/projects" title="Projects" class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'projects'  || $uri->getSegment(1) == 'taskboard'  ? 'active-nav-link' : '') ?>">
+                          <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                          <span class="nav__name">Projects</span>
+                        </a>
+                        <a href="/team" title="Team" class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'team'   ? 'active-nav-link' : '') ?>">
+                        <ion-icon  slot="icon-only" name="people-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Team</span>
+                    </a>
+                    <a href="/reviews" title="Review Register" class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'reviews'   ? 'active-nav-link' : '') ?>">
+                        <ion-icon name="eye-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Review Register</span>
+                    </a>
 
+                    <div class="nav__link collapse <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'active-nav-link' : '')  ?>">
+                        <a href="/documents" title="Documents" class="collapse__sublink my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">
+                          <ion-icon name="documents-outline" class="nav__icon"></ion-icon>
+                        </a>
+                        <a href="/documents" title="Documents"  class="my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">Documents</a>
 
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
-            <li class="sidebar-dropdown <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active' : null) ?>">
-              <a href="#">
-                <i class="fa fa-search "></i>
-                <span>Traceability</span>
-              </a>
-              <div class="sidebar-submenu" style="<?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'display:block;' : null) ?>">
-                <ul>
-                  <li>
-                    <a href="/traceability-matrix">Traceability Matrix</a>
-                  </li>
-                  <li>
-                    <a href="/requirements">Requirements</a>
-                  </li>
-                  <li>
-                    <a href="/test-cases">Test cases</a>
-                  </li>
-                  
-                </ul>
-              </div>
-            </li>
-            
-            <!--<li class="sidebar-dropdown">
-              <a href="#">
-                <i class="far fa-edit"></i>
-                <span>Update from Testlink</span>
+                        <ul class="collapse__menu">
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-templates" class="collapse__sublink ">Templates</a></li>
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-master" class="collapse__sublink ">References</a></li>
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-acronyms" class="collapse__sublink ">Acronyms</a></li>
+                        </ul>
+                    </div>
+
+                    <a href="/diagramsList" title="Draw Diagram" class="nav__link my_nav_link <?= (strpos($currentUrl , 'diagrams')   ? 'active-nav-link' : '') ?>">
+                        <ion-icon name="color-palette-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Draw Diagram</span>
+                    </a>
+
+                    <a href="/risk-assessment" title="Risk Assessment" 
+                      class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'risk-assessment'   ? 'active-nav-link' : '') ?>">
+                        <ion-icon name="shield-checkmark-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Risk Assessment</span>
+                    </a>
+                    <div class="nav__link collapse <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'active-nav-link' : '') ?>">
+                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">
+                          <ion-icon name="apps-outline" class="nav__icon"></ion-icon>
+                        </a>
+                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">Traceability</a>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <li style="padding:6px;"><a style="padding:6px" href="/requirements" class="collapse__sublink">Requirements</a></li>
+                            <li style="padding:6px;"><a style="padding:6px" href="/test-cases" class="collapse__sublink">Test</a></li>
+                        </ul>
+                    </div>
+                    <a href="/inventory-master" title="Assets"
+                      class="nav__link my_nav_link <?= ($uri->getSegment(1) == 'inventory-master'   ? 'active-nav-link' : '') ?>">
+                        <ion-icon name="cart-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Assets</span>
+                    </a>
+
+                    <a target="_blank" href="/storage/repo" title="Storage"
+                      class="nav__link my_nav_link">
+                        <ion-icon name="cloud-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Storage</span>
+                    </a>
+                </div>
+
                 
-              </a>
-              <div class="sidebar-submenu">
-                <ul>
-                  <li>
-                    <a href="#">Requirements</a>
-                  </li>
-                  <li>
-                    <a href="#">Test Cases</a>
-                  </li>
-                </ul>
+            </div>
+            <a href="/logout" class="nav__link" title="LogOut" id="only-logout">
+                    <ion-icon name="log-out-outline" class="nav__icon my_nav_link"></ion-icon>
+                    <span class="nav__name">Log Out</span>
+            </a>
+            <div class="sidebar-footer  d-none" id="footer-icons" >
+            <div class="row justify-content-center" >
+                  <?php $col="col-6"; if (session()->get('is-admin')): $col="col-4";?>
+                  <div class="<?= $col ?>">
+                    <a href="/admin/settings"  title="Settings"> 
+                      <ion-icon name="settings-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                      
+                    </a>
+                  </div>
+                  <?php endif; ?>
+                  <div class="<?= $col ?>">
+                    <a href="/profile"  title="My Profile">
+                      <ion-icon name="person-circle-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                    </a>
+                  </div>
+                  <div class="<?= $col ?>">
+                    <a href="/logout" title="Log Out">
+                      <ion-icon name="log-out-outline" style="font-size:1.65rem" class="nav__icon "></ion-icon>
+                    </a>
+                  </div>
+                </div>
               </div>
-            </li>
-            <li class="header-menu">
-              <span>Reports </span>
-              
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-book"></i>
-                <span>Traceability Matrix</span>
-                <span class="badge badge-pill badge-primary">Beta</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-list"></i>
-                <span>IEC 62304 Compliance</span>
-                
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fa fa-folder"></i>
-                <span>Cybersecurity Compliance</span>
-              </a>
-            </li>
-          </ul>
+               
+
+
+            </nav>
         </div>
-        <!-- sidebar-menu  -->
-      </div>
-      <!-- sidebar-content  -->
-      <div class="sidebar-footer">
-      <?php if (session()->get('is-admin')): ?>
-        <a href="/admin/users">
-          <i class="fa fa-users" style="font-size: 20px;" title="Registered Users"></i>
-          <span class="badge badge-pill badge-warning notification" style="font-size: 7px;">!</span>
-        </a>
-      <?php endif; ?>
-        <!-- 
-        <a href="#">
-          <i class="fa fa-envelope"></i>
-          <span class="badge badge-pill badge-success notification">7</span>
-        </a>
-         -->
-        <a href="/profile">
-          <i class="fa fa-id-badge" style="font-size: 20px;" title="My Profile"></i>
-          <span class="badge badge-pill  badge-success notification" style="font-size: 7px;">&nbsp;</span>
-        </a>
-        <a href="/logout" title="Log Out">
-          <i class="fa fa-power-off" style="font-size: 20px;"></i>
-        </a>
-      </div>
-    </nav>
-    <main class="page-content">
+
+      
+      <main class="page-content">
+        <div id="loading-overlay">
+          <div class="loading-icon"><i class="fa fa-spinner fa-spin fa-3x text-primary"></i></div>
+        </div>  
+        <div class="floating-alert alert text-light box-shadow-left success-alert" style="display: none;z-index:9999" role="alert"></div>
     <?php endif; ?>
     
       
