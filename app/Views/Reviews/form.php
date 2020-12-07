@@ -207,7 +207,7 @@ var review, initialCategory, initialName;
       const parentElement = element.parent().siblings("td"); 
       const diff = parentElement.find(".d2h-code-line-ctn"); 
       const codeLine = "`"+diff.text().trim()+"`";
-      const message = `**Line** ${element.text().trim()} ${filePath} ${codeLine}`;
+      const message = `**Line ${element.text().trim()}** ${filePath} ${codeLine}`;
 
 
       
