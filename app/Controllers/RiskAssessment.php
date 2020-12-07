@@ -5,6 +5,9 @@ use App\Models\TeamModel;
 use App\Models\RiskAssessmentModel;
 use App\Models\SettingsModel;
 use CodeIgniter\I18n\Time;
+use TP\Tools\Pandoc;
+use TP\Tools\PandocExtra;
+
 class RiskAssessment extends BaseController
 {
 	public function index()
@@ -37,6 +40,11 @@ class RiskAssessment extends BaseController
 				$data["data"] = $model->getRisks($status, $type);
 				$data['riskCategorySelected'] = $type;
 			}	
+		}
+		$pandoc = new Pandoc();
+		foreach($data['data'] as $key=>$item){
+			$convertData = $pandoc->convert($data['data'][$key]['hazard-analysis'], "gfm", "html5");
+			$data['data'][$key]['hazard-analysis'] = $convertData;
 		}
 		session()->set('prevUrl', '');
 		$data['projects'] = $this->getProjects();
