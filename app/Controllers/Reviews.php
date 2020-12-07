@@ -270,15 +270,14 @@ class Reviews extends BaseController
 				"review-name" =>'required|max_length[64]',
 				"assigned-to" => 'required',
 				"context" => 'required|max_length[60]',
-				"description" => 'required',
 				"review-by" =>'required',
 				"status" => 'required',
 				"category" => 'required',
 			];
 
 			$errors = [
-				'description' => [
-					'required' => 'Review Comment is required.',
+				'review-by' => [
+					'required' => 'Select a reviewer',
 				]
 			];
 

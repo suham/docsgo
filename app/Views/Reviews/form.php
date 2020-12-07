@@ -1,3 +1,12 @@
+<style>
+.d2h-wrapper {
+    overflow-y: scroll;
+    max-height: 80vh;
+}
+.d2h-code-linenumber {
+    position:relative;
+}
+</style>
 <div class="p-0 p-md-4">
   <div class="row justify-content-center">
     <div class="col-12 col-md-9 ml-0 pb-3 pt-3 form-color">
@@ -172,7 +181,7 @@
     </div>
   </div>
 </div>
-
+<a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top text-primary" role="button"><i class="fas fa-chevron-up"></i></a>
 <script>
 var review, initialCategory, initialName;
   $(document).ready(function () {
@@ -185,15 +194,28 @@ var review, initialCategory, initialName;
           
           evaluteDiff("code-diff", "show");
         },500);
-        // evaluteDiff("diffDiv", "show");
-        // const $codemirror = $('textarea[name="code-diff"]').nextAll('.CodeMirror')[0].CodeMirror;
-        // $codemirror.setValue(differential);
-        // $codemirror.refresh();
+        
       }
     <?php endif; ?>
     initialCategory = $('#category').val();
     initialName = $('#review-name').val();
   });
+
+  function addLineToComment(){
+      const element = $(this);
+      const parentElement = element.parent().siblings("td"); 
+      const diff = parentElement.find(".d2h-code-line-ctn"); 
+      const message = `Line ${element.text().trim()}  ${diff.text().trim()}`;
+      
+      const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;
+      const existingVal = $codemirror.getDoc().getValue();
+      $codemirror.getDoc().setValue(existingVal+ "\n"+ message +"\n");
+      var toElement = $("label:contains('Note')")[0];
+      $('html, body').animate({
+        scrollTop: $(toElement).offset().top
+      }, 1000);
+      
+  }
 
   function evaluteDiff(sectionId, visibility){
     
@@ -216,6 +238,10 @@ var review, initialCategory, initialName;
       var codeMirrorDiv = $("#"+sectionId).closest('div').find('.CodeMirror');
       $(toolbar).addClass('d-none');
       $(codeMirrorDiv).addClass('d-none');
+
+      $(".line-num1").click(addLineToComment);
+      $(".line-num2").click(addLineToComment);
+
     }else{
       
       $("#diffDiv").addClass('d-none');
@@ -227,6 +253,7 @@ var review, initialCategory, initialName;
       $(codeMirrorDiv).removeClass('d-none');
       const $codemirror = $('textarea[name="' + sectionId + '"]').nextAll('.CodeMirror')[0].CodeMirror;
       $codemirror.refresh();
+      
     }
    
   }

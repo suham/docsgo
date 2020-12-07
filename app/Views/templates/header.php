@@ -136,11 +136,34 @@
       bottom: 76px;
     }
 
+    .back-to-top {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        display: none;
+        border: 1px solid;
+    }
+
     </style>
 
     <script>
       $(document).ready(function() {
           $.getScript("/assets/js/header.js");
+
+          $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+              $('#back-to-top').fadeIn();
+            } else {
+              $('#back-to-top').fadeOut();
+            }
+          });
+          // scroll body to 0px on click
+          $('#back-to-top').click(function () {
+            $('body,html').animate({
+              scrollTop: 0
+            }, 400);
+            return false;
+          });
 
       });
      
