@@ -206,7 +206,8 @@ var review, initialCategory, initialName;
       const filePath = element.parentsUntil('div.d2h-wrapper').find("span.d2h-file-name").text();
       const parentElement = element.parent().siblings("td"); 
       const diff = parentElement.find(".d2h-code-line-ctn"); 
-      const message = `Line ${element.text().trim()} ${filePath} ${diff.text().trim()}`;
+      const codeLine = "`"+diff.text().trim()+"`";
+      const message = `**Line** ${element.text().trim()} ${filePath} ${codeLine}`;
 
 
       
