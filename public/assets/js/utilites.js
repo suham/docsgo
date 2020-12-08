@@ -48,24 +48,6 @@ function makeRequest(url){
     
 }
 
-// function getAjaxOptions(url, type, data = null){
-//     let options = {url: url};
-    
-//     if(type == "GET"){
-//         options.type = "GET";
-//     }else if(type == "POST"){
-//         options.type = "POST";
-//         options.data = data;
-//     }else if(type == "POST_FILE_UPLOAD"){
-//         options.type = "POST";
-//         options.data = data;
-//         options.contentType = false;
-//         options.cache = false;
-//         options.processData = false;
-//     }
-//     return options;
-// }
-
 function makePOSTRequest(url, data, fileData=false){
     if(!fileData){
         return new Promise((resolve, reject) => {
@@ -114,31 +96,6 @@ function makePOSTRequest(url, data, fileData=false){
 
 }
 
-// function makePOSTRequest(url, data){
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             type: 'POST',
-//             url: url,
-//             data: data,
-//             contentType: false,
-//             cache: false,
-//             processData:false,
-//             success: function (response) {  
-//                 try{
-//                     response = JSON.parse(response);
-//                 }catch(e){
-//                     showPopUp('Error', 'Session timed out! Login Again.');
-//                     return false;
-//                 }     
-//                 resolve(response);
-//             },
-//             error: function (err) {
-//                 reject(err);
-//             }
-//         });
-//     });
-// }
-
 function showPopUp(title, message){
     bootbox.alert({
             title: title, 
@@ -154,13 +111,17 @@ function formatDate(utcDate) {
     var date = ist;
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
+    month = month < 10 ? '0' + month : '' + month;
     var day = date.getDate();
+    day = day < 10 ? '0' + day : '' + day;
     var hours = date.getHours();
-    var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours < 10 ? '0' + hours : '' + hours;
+    var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0'+minutes : minutes;
+    
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return year+"-"+month+"-"+day+" "+strTime;
 }
