@@ -10,6 +10,13 @@ use PhpOffice\PhpWord\Shared\ZipArchive;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+function myCustomErrorHandler(int $errNo, string $errMsg, string $file, int $line) {
+	echo $errMsg;
+	alert($errMsg);
+	exit;
+	return false;
+}
+set_error_handler('App\Controllers\myCustomErrorHandler');
 
 class GenerateDocuments extends BaseController
 {
@@ -221,126 +228,142 @@ class GenerateDocuments extends BaseController
 
 
 			$section = $phpWord->addSection();
-
-			for ($i = 0; $i < count($json['sections']); $i++) {
-				$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
-				$contentSection = '<b></b>';
-				$org = $json['sections'][$i]['content'];
-				$contentSection = $pandoc->convert($org, "gfm", "html5");
-				//DONT DELETE THE BELOW CODE< HANDLING MULTIPLE SECNARIOS FOR DOC RENDER VIEWS
-				/*
-				if($json['sections'][$i]['content'] != ''){
-					if ((strpos($json['sections'][$i]['title'], 'Risk Assessment') !== false) || (strpos($json['sections'][$i]['title'], 'Risk Management') !== false)){
-						$org = $json['sections'][$i]['content'];
-						$org = str_replace("<br>", "", $org);
-						$org = str_replace("<br/>", "", $org);
-						if( (strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
-							$org = handleCodeblocks($org);
+			try{
+				for ($i = 0; $i < count($json['sections']); $i++) {
+					$section->addTitle($i + 1 . ". " . $json['sections'][$i]['title']);
+					$contentSection = '<b></b>';
+					$org = $json['sections'][$i]['content'];
+					$contentSection = $pandoc->convert($org, "gfm", "html5");
+					//DONT DELETE THE BELOW CODE< HANDLING MULTIPLE SECNARIOS FOR DOC RENDER VIEWS|ISSUES
+					/*
+					if($json['sections'][$i]['content'] != ''){
+						if ((strpos($json['sections'][$i]['title'], 'Risk Assessment') !== false) || (strpos($json['sections'][$i]['title'], 'Risk Management') !== false)){
+							$org = $json['sections'][$i]['content'];
+							$org = str_replace("<br>", "", $org);
+							$org = str_replace("<br/>", "", $org);
+							if( (strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
+								$org = handleCodeblocks($org);
+							}
+							$contentSection = $pandoc->convert($org, "gfm", "html5");
+						}else{
+							$org = $json['sections'][$i]['content'];
+							if((strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
+								$org = handleCodeblocks($org);
+							}
+							$org = htmlspecialchars($org);
+							$contentSection = $pandoc->convert($org, "gfm", "html5");	
 						}
-						$contentSection = $pandoc->convert($org, "gfm", "html5");
-					}else{
-						$org = $json['sections'][$i]['content'];
-						if((strpos($org, '```') !== false) || (strpos($org, '``') !== false) || (strpos($org, '````') !== false)){
-							$org = handleCodeblocks($org);
-						}
-						$org = htmlspecialchars($org);
-						$contentSection = $pandoc->convert($org, "gfm", "html5");	
 					}
+					*/
+					if (strpos($contentSection, '<table>') !== false) {
+						$tableContentFormatted = addTableStylesToContent($contentSection);
+						//setOutputEscapingEnabled is added for gfm markdown
+						\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+						\PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
+					} else {
+						\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+						\PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
+					}
+					
+					$section->addTextBreak();
 				}
-				*/
-				if (strpos($contentSection, '<table>') !== false) {
-					$tableContentFormatted = addTableStylesToContent($contentSection);
-					//setOutputEscapingEnabled is added for gfm markdown
-					\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $tableContentFormatted, FALSE, FALSE);
-				} else {
-					\PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-					\PhpOffice\PhpWord\Shared\Html::addHtml($section, $contentSection, FALSE, FALSE);
-				}
-				
-				$section->addTextBreak();
 			}
-			// Saving the document as OOXML file...
-			\PhpOffice\PhpWord\Settings::setCompatibility(false);
-			$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-			ob_clean();
-			$count++;
-			
-			if ($type == "project") {
-				$objWriter->save($fileName);
-				$directoryName = "Project_Documents";
-				if (!is_dir($directoryName)) {
-					mkdir($directoryName, 0777);
-				}
-				rename($fileName, $directoryName . '/' . $fileName);
-				if (count($idArray) == $count) {
-					$zip_file = $directoryName .'_'.$main_id.'.zip';
-					$rootPath = realpath($directoryName);
-					// / Initiate a new instance of ZipArchive  
-					$zip = new ZipArchive();  
-					$res = $zip->open($zip_file, ZipArchive::CREATE);
-					if ($zip->open($zip_file, ZipArchive::CREATE)) {
-						$files = new RecursiveIteratorIterator(
-							new RecursiveDirectoryIterator($rootPath), RecursiveIteratorIterator::LEAVES_ONLY
-						);
-						foreach ($files as $name => $file) {
-							if (!$file->isDir()) {
-								$filePath = $file->getRealPath();
-								$relativePath = substr($filePath, strlen($rootPath) + 1);
-								$zip->addFile($filePath, $relativePath);
-								$filesToDelete[] = $filePath;
-							}
-						}
-						$zip->close();
-						header('Content-Description: File Transfer');
-						header('Content-Type: '.mime_content_type($zip_file).'');
-						header("Content-Disposition: attachment; filename=\"".basename($zip_file)."\";");
-						header('X-Sendfile: '.$zip_file);
-						header('Content-Transfer-Encoding: binary');
-						header("Cache-Control: no-cache");
-						header('Content-Length: ' . filesize($zip_file));
-						//removing the document files
-						if (is_dir($directoryName)) {
-							foreach ($filesToDelete as $file) {
-								unlink($file);
-							}
-							rmdir($directoryName);
-						}
-						readfile($zip_file);
-					}else{
-						echo "unable to create zip file";
+			catch (Error $e) {
+				echo "Error caught: " . $e->getMessage();
+				return false;
+		  	}
+			try{
+				// Saving the document as OOXML file...
+				\PhpOffice\PhpWord\Settings::setCompatibility(false);
+				$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+				ob_clean();
+				$count++;
+			}
+			catch (Error $e) {
+				echo "Error caught: " . $e->getMessage();
+				return false;
+			}
+			try{
+				if ($type == "project") {
+					$objWriter->save($fileName);
+					$directoryName = "Project_Documents";
+					if (!is_dir($directoryName)) {
+						mkdir($directoryName, 0777);
 					}
-				}
-			}else{
-				$rootDirName = $_SERVER['DOCUMENT_ROOT'];
-				$directoryName = "Project_Documents_".$str[0]['project-id'];		
-				if (!is_dir($directoryName)) {
-					mkdir($directoryName, 0777);
-				}
-				$objWriter->save($directoryName.'/'.$fileName);
-				if($typeNumber == 1){
-					header("Cache-Control: no-cache");
-					header("Content-Description: File Transfer");
-					header("Content-Disposition: attachment; filename=".$fileName);
-					header("Content-Transfer-Encoding: binary");  
-					readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
-					unlink($directoryName.'/'.$fileName);
+					rename($fileName, $directoryName . '/' . $fileName);
+					if (count($idArray) == $count) {
+						$zip_file = $directoryName .'_'.$main_id.'.zip';
+						$rootPath = realpath($directoryName);
+						// / Initiate a new instance of ZipArchive  
+						$zip = new ZipArchive();  
+						$res = $zip->open($zip_file, ZipArchive::CREATE);
+						if ($zip->open($zip_file, ZipArchive::CREATE)) {
+							$files = new RecursiveIteratorIterator(
+								new RecursiveDirectoryIterator($rootPath), RecursiveIteratorIterator::LEAVES_ONLY
+							);
+							foreach ($files as $name => $file) {
+								if (!$file->isDir()) {
+									$filePath = $file->getRealPath();
+									$relativePath = substr($filePath, strlen($rootPath) + 1);
+									$zip->addFile($filePath, $relativePath);
+									$filesToDelete[] = $filePath;
+								}
+							}
+							$zip->close();
+							header('Content-Description: File Transfer');
+							header('Content-Type: '.mime_content_type($zip_file).'');
+							header("Content-Disposition: attachment; filename=\"".basename($zip_file)."\";");
+							header('X-Sendfile: '.$zip_file);
+							header('Content-Transfer-Encoding: binary');
+							header("Cache-Control: no-cache");
+							header('Content-Length: ' . filesize($zip_file));
+							//removing the document files
+							if (is_dir($directoryName)) {
+								foreach ($filesToDelete as $file) {
+									unlink($file);
+								}
+								rmdir($directoryName);
+							}
+							readfile($zip_file);
+						}else{
+							echo "unable to create zip file";
+						}
+					}
 				}else{
-					$outputFileName = str_replace("docx", "html", $fileName);
-					$cmd = "pandoc --extract-media ./media '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
-					// $cmd = "pandoc --extract-media $imgPath '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
-					// $cmd = "pandoc '".$directoryName."/".$fileName."' --keep-parstyle='Snap' --keep-parstyle='Crackle' --metadata title='vios' -s -o ".$outputFileName;
-					$html = shell_exec($cmd);
-					$html = file_get_contents($outputFileName);
-					$html = addTableStylesToContent($html);
-					$html = addImagePaths($html, $documentTitle);
-					echo $html;
-					unlink($directoryName.'/'.$fileName);
-					unlink($outputFileName);
-					return false;
+					$rootDirName = $_SERVER['DOCUMENT_ROOT'];
+					$directoryName = "Project_Documents_".$str[0]['project-id'];		
+					if (!is_dir($directoryName)) {
+						mkdir($directoryName, 0777);
+					}
+					$objWriter->save($directoryName.'/'.$fileName);
+					if($typeNumber == 1){
+						header("Cache-Control: no-cache");
+						header("Content-Description: File Transfer");
+						header("Content-Disposition: attachment; filename=".$fileName);
+						header("Content-Transfer-Encoding: binary");  
+						readfile($directoryName.'/'.$fileName); // or echo file_get_contents($temp_file);
+						unlink($directoryName.'/'.$fileName);
+					}else{
+						$outputFileName = str_replace("docx", "html", $fileName);
+						$cmd = "pandoc --extract-media ./media '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
+						// $cmd = "pandoc --extract-media $imgPath '".$directoryName."/".$fileName."' --metadata title='vios' -s -o ".$outputFileName;
+						// $cmd = "pandoc '".$directoryName."/".$fileName."' --keep-parstyle='Snap' --keep-parstyle='Crackle' --metadata title='vios' -s -o ".$outputFileName;
+						$html = shell_exec($cmd);
+						$html = file_get_contents($outputFileName);
+						$html = addTableStylesToContent($html);
+						$html = addImagePaths($html, $documentTitle);
+						echo $html;
+						unlink($directoryName.'/'.$fileName);
+						unlink($outputFileName);
+						return false;
+					}
 				}
 			}
-			
+			catch (Error $e) {
+				echo "Error caught: " . $e->getMessage();
+				return false;
+			}
+				
 		}
 	}
 
