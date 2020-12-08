@@ -88,11 +88,10 @@ class DocumentTemplate extends BaseController
 			$data['formTitle'] = "Add Template";
 		}else{
 			$data['action'] = "add/".$id;
-			$data['formTitle'] = "Update Template";
 
 			$documentTemplate = $model->where('id',$id)->first();	
 			$data['documentTemplate'] = $documentTemplate;
-			$data['formTitle'] = "Update " . $documentTemplate['name'];
+			$data['formTitle'] = $documentTemplate['name'];
 			$template = json_decode($data['documentTemplate']["template-json-object"], true);		
 			$data['template'] = $template[$documentTemplate['type']];
 		}
@@ -116,7 +115,7 @@ class DocumentTemplate extends BaseController
 		$tables['Requirements']['name'] = "requirements";
 		$tables['Requirements']['columns'] = "description,requirement,type,update_date";
 		$tables['Reviews']['name'] = "reviews";
-		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,review-by,assigned-to";
+		$tables['Reviews']['columns'] = "review-name,context,description,review-ref,status,project-name,reviewer,author";
 		$tables['RiskAssessment']['name'] = "riskAssessment";
 		$tables['RiskAssessment']['columns'] = "risk_type,risk,description,component,hazard-analysis,assessment,baseScore_severity,status";
 		$tables['Teams']['name'] = "teams";

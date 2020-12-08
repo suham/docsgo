@@ -13,94 +13,103 @@ class Reviews extends BaseController
         $data = [];
 		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = True;
-		$data['addUrl'] = "";
-		session()->set('prevUrl', '');
+		$data['addUrl'] = "/reviews/add";
 
-		//Projects Dropdown
-		$projectModel = new ProjectModel();
-		$data['projects'] = $projectModel->getProjects();
-		
-		//Status Radio Buttons
-		$settingsModel = new SettingsModel();		
-		$documentStatusOptions =  $settingsModel->getConfig("documentStatus");
-		$data["reviewStatus"] = $documentStatusOptions;
+		$selectedStatus = null;
+		$selectedProject = null;
+
+		if(isset($_SESSION['PREV_URL'])){
+			$prev_url = $_SESSION['PREV_URL'];
+			if($prev_url["name"] == "reviewsList"){
+				$vars = $prev_url["vars"];
+				$selectedStatus = $vars['view'];
+				$selectedProject = $vars['project_id'];
+			}
+		}
 
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
 
+		$settingsModel = new SettingsModel();		
+		$documentStatusOptions =  $settingsModel->getConfig("documentStatus");
+		$data["reviewStatus"] = $documentStatusOptions; //Status Radio Buttons
+
+		if($selectedStatus == null){
+			if($documentStatusOptions != null){
+				$selectedStatus = $documentStatusOptions[0]; //Default status
+			}else{
+				$selectedStatus = null;
+			}
+		}
+		
+		$projectModel = new ProjectModel();
+		$data['projects'] = $projectModel->getProjects(); //Projects Dropdown
+		
+		if($selectedProject == null){
+			$selectedProject = $this->getActiveProjectId(); //Default project
+		}
+
+		$reviewModel = new ReviewModel();
+		$data['reviewsCount'] = $reviewModel->getReviewsCount($selectedProject);
+
+		$data['selectedProject'] = $selectedProject;
+		$data['selectedStatus'] = $selectedStatus;
+
+		echo view('templates/header');
+		echo view('templates/pageTitle', $data);
+		echo view('Reviews/list',$data);
+		echo view('templates/footer');
+	}
+
+	public function getReviewStats(){
+		$project_id = $this->request->getVar('project_id');
+
+		$reviewModel = new ReviewModel();
+		$reviewStats = $reviewModel->getReviewsCount($project_id);
+		$response["success"] = "True";
+        $response["reviewStats"] = $reviewStats;
+        
+        echo json_encode($response);
+	}
+
+	private function getActiveProjectId(){
+
+		$projectModel = new ProjectModel();
+		$activeProject = $projectModel->where("status","Active")->first();	
+		
+		if($activeProject != ""){
+			return $activeProject['project-id'];
+		}else{
+			$activeProject = $projectModel->first();	
+			if($activeProject != ""){
+				return $activeProject['project-id'];
+			}else{
+				return null;
+			}
+		}
+	}
+
+	public function getReviews(){
 		$view = $this->request->getVar('view');
 		$project_id = $this->request->getVar('project_id');
 
+		$vars['view'] = $view;
+		$vars['project_id'] = $project_id;
+
+		helper('Helpers\utils');
+		setPrevUrl('reviewsList', $vars);
+		
 		$model = new ReviewModel();
-		$selectedStatus = null;
+		$whereCondition = ' WHERE rev.`status` = "'.$view.'" and proj.`project-id` = '.$project_id;
+
+		$data = $model->getMappedRecords($whereCondition);
 		
-		if($view == '' || $project_id == ''){
-			//Initial Case
-			$activeProject = $projectModel->where("status","Active")->first();	
-			if($activeProject == ""){
-				$activeProject = $projectModel->first();	
-				if($activeProject == ""){
-					$data['data'] = [];
-					echo view('templates/header');
-					echo view('templates/pageTitle', $data);
-					echo view('Reviews/list',$data);
-					echo view('templates/footer');
-					exit(0);
-				}
-			}
-			$selectedProject = $activeProject['project-id'];
-			
-			if($documentStatusOptions != null){
-				$selectedStatus = $documentStatusOptions[0];
-			}
-
-		}else{				  
-			$selectedProject = $project_id;
-			$selectedStatus = $view;
-		}
-
-		if($selectedStatus != null){
-			$data['data'] = $model->where("status",$selectedStatus)
-			->where("project-id",$selectedProject)->orderBy('updated-at', 'desc')->findAll();	
-
-			$data['selectedProject'] = $selectedProject;
-			$data['selectedStatus'] = $selectedStatus;						  
-
-			$data['reviewsCount'] = $model->getReviewsCount($data['selectedProject'] );
-		}else{
-			$data['data'] = [];
-		}
+		$response["success"] = "True";
+        $response["reviews"] = $data;
+        
+        echo json_encode($response);
 		
-
-		echo view('templates/header');
-		echo view('templates/pageTitle', $data);
-		echo view('Reviews/list',$data);
-		echo view('templates/footer');
 	}
-
-	public function projectReview()
-    {
-        $data = [];
-		
-		$data['addBtn'] = True;
-		$data['addUrl'] = "/reviews/add";
-		$id = $this->returnParams();
-		$model = new ReviewModel();
-		$data['data'] = $model->findAll();	
-		$data['data'] = $model->where('project-id',$id)->findAll();	
-		
-		
-		$data['projects'] = $this->getProjects();
-		$data['pageTitle'] = $data['projects'][$id].' Reviews';
-		$teamModel = new TeamModel();
-		$data['teamMembers'] = $teamModel->getMembers();
-
-		echo view('templates/header');
-		echo view('templates/pageTitle', $data);
-		echo view('Reviews/list',$data);
-		echo view('templates/footer');
-	}
-	
 
 	private function getProjects(){
         $projectModel = new ProjectModel();
@@ -198,23 +207,9 @@ class Reviews extends BaseController
 		$data['pageTitle'] = 'Review Register';
 		$data['addBtn'] = False;
 		$data['backUrl'] = "/reviews";
-		$data['projects'] = $this->getProjects();
-		//Handling the back page navigation url
-		if(isset($_SERVER['HTTP_REFERER'])){
-			$urlStr = $_SERVER['HTTP_REFERER'];
-			if (strpos($urlStr, '?view')) {
-				$urlAr = explode("?view", $urlStr);
-				$backUrl = '/reviews?view'.$urlAr[count($urlAr)-1];
-				session()->set('prevUrl', $backUrl);
-			}else{
-				if(session()->get('prevUrl') == ''){
-					session()->set('prevUrl', '/reviews');
-				}
-			}
-		}else{
-			session()->set('prevUrl', '/reviews');
-		}
-		$data['backUrl'] =  session()->get('prevUrl');
+
+		$projectModel = new ProjectModel();
+		$data['projects'] = $projectModel->getProjects();
 
 		$teamModel = new TeamModel();
 		$data['teamMembers'] = $teamModel->getMembers();
@@ -254,14 +249,18 @@ class Reviews extends BaseController
 			$data['user'] = $TeamModel->where('id', session()->get('id'))->first();
 			$data['review']['assigned-to'] = $data['user']['id'];			
 		}else{
+			
 			$data['action'] = "add/".$id;
 			
 			$data['review'] = $model->where('id',$id)->first();		
-			$data['formTitle'] = $data['review']['review-name'];
+			$data['formTitle'] = 'R-'.$data['review']['id']." ".$data['review']['context'];
 			//Update form, auto fill the project field
 			$project_id = $data['review']['project-id'];
 			$data['project_id'] = $project_id;
-			$data['project_name'] = $data['projects'][$project_id];			
+			$data['project_name'] = $data['projects'][$project_id];		
+
+			$data['nearByReviews'] = $this->getNearByReviews($data['review']['updated-at']);
+			
 		}
 		$currentTime = gmdate("Y-m-d H:i:s");
 		if ($this->request->getMethod() == 'post') {
@@ -295,22 +294,23 @@ class Reviews extends BaseController
 				"category" => $this->request->getVar('category')
 			];
 
-			$data['review'] = $newData;
-
 			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
 			}else{
-
+				$session = session();
 				if($id > 0){
 					$newData['id'] = $id;
+					$data['review'] = $newData;
+					$model->save($newData);
 					$message = 'Review successfully updated.';
+					$session->setFlashdata('success', $message);
 				}else{
+					$reviewId = $model->insert($newData);
 					$message = 'Review successfully added.';
+					$session->setFlashdata('success', $message);
+					return redirect()->to('/reviews/add/'.$reviewId);
 				}
-
-				$model->save($newData);
-				$session = session();
-				$session->setFlashdata('success', $message);
+				
 			}
 		}
 		
@@ -318,6 +318,27 @@ class Reviews extends BaseController
 		echo view('templates/pageTitle', $data);
 		echo view('Reviews/form', $data);
 		echo view('templates/footer');
+	}
+
+	private function getNearByReviews($id){
+		$prevId = null; $nextId = null;
+
+		if(isset($_SESSION['PREV_URL'])){
+			$prev_url = $_SESSION['PREV_URL'];
+			if($prev_url["name"] == "reviewsList"){
+				$vars = $prev_url["vars"];
+				$status = $vars['view'];
+				$project_id = $vars['project_id'];
+				$model = new ReviewModel();
+				$prevId = $model->getPrevReviewId($id, $project_id, $status);
+				$nextId = $model->getNextReviewId($id, $project_id, $status);
+			}
+		}
+		
+		$rev["prevId"] = $prevId;
+		$rev["nextId"] = $nextId;
+
+		return $rev;
 	}
 
 	public function delete(){

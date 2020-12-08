@@ -8,12 +8,6 @@
     </div>
 
     <div class="col-12">
-        <div class="alert alert-warning d-none" role="alert">
-            No records found.
-        </div>
-    </div>
-
-    <div class="col-12">
         <table class="table  table-hover" id="diagrams-list">
             <thead class="thead-dark">
                 <tr>

@@ -1,154 +1,219 @@
+<div class="row p-0 p-md-4 justify-content-center">
 
-<?php
-  $uri = service('uri');
-?>
-<div class="row p-2 p-md-4">
-   
-    <div class="col-12 col-md-3" >
-      <div class="form-group mb-0">
-        <select class="form-control selectpicker" onchange="getData()" id="projects"  data-style="btn-secondary" data-live-search="true" data-size="8" >
-          <option value="" disabled >
-            Select Project
-          </option>
-          <?php foreach ($projects as $key=>$value): ?>
-            <option  <?= (($selectedProject == $key) ? "selected" : "") ?> value="<?=  $key ?>"><?=  $value ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+    <div class="col-12 pt-3 mb-4 pt-md-0 pb-md-0">
+
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <div class="form-group mb-0">
+                    <select class="form-control selectpicker" onchange="getTableRecords(true)" id="projects"
+                        data-style="btn-secondary" data-live-search="true" data-size="8">
+                        <option value="" disabled>
+                            Select Project
+                        </option>
+                        <?php foreach ($projects as $key => $value): ?>
+                        <option <?=(($selectedProject == $key) ? "selected" : "")?> value="<?=$key?>"><?=$value?>
+                        </option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-9 pt-3 pb-3 pt-md-0 pb-md-0">
+                <div class="btn-group btn-group-toggle ">
+                    <?php foreach ($reviewStatus as $revStatus): ?>
+                    <?php
+                        $statusId = str_replace(' ', '_', $revStatus);
+                        $selected = ($selectedStatus == $revStatus) ? true : false;
+                        $statusCount = (isset($reviewsCount[$revStatus])) ? $reviewsCount[$revStatus] : 0;
+                    ?>
+                    <label 
+                        class="lbl_<?= $statusId ?> btn <?=($selected ? " btn-primary" : "btn-secondary")?>">
+                        <input type="radio" name="view" value="<?=$revStatus?>" autocomplete="off" onclick="getTableRecords()"
+                            <?=($selected ? "checked" : "")?>> <?=$revStatus?>
+                        <?php if (isset($reviewsCount[$revStatus])): ?>
+                         
+                        <?php endif?>
+                        <span class="stats_<?= $statusId ?> badge badge-light ml-1 "><?= $statusCount ?></span>
+                    </label>
+                    <?php endforeach;?>
+                </div>
+
+            </div>
+
+        </div>
+
 
     </div>
 
-    <div class="col-12 col-md-9 pt-3 pb-3 pt-md-0 pb-md-0">
-      <div class="btn-group btn-group-toggle ">
-        <?php foreach ($reviewStatus as $revStatus): ?>
-          <label onclick="getData()" class="btn <?= (($selectedStatus == $revStatus) ? " btn-primary" : "btn-secondary") ?>">
-            <input type="radio" name="view" value="<?=  $revStatus ?>" autocomplete="off" <?= (($selectedStatus == $revStatus) ? "checked" : "") ?>>  <?=  $revStatus ?>
-              <?php if(isset($reviewsCount[$revStatus])): ?>
-                <span class="badge badge-light ml-1"><?= $reviewsCount[$revStatus] ?></span>
-              <?php endif ?>  
-          </label>
-        <?php endforeach; ?>
-      </div>
-      
-    </div>
-</div>
-
-<div class="row p-0 p-md-4">  
-  <?php if (session()->get('alert')): ?>
     <div class="col-12">
-      <div class="alert alert-<?= session()->get('alert') ?>" role="alert">
-          <?= session()->get('message') ?>
-      </div>
-    </div>
-  <?php endif; ?>
-
-<?php if (count($data) == 0): ?>
-
-  <div class="col-12">
-    <div class="alert alert-warning" role="alert">
-      No records found.
-    </div>
-  </div>
-
-  <?php else: ?>
-    <div class="col-12">
-      <table class="table  table-hover" id="reviews-list">
-        <thead>
-          <tr>
-            <th scope="col" >#</th>
-            <th scope="col" style="max-width:125px;word-wrap: break-word;">Name</th>
-            <th scope="col" style="max-width:570px;word-wrap: break-word;">Review Item</th>
-            <th scope="col" style="min-width:120px;">Author</th>
-            <th scope="col" style="min-width:120px;">Reviewer</th>
-            <th scope="col" style="min-width: 125px;">Update Date</th>
-            <th scope="col" style="min-width: 100px;">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white ">
-          <?php foreach ($data as $key=>$row): ?>
-              <tr scope="row" id="<?php echo $row['id'];?>">
-                  <td><?php echo $key+1; ?></td>
-                  <td style="max-width:125px;word-wrap: break-word;"><?php echo $row['review-name'];?></td>
-                  <td style="max-width:570px;word-wrap: break-word;"><?php echo $row['context'];?></td>
-                  <td><?php echo $teamMembers[$row['assigned-to']];?></td>
-                  <td><?php echo $teamMembers[$row['review-by']];?></td>
-                  <td><?php $timestamp = strtotime($row['updated-at']) + (330*60); echo date("Y-m-d h:i A", $timestamp); ?></td>
-                  <td>
-                      <a href="/reviews/add/<?php echo $row['id'];?>" class="btn btn-warning">
-                          <i class="fa fa-edit"></i>
-                      </a>
-                      <?php if (session()->get('is-admin')): ?>
-                      <a onclick="deleteReview(<?php echo $row['id'];?>)" class="btn btn-danger ml-2">
-                          <i class="fa fa-trash text-light"></i>
-                      </a>
-                      <?php endif; ?>
-                  </td>
-              </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    
+        <table class="table  table-hover" id="reviews-list">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" style="width:30px">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Review Item</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Reviewer</th>
+                    <th scope="col">Update date</th>
+                    <th scope="col" style="width:175px">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white " id="tbody"></tbody>
+        </table>
     </div>
 
-<?php endif; ?>
-  
 </div>
 
 <script>
- function deleteReview(id){
+  var userId, reviewStatus, table = null;
 
-    bootbox.confirm("Do you really want to delete the review?", function(result) {
-      if(result){
-        $.ajax({
-           url: '/reviews/delete/'+id,
-           type: 'GET',
-           success: function(response){
-              console.log(response);
-              response = JSON.parse(response);
-              if(response.success == "True"){
-                  $("#"+id).fadeOut(800)
-              }else{
-                 bootbox.alert('Review not deleted.');
-              }
-            }
-         });
-      }else{
-        console.log('Delete Cancelled');
-      }
+  $(document).ready(function() {
+      userId = <?= session()->get('id') ?>;
+      reviewStatus = <?= json_encode($reviewStatus) ?>;
 
+      initializeDataTable('reviews-list');
+
+      getTableRecords();
+
+  });
+
+  function initializeDataTable(tableId){
+    table = $('#'+tableId).DataTable({
+          "responsive": true,
+          "autoWidth": false,
+          "stateSave": true,
+          "pagingType": "full_numbers",
+          "paging": true,
+          "lengthMenu": [10, 25, 50, 75, 100],
     });
-
- }
-
-    $(document).ready( function () {
-      var table = $('#reviews-list').DataTable({
-        "responsive": true,
-        "stateSave": true,
-        "autoWidth": false
-      });
-      $('.l-navbar .nav__link, #footer-icons').on('click', function () {
-        table.state.clear();
-      });
-
-      $('#addButton').click(function(){
-        navigateAddPage();
-      });
-    });
-
-  function getData(){
-    var selectedView = $("input[name='view']:checked").val();
-    var selectedProjectId = $("#projects").val();
-    var url = `reviews?view=${selectedView}&project_id=${selectedProjectId}`
-    window.location = url;
   }
 
-  function navigateAddPage() {
-    console.log("navigateAddPage:", $('#projects').val());
-    const project_id = $("#projects").val();
-    const url = `/reviews/add?project_id=${project_id}`;
-    location.href = url;
+  $(document).on({
+        ajaxStart: function(){
+            $("#loading-overlay").show();
+        },
+        ajaxStop: function(){ 
+            $("#loading-overlay").hide();
+        }    
+  });
+
+  function getTableRecords(updateStats = false){
+    const selectedView = $("input[name='view']:checked").val();
+    const selectedProjectId = $("#projects").val();
+    var url = `/reviews/getReviews?view=${selectedView}&project_id=${selectedProjectId}`;
+    
+    $("#addButton").attr("href", `/reviews/add?project_id=${selectedProjectId}`);
+    
+    $(".btn-group label").removeClass("btn-primary").addClass("btn-secondary");
+    $(`.lbl_${selectedView.replace(/\s/g, '_')}`).removeClass("btn-secondary").addClass("btn-primary");
+    
+    makeRequest(url)
+    .then((response) => {
+        const reviewsList = response.reviews;
+        if(reviewsList.length){
+          populateTable(reviewsList);
+        }else{
+          $('#tbody').html("");
+        }
+        
+    })
+    .catch((err) => {
+        console.log(err);
+        showPopUp('Error', "An unexpected error occured on server.");
+    })
+    
+    if(updateStats){
+      var url = `/reviews/getReviewStats?project_id=${selectedProjectId}`;
+    
+      makeRequest(url)
+      .then((response) => {
+          const reviewStats = response.reviewStats;
+          updateCount(reviewStats)
+      })
+      .catch((err) => {
+          console.log(err);
+          showPopUp('Error', "An unexpected error occured on server.");
+      })
+    }
+
+  }
+
+  function updateCount(updatedCount){
+    reviewStatus.forEach(status => {
+      var count = 0;
+      if(updatedCount.hasOwnProperty(status)){
+        count = updatedCount[status];
+      }
+
+      $(`.stats_${status.replace(/\s/g, '_')}`).text(count);
+    })
+
+  }
+
+  function populateTable(reviewsList){
+        dataInfo = {
+            "rowId": 'id',
+            "requiredFields": ['reviewId','review-name', 'context', 'author', 'reviewer', 'updated-at'],
+            "dateFields": ["updated-at"],
+            "action": [
+                {
+                    title: "Edit",
+                    buttonClass: "btn btn-warning",
+                    iconClass: "fa fa-edit",
+                    clickTrigger: "edit",
+                    clickParams: ['id']
+                },
+                {
+                    title: "Delete",
+                    buttonClass: "btn btn-danger",
+                    iconClass: "fa fa-trash",
+                    clickTrigger: "deleteReview",
+                    clickParams: ['id'],
+                    condition: {
+                        on: 'assigned-to',
+                        with: userId
+                    }
+                }
+            ]
+        };
+
+        table.destroy();
+        
+        $('#tbody').html("");
+        $('#tbody').append(getHTMLtable(reviewsList, dataInfo));
+        
+        initializeDataTable('reviews-list');
+
+  }
+
+  function edit(id){
+      location.href = `/reviews/add/${id}`;
+  }
+
+  function deleteReview(id) {
+
+      bootbox.confirm("Do you really want to delete the review?", function(result) {
+          if (result) {
+              $.ajax({
+                  url: '/reviews/delete/' + id,
+                  type: 'GET',
+                  success: function(response) {
+                      response = JSON.parse(response);
+                      if (response.success == "True") {
+                          $("#" + id).fadeOut(800)
+                      } else {
+                          bootbox.alert('Review not deleted.');
+                      }
+                  }
+              });
+          } else {
+              console.log('Delete Cancelled');
+          }
+
+      });
 
   }
 
 </script>
-

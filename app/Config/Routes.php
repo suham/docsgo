@@ -87,7 +87,8 @@ $routes->match(['get','post'],'generate-documents/checkGenerateDocuments/(:num)'
 $routes->match(['get','post'],'generate-documents/updateGenerateDocumentPath/(:num)', 'GenerateDocuments::updateGenerateDocumentPath',['filter' => 'auth']);
 
 $routes->get('reviews', 'Reviews::index',['filter' => 'auth']);
-$routes->get('reviews/project/(:num)', 'Reviews::projectReview',['filter' => 'auth']);
+$routes->get('reviews/getReviews', 'Reviews::getReviews', ['filter' => 'auth']);
+$routes->get('reviews/getReviewStats', 'Reviews::getReviewStats', ['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/add', 'Reviews::add',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/add/(:num)', 'Reviews::add',['filter' => 'auth']);
 $routes->match(['get','post'],'reviews/delete/(:num)', 'Reviews::delete',['filter' => 'auth']);
