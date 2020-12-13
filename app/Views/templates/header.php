@@ -204,14 +204,14 @@
                         <a href="/documents" title="Documents" class="collapse__sublink my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">
                           <ion-icon name="documents-outline" class="nav__icon"></ion-icon>
                         </a>
-                        <a href="/documents" title="Documents"  class="my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">Documents</a>
+                        <a  href="/documents" title="Documents"  class="nav__name my_nav_link <?= (($uri->getSegment(1) == 'documents' || $uri->getSegment(1) == 'documents-templates' || $uri->getSegment(1) == 'documents-master' || $uri->getSegment(1) == 'documents-acronyms') ? 'text-light' : '')  ?>"">Documents</a>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                         <ul class="collapse__menu">
-                          <li style="padding:6px;"><a style="padding:6px" href="/documents-templates" class="collapse__sublink ">Templates</a></li>
-                          <li style="padding:6px;"><a style="padding:6px" href="/documents-master" class="collapse__sublink ">References</a></li>
-                          <li style="padding:6px;"><a style="padding:6px" href="/documents-acronyms" class="collapse__sublink ">Acronyms</a></li>
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-templates" class="collapse__sublink nav__name">Templates</a></li>
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-master" class="collapse__sublink nav__name">References</a></li>
+                          <li style="padding:6px;"><a style="padding:6px" href="/documents-acronyms" class="collapse__sublink nav__name">Acronyms</a></li>
                         </ul>
                     </div>
 
@@ -229,13 +229,13 @@
                         <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">
                           <ion-icon name="apps-outline" class="nav__icon"></ion-icon>
                         </a>
-                        <a href="/traceability-matrix" title="Traceability Matrix" class="collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">Traceability</a>
+                        <a href="/traceability-matrix" title="Traceability Matrix" class="nav__name collapse__sublink my_nav_link <?= ((($uri->getSegment(1) == 'requirements') || $uri->getSegment(1) == 'test-cases' || $uri->getSegment(1) == 'traceability-matrix')  ? 'text-light' : '') ?>">Traceability</a>
 
                         <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                         <ul class="collapse__menu">
-                            <li style="padding:6px;"><a style="padding:6px" href="/requirements" class="collapse__sublink">Requirements</a></li>
-                            <li style="padding:6px;"><a style="padding:6px" href="/test-cases" class="collapse__sublink">Test</a></li>
+                            <li style="padding:6px;"><a style="padding:6px" href="/requirements" class="nav__name collapse__sublink">Requirements</a></li>
+                            <li style="padding:6px;"><a style="padding:6px" href="/test-cases" class="nav__name collapse__sublink">Test</a></li>
                         </ul>
                     </div>
                     <a href="/inventory-master" title="Assets"

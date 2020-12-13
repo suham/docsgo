@@ -641,7 +641,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <p class="card-text task_title">${newTask.title}</p>
+                            <p data-toggle="popover" data-placement="top" data-content="${newTask.description}" class="card-text task_title">${newTask.title}</p>
                         </div>
                         <div class="card-footer text-muted text-right pl-2 pr-2">
                             <div class="float-left">
