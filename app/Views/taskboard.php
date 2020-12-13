@@ -25,14 +25,32 @@
         padding: 0.3rem;
         min-height: 30vh;
         /* z-index: 1; */
-        background-color: lightgray;
-        border-color: 1px solid darkgray;
+        background-color: #ccc;
+        border-color: 1px solid #ccc;
+    }
+
+    @keyframes cardEntrance {
+        from{
+            opacity: 0;
+            transform: translate(-100%, 50%) rotate(15deg) translate(100%, -50%);
+        }
+        to{
+            opacity: 1;
+            transform: rotate(0deg);
+        }
     }
 
     /* task styles */
-    .newTask:hover {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.10);
+    .newTask{
+        animation: cardEntrance 500ms ease-out;
+        animation-fill-mode: backwards;
     }
+
+    .newTask:hover {
+        box-shadow: rgba(19,19,19,0.6) 0px 0.35em 1.175em, rgba(19,19,19,0.2) 0px 0.175em 0.5em;
+        transform: translateY(-3px) scale(1.05);
+        transition: transform 1000ms;
+      }
 
     .truncate {
         width: 136px;
