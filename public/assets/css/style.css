@@ -142,6 +142,12 @@ table tr:last-child td:last-child {
   background: #6f42c1;
 }
 
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index:9;
+}
+
 
 /* Shadow */
 
@@ -211,6 +217,13 @@ table tr:last-child td:last-child {
   color: #007bff;
   border-color: #dee2e6;
 }
+
+.btn-sm-danger:hover {
+  background-color: #dee2e6;
+  color: #dc3545;
+  border-color: #dee2e6;
+}
+
 
 /* Custom Alert */
 

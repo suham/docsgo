@@ -7,31 +7,47 @@
 .d2h-code-linenumber {
     position: relative;
 }
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.withReviewBox {
+    max-height: 311px;
+}
+
+.withoutReviewBox {
+    max-height: 540px;
+}
+
+.hide {
+    display: none;
+}
+
+.reviewDiv {
+    max-width: 565px;
+}
 </style>
 <div class="p-0 p-md-4">
     <div class="row justify-content-center">
-
-        <div class="col-12 col-md-9 mx-auto">
-
+        <div class="col-12 col-md-7 mx-auto">
             <?php if (session()->get('success')): ?>
             <div class="alert alert-success" role="alert">
                 <?= session()->get('success') ?>
             </div>
             <?php endif; ?>
-
         </div>
-        <div class="col-12 col-md-9 ml-0 pb-3 pt-3 form-color">
-
-            <div class="container">
-
-                <div class="card-header form-color" style="border:0px !important;">
-                    <div class="row">
+        <div class="col-12 col-lg-7 ml-3 pr-0 pl-0">
+            <div class="form-color">
+                <div class="card-header" style="border:0px !important;">
+                    <div class="row p-2">
                         <div class="">
-                            <h3><?= $formTitle ?></h3>
+                            <h3 style="width: 638px;" class="truncate" data-toggle="popover" data-placement="top"
+                                data-content="<?= $formTitle ?>"><?= $formTitle ?></h3>
                         </div>
                         <div class="ml-auto">
-                            <button type="button" id="project-name" class="btn btn-info"><?= $project_name ?></button>
-
                             <?php if (isset($nearByReviews)): ?>
                             <a data-toggle="popover" style="border: 1px solid;" data-placement="left"
                                 title="<?= isset($nearByReviews['prevId']) ? 'R-'.$nearByReviews['prevId']: '' ?>"
@@ -46,18 +62,11 @@
                                 <i class="fas fa-angle-right"></i>
                             </a>
                             <?php endif; ?>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-                <form class="" action="/reviews/<?= $action ?>" method="post">
-
+                <form class="p-3" action="/reviews/<?= $action ?>" method="post">
                     <div class="row">
-
                         <?php if (isset($validation)): ?>
                         <div class="col-12">
                             <div class="alert alert-danger" role="alert">
@@ -65,9 +74,17 @@
                             </div>
                         </div>
                         <?php endif; ?>
-
                         <input type="hidden" id="project-id" name="project-id" value="<?= $project_id ?>" />
-
+                        <input type="hidden" id="reviewId" name="reviewId"
+                            value="<?= isset($review['id']) ? $review['id']: '' ?>" />
+                        <div class="col-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="font-weight-bold text-muted" for="project-name">Project</label>
+                                <button style="width:175px;" type="button" id="project-name" data-toggle="popover"
+                                    data-placement="top" data-content="<?= $project_name ?>"
+                                    class="btn btn-info truncate"><?= $project_name ?></button>
+                            </div>
+                        </div>
                         <div class="col-12 col-sm-3">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="category">Category</label>
@@ -76,17 +93,14 @@
                                     <option value="" disabled <?= isset($review['category']) ? '' : 'selected' ?>>
                                         Select
                                     </option>
-
                                     <?php foreach ($reviewCategory as $revCat): ?>
                                     <option
                                         <?= isset($review['category']) ? (($review['category'] == $revCat["value"]) ? 'selected': '') : '' ?>
                                         value="<?=  $revCat["value"] ?>"><?=  $revCat["value"] ?></option>
                                     <?php endforeach; ?>
-
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-12  col-sm-3">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="review-name">Name</label>
@@ -94,18 +108,9 @@
                                     value="<?= isset($review['review-name']) ? $review['review-name'] : '' ?>">
                             </div>
                         </div>
-
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label class="font-weight-bold text-muted" for="context">Review Item</label>
-                                <input maxlength=60 type="text" class="form-control" required name="context"
-                                    id="context" value="<?= isset($review['context']) ? $review['context'] : '' ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4">
+                        <div class="col-12 col-sm-3">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="assigned-to">Author</label>
-
                                 <select class="form-control  selectpicker" data-live-search="true" data-size="8"
                                     name="assigned-to" id="assigned-to">
                                     <option value="" disabled <?= isset($review['assigned-to']) ? '' : 'selected' ?>>
@@ -116,16 +121,19 @@
                                         <?= isset($review['assigned-to']) ? (($review['assigned-to'] == $key) ? 'selected': '') : '' ?>
                                         value="<?=  $key ?>"><?=  $value ?></option>
                                     <?php endforeach; ?>
-
                                 </select>
-
                             </div>
                         </div>
-
+                        <div class="col-12 col-sm-8">
+                            <div class="form-group">
+                                <label class="font-weight-bold text-muted" for="context">Review Item</label>
+                                <input maxlength=60 type="text" class="form-control" required name="context"
+                                    id="context" value="<?= isset($review['context']) ? $review['context'] : '' ?>">
+                            </div>
+                        </div>
                         <div class="col-12 col-sm-4">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="review-by">Reviewer</label>
-
                                 <select class="form-control  selectpicker" data-live-search="true" data-size="8"
                                     name="review-by" id="review-by">
                                     <option value="" disabled <?= isset($review['review-by']) ? '' : 'selected' ?>>
@@ -136,18 +144,16 @@
                                         <?= isset($review['review-by']) ? (($review['review-by'] == $key) ? 'selected': '') : '' ?>
                                         value="<?=  $key ?>"><?=  $value ?></option>
                                     <?php endforeach; ?>
-
                                 </select>
-
                             </div>
                         </div>
-
                         <div
                             class="col-12 differential <?=isset($review['category']) ? (($review['category'] == "Code") ? '' : 'd-none' ) : 'd-none'?>">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-10"><label class="font-weight-bold text-muted" for="code-diff">Code
-                                            Diff</label></div>
+                                            Diff</label>
+                                    </div>
                                     <div class="col-2">
                                         <button type="button" id="btn_diff_eval"
                                             class="btn btn-sm  btn-outline-dark float-right mt-1"
@@ -159,37 +165,30 @@
                                             Edit</button>
                                     </div>
                                 </div>
-
                                 <textarea class="form-control" name="code-diff" id="code-diff"></textarea>
                                 <div id="diffDiv"></div>
                             </div>
                         </div>
-
                         <div class="col-12 ">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="review-ref">Author's Note</label>
                                 <textarea class="form-control" name="review-ref" id="review-ref"><?=
-                isset($review['review-ref']) ? trim($review['review-ref']) : ''
-                ?></textarea>
+                           isset($review['review-ref']) ? trim($review['review-ref']) : ''
+                           ?></textarea>
                             </div>
                         </div>
-
-                        <div class="col-12 <?= isset($review['id']) ? '': 'd-none' ?>">
-                            <div class="form-group">
-                                <label class="font-weight-bold text-muted" for="description">Review Comment</label>
-                                <textarea class="form-control" name="description" id="description"><?=
-                isset($review['description']) ? trim($review['description']) : ''
-                ?></textarea>
-                            </div>
-                        </div>
-
-
-
                     </div>
-
                     <div class="row justify-content-md-center">
-
-                        <div class="col-12 col-sm-4">
+                        <?php
+                     $showSubmit = true;
+                     if(isset($review['id'])){
+                         if(session()->get('id') != $review['assigned-to']){
+                             $showSubmit = false;
+                         }
+                     }
+                     ?>
+                        <?php if($showSubmit): ?>
+                        <div class="col-12 col-sm-4 statusDiv">
                             <div class="form-group">
                                 <label class="font-weight-bold text-muted" for="status">Status</label>
                                 <select class="form-control  selectpicker" data-live-search="true" data-size="8"
@@ -202,30 +201,95 @@
                                         <?= isset($review['status']) ? (($review['status'] == $rev["value"]) ? 'selected': '') : '' ?>
                                         value="<?=  $rev["value"] ?>"><?=  $rev["value"] ?></option>
                                     <?php endforeach; ?>
-
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 col-sm-2 ">
                             <button type="submit" style="margin-top: 32px;" class="btn btn-primary">Submit</button>
                         </div>
-
+                        <?php endif ?>
                     </div>
-
-
                 </form>
             </div>
         </div>
+        <?php if(isset($review['id'])): ?>
+        <div class="col reviewDiv pr-0 pl-0">
+            <div class="col sticky">
+                <div class="form-color">
+                    <div class="card-header" style="border:0px !important;">
+                        <div class="row">
+                            <div class="col-10">
+                                <h5 class="text-primary mt-2">Review Comments</h5>
+                            </div>
+                            <div class="col-2">
+                                <button onclick="showReview()" class="btn btn-outline-primary float-right">
+                                    <i class="fas fa-plus "></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <ul class="commentsList list-group scroll scroll-primary withoutReviewBox"></ul>
+                    </div>
+                    <div>
+                        <div class="form-group hide reviewbox p-2">
+                            <textarea class="form-control" name="description" id="description"></textarea>
+                            <div class="d-flex w-100 justify-content-end mt-2">
+                                <?php
+                                $showStatus = false;
+                                $reviewId = "";
+                                if(isset($review['id'])){
+                                    $reviewId = $review['id'];
+                                    if(session()->get('id') == $review['review-by']){
+                                        $showStatus = true;
+                                    }
+                                }
+                                ?>
+                                <div style="width:175px">
+                                    <?php if($showStatus): ?>
+                                    <select class="form-control selectpicker" data-live-search="true" data-size="8"
+                                        name="reviewStatus" id="reviewStatus">
+                                        <option value="" disabled>
+                                            Select
+                                        </option>
+                                        <?php foreach ($reviewStatus as $rev): ?>
+                                        <option
+                                            <?= isset($review['status']) ? (($review['status'] == $rev["value"]) ? 'selected': '') : '' ?>
+                                            value="<?=  $rev["value"] ?>"><?=  $rev["value"] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php endif ?>
+                                </div>
+                                <div>
+                                    <button class="btn btn-success ml-4" onclick="saveComment('<?= $reviewId ?>')">Save</button>
+                                    <button class="btn btn-dark ml-1" onclick="showReview()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif ?>
     </div>
 </div>
 <a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top text-primary" role="button"><i
         class="fas fa-chevron-up"></i></a>
 <script>
-var review, initialCategory, initialName;
+var review, initialCategory, initialName, toggleReviewBox = true,
+    reviewComments = [],
+    commentEditId = "",
+    userName = "";
+
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
         trigger: "hover"
     });
+
+    $(".sticky").parents().css("overflow", "visible")
+    $("body").css("overflow-x", "hidden");
+
+    userName = "<?= session()->get('name') ?>";
 
     <?php if (isset($review)): ?>
     review = <?= json_encode($review) ?>;
@@ -238,15 +302,35 @@ $(document).ready(function() {
         }, 500);
 
     }
+    if (review.description != null && review.description != "") {
+        const temp = JSON.parse(review.description);
+        const comments = Object.values(temp);
+        reviewComments = comments;
+
+        comments.forEach((comment) => {
+            addReviewCommentToUI(review.id, comment);
+        })
+    }
     <?php endif; ?>
 
     initialCategory = $('#category').val();
     initialName = $('#review-name').val();
 });
 
+$(document).on({
+    ajaxStart: function() {
+        $("#loading-overlay").show();
+    },
+    ajaxStop: function() {
+        $("#loading-overlay").hide();
+    }
+});
+
+
 $(".alert-success").fadeTo(2000, 500).slideUp(500, function() {
     $(".alert-success").slideUp(500);
 });
+
 
 function addLineToComment() {
     const element = $(this);
@@ -259,10 +343,72 @@ function addLineToComment() {
     const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;
     const existingVal = $codemirror.getDoc().getValue();
     $codemirror.getDoc().setValue(existingVal + "\n" + message + "\n");
-    var toElement = $("label:contains('Comment')")[0];
-    $('html, body').animate({
-        scrollTop: $(toElement).offset().top
-    }, 1000);
+    //    var toElement = $("label:contains('Comment')")[0];
+    //    $('html, body').animate({
+    //        scrollTop: $(toElement).offset().top
+    //    }, 1000);
+    if ($(".reviewDiv").length) {
+        if (!$(".reviewbox").is(":visible")) {
+            showReview();
+        }
+    }
+
+}
+
+function saveComment(reviewId) {
+    const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;
+    const message = $codemirror.getDoc().getValue();
+
+    if (message != "") {
+        $codemirror.getDoc().setValue("");
+
+        const updateStatus = $("#reviewStatus").length;
+        let reviewStatus = "";
+        if (updateStatus) {
+            reviewStatus = $("#reviewStatus").val();
+        }
+
+        let data = {
+            "commentId": commentEditId,
+            reviewId,
+            message,
+            reviewStatus
+        };
+
+        makePOSTRequest('/reviews/saveComment', data)
+            .then((response) => {
+                if (response.success == "True") {
+                    const comment = response.comment;
+                    if (commentEditId != "") {
+                        let previousComment = getObjectFromArray(commentEditId, reviewComments);
+                        reviewComments.splice(previousComment[0], 1);
+                        $("#" + commentEditId).remove();
+                    }
+                    if (response.updateStatus == "True") {
+                        if ($("#status").length) {
+                            $("#status").val(reviewStatus);
+                            $('.selectpicker').selectpicker('refresh');
+                        }
+
+                    }
+
+                    reviewComments.push(comment);
+                    addReviewCommentToUI(review.id, comment);
+                    showReview();
+                    showFloatingAlert(response.message);
+                } else {
+                    showPopUp('Error', response.errorMsg);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                showPopUp('Error', "An unexpected error occured on server.");
+            })
+
+    } else {
+        showReview();
+    }
+
 
 }
 

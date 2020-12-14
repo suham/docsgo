@@ -130,7 +130,13 @@ class Pandoc
         // *really* pandoc we will just check that its something.
         // If the provide no path to pandoc we will try to find it on our own
         if ( ! $executable) {
-            exec('which pandoc', $output, $returnVar);
+            
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                exec('where pandoc', $output, $returnVar);
+            } else {
+                exec('which pandoc', $output, $returnVar);
+            }
+            
             if ($returnVar === 0) {
                 $this->executable = $output[0];
             } else {

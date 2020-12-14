@@ -129,8 +129,8 @@
     
       makeRequest(url)
       .then((response) => {
-          const reviewStats = response.reviewStats;
-          updateCount(reviewStats)
+            const reviewStats = response.reviewStats;
+            updateCount(reviewStats);
       })
       .catch((err) => {
           console.log(err);
@@ -143,9 +143,12 @@
   function updateCount(updatedCount){
     reviewStatus.forEach(status => {
       var count = 0;
-      if(updatedCount.hasOwnProperty(status)){
-        count = updatedCount[status];
+      if(updatedCount != null){
+        if(updatedCount.hasOwnProperty(status)){
+            count = updatedCount[status];
+        }
       }
+      
 
       $(`.stats_${status.replace(/\s/g, '_')}`).text(count);
     })

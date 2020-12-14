@@ -273,3 +273,133 @@ function getHTMLtable(data, dataInfo){
 
     return tbody;
 }
+
+// Review and Documents Shared Code
+function  addReviewCommentToUI(reviewId, comment) {
+    const commentEdit = (userName != comment.by) ? 'hide' : '';
+    let commentHtml = `<li class="list-group-item list-group-item-action " id = "${comment.id}">
+                               <div class="w-100 text-right float-right ${commentEdit}">
+                                   <button data-toggle="popover" data-placement="bottom" data-content="Edit Comment" type="button"
+                                       class="ml-1 btn btn-sm box-shadow-right btn-sm-primary btn-primary" 
+                                       onclick="editComment('${comment.id}')">
+                                       <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                   </button>
+                                   <button data-toggle="popover" data-placement="bottom" data-content="Delete Comment" type="button"
+                                       class="ml-1 btn btn-sm box-shadow-right btn-sm-danger btn-danger"
+                                       onclick="deleteComment('${reviewId}', '${comment.id}')">
+                                       <i class="fa fa-trash" aria-hidden="true"></i>
+                                   </button>
+                               </div>
+   
+                               ${SimpleMDE.prototype.markdown(comment.message)}
+                               
+                               <footer class="d-flex w-100 justify-content-between">
+                                    <div>
+                                        <cite class=" mt-3" style="font-size:11px">${formatDate(comment.timestamp)}</cite>
+                                    </div>
+                                    <div>
+                                        <span class="blockquote-footer"><cite>${comment.by}</cite> </span>
+                                        
+                                    </div>
+                               </footer>
+                           </li>`;
+
+    $(".commentsList").prepend(commentHtml);
+    $('[data-toggle="popover"]').popover({
+        trigger: "hover"
+    });
+}
+
+function showReview() {
+    const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;
+    if (toggleReviewBox) {
+        $(".commentsList").removeClass("withoutReviewBox");
+        $(".commentsList").addClass("withReviewBox");
+        $(".reviewbox").fadeIn();
+
+        $codemirror.refresh();
+    } else {
+        $codemirror.getDoc().setValue("");
+        $(".commentsList").removeClass("withReviewBox");
+        $(".commentsList").addClass("withoutReviewBox");
+        $(".reviewbox").fadeOut();
+        commentEditId = "";
+
+    }
+
+    toggleReviewBox = !toggleReviewBox;
+}
+
+function getObjectFromArray(objectId, objectArray) {
+    var requiredObject, requiredObjectLoc;
+
+    objectArray.some((object, index) => {
+        if (object.id == objectId) {
+            requiredObject = object;
+            requiredObjectLoc = index;
+            return true;
+        }
+    });
+
+    return [requiredObjectLoc, requiredObject];
+}
+
+function editComment(commentId) {
+    commentEditId = commentId;
+    let comment = getObjectFromArray(commentId, reviewComments);
+
+    const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;
+    const message = comment[1].message;
+    $codemirror.getDoc().setValue(message);
+
+    showReview();
+}
+
+function deleteComment(reviewId ,commentId) {
+
+    bootbox.confirm({
+        title: 'Delete',
+        message: `Are you sure you want to delete ?`,
+        buttons: {
+            cancel: {
+                label: '<i class="fa fa-times"></i> Cancel'
+            },
+            confirm: {
+                label: '<i class="fa fa-check"></i> Confirm'
+            }
+        },
+        callback: function(result) {
+            if (result) {
+                // const reviewId = $("#reviewId").val();
+                let data = {
+                    "commentId": commentId,
+                    reviewId
+                };
+
+                makePOSTRequest('/reviews/deleteComment', data)
+                    .then((response) => {
+                        if (response.success == "True") {
+                            let previousComment = getObjectFromArray(commentId, reviewComments);
+                            reviewComments.splice(previousComment[0], 1);
+                            $("#" + commentId).fadeOut(800, function() {
+                                $(this).remove();
+                            });
+                            showFloatingAlert(response.message);
+                        } else {
+                            showPopUp('Error', response.errorMsg);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        showPopUp('Error', "An unexpected error occured on server.");
+                    })
+
+            } else {
+                console.log('Delete Cancelled');
+            }
+        }
+    });
+
+
+}
+

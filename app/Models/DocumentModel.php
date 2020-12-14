@@ -79,12 +79,15 @@ class DocumentModel extends Model{
         $query = $db->query($sql);
 
         $result = $query->getResult('array');
-
-        for($i=0; $i<count($result);$i++){
-			$data[$result[$i]['status']] = $result[$i]['count'];
-		}
-        
-        return $data;
+        if(count($result)){
+            for($i=0; $i<count($result);$i++){
+                $data[$result[$i]['status']] = $result[$i]['count'];
+            }
+            return $data;
+        }else{
+            return null;
+        }
+    
     }
 
 }

@@ -31,11 +31,17 @@ class ReviewModel extends Model{
         $query = $db->query($sql);
         $result = $query->getResult('array');
 
-        for($i=0; $i<count($result);$i++){
-			$data[$result[$i]['status']] = $result[$i]['count'];
-		}
+        if(count($result)){
+            for($i=0; $i<count($result);$i++){
+                $data[$result[$i]['status']] = $result[$i]['count'];
+            }
+            return $data;
+        }else{
+            return null;
+        }
         
-        return $data;
+        
+        
     }
 
     public function getPrevReviewId($updateDate, $project_id, $status){
@@ -55,7 +61,7 @@ class ReviewModel extends Model{
      
     public function getNextReviewId($updateDate, $project_id, $status){
         $db      = \Config\Database::connect();
-        $sql = "SELECT id from `docsgo-reviews` where `updated-at` > '".$updateDate."' and `project-id` = ".$project_id." and status = '".$status."'  ORDER BY `updated-at` desc LIMIT 1;";
+        $sql = "SELECT id from `docsgo-reviews` where `updated-at` > '".$updateDate."' and `project-id` = ".$project_id." and status = '".$status."'  ORDER BY `updated-at`,id desc LIMIT 1;";
        
         $query = $db->query($sql);
 
