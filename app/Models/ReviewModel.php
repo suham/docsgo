@@ -21,6 +21,23 @@ class ReviewModel extends Model{
 
         $query = $db->query($sql);
         $data = $query->getResult('array');
+
+        for($i=0; $i<count($data );$i++){
+
+            $description = $data[$i]['description'];
+            
+            if($description != null && $description != ""){
+                $description = json_decode($description, true);
+                $comments = "";
+                foreach($description as $comment){
+                    $comments .= "[".$comment["by"]."]";
+                    $comments .= $comment["message"];
+                    $comments .= "<br/>";
+                }
+                $data[$i]['description'] = $comments;
+            }
+            
+        }
         return $data;
     }
 

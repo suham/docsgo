@@ -96,9 +96,6 @@ $routes->post('reviews/addDocReview', 'Reviews::addDocReview',['filter' => 'auth
 $routes->post('reviews/saveComment', 'Reviews::saveComment',['filter' => 'auth']);
 $routes->post('reviews/deleteComment', 'Reviews::deleteComment',['filter' => 'auth']);
 
-// Remove After use
-$routes->get('reviews/updateReviewDescription', 'Reviews::updateReviewDescription',['filter' => 'auth']);
-
 $routes->get('documents', 'Documents::index',['filter' => 'auth']);
 $routes->get('documents/add', 'Documents::add',['filter' => 'auth']);
 $routes->post('documents/save', 'Documents::save',['filter' => 'auth']);
