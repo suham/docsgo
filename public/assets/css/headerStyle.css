@@ -71,7 +71,6 @@ a{
   grid-template-columns: max-content max-content;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
 }
 .nav__toggle{
   font-size: 1.25rem;
@@ -98,11 +97,20 @@ a{
 .nav__link:hover{
   background-color: var(--first-color);
 }
+
+.nav__link:hover img{
+  filter: invert(1);
+}
 .nav__icon{
-  font-size: 1.25rem;
+  font-size: 0.9rem
 }
 .nav__name{
   font-size: var(--small-font-size);
+}
+
+.icon__image {
+  width: 1.5em;
+  height: 1.5em;
 }
 
 /*Expander menu*/
