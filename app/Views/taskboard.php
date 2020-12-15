@@ -123,6 +123,7 @@
             <div class="card">
                 <div class="card-header bg-dark text-light">
                     Todo
+                    <span class="stats_Todo badge badge-light float-right mt-1">0</span>
                 </div>
 
                 <div class="card-body task-parent scroll scroll-dark" id="column_Todo">
@@ -146,6 +147,7 @@
             <div class="card ">
                 <div class="card-header  bg-info  text-light">
                     In Progress
+                    <span class="stats_InProgress badge badge-light float-right mt-1">0</span>
                 </div>
                 <div class="card-body task-parent scroll scroll-info " id="column_InProgress">
                     <div class="input-group">
@@ -167,6 +169,7 @@
             <div class="card">
                 <div class="card-header bg-purple">
                     Under Verification
+                    <span class="stats_UnderVerification badge badge-light float-right mt-1">0</span>
                 </div>
                 <div class="card-body  task-parent scroll scroll-purple " id="column_UnderVerification">
                     <div class="input-group">
@@ -189,6 +192,7 @@
             <div class="card">
                 <div class="card-header  bg-success text-light">
                     Complete
+                    <span class="stats_Complete badge badge-light float-right mt-1">0</span>
                 </div>
                 <div class="card-body  task-parent scroll scroll-success " id="column_Complete">
                     <div class="input-group">
@@ -211,6 +215,7 @@
             <div class="card">
                 <div class="card-header  bg-warning text-dark">
                     Observations
+                    <span class="stats_Observations badge badge-light float-right mt-1">0</span>
                 </div>
                 <div class="card-body  task-parent scroll scroll-warning " id="column_Observations">
                     <div class="input-group">
@@ -235,7 +240,7 @@
 <script>
     var teamMembers, project_id, teamMemberOptions = "", tasksArr = [];
     var defaultZIndex =3;
-   
+    var taskStats = {'Todo': 0, 'In Progress': 0, 'Under Verification': 0, 'Complete': 0, 'Observations': 0};
 
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover({trigger: "hover" });
@@ -254,16 +259,29 @@
         <?php if(isset($tasksArr)): ?>
             tasksArr = <?= json_encode($tasksArr) ?>;
             tasksArr.forEach((task,i)=>{
-                
+                taskStats[task['task_column']] += 1;
                 if(task.comments != null){
                     tasksArr[i].comments = JSON.parse(task.comments);
                 }
                 addTaskToDocument(task);
             });
+            updateStats(taskStats);
         <?php endif ?>
+
 
         
     });
+
+    function updateStats(){
+        const keys = Object.keys(taskStats);
+        const values = Object.values(taskStats);
+        
+        for(var i=0;i<keys.length;i++){
+            const targetColumn = ".stats_"+keys[i].replace(" ", "");
+            console.log(targetColumn);
+            $(targetColumn).text(values[i])
+        }
+    }
 
     $(document).on({
         ajaxStart: function(){
@@ -728,7 +746,10 @@
                     
                         // taskObject.id = data.task;
                         tasksArr.push(data.task);
-                        
+
+                        taskStats[data.task['task_column']] += 1;
+                        updateStats();
+
                         addTaskToDocument(data.task);
                         showFloatingAlert(`T${data.task.id} task added successfully!`);
 
@@ -747,6 +768,10 @@
                         if(existingTask.task_column != task.task_column){
                             var div_column = task.task_column.replace(" ", "");
                             $(`#${task.id}`).appendTo($("#column_"+div_column));
+
+                            taskStats[existingTask.task_column] -= 1;
+                            taskStats[task.task_column] += 1;
+                            updateStats();
                         }
                         showFloatingAlert(`T${task.id} task updated successfully!`);
 
@@ -772,11 +797,21 @@
                         $("#"+taskObject.id).fadeOut(800, function() { $(this).remove(); });
                         const temp = getTaskFromArray(taskObject.id);
                         const existingTaskLoc = temp[0];
+                        const existingTask = temp[1];
+
+                        taskStats[existingTask.task_column] -= 1;
+                        updateStats();
+
                         tasksArr.splice(existingTaskLoc, 1);
+
                     }else if(type == "updateTaskColumn"){
                         const temp = getTaskFromArray(taskObject.id);
                         const existingTaskLoc = temp[0];
                         const existingTask = temp[1];
+
+                        taskStats[existingTask.task_column] -= 1;
+                        taskStats[taskObject.task_column] += 1;
+                        updateStats();
 
                         existingTask.task_column = taskObject.task_column;
                         tasksArr[existingTaskLoc] = existingTask;
