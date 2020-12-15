@@ -321,11 +321,11 @@
 
                                                     <div>
                                                         <div class="pr-3 pt-1">
-                                                            <a href="#" class="btn btn-sm btn-outline-warning "
+                                                            <button type="button" class="btn btn-sm btn-outline-warning "
                                                                 onclick="addLineToComment('<?=$section['title']?>')"
                                                                 title="Add review comment">
                                                                 <i class="fas fa-list "></i>
-                                                            </a>
+                                                            </button>
                                                         </div>
                                                     </div>
 
