@@ -714,6 +714,7 @@ $("#section-tab").click(function() {
         $('.sections').each(function() {
             var $cm = $(this).nextAll('.CodeMirror')[0].CodeMirror;
             $cm.refresh();
+            $('.editor-preview').addClass('scroll scroll-primary');
             // $cm.on("update", function(el) {
             //     const updatedValue = el.getValue()
             //     var textarea = el.getTextArea();
