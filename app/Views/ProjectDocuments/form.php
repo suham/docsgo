@@ -1014,6 +1014,7 @@ function showPreview(title, message, width) {
         centerVertical: true,
         backdrop: 'static',
         size: width,
+        className: 'preview-modal',
         buttons: {
             ok: {
                 label: 'Close'
@@ -1024,7 +1025,7 @@ function showPreview(title, message, width) {
 </script>
 
 <style>
-.modal-content {
+.preview-modal > .modal-content {
     width: 200% !important;
 }
 
