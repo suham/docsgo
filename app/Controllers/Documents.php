@@ -148,7 +148,7 @@ class Documents extends BaseController
 			$data = $documents->getDocuments($condition);	
 			return $data;
 		}else if($tableName == 'riskAssessment'){
-			$condition = " WHERE `project_id` = ".$project_id;
+			$condition = " WHERE `status` = 'Open'";
 			$riskAssessment = new RiskAssessmentModel();
 			$data = $riskAssessment->getRisksForDocuments($condition);	
 			return $data;
