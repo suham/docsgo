@@ -864,15 +864,19 @@ function addLineToComment(sectionName) {
 
     if (sectionName != "") {
         $codemirror.getDoc().setValue(existingVal + sectionName);
+        textareaFocus($codemirror);
     }
 
     if ($(".reviewDiv").length) {
         if (!$(".reviewbox").is(":visible")) {
             showReview();
+            textareaFocus($codemirror);
         }
     }
 
 }
+
+
 
 function saveReview(reviewId) {
     const $codemirror = $('textarea[name="description"]').nextAll('.CodeMirror')[0].CodeMirror;

@@ -318,6 +318,7 @@ function showReview() {
         $(".reviewbox").fadeIn();
 
         $codemirror.refresh();
+        textareaFocus($codemirror);
     } else {
         $codemirror.getDoc().setValue("");
         $(".commentsList").removeClass("withReviewBox");
@@ -328,6 +329,14 @@ function showReview() {
     }
 
     toggleReviewBox = !toggleReviewBox;
+}
+
+function textareaFocus($codemirror){
+    $codemirror.focus();
+    const lastLine = $codemirror.lastLine();
+    $codemirror.setCursor({
+            line: lastLine             
+    });
 }
 
 function getObjectFromArray(objectId, objectArray) {

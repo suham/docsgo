@@ -350,6 +350,7 @@ function addLineToComment() {
     if ($(".reviewDiv").length) {
         if (!$(".reviewbox").is(":visible")) {
             showReview();
+            textareaFocus($codemirror);
         }
     }
 
